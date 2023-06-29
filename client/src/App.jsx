@@ -4,8 +4,7 @@ import ShortUniqueId from 'short-unique-id';
 import LoadingSpinner from './components/UI/LoadingSpinner';
 import { Box } from '@mui/material';
 
-const CodeEditor = lazy(() => import('./CodeEditor'));
-
+const Notebook = lazy(() => import('./Notebook'));
 const uuid = new ShortUniqueId({ length: 6 });
 
 function App() {
@@ -33,7 +32,7 @@ function App() {
             path='/:uuid'
             element={
               <Suspense fallback={<LoadingSpinner />}>
-                <CodeEditor key={roomID} roomID={roomID} />
+                <Notebook key={roomID} roomID={roomID} />
               </Suspense>
             }
           />
@@ -41,7 +40,7 @@ function App() {
             path='/'
             element={
               <Suspense fallback={<LoadingSpinner />}>
-                <CodeEditor key={roomID} roomID={roomID} />
+                <Notebook key={roomID} roomID={roomID} />
               </Suspense>
             }
           />
