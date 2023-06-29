@@ -1,4 +1,4 @@
-import { useContext, useState, useRef } from 'react';
+import { useContext, useEffect, useState, useRef } from 'react';
 import { Box, IconButton, Paper, Stack, Tooltip } from '@mui/material';
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 import TextareaAutosize from 'react-textarea-autosize';
@@ -8,32 +8,29 @@ import { duotoneDark, duotoneSpace } from 'react-syntax-highlighter/dist/esm/sty
 import { CloseSharp } from '@mui/icons-material';
 import NotebookContext from './NotebookContext';
 
-const MarkdownCell = ({ cell, index, id }) => {
-  const { deleteCell, editing, handleDoubleClick, handleBlur } = useContext(NotebookContext);
+const MarkdownCell = ({ index, id, ytext }) => {
+  const { addCellAtIndex, deleteCell, editing, handleDoubleClick, handleBlur, handleEditingChange, ydoc } =
+    useContext(NotebookContext);
   const [hoverBottom, setHoverBottom] = useState(false);
   const [hover, setHover] = useState(false);
   const textareaRef = useRef();
+  const [text, setText] = useState('');
 
   useEffect(() => {
-    // The observer function is called whenever the Y.Text content changes
-    const observer = event => {
-      // Prevent updates if the change was caused by our textarea
-      if (event.transaction.origin !== textareaRef.current) {
-        textareaRef.current.value = cell.content.toString();
-      }
+    const type = ytext;
+    setText(type.toString());
+
+    const updateText = () => {
+      setText(type.toString());
     };
 
-    cell.content.observe(observer);
-
-    return () => {
-      // Remove the observer when the component unmounts
-      cell.content.unobserve(observer);
-    };
-  }, [cell.content]);
+    type.observe(() => {
+      updateText();
+    });
+  }, [ytext]);
 
   const handleTextareaChange = e => {
-    const ytext = cell.content;
-    // We pass the textarea as the origin of the transaction to prevent unnecessary updates
+    const ytext = ydoc.getText(id);
     ytext.doc.transact(() => {
       ytext.delete(0, ytext.length);
       ytext.insert(0, e.target.value);
@@ -75,7 +72,7 @@ const MarkdownCell = ({ cell, index, id }) => {
         {editing === index ? (
           <TextareaAutosize
             ref={textareaRef}
-            defaultValue={cell.content.toString()} // Use defaultValue instead of value to not control the input
+            defaultValue={text}
             onChange={handleTextareaChange}
             onBlur={handleTextareaBlur}
             onDoubleClick={() => handleDoubleClick(index)}

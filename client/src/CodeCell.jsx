@@ -6,8 +6,9 @@ import AddCell from './AddCell';
 import CodeToolbar from './CodeToolbar';
 import * as Y from 'yjs';
 import NotebookContext from './NotebookContext';
+import { Editor } from '@monaco-editor/react';
 
-const CodeCell = ({ id, index, cell }) => {
+const CodeCell = ({ id, index, cell, ytext }) => {
   const { awareness, ydoc, addCellAtIndex, deleteCell, handleEditingChange } = useContext(NotebookContext);
   const editorRef = useRef(null);
   const [processing, setProcessing] = useState(false);
@@ -15,23 +16,18 @@ const CodeCell = ({ id, index, cell }) => {
   const [hoverBottom, setHoverBottom] = useState(false);
   const [outputMap, setOutputMap] = useState(null);
 
+  const handleEditorDidMount = (editor, monaco) => {
+    const undoManager = new Y.UndoManager(ytext);
+    new MonacoBinding(ytext, editor.getModel(), new Set([editor]), awareness);
+
+    editor.onDidChangeModelContent(e => {
+      handleEditingChange(id, editor.getValue().trim());
+    });
+  };
+
   useEffect(() => {
-    if (!editorRef.current) {
-      const type = ydoc.getText(id);
-      const undoManager = new Y.UndoManager(type);
-      setOutputMap(ydoc.getMap(`${id}-output`));
-
-      const editor = monaco.editor.create(editorRef.current, {
-        value: type.toString(),
-        language: 'javascript'
-      });
-
-      new MonacoBinding(type, editor.getModel(), new Set([editor]), awareness);
-      editor.onDidChangeModelContent(e => {
-        handleEditingChange(id, editor.getValue().trim());
-      });
-    }
-  }, [id, ydoc, awareness, handleEditingChange]);
+    setOutputMap(ydoc.getMap('output'));
+  }, [cell]);
 
   useEffect(() => {
     if (outputMap) {
@@ -63,6 +59,17 @@ const CodeCell = ({ id, index, cell }) => {
           backgroundColor: 'navajowhite'
         }}>
         <CodeToolbar onClickRun={handleRunCode} id={id} onDelete={deleteCell} />
+        <Editor
+          aria-labelledby='Code Editor'
+          className='justify-center'
+          defaultLanguage='javascript'
+          height='20vh'
+          theme='vs-dark'
+          onMount={handleEditorDidMount}
+          options={{
+            cursorBlinking: 'smooth'
+          }}
+        />
         <Typography sx={{ fontFamily: 'monospace', ml: '5px', backgroundColor: 'charcoal' }}>
           {processing ? 'Processing...' : output}
         </Typography>

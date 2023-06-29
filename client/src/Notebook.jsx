@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { Box } from '@mui/material';
+import { Box, Button, Toolbar } from '@mui/material';
+import { AddCircleTwoTone, Code } from '@mui/icons-material';
+
 import randomColor from 'randomcolor';
 import { WebrtcProvider } from 'y-webrtc';
 import { v4 as uuidv4 } from 'uuid';
@@ -7,25 +9,25 @@ import * as Y from 'yjs';
 import MarkdownCell from './MarkdownCell';
 import CodeCell from './CodeCell';
 import NotebookContext from './NotebookContext';
-import Editor from '@monaco-editor/react';
 import { MonacoBinding } from 'y-monaco';
 import { languageOptions } from './constants/languageOptions';
 import Client from './components/Client';
+import AddCell from './AddCell';
 
 const roomToProviderMap = new Map();
 const roomToYDocMap = new Map();
 
 const Notebook = ({ roomID }) => {
   // Y.Doc, Provider and Awareness setup
+  const ydocRef = useRef(roomToYDocMap.get(roomID));
+  const providerRef = useRef(roomToProviderMap.get(roomID));
+  const [awareness, setAwareness] = useState(null);
+
   const editorRef = useRef(null);
   const [compilerText, setCompilerText] = useState('');
   const [outputType, setOutputType] = useState(null);
   const [cells, setCells] = useState([]);
-
-  const ydocRef = useRef(roomToYDocMap.get(roomID));
-  const providerRef = useRef(roomToProviderMap.get(roomID));
-
-  const [awareness, setAwareness] = useState(null);
+  const [hoverTop, setHoverTop] = useState(false);
 
   // Users setup / management
   const [users, setUsers] = useState([]);
@@ -38,6 +40,7 @@ const Notebook = ({ roomID }) => {
     if (ydocRef.current) {
       const cells = ydocRef.current.getMap('shared').get('cells');
       setCells(cells);
+      // cells is Y.Array of YMaps
     }
   }, [ydocRef.current]);
 
@@ -58,20 +61,6 @@ const Notebook = ({ roomID }) => {
       setAwareness(providerRef.current.awareness);
     }
   }, [roomID]);
-
-  // When a cell is added, create a new Y.Text for its content
-  // cells.observe(event => {
-  //   event.changes.added.forEach(added => {
-  //     if (!added.text) added.text = new Y.Text();
-  //   });
-  // });
-
-  // If there are no cells at the beginning, add a default one
-  useEffect(() => {
-    if (cells instanceof Y.Array && cells.length === 0) {
-      cells.insert(0, [{ id: uuidv4(), type: 'code', text: new Y.Text() }]);
-    }
-  }, [cells]);
 
   useEffect(() => {
     if (!awareness) return;
@@ -184,17 +173,18 @@ const Notebook = ({ roomID }) => {
     }
   };
 
-  const addCellAtIndex = (idx, type, text, id) => {
-    const cellArray = ydocRef.current.getArray('cells');
-    const newCell = new Y.Map();
-    newCell.set('id', id);
-    newCell.set('type', type);
-    newCell.set('text', new Y.Text(text));
+  const addCellAtIndex = (idx, type) => {
+    const cellArray = ydocRef.current.getMap('shared').get('cells');
+    const cell = new Y.Map();
+    cell.set('id', uuidv4());
+    cell.set('type', type);
+    cell.set('text', new Y.Text('empty'));
     if (idx >= cellArray.length) {
-      cellArray.push([newCell]);
+      cellArray.push([cell]);
     } else {
-      cellArray.insert(idx + 1, [newCell]);
+      cellArray.insert(idx + 1, [cell]);
     }
+    setCells(cellArray);
   };
 
   const handleDoubleClick = index => {
@@ -211,12 +201,17 @@ const Notebook = ({ roomID }) => {
   function handleEditorDidMount(editor, monaco) {
     editorRef.current = editor;
     editorRef.current.getModel().setEOL(0);
-    const type = ydocRef.current.getText('monaco');
-    const undoManager = new Y.UndoManager(type);
-    const outputMap = ydocRef.current.getMap('output');
-    setOutputType(outputMap);
-    const binding = new MonacoBinding(type, editorRef.current.getModel(), new Set([editorRef.current]), awareness);
   }
+
+  useEffect(() => {
+    if (awareness && editorRef.current) {
+      const type = ydocRef.current.getText('monaco');
+      const undoManager = new Y.UndoManager(type);
+      const outputMap = ydocRef.current.getMap('output');
+      setOutputType(outputMap);
+      const binding = new MonacoBinding(type, editorRef.current.getModel(), new Set([editorRef.current]), awareness);
+    }
+  }, [awareness, editorRef.current]);
 
   useEffect(() => {
     if (outputType) {
@@ -236,21 +231,13 @@ const Notebook = ({ roomID }) => {
     handleBlur,
     editing,
     setEditing,
-    provider: providerRef.current,
-    awareness
+    awareness,
+    ydoc: ydocRef.current,
+    provider: providerRef.current
   };
 
   return (
     <NotebookContext.Provider value={contextValue}>
-      {/* {cells.map((cell, index) => {
-        const { id, type } = cell;
-        return (
-          <Box key={id || index}>
-            {type === 'markdown' && <MarkdownCell id={id} index={index} cell={cell} />}
-            {type === 'code' && <CodeCell id={id} index={index} cell={cell} />}
-          </Box>
-        );
-      })} */}
       <Box sx={{ display: 'flex', gap: 3 }}>
         {hideUsers ? null : (
           <Box sx={{ display: 'flex', gap: 3 }}>
@@ -260,18 +247,34 @@ const Notebook = ({ roomID }) => {
           </Box>
         )}
       </Box>
+      {cells.length > 0 && (
+        <AddCell addCell={addCellAtIndex} index={0} hover={hoverTop} setHover={setHoverTop} isFirst={true} />
+      )}
+      <Box mt={2} sx={{ textAlign: 'center' }}>
+        {cells.length == 0 && (
+          <Toolbar sx={{ width: '30%', margin: '0 auto', justifyContent: 'space-between' }}>
+            <Button onClick={() => addCellAtIndex(0, 'markdown')} variant='contained'>
+              <AddCircleTwoTone /> Markdown
+            </Button>
+            <Button onClick={() => addCellAtIndex(0, 'code')} variant='contained'>
+              <Code sx={{ mr: '5px' }} /> Code
+            </Button>
+          </Toolbar>
+        )}
+      </Box>
       <Box sx={{ mx: 5, py: 1 }}>
-        <Editor
-          aria-labelledby='Code Editor'
-          className='justify-center'
-          language={languageOptions[0]}
-          height='50vh'
-          theme='vs-dark'
-          onMount={handleEditorDidMount}
-          options={{
-            cursorBlinking: 'smooth'
-          }}
-        />
+        {cells &&
+          cells.map((cell, index) => {
+            const id = cell.get('id');
+            const type = cell.get('type');
+            const text = cell.get('text');
+            return (
+              <Box key={id || index}>
+                {type === 'markdown' && <MarkdownCell id={id} index={index} cell={cell} ytext={text} />}
+                {type === 'code' && <CodeCell id={id} index={index} cell={cell} ytext={text} />}
+              </Box>
+            );
+          })}
       </Box>
     </NotebookContext.Provider>
   );
