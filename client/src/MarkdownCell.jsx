@@ -22,6 +22,7 @@ const MarkdownCell = ({ index, id, ytext }) => {
 
     const updateText = () => {
       setText(type.toString());
+      ////
     };
 
     type.observe(() => {
@@ -30,7 +31,6 @@ const MarkdownCell = ({ index, id, ytext }) => {
   }, [ytext]);
 
   const handleTextareaChange = e => {
-    const ytext = ydoc.getText(id);
     ytext.doc.transact(() => {
       ytext.delete(0, ytext.length);
       ytext.insert(0, e.target.value);

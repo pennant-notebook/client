@@ -60,6 +60,7 @@ const Notebook = ({ roomID }) => {
       roomToProviderMap.set(roomID, providerRef.current);
       setAwareness(providerRef.current.awareness);
     }
+    //asASD
   }, [roomID]);
 
   useEffect(() => {
