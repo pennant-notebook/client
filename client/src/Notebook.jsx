@@ -29,10 +29,13 @@ const Notebook = ({ roomID }) => {
   const [cells, setCells] = useState([]);
   const [cellsData, setCellsData] = useState([]);
 
+
   useEffect(() => {
     if (ydocRef.current) {
       const cells = ydocRef.current.getMap('shared').get('cells');
-      setCells(cells);
+      ////////
+      // setCells(cells);
+      ////////
       setCellsData(Array.from(cells));
     }
   }, [ydocRef.current]);
@@ -82,11 +85,34 @@ const Notebook = ({ roomID }) => {
   }, [awareness]);
 
   const deleteCell = id => {
-    const cellArray = ydocRef.current.getArray('cells');
-    const cellIndex = cellArray.toArray().findIndex(c => c.get('id') === id);
+    ////
+    /*
+    ydoc
+    map: shared
+      notebookId
+      cells Y-arr
+      access cells, check
+      delete at the right index, check
+      then call setCells(cells), fail
+        YMAP 
+          metadata
+          YText
+    */
+    // const cellArray = ydocRef.current.getArray('cells');
+    const cellArray = ydocRef.current.getMap('shared').get('cells');
+    console.log('cellArrayLength', cellArray)
+    const cellIndex = cells.toArray().findIndex(c => c.get('id') === id);
+    ////
+    console.log('cellIndex', cellIndex)
     if (cellIndex !== -1) {
       cellArray.delete(cellIndex);
+      // cells.delete(cellIndex);
+      // setCells(cellArray);
+      // setCellsData(Array.from(cellArray));
     }
+    // setCells(cellArray);
+    setCellsData(Array.from(cellArray));
+    console.log('cellArrayAfterDelete', cellArray)
   };
 
   const addCellAtIndex = (idx, type) => {
@@ -171,7 +197,7 @@ const Notebook = ({ roomID }) => {
             const text = cell.get('text');
             return (
               <Box key={id || index}>
-                {type === 'markdown' && <MarkdownCell id={id} index={index} cell={cell} ytext={text} />}
+                {type === 'markdown' && <MarkdownCell id={id} index={index} cell={cell} ytext={text}  />}
                 {type === 'code' && <CodeCell id={id} index={index} cell={cell} ytext={text} />}
               </Box>
             );
