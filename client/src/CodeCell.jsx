@@ -5,11 +5,14 @@ import { checkStatus, sendToJudge, parseEngineResponse } from './services/codeEx
 import AddCell from './AddCell';
 import CodeToolbar from './CodeToolbar';
 import * as Y from 'yjs';
-import NotebookContext from './NotebookContext';
 import { Editor } from '@monaco-editor/react';
 
+import NotebookContext from './NotebookContext';
+// import { useNotebookContext } from './NotebookContext';
+// import { deleteCell, handleEditingChange } from './notebookHelpers';
+
 const CodeCell = ({ id, index, cell, ytext }) => {
-  const { awareness, ydoc, addCellAtIndex, deleteCell, handleEditingChange } = useContext(NotebookContext);
+  const { awareness, ydoc, deleteCell, handleEditingChange } = useContext(NotebookContext);
   const editorRef = useRef(null);
   const [processing, setProcessing] = useState(false);
   const [output, setOutput] = useState('');
@@ -21,7 +24,7 @@ const CodeCell = ({ id, index, cell, ytext }) => {
     new MonacoBinding(ytext, editor.getModel(), new Set([editor]), awareness);
 
     editor.onDidChangeModelContent(e => {
-      handleEditingChange(id, editor.getValue().trim());
+      handleEditingChange(ydoc, id, editor.getValue().trim());
     });
   };
 
@@ -74,7 +77,7 @@ const CodeCell = ({ id, index, cell, ytext }) => {
           {processing ? 'Processing...' : output}
         </Typography>
       </Box>
-      <AddCell addCell={addCellAtIndex} index={index} hover={hoverBottom} setHover={setHoverBottom} />
+      <AddCell index={index} hover={hoverBottom} setHover={setHoverBottom} />
     </Stack>
   );
 };
