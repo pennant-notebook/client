@@ -1,11 +1,6 @@
 import { useContext, useEffect, useState, useRef } from 'react';
 import { Box, IconButton, Paper, Stack, Tooltip, Typography } from '@mui/material';
-import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
-import TextareaAutosize from 'react-textarea-autosize';
 import AddCell from './AddCell';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { duotoneDark, duotoneSpace } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { CloseSharp } from '@mui/icons-material';
 //// below
 import { Editor } from '@monaco-editor/react';
 import CodeToolbar from './CodeToolbar';
