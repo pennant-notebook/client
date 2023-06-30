@@ -8,11 +8,6 @@ const MarkdownToolbar = ({ onClickRun, onDelete, id }) => {
       <Typography  sx={{ color: 'black', position: 'absolute', left: '12px' }}>
           Markdown
         </Typography>
-        {/* <Tooltip title='Run code'>lkjkl
-          <IconButton onClick={onClickRun} sx={{ '&:hover': { backgroundColor: 'transparent' } }}>
-            <PlayCircle sx={{ color: 'lightgray' }} />
-          </IconButton>
-        </Tooltip> */}
         <Tooltip title='Remove cell'>
           <IconButton onClick={() => { console.log('id', id); onDelete(id)}} sx={{ '&:hover': { backgroundColor: 'transparent' } }}>
             <CloseSharp sx={{ color: 'lightgray' }} />

@@ -33,9 +33,6 @@ const Notebook = ({ roomID }) => {
   useEffect(() => {
     if (ydocRef.current) {
       const cells = ydocRef.current.getMap('shared').get('cells');
-      ////////
-      // setCells(cells);
-      ////////
       setCellsData(Array.from(cells));
     }
   }, [ydocRef.current]);
@@ -85,20 +82,6 @@ const Notebook = ({ roomID }) => {
   }, [awareness]);
 
   const deleteCell = id => {
-    ////
-    /*
-    ydoc
-    map: shared
-      notebookId
-      cells Y-arr
-      access cells, check
-      delete at the right index, check
-      then call setCells(cells), fail
-        YMAP 
-          metadata
-          YText
-    */
-    // const cellArray = ydocRef.current.getArray('cells');
     const cellArray = ydocRef.current.getMap('shared').get('cells');
     console.log('cellArrayLength', cellArray)
     const cellIndex = cells.toArray().findIndex(c => c.get('id') === id);
@@ -106,9 +89,6 @@ const Notebook = ({ roomID }) => {
     console.log('cellIndex', cellIndex)
     if (cellIndex !== -1) {
       cellArray.delete(cellIndex);
-      // cells.delete(cellIndex);
-      // setCells(cellArray);
-      // setCellsData(Array.from(cellArray));
     }
     // setCells(cellArray);
     setCellsData(Array.from(cellArray));
@@ -209,8 +189,4 @@ const Notebook = ({ roomID }) => {
 
 export default Notebook;
 
-// const NotebookContainer = ({ roomID }) => (
-//   <NotebookProvider roomID={roomID}>
-//     <Notebook />
-//   </NotebookProvider>
-// );
+

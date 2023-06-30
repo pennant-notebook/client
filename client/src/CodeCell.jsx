@@ -8,8 +8,6 @@ import * as Y from 'yjs';
 import { Editor } from '@monaco-editor/react';
 
 import NotebookContext from './NotebookContext';
-// import { useNotebookContext } from './NotebookContext';
-// import { deleteCell, handleEditingChange } from './notebookHelpers';
 
 const CodeCell = ({ id, index, cell, ytext }) => {
   const { awareness, ydoc, deleteCell, handleEditingChange } = useContext(NotebookContext);
@@ -50,14 +48,6 @@ const CodeCell = ({ id, index, cell, ytext }) => {
     outputMap.set('data', convertedOutput);
   };
 
-  // const onDeleteCell = async (cellId) => {
-  //   setProcessing(true);
-  //   setCells[]
-  //   setProcessing(false);
-  //   const convertedOutput = parseEngineResponse(processedResponse);
-  //   outputMap.set('data', convertedOutput);
-  // };
-
   return (
     <Stack>
       <Box
@@ -86,7 +76,6 @@ const CodeCell = ({ id, index, cell, ytext }) => {
         </Typography>
       </Box>
       <AddCell index={index} hover={hoverBottom} setHover={setHoverBottom} />
-      {/* <AddCell index={index} hover={hoverBottom} setHover={setHoverBottom} /> */}
     </Stack>
   );
 };
