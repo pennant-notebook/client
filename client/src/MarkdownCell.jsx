@@ -6,7 +6,10 @@ import AddCell from './AddCell';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { duotoneDark, duotoneSpace } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { CloseSharp } from '@mui/icons-material';
+
 import NotebookContext from './NotebookContext';
+// import { useNotebookContext } from './NotebookContext';
+// import { deleteCell, handleEditingChange } from './notebookHelpers';
 
 const MarkdownCell = ({ index, id, ytext }) => {
   const { addCellAtIndex, deleteCell, editing, handleDoubleClick, handleBlur, handleEditingChange, ydoc } =
@@ -30,7 +33,6 @@ const MarkdownCell = ({ index, id, ytext }) => {
   }, [ytext]);
 
   const handleTextareaChange = e => {
-    const ytext = ydoc.getText(id);
     ytext.doc.transact(() => {
       ytext.delete(0, ytext.length);
       ytext.insert(0, e.target.value);
@@ -123,7 +125,7 @@ const MarkdownCell = ({ index, id, ytext }) => {
         )}
       </Paper>
 
-      <AddCell addCell={addCellAtIndex} index={index} hover={hoverBottom} setHover={setHoverBottom} />
+      <AddCell index={index} hover={hoverBottom} setHover={setHoverBottom} />
     </Stack>
   );
 };

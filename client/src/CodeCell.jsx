@@ -5,11 +5,12 @@ import { checkStatus, sendToJudge, parseEngineResponse } from './services/codeEx
 import AddCell from './AddCell';
 import CodeToolbar from './CodeToolbar';
 import * as Y from 'yjs';
-import NotebookContext from './NotebookContext';
 import { Editor } from '@monaco-editor/react';
 
+import NotebookContext from './NotebookContext';
+
 const CodeCell = ({ id, index, cell, ytext }) => {
-  const { awareness, ydoc, addCellAtIndex, deleteCell, handleEditingChange } = useContext(NotebookContext);
+  const { awareness, ydoc, deleteCell, handleEditingChange } = useContext(NotebookContext);
   const editorRef = useRef(null);
   const [processing, setProcessing] = useState(false);
   const [output, setOutput] = useState('');
@@ -17,11 +18,12 @@ const CodeCell = ({ id, index, cell, ytext }) => {
   const [outputMap, setOutputMap] = useState(null);
 
   const handleEditorDidMount = (editor, monaco) => {
+    editorRef.current = editor;
     const undoManager = new Y.UndoManager(ytext);
     new MonacoBinding(ytext, editor.getModel(), new Set([editor]), awareness);
 
     editor.onDidChangeModelContent(e => {
-      handleEditingChange(id, editor.getValue().trim());
+      handleEditingChange(ydoc, id, editor.getValue().trim());
     });
   };
 
@@ -43,6 +45,7 @@ const CodeCell = ({ id, index, cell, ytext }) => {
     const response = await sendToJudge(editorRef.current.getValue(), '', 63);
     const processedResponse = await checkStatus(response.data.token);
     setProcessing(false);
+    x;
     const convertedOutput = parseEngineResponse(processedResponse);
     outputMap.set('data', convertedOutput);
   };
@@ -50,7 +53,6 @@ const CodeCell = ({ id, index, cell, ytext }) => {
   return (
     <Stack>
       <Box
-        ref={editorRef}
         style={{
           width: '82%',
           margin: '0 auto',
@@ -74,7 +76,7 @@ const CodeCell = ({ id, index, cell, ytext }) => {
           {processing ? 'Processing...' : output}
         </Typography>
       </Box>
-      <AddCell addCell={addCellAtIndex} index={index} hover={hoverBottom} setHover={setHoverBottom} />
+      <AddCell index={index} hover={hoverBottom} setHover={setHoverBottom} />
     </Stack>
   );
 };
