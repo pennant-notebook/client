@@ -90,16 +90,10 @@ const MarkdownCell = ({ index, id, ytext }) => {
             autoFocus
           />
         ) : text.trim() !== '' ? (
-          <Box sx={{ width: '100%', height: '100%' }}>
+          <Box sx={{ width: '100%', height: '100%' }} className='markdown'>
             <ReactMarkdown
+              className='prose'
               components={{
-                p: props => <p {...props} style={{ margin: 0, padding: 0, color: 'charcoal' }} />,
-                h1: props => <h1 {...props} style={{ margin: 0, padding: 0, color: 'rebeccapurple' }} />,
-                h2: props => <h2 {...props} style={{ margin: 0, padding: 0, color: 'green' }} />,
-                h3: props => <h3 {...props} style={{ margin: 0, padding: 0, color: 'coral' }} />,
-                h4: props => <h4 {...props} style={{ margin: 0, padding: 0, color: 'maroon' }} />,
-                h5: props => <h5 {...props} style={{ margin: 0, padding: 0, color: 'dodgerblue' }} />,
-                h6: props => <h6 {...props} style={{ margin: 0, padding: 0, color: '#DA70D6' }} />,
                 code: ({ node, inline, className, children, ...props }) => {
                   const match = /language-(\w+)/.exec(className || '');
                   return !inline && match ? (

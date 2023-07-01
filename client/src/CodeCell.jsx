@@ -16,13 +16,19 @@ const CodeCell = ({ id, index, cell, ytext }) => {
   const [output, setOutput] = useState('');
   const [hoverBottom, setHoverBottom] = useState(false);
   const [outputMap, setOutputMap] = useState(null);
+  const [editorHeight, setEditorHeight] = useState('0vh');
 
   const handleEditorDidMount = (editor, monaco) => {
     editorRef.current = editor;
     const undoManager = new Y.UndoManager(ytext);
     new MonacoBinding(ytext, editor.getModel(), new Set([editor]), awareness);
+    const lineHeight = editor.getOption(monaco.editor.EditorOption.lineHeight);
+    const lineCount = editor.getModel().getLineCount();
+    setEditorHeight(`${lineCount * lineHeight}px`);
 
     editor.onDidChangeModelContent(e => {
+      const lineCount = editor.getModel().getLineCount();
+      setEditorHeight(`${lineCount * lineHeight}px`);
       handleEditingChange(ydoc, id, editor.getValue().trim());
     });
   };
@@ -52,10 +58,12 @@ const CodeCell = ({ id, index, cell, ytext }) => {
   return (
     <Stack>
       <Box
+        className='codecell-container'
         style={{
-          width: '82%',
+          width: '80%',
           margin: '0 auto',
           border: '1px solid dimgray',
+          borderRadius: '5px',
           paddingBottom: output ? '4px' : '0',
           backgroundColor: 'navajowhite'
         }}>
@@ -63,12 +71,15 @@ const CodeCell = ({ id, index, cell, ytext }) => {
         <Editor
           aria-labelledby='Code Editor'
           className='justify-center'
+          height={editorHeight}
           defaultLanguage='javascript'
-          height='20vh'
           theme='vs-dark'
           onMount={handleEditorDidMount}
           options={{
-            cursorBlinking: 'smooth'
+            cursorBlinking: 'smooth',
+            minimap: { enabled: false },
+            scrollbar: { vertical: 'hidden', horizontal: 'hidden' },
+            scrollBeyondLastLine: false
           }}
         />
         <Typography sx={{ fontFamily: 'monospace', ml: '5px', backgroundColor: 'charcoal' }}>
