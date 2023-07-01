@@ -104,6 +104,7 @@ const Notebook = ({ roomID }) => {
       cellArray.insert(idx + 1, [cell]);
     }
     setCells(cellArray);
+    // below refreshes the notebook to immediately show the new state of the notebook without the deleted cell
     setCellsJSON(cellArray.toJSON());
   };
 

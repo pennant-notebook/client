@@ -45,7 +45,6 @@ const CodeCell = ({ id, index, cell, ytext }) => {
     const response = await sendToJudge(editorRef.current.getValue(), '', 63);
     const processedResponse = await checkStatus(response.data.token);
     setProcessing(false);
-    x;
     const convertedOutput = parseEngineResponse(processedResponse);
     outputMap.set('data', convertedOutput);
   };
