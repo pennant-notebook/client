@@ -32,15 +32,20 @@ const Notebook = ({ roomID }) => {
   useEffect(() => {
     if (ydocRef.current) {
       const cells = ydocRef.current.getArray('cells');
-      console.log(cells);
       setCells(cells);
       setCellsJSON(cells.toJSON());
+
+      // Listen to YJS events on the cells to fix the race issue where the UI updates before the YDoc finishes updating
+      cells.observeDeep(() => {
+        setCells(cells);
+        setCellsJSON(cells.toJSON());
+      });
     }
   }, [ydocRef.current]);
 
   useEffect(() => {
     if (!ydocRef.current) {
-      ydocRef.current = initializeYDoc(roomID);
+      ydocRef.current = initializeYDoc();
       roomToYDocMap.set(roomID, ydocRef.current);
     }
 
