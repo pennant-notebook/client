@@ -2,10 +2,10 @@ import randomColor from 'randomcolor';
 import * as Y from 'yjs';
 import { WebrtcProvider } from 'y-webrtc';
 
-export const initializeYDoc = roomID => {
+export const initializeYDoc = () => {
   const ydoc = new Y.Doc();
-  const cells = new Y.Array();
-  ydoc.getMap('shared').set('cells', cells);
+  const cells = ydoc.getArray('cells');
+  console.log(cells);
   return ydoc;
 };
 

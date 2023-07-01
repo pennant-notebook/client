@@ -31,7 +31,8 @@ const Notebook = ({ roomID }) => {
 
   useEffect(() => {
     if (ydocRef.current) {
-      const cells = ydocRef.current.getMap('shared').get('cells');
+      const cells = ydocRef.current.getArray('cells');
+      console.log(cells);
       setCells(cells);
       setCellsData(Array.from(cells));
     }
@@ -84,13 +85,15 @@ const Notebook = ({ roomID }) => {
   const deleteCell = id => {
     const cellArray = ydocRef.current.getArray('cells');
     const cellIndex = cellArray.toArray().findIndex(c => c.get('id') === id);
+    console.log('cellIndex', cellIndex);
+    console.log(cellArray);
     if (cellIndex !== -1) {
       cellArray.delete(cellIndex);
     }
   };
 
   const addCellAtIndex = (idx, type) => {
-    const cellArray = ydocRef.current.getMap('shared').get('cells');
+    const cellArray = ydocRef.current.getArray('cells');
     const cell = new Y.Map();
     cell.set('id', uuidv4());
     cell.set('type', type);
@@ -152,7 +155,7 @@ const Notebook = ({ roomID }) => {
       </Box>
       {cells.length > 0 && <AddCell index={0} hover={hoverTop} setHover={setHoverTop} isFirst={true} />}
       <Box mt={2} sx={{ textAlign: 'center' }}>
-        {cells.length == 0 && (
+        {cells.length === 0 && (
           <Toolbar sx={{ width: '30%', margin: '0 auto', justifyContent: 'space-between' }}>
             <Button onClick={() => addCellAtIndex(0, 'markdown')} variant='contained'>
               <AddCircleTwoTone /> Markdown
@@ -182,9 +185,3 @@ const Notebook = ({ roomID }) => {
 };
 
 export default Notebook;
-
-// const NotebookContainer = ({ roomID }) => (
-//   <NotebookProvider roomID={roomID}>
-//     <Notebook />
-//   </NotebookProvider>
-// );

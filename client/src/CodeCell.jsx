@@ -8,8 +8,6 @@ import * as Y from 'yjs';
 import { Editor } from '@monaco-editor/react';
 
 import NotebookContext from './NotebookContext';
-// import { useNotebookContext } from './NotebookContext';
-// import { deleteCell, handleEditingChange } from './notebookHelpers';
 
 const CodeCell = ({ id, index, cell, ytext }) => {
   const { awareness, ydoc, deleteCell, handleEditingChange } = useContext(NotebookContext);
@@ -20,6 +18,7 @@ const CodeCell = ({ id, index, cell, ytext }) => {
   const [outputMap, setOutputMap] = useState(null);
 
   const handleEditorDidMount = (editor, monaco) => {
+    editorRef.current = editor;
     const undoManager = new Y.UndoManager(ytext);
     new MonacoBinding(ytext, editor.getModel(), new Set([editor]), awareness);
 
@@ -46,6 +45,7 @@ const CodeCell = ({ id, index, cell, ytext }) => {
     const response = await sendToJudge(editorRef.current.getValue(), '', 63);
     const processedResponse = await checkStatus(response.data.token);
     setProcessing(false);
+    x;
     const convertedOutput = parseEngineResponse(processedResponse);
     outputMap.set('data', convertedOutput);
   };
@@ -53,7 +53,6 @@ const CodeCell = ({ id, index, cell, ytext }) => {
   return (
     <Stack>
       <Box
-        ref={editorRef}
         style={{
           width: '82%',
           margin: '0 auto',
