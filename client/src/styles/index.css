@@ -24,6 +24,32 @@
   top: -5px;
 }
 
+.markdown p {
+  @apply m-0 p-0 text-gray-900;
+}
+.markdown h1 {
+  @apply m-0 p-0 text-purple-600;
+}
+.markdown h2 {
+  @apply m-0 p-0 text-green-500;
+}
+.markdown h3 {
+  @apply m-0 p-0 text-red-600;
+}
+.markdown h4 {
+  @apply m-0 p-0 text-red-800;
+}
+.markdown h5 {
+  @apply m-0 p-0 text-blue-500;
+}
+.markdown h6 {
+  @apply m-0 p-0 text-fuchsia-500;
+}
+
+.codecell-container {
+  mask-image: radial-gradient(circle, black 100%, transparent 100%);
+}
+
 @layer utilities {
   @variants responsive {
     /* Hide scrollbar for Chrome, Safari and Opera */

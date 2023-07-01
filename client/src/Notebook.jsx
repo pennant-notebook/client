@@ -88,6 +88,7 @@ const Notebook = ({ roomID }) => {
     console.log('cellIndex', cellIndex);
     if (cellIndex !== -1) {
       cellArray.delete(cellIndex);
+      // below refreshes the notebook to immediately show the new state of the notebook without the deleted cell
       setCellsJSON(prevState => prevState.filter(cell => cell.id !== id));
     }
   };
@@ -104,7 +105,6 @@ const Notebook = ({ roomID }) => {
       cellArray.insert(idx + 1, [cell]);
     }
     setCells(cellArray);
-    // below refreshes the notebook to immediately show the new state of the notebook without the deleted cell
     setCellsJSON(cellArray.toJSON());
   };
 
