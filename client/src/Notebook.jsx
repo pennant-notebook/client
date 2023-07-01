@@ -27,14 +27,14 @@ const Notebook = ({ roomID }) => {
   const [users, setUsers] = useState([]);
   const [hideUsers, setHideUsers] = useState(false);
   const [cells, setCells] = useState([]);
-  const [cellsData, setCellsData] = useState([]);
+  const [cellsJSON, setCellsJSON] = useState([]);
 
   useEffect(() => {
     if (ydocRef.current) {
       const cells = ydocRef.current.getArray('cells');
       console.log(cells);
       setCells(cells);
-      setCellsData(Array.from(cells));
+      setCellsJSON(cells.toJSON());
     }
   }, [ydocRef.current]);
 
@@ -86,9 +86,9 @@ const Notebook = ({ roomID }) => {
     const cellArray = ydocRef.current.getArray('cells');
     const cellIndex = cellArray.toArray().findIndex(c => c.get('id') === id);
     console.log('cellIndex', cellIndex);
-    console.log(cellArray);
     if (cellIndex !== -1) {
       cellArray.delete(cellIndex);
+      setCellsJSON(prevState => prevState.filter(cell => cell.id !== id));
     }
   };
 
@@ -104,7 +104,7 @@ const Notebook = ({ roomID }) => {
       cellArray.insert(idx + 1, [cell]);
     }
     setCells(cellArray);
-    setCellsData(Array.from(cellArray));
+    setCellsJSON(cellArray.toJSON());
   };
 
   const handleEditingChange = (id, content) => {
