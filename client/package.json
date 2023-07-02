@@ -24,6 +24,7 @@
     "react-markdown": "^8.0.7",
     "react-router-dom": "^6.12.1",
     "react-syntax-highlighter": "^15.5.0",
+    "react-textarea-autosize": "^8.5.1",
     "short-unique-id": "^4.4.4",
     "uuid": "^9.0.0",
     "y-monaco": "^0.1.4",
