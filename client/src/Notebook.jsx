@@ -3,11 +3,9 @@ import { Box, Button, Toolbar } from '@mui/material';
 import { AddCircleTwoTone, Code } from '@mui/icons-material';
 import MarkdownCell from './MarkdownCell';
 import * as Y from 'yjs';
-
 import CodeCell from './CodeCell';
 import { v4 as uuidv4 } from 'uuid';
 import NotebookContext from './NotebookContext';
-// import NotebookProvider, { useNotebookContext } from './NotebookContext';
 import Client from './components/Client';
 import AddCell from './AddCell';
 
@@ -36,7 +34,7 @@ const Notebook = ({ roomID }) => {
       setCellsJSON(cells.toJSON());
 
       // Listen to YJS events on the cells to fix the race issue where the UI updates before the YDoc finishes updating
-      cells.observeDeep(() => {
+      cells.observe(() => {
         setCells(cells);
         setCellsJSON(cells.toJSON());
       });
@@ -93,8 +91,9 @@ const Notebook = ({ roomID }) => {
     console.log('cellIndex', cellIndex);
     if (cellIndex !== -1) {
       cellArray.delete(cellIndex);
+      // setCells(cellArray);
       // below refreshes the notebook to immediately show the new state of the notebook without the deleted cell
-      setCellsJSON(prevState => prevState.filter(cell => cell.id !== id));
+      // setCellsJSON(prevState => prevState.filter(cell => cell.id !== id));
     }
   };
 
@@ -109,8 +108,8 @@ const Notebook = ({ roomID }) => {
     } else {
       cellArray.insert(idx + 1, [cell]);
     }
-    setCells(cellArray);
-    setCellsJSON(cellArray.toJSON());
+    // setCells(cellArray);
+    // setCellsJSON(cellArray.toJSON());
   };
 
   const handleEditingChange = (id, content) => {
@@ -135,7 +134,6 @@ const Notebook = ({ roomID }) => {
   };
 
   const contextValue = {
-    cells,
     addCellAtIndex,
     deleteCell,
     handleEditingChange,

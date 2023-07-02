@@ -10,13 +10,13 @@ import { Editor } from '@monaco-editor/react';
 import NotebookContext from './NotebookContext';
 
 const CodeCell = ({ id, index, cell, ytext }) => {
-  const { awareness, ydoc, deleteCell, handleEditingChange } = useContext(NotebookContext);
   const editorRef = useRef(null);
+  const { awareness, ydoc, deleteCell } = useContext(NotebookContext);
   const [processing, setProcessing] = useState(false);
   const [output, setOutput] = useState('');
   const [hoverBottom, setHoverBottom] = useState(false);
   const [outputMap, setOutputMap] = useState(null);
-  const [editorHeight, setEditorHeight] = useState('0vh');
+  const [editorHeight, setEditorHeight] = useState('5vh');
 
   const handleEditorDidMount = (editor, monaco) => {
     editorRef.current = editor;
@@ -29,7 +29,7 @@ const CodeCell = ({ id, index, cell, ytext }) => {
     editor.onDidChangeModelContent(e => {
       const lineCount = editor.getModel().getLineCount();
       setEditorHeight(`${lineCount * lineHeight}px`);
-      handleEditingChange(ydoc, id, editor.getValue().trim());
+      // handleEditingChange(id, editor.getValue().trim());
     });
   };
 
@@ -79,7 +79,8 @@ const CodeCell = ({ id, index, cell, ytext }) => {
             cursorBlinking: 'smooth',
             minimap: { enabled: false },
             scrollbar: { vertical: 'hidden', horizontal: 'hidden' },
-            scrollBeyondLastLine: false
+            scrollBeyondLastLine: false,
+            lineHeight: 22
           }}
         />
         <Typography sx={{ fontFamily: 'monospace', ml: '5px', backgroundColor: 'charcoal' }}>
