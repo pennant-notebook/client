@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ShortUniqueId from 'short-unique-id';
 import LoadingSpinner from './components/UI/LoadingSpinner';
 import { Box } from '@mui/material';
+import Header from './components/UI/Header';
 
 const Notebook = lazy(() => import('./Notebook'));
 const uuid = new ShortUniqueId({ length: 6 });
@@ -26,6 +27,7 @@ function App() {
 
   return (
     <Box sx={{ height: '100vh', overflowY: 'scroll' }}>
+      <Header />
       <BrowserRouter>
         <Routes>
           <Route

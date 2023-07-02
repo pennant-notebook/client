@@ -1,7 +1,8 @@
+import { memo } from 'react';
 import { CloseSharp, PlayCircle } from '@mui/icons-material';
 import { Box, Stack, Tooltip, IconButton, Typography } from '@mui/material';
 
-const CodeToolbar = ({ onClickRun, onDelete, id }) => {
+const CodeToolbar = memo(({ onClickRun, onDelete, id }) => {
   return (
     <Box sx={{ backgroundColor: '#282A35', height: '40px', margin: 0, padding: 0, borderBottom: '1px solid gray' }}>
       <Stack direction='row' sx={{ justifyContent: 'end', position: 'relative', alignItems: 'center' }}>
@@ -21,5 +22,6 @@ const CodeToolbar = ({ onClickRun, onDelete, id }) => {
       </Stack>
     </Box>
   );
-};
+});
+
 export default CodeToolbar;

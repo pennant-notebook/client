@@ -6,16 +6,12 @@ import AddCell from './AddCell';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { duotoneDark, duotoneSpace } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { CloseSharp } from '@mui/icons-material';
-
 import NotebookContext from './NotebookContext';
-// import { useNotebookContext } from './NotebookContext';
-// import { deleteCell, handleEditingChange } from './notebookHelpers';
 
 const MarkdownCell = ({ index, id, ytext }) => {
-  const { addCellAtIndex, deleteCell, editing, handleDoubleClick, handleBlur, handleEditingChange, ydoc } =
-    useContext(NotebookContext);
-  const [hoverBottom, setHoverBottom] = useState(false);
+  const { deleteCell, editing, handleDoubleClick, handleBlur, handleEditingChange } = useContext(NotebookContext);
   const [hover, setHover] = useState(false);
+  const [hoverBottom, setHoverBottom] = useState(false);
   const textareaRef = useRef();
   const [text, setText] = useState('');
 
@@ -56,21 +52,18 @@ const MarkdownCell = ({ index, id, ytext }) => {
           position: 'relative'
         }}
         onDoubleClick={() => handleDoubleClick(index)}
-        onMouseOver={() => setHover(true)}
-        onMouseOut={() => setHover(false)}
         onBlur={handleBlur}>
-        {(editing === index || hover) && (
-          <Box sx={{ position: 'absolute', top: '0', right: '0' }}>
-            <Tooltip title='Remove cell'>
-              <IconButton
-                onMouseOver={() => setHover(true)}
-                onClick={() => deleteCell(id)}
-                sx={{ '&:hover': { backgroundColor: 'transparent' } }}>
-                <CloseSharp sx={{ color: 'dimgray' }} />
-              </IconButton>
-            </Tooltip>
-          </Box>
-        )}
+        <Box sx={{ position: 'absolute', top: '0', right: '0' }}>
+          <Tooltip title='Remove cell'>
+            <IconButton
+              onMouseOver={() => setHover(true)}
+              onMouseOut={() => setHover(false)}
+              onClick={() => deleteCell(id)}
+              sx={{ '&:hover': { backgroundColor: 'transparent' } }}>
+              <CloseSharp sx={{ color: 'dimgray', opacity: hover ? 1 : 0.5 }} />
+            </IconButton>
+          </Tooltip>
+        </Box>
         {editing === index ? (
           <TextareaAutosize
             ref={textareaRef}
