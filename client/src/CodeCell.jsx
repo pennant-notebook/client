@@ -8,7 +8,7 @@ import { Editor } from '@monaco-editor/react';
 import useNotebookContext from './NotebookContext';
 import AddCell from './AddCell';
 
-const CodeCell = ({ id, index, cell, editorContent }) => {
+const CodeCell = ({ id, cell, editorContent }) => {
   const { awareness, deleteCell } = useNotebookContext();
   const editorRef = useRef(null);
   const outputMap = cell.get('outputMap');
@@ -72,8 +72,6 @@ const CodeCell = ({ id, index, cell, editorContent }) => {
           {processing ? 'Processing...' : output}
         </Typography>
       </Box>
-      <AddCell index={index} />
-
     </Stack>
   );
 };

@@ -62,18 +62,26 @@ const Notebook = ({ roomID, doc, provider }) => {
   return (
     <NotebookContext.Provider value={contextValue}>
       <Box sx={{ mx: 5, py: 1 }}>
-
-        {yPrettyPrint(doc, 'just before map')}
         {cellDataArr &&
           cellDataArr.map((cell, index) => {
             const id = cell.get('id');
             const type = cell.get('type');
             const text = cell.get('editorContent');
             return (
-                <Box key={id || index}>
-                  {type === 'markdown' && <MarkdownCell id={id} index={index} ytext={text} />}
-                  {type === 'code' && <CodeCell id={id} cell={cell} editorContent={text} index={index} />}
-                </Box>
+              <Box key={id || index}>
+                {type === 'markdown' && (
+                  <Box>
+                    <MarkdownCell id={id} editorContent={text} />
+                    <AddCell index={index} />
+                  </Box>
+                )}
+                {type === 'code' && (
+                  <Box>
+                    <CodeCell id={id} cell={cell} editorContent={text} />
+                    <AddCell index={index} />
+                  </Box>
+                )}
+              </Box>
             );
           })}
       </Box>
