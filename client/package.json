@@ -27,6 +27,7 @@
     "react-textarea-autosize": "^8.5.1",
     "short-unique-id": "^4.4.4",
     "uuid": "^9.0.0",
+    "ws": "^8.13.0",
     "y-indexeddb": "^9.0.11",
     "y-monaco": "^0.1.4",
     "y-webrtc": "^10.2.4",

@@ -23,7 +23,7 @@ export const createCell = type => {
   const cell = new Y.Map();
   cell.set("id", uuidv4());
   cell.set("type", type);
-  cell.set("text", new Y.Text(""));
+  cell.set("editorContent", new Y.Text(""));
   if (type === "code") {
     const outputMap = cell.set("outputMap", new Y.Map());
   }
