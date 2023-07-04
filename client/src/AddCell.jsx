@@ -1,35 +1,31 @@
 import { Add, Code } from '@mui/icons-material';
 import { Box, Divider, IconButton, Tooltip } from '@mui/material';
-import NotebookContext from './NotebookContext';
-import { useContext } from 'react';
+import useNotebookContext from './NotebookContext';
 
-const AddCell = ({ index, hover, setHover, isFirst }) => {
-  const { addCellAtIndex } = useContext(NotebookContext);
+const AddCell = ({ index }) => {
+  const { addCellAtIndex } = useNotebookContext();
 
   return (
-    <Box
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      sx={{ display: 'flex', justifyContent: 'center' }}>
+    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
       <Divider
         flexItem
         sx={{
           ml: '30px',
-          opacity: hover ? '1' : '0',
+          opacity: '1',
           width: '82%',
-          color: hover ? 'gray' : 'transparent'
+          color: 'gray'
         }}>
-        <Tooltip title={isFirst ? 'Add Markdown Cell Above' : 'Add Markdown Cell'}>
+        <Tooltip title='Add Markdown Cell'>
           <IconButton
             onClick={() => addCellAtIndex(index, 'markdown')}
-            sx={{ '&:hover': { backgroundColor: 'transparent' } }}>
+            sx={{ opacity: 0.5, '&:hover': { backgroundColor: 'transparent', opacity: 1 } }}>
             <Add sx={{ fontSize: '24px', opacity: '0.6', '&:hover': { opacity: 1 } }} />
           </IconButton>
         </Tooltip>
-        <Tooltip title={isFirst ? 'Add Code Cell Above' : 'Add Code Cell'}>
+        <Tooltip title='Add Code Cell'>
           <IconButton
             onClick={() => addCellAtIndex(index, 'code')}
-            sx={{ '&:hover': { backgroundColor: 'transparent' } }}>
+            sx={{ opacity: 0.5, '&:hover': { backgroundColor: 'transparent', opacity: 1 } }}>
             <Code sx={{ fontSize: '24px', opacity: '0.6', '&:hover': { opacity: 1 } }} />
           </IconButton>
         </Tooltip>

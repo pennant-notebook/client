@@ -1,5 +1,7 @@
-import { createContext } from 'react';
+import { createContext, useContext } from 'react';
 
-const NotebookContext = createContext();
+export const NotebookContext = createContext();
 
-export default NotebookContext;
+const useNotebookContext = () => useContext(NotebookContext);
+
+export default useNotebookContext;
