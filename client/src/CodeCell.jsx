@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Box, Stack, Typography } from '@mui/material';
 import { MonacoBinding } from 'y-monaco';
 import { checkStatus, sendToJudge, parseEngineResponse } from './services/codeExecutionService';
@@ -6,16 +6,14 @@ import AddCell from './AddCell';
 import CodeToolbar from './CodeToolbar';
 import * as Y from 'yjs';
 import { Editor } from '@monaco-editor/react';
-
-import NotebookContext from './NotebookContext';
+import useNotebookContext from './NotebookContext';
 
 const CodeCell = ({ id, index, cell, ytext }) => {
+  const { awareness, deleteCell } = useNotebookContext();
   const editorRef = useRef(null);
-  const { awareness, ydoc, deleteCell } = useContext(NotebookContext);
+  const outputMap = cell.get('outputMap');
   const [processing, setProcessing] = useState(false);
   const [output, setOutput] = useState('');
-  const [hoverBottom, setHoverBottom] = useState(false);
-  const [outputMap, setOutputMap] = useState(null);
   const [editorHeight, setEditorHeight] = useState('5vh');
 
   const handleEditorDidMount = (editor, monaco) => {
@@ -29,13 +27,8 @@ const CodeCell = ({ id, index, cell, ytext }) => {
     editor.onDidChangeModelContent(e => {
       const lineCount = editor.getModel().getLineCount();
       setEditorHeight(`${lineCount * lineHeight}px`);
-      // handleEditingChange(id, editor.getValue().trim());
     });
   };
-
-  useEffect(() => {
-    setOutputMap(ydoc.getMap('output'));
-  }, [cell]);
 
   useEffect(() => {
     if (outputMap) {
@@ -87,7 +80,7 @@ const CodeCell = ({ id, index, cell, ytext }) => {
           {processing ? 'Processing...' : output}
         </Typography>
       </Box>
-      <AddCell index={index} hover={hoverBottom} setHover={setHoverBottom} />
+      <AddCell index={index} />
     </Stack>
   );
 };
