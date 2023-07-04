@@ -1,5 +1,5 @@
 {
-  "name": "monaco-pennant-yjs",
+  "name": "pennant-ui",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -30,6 +30,7 @@
     "y-indexeddb": "^9.0.11",
     "y-monaco": "^0.1.4",
     "y-webrtc": "^10.2.4",
+    "y-websocket": "^1.5.0",
     "yjs": "^13.5.44"
   },
   "devDependencies": {

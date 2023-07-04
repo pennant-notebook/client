@@ -10,11 +10,27 @@ import { NotebookContext } from './NotebookContext';
 const roomToProviderMap = new Map();
 const roomToYDocMap = new Map();
 
-// TODO:
-// Consider changing the way we store the provider and ydoc objects.
-// Consider chaning the data structure of cells from yarray to ymap for 1:1 retrieval
 
 const Notebook = ({ roomID }) => {
+
+  // const [cellDataArr, setCellDataArr] = useState(doc.getArray('cells').toArray());
+  // const cellDataArrRef = useRef(doc.getArray('cells'));
+  // const editorRef = useRef(null);
+
+
+  // useEffect(() => {
+  //   provider.on('sync', isSynced => {
+  //     console.log('\n\nlocal yDoc has synced')
+  //     yPrettyPrint(doc)
+
+  //     const _cda = doc.get('cells')
+  //     setCellDataArr(_cda.toArray())
+
+  //     _cda.observe(e => {
+  //       setCellDataArr(_cda.toArray())
+  //     })
+  //   })
+  // }, [])
   const ydocRef = useRef(roomToYDocMap.get(roomID));
   const providerRef = useRef(roomToProviderMap.get(roomID));
   const awarenessRef = useRef(null);
@@ -22,6 +38,8 @@ const Notebook = ({ roomID }) => {
   const [_, forceRefresh] = useState([]);
 
   useEffect(() => {
+    console.log(roomID)
+    console.log(ydocRef.current)
     if (!ydocRef.current) {
       ydocRef.current = initializeYDoc(roomID);
       roomToYDocMap.set(roomID, ydocRef.current);
