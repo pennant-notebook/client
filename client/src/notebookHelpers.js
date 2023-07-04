@@ -3,9 +3,9 @@ import { v4 as uuidv4 } from "uuid";
 import { WebsocketProvider } from "y-websocket";
 import { ws } from "ws";
 
-export const initializeYDoc = roomID => {
+export const initializeYDoc = () => {
   const ydoc = new Y.Doc();
-  const cells = ydoc.getArray("cells");
+  // const cells = ydoc.getArray("cells");
   return ydoc;
 };
 

@@ -8,11 +8,9 @@ import AddCell from './AddCell';
 import { NotebookContext } from './NotebookContext';
 import { yPrettyPrint } from './utils/yPrettyPrint';
 
-const roomToProviderMap = new Map();
-const roomTodocMap = new Map();
-
-
-const Notebook = ({ roomID, doc, provider }) => {
+const Notebook = ({ doc, provider }) => {
+  console.log('doc from within Notebook', doc)
+  console.log('provider from within Notebook', provider)
   const [cellDataArr, setCellDataArr] = useState(doc.getArray('cells').toArray());
   const cellDataArrRef = useRef(doc.getArray('cells'));
   const editorRef = useRef(null);
@@ -20,18 +18,36 @@ const Notebook = ({ roomID, doc, provider }) => {
   let awareness = provider?.awareness;
 
   useEffect(() => {
+    console.log(provider)
     provider.on('sync', isSynced => {
       console.log('\n\nlocal doc has synced')
       yPrettyPrint(doc)
 
       const _cda = doc.get('cells')
+      console.log(doc.get('cells'))
       setCellDataArr(_cda.toArray())
 
       _cda.observe(e => {
         setCellDataArr(_cda.toArray())
+        console.log(doc.get('cells'))
       })
     })
   }, [])
+
+  useEffect(() => {
+    const cells = doc.getArray('cells');
+    setCellDataArr(cells.toArray());
+
+    const observer = () => {
+      setCellDataArr(cells.toArray());
+    };
+
+    cells.observe(observer);
+
+    return () => {
+      cells.unobserve(observer);
+    };
+  }, []);
 
 
   const deleteCell = id => {
