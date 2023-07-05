@@ -1,11 +1,14 @@
-import { React, lazy, Suspense } from 'react';
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import ShortUniqueId from 'short-unique-id';
 import LoadingSpinner from './components/UI/LoadingSpinner';
 import { Box } from '@mui/material';
+import { initializeYDoc, initializeProvider } from './notebookHelpers';
 
 const Notebook = lazy(() => import('./Notebook'));
-const uuid = new ShortUniqueId({ length: 6 });
+  const ydoc = initializeYDoc();
+  const provider = initializeProvider(ydoc, 'LADYGAGA');
+const Room = () => {
 
 const Room = () => {
   const location = useLocation();
@@ -29,7 +32,6 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path='/:uuid' element={<Room />} />
-          <Route path='/' element={<Room />} />
         </Routes>
       </BrowserRouter>
     </Box>

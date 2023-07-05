@@ -5,6 +5,7 @@ import { checkStatus, sendToJudge, parseEngineResponse } from './services/codeEx
 import CodeToolbar from './CodeToolbar';
 import { Editor } from '@monaco-editor/react';
 import useNotebookContext from './NotebookContext';
+import AddCell from './AddCell';
 
 const CodeCell = ({ id, cell, ytext }) => {
   const { awareness, deleteCell } = useNotebookContext();
@@ -12,7 +13,7 @@ const CodeCell = ({ id, cell, ytext }) => {
   const outputMap = cell.get('outputMap');
   const [processing, setProcessing] = useState(false);
   const [output, setOutput] = useState('');
-  const [editorHeight, setEditorHeight] = useState('5vh');
+  // const [editorHeight, setEditorHeight] = useState('5vh');
 
   const handleEditorDidMount = (editor, monaco) => {
     editorRef.current = editor;
@@ -20,11 +21,6 @@ const CodeCell = ({ id, cell, ytext }) => {
     const lineHeight = editor.getOption(monaco.editor.EditorOption.lineHeight);
     const lineCount = editor.getModel().getLineCount();
     setEditorHeight(`${lineCount * lineHeight}px`);
-
-    editor.onDidChangeModelContent(e => {
-      const lineCount = editor.getModel().getLineCount();
-      setEditorHeight(`${lineCount * lineHeight}px`);
-    });
   };
 
   useEffect(() => {
@@ -61,7 +57,7 @@ const CodeCell = ({ id, cell, ytext }) => {
         <Editor
           aria-labelledby='Code Editor'
           className='justify-center'
-          height={editorHeight}
+          height='25vh'
           defaultLanguage='javascript'
           theme='vs-dark'
           onMount={handleEditorDidMount}

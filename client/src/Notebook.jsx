@@ -44,6 +44,7 @@ const Notebook = ({ roomID }) => {
   const addCellAtIndex = (idx, type) => {
     const cellArray = doc.current.getArray('cells');
     const cell = createCell(type);
+    console.log('cell from within addCellAtIndex', cell)
     if (idx >= cellArray.length) {
       cellArray.push([cell]);
     } else {
@@ -86,8 +87,10 @@ const Notebook = ({ roomID }) => {
           })}
       </Box>
       {cellsYArray && cellsYArray.length === 0 && <AddCell index={0} />}
+      {cellDataArr && cellDataArr.length === 0 && <AddCell index={0} />}
     </NotebookContext.Provider>
   );
 };
 
 export default Notebook;
+
