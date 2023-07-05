@@ -87,7 +87,6 @@ const Notebook = ({ roomID }) => {
           })}
       </Box>
       {cellsYArray && cellsYArray.length === 0 && <AddCell index={0} />}
-      {/* {cellDataArr && cellDataArr.length === 0 && <AddCell index={0} />} */}
     </NotebookContext.Provider>
   );
 };
