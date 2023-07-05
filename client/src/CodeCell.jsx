@@ -12,7 +12,7 @@ const CodeCell = ({ cellID, roomID, cell, ytext }) => {
   const editorRef = useRef(null);
   const outputMap = cell.get('outputMap');
   const [processing, setProcessing] = useState(false);
-  const [output, setOutput] = useState('');
+  const [output, setOutput] = useState(outputMap);
   const [editorHeight, setEditorHeight] = useState('5vh');
 
   const handleEditorDidMount = (editor, monaco) => {
