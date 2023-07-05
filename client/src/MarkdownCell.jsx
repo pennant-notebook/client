@@ -8,19 +8,25 @@ import { CloseSharp } from '@mui/icons-material';
 import useNotebookContext from './NotebookContext';
 import AddCell from './AddCell';
 
-const MarkdownCell = ({ id, editorContent }) => {
+const MarkdownCell = ({ id, ytext }) => {
   const { deleteCell } = useNotebookContext();
   const textareaRef = useRef();
   const [text, setText] = useState('');
   const [editing, setEditing] = useState(false);
 
   useEffect(() => {
-    setText(editorContent.toString());
+    const type = ytext;
+    setText(type.toString());
 
-    editorContent.observe(() => {
-      setText(editorContent.toString());
+    const updateText = () => {
+      setText(type.toString());
+    };
+
+    type.observe(() => {
+      updateText();
+    
     });
-  }, [editorContent]);
+  }, [type]);
 
   const handleTextareaChange = e => {
     editorContent.doc.transact(() => {

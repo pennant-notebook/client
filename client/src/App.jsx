@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import ShortUniqueId from 'short-unique-id';
 import LoadingSpinner from './components/UI/LoadingSpinner';
 import { Box } from '@mui/material';
 import { initializeYDoc, initializeProvider } from './notebookHelpers';
@@ -9,10 +10,18 @@ const Notebook = lazy(() => import('./Notebook'));
   const provider = initializeProvider(ydoc, 'LADYGAGA');
 const Room = () => {
 
+const Room = () => {
+  const location = useLocation();
+  let roomID = location.pathname.slice(1);
+  if (!roomID || roomID.length !== 6) {
+    roomID = uuid();
+    const newUrl = `/${roomID}`;
+    window.history.replaceState(null, '', newUrl);
+  }
 
   return (
     <Suspense fallback={<LoadingSpinner />}>
-      <Notebook doc={ydoc} provider={provider} />
+      <Notebook roomID={roomID} />
     </Suspense>
   );
 };
@@ -22,7 +31,7 @@ function App() {
     <Box sx={{ height: '100vh', overflowY: 'scroll' }}>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<Room />} />
+          <Route path='/:uuid' element={<Room />} />
         </Routes>
       </BrowserRouter>
     </Box>
