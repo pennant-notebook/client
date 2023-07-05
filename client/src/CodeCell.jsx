@@ -5,8 +5,9 @@ import { checkStatus, sendToJudge, parseEngineResponse } from './services/codeEx
 import CodeToolbar from './CodeToolbar';
 import { Editor } from '@monaco-editor/react';
 import useNotebookContext from './NotebookContext';
+import { sendToDredd, checkDreddStatus } from './services/dreddExecutionService';
 
-const CodeCell = ({ id, cell, ytext }) => {
+const CodeCell = ({ cellID, roomID, cell, ytext }) => {
   const { awareness, deleteCell } = useNotebookContext();
   const editorRef = useRef(null);
   const outputMap = cell.get('outputMap');
@@ -31,13 +32,18 @@ const CodeCell = ({ id, cell, ytext }) => {
     }
   }, [outputMap]);
 
-  const handleRunCode = async () => {
-    setProcessing(true);
-    const response = await sendToJudge(editorRef.current.getValue(), '', 63);
-    const processedResponse = await checkStatus(response.data.token);
-    setProcessing(false);
-    const convertedOutput = parseEngineResponse(processedResponse);
-    outputMap.set('data', convertedOutput);
+  const parseDreddResponse = (response) => {
+    console.log(response);
+    return response[0].output;
+  };
+
+  const handleDredd = async () => {
+    setProcessing(true); // for Toast
+    const token = await sendToDredd(roomID, cellID, editorRef.current.getValue()); // 2nd arg is input
+    const response = await checkDreddStatus(token);
+    const processedResponse = parseDreddResponse(response);
+    setProcessing(false); // for Toast
+    outputMap.set('data', processedResponse);
   };
 
   return (
@@ -52,11 +58,11 @@ const CodeCell = ({ id, cell, ytext }) => {
           paddingBottom: output ? '4px' : '0',
           backgroundColor: 'navajowhite'
         }}>
-        <CodeToolbar onClickRun={handleRunCode} id={id} onDelete={deleteCell} />
+        <CodeToolbar onClickRun={handleDredd} id={cellID} onDelete={deleteCell} />
         <Editor
           aria-labelledby='Code Editor'
           className='justify-center'
-          height='25vh'
+          height={editorHeight}
           defaultLanguage='javascript'
           theme='vs-dark'
           onMount={handleEditorDidMount}
