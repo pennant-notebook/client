@@ -6,7 +6,6 @@ import ReactMarkdown from 'react-markdown';
 import TextareaAutosize from 'react-textarea-autosize';
 import { CloseSharp } from '@mui/icons-material';
 import useNotebookContext from './NotebookContext';
-import AddCell from './AddCell';
 
 const MarkdownCell = ({ id, ytext }) => {
   const { deleteCell } = useNotebookContext();
@@ -26,12 +25,12 @@ const MarkdownCell = ({ id, ytext }) => {
       updateText();
     
     });
-  }, [type]);
+  }, [ytext]);
 
   const handleTextareaChange = e => {
-    editorContent.doc.transact(() => {
-      editorContent.delete(0, editorContent.length);
-      editorContent.insert(0, e.target.value);
+    ytext.doc.transact(() => {
+      ytext.delete(0, ytext.length);
+      ytext.insert(0, e.target.value);
     }, textareaRef.current);
   };
 

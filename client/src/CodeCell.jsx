@@ -5,7 +5,6 @@ import { checkStatus, sendToJudge, parseEngineResponse } from './services/codeEx
 import CodeToolbar from './CodeToolbar';
 import { Editor } from '@monaco-editor/react';
 import useNotebookContext from './NotebookContext';
-import AddCell from './AddCell';
 
 const CodeCell = ({ id, cell, ytext }) => {
   const { awareness, deleteCell } = useNotebookContext();
@@ -13,7 +12,7 @@ const CodeCell = ({ id, cell, ytext }) => {
   const outputMap = cell.get('outputMap');
   const [processing, setProcessing] = useState(false);
   const [output, setOutput] = useState('');
-  // const [editorHeight, setEditorHeight] = useState('5vh');
+  const [editorHeight, setEditorHeight] = useState('5vh');
 
   const handleEditorDidMount = (editor, monaco) => {
     editorRef.current = editor;
