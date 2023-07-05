@@ -1,54 +1,65 @@
 // Notebook.jsx
 import { useEffect, useState, useRef } from 'react';
 import { Box } from '@mui/material';
-import { createCell, initializeProvider, initializeYDoc } from './notebookHelpers';
+import { createCell } from './notebookHelpers';
 import MarkdownCell from './MarkdownCell';
 import CodeCell from './CodeCell';
 import AddCell from './AddCell';
 import { NotebookContext } from './NotebookContext';
+import { yPrettyPrint } from './utils/yPrettyPrint';
 
-const roomToProviderMap = new Map();
-const roomToYDocMap = new Map();
+const Notebook = ({ doc, provider }) => {
+  console.log('doc from within Notebook', doc)
+  console.log('provider from within Notebook', provider)
+  const [cellDataArr, setCellDataArr] = useState(doc.getArray('cells').toArray());
+  const cellDataArrRef = useRef(doc.getArray('cells'));
+  const editorRef = useRef(null);
 
-// TODO:
-// Consider changing the way we store the provider and ydoc objects.
-// Consider chaning the data structure of cells from yarray to ymap for 1:1 retrieval
-
-const Notebook = ({ roomID }) => {
-  const ydocRef = useRef(roomToYDocMap.get(roomID));
-  const providerRef = useRef(roomToProviderMap.get(roomID));
-  const awarenessRef = useRef(null);
-  const [cells, setCells] = useState([]);
-  const [_, forceRefresh] = useState([]);
+  let awareness = provider?.awareness;
 
   useEffect(() => {
-    if (!ydocRef.current) {
-      ydocRef.current = initializeYDoc(roomID);
-      roomToYDocMap.set(roomID, ydocRef.current);
-      const cells = ydocRef.current.getArray('cells');
-      cells.observe(() => {
-        setCells(ydocRef.current.getArray('cells'));
-        forceRefresh([]);
-      });
-      setCells(cells);
-    }
+    console.log(provider)
+    provider.on('sync', isSynced => {
+      console.log('\n\nlocal doc has synced')
+      yPrettyPrint(doc)
 
-    if (!providerRef.current) {
-      providerRef.current = initializeProvider(ydocRef.current, roomID);
-      roomToProviderMap.set(roomID, providerRef.current);
-      awarenessRef.current = providerRef.current.awareness;
-    }
-  }, [roomID]);
+      const _cda = doc.get('cells')
+      console.log(doc.get('cells'))
+      setCellDataArr(_cda.toArray())
+
+      _cda.observe(e => {
+        setCellDataArr(_cda.toArray())
+        console.log(doc.get('cells'))
+      })
+    })
+  }, [])
+
+  useEffect(() => {
+    const cells = doc.getArray('cells');
+    setCellDataArr(cells.toArray());
+
+    const observer = () => {
+      setCellDataArr(cells.toArray());
+    };
+
+    cells.observe(observer);
+
+    return () => {
+      cells.unobserve(observer);
+    };
+  }, []);
+
 
   const deleteCell = id => {
-    const cellArray = ydocRef.current.getArray('cells');
+    const cellArray = doc.getArray('cells');
     const cellIndex = cellArray.toArray().findIndex(c => c.get('id') === id);
     if (cellIndex !== -1) cellArray.delete(cellIndex);
   };
 
   const addCellAtIndex = (idx, type) => {
-    const cellArray = ydocRef.current.getArray('cells');
+    const cellArray = doc.getArray('cells');
     const cell = createCell(type);
+    console.log('cell from within addCellAtIndex', cell)
     if (idx >= cellArray.length) {
       cellArray.push([cell]);
     } else {
@@ -59,30 +70,41 @@ const Notebook = ({ roomID }) => {
   const contextValue = {
     addCellAtIndex,
     deleteCell,
-    awareness: awarenessRef.current,
-    ydoc: ydocRef.current,
-    provider: providerRef.current
+    awareness,
+    doc,
+    provider
   };
 
   return (
     <NotebookContext.Provider value={contextValue}>
       <Box sx={{ mx: 5, py: 1 }}>
-        {cells &&
-          cells.map((cell, index) => {
+        {cellDataArr &&
+          cellDataArr.map((cell, index) => {
             const id = cell.get('id');
             const type = cell.get('type');
-            const text = cell.get('text');
+            const text = cell.get('editorContent');
             return (
               <Box key={id || index}>
-                {type === 'markdown' && <MarkdownCell id={id} index={index} ytext={text} />}
-                {type === 'code' && <CodeCell id={id} index={index} cell={cell} ytext={text} />}
+                {type === 'markdown' && (
+                  <Box>
+                    <MarkdownCell id={id} editorContent={text} />
+                    <AddCell index={index} />
+                  </Box>
+                )}
+                {type === 'code' && (
+                  <Box>
+                    <CodeCell id={id} cell={cell} editorContent={text} />
+                    <AddCell index={index} />
+                  </Box>
+                )}
               </Box>
             );
           })}
       </Box>
-      {cells && cells.length === 0 && <AddCell index={0} />}
+      {cellDataArr && cellDataArr.length === 0 && <AddCell index={0} />}
     </NotebookContext.Provider>
   );
 };
 
 export default Notebook;
+

@@ -2,32 +2,24 @@ import { useEffect, useRef, useState } from 'react';
 import { Box, Stack, Typography } from '@mui/material';
 import { MonacoBinding } from 'y-monaco';
 import { checkStatus, sendToJudge, parseEngineResponse } from './services/codeExecutionService';
-import AddCell from './AddCell';
 import CodeToolbar from './CodeToolbar';
 import * as Y from 'yjs';
 import { Editor } from '@monaco-editor/react';
 import useNotebookContext from './NotebookContext';
+import AddCell from './AddCell';
 
-const CodeCell = ({ id, index, cell, ytext }) => {
+const CodeCell = ({ id, cell, editorContent }) => {
   const { awareness, deleteCell } = useNotebookContext();
   const editorRef = useRef(null);
   const outputMap = cell.get('outputMap');
   const [processing, setProcessing] = useState(false);
   const [output, setOutput] = useState('');
-  const [editorHeight, setEditorHeight] = useState('5vh');
+  // const [editorHeight, setEditorHeight] = useState('5vh');
 
   const handleEditorDidMount = (editor, monaco) => {
     editorRef.current = editor;
-    const undoManager = new Y.UndoManager(ytext);
-    new MonacoBinding(ytext, editor.getModel(), new Set([editor]), awareness);
-    const lineHeight = editor.getOption(monaco.editor.EditorOption.lineHeight);
-    const lineCount = editor.getModel().getLineCount();
-    setEditorHeight(`${lineCount * lineHeight}px`);
 
-    editor.onDidChangeModelContent(e => {
-      const lineCount = editor.getModel().getLineCount();
-      setEditorHeight(`${lineCount * lineHeight}px`);
-    });
+    new MonacoBinding(editorContent, editor.getModel(), new Set([editor]), awareness);
   };
 
   useEffect(() => {
@@ -64,7 +56,7 @@ const CodeCell = ({ id, index, cell, ytext }) => {
         <Editor
           aria-labelledby='Code Editor'
           className='justify-center'
-          height={editorHeight}
+          height='25vh'
           defaultLanguage='javascript'
           theme='vs-dark'
           onMount={handleEditorDidMount}
@@ -80,7 +72,6 @@ const CodeCell = ({ id, index, cell, ytext }) => {
           {processing ? 'Processing...' : output}
         </Typography>
       </Box>
-      <AddCell index={index} />
     </Stack>
   );
 };
