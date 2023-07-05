@@ -21,6 +21,11 @@ const CodeCell = ({ cellID, roomID, cell, ytext }) => {
     const lineHeight = editor.getOption(monaco.editor.EditorOption.lineHeight);
     const lineCount = editor.getModel().getLineCount();
     setEditorHeight(`${lineCount * lineHeight}px`);
+
+    editor.onDidChangeModelContent(e => {
+      const lineCount = editor.getModel().getLineCount();
+      setEditorHeight(`${lineCount * lineHeight}px`);
+    });
   };
 
   useEffect(() => {
@@ -32,7 +37,7 @@ const CodeCell = ({ cellID, roomID, cell, ytext }) => {
     }
   }, [outputMap]);
 
-  const parseDreddResponse = (response) => {
+  const parseDreddResponse = response => {
     console.log(response);
     return response[0].output;
   };
