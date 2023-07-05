@@ -78,7 +78,7 @@ const Notebook = ({ roomID }) => {
                 )}
                 {type === 'code' && (
                   <Box>
-                    <CodeCell id={id} cell={cell} ytext={text} />
+                    <CodeCell cellID={id} roomID={roomID} cell={cell} ytext={text} />
                     <AddCell index={index} />
                   </Box>
                 )}
