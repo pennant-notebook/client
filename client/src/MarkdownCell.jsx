@@ -5,20 +5,24 @@ import { duotoneDark, duotoneSpace } from 'react-syntax-highlighter/dist/esm/sty
 import ReactMarkdown from 'react-markdown';
 import TextareaAutosize from 'react-textarea-autosize';
 import { CloseSharp } from '@mui/icons-material';
-import AddCell from './AddCell';
 import useNotebookContext from './NotebookContext';
 
-const MarkdownCell = ({ index, id, ytext }) => {
+const MarkdownCell = ({ id, ytext }) => {
   const { deleteCell } = useNotebookContext();
   const textareaRef = useRef();
   const [text, setText] = useState('');
   const [editing, setEditing] = useState(false);
 
   useEffect(() => {
-    setText(ytext.toString());
+    const type = ytext;
+    setText(type.toString());
 
-    ytext.observe(() => {
-      setText(ytext.toString());
+    const updateText = () => {
+      setText(type.toString());
+    };
+
+    type.observe(() => {
+      updateText();
     });
   }, [ytext]);
 
@@ -95,7 +99,6 @@ const MarkdownCell = ({ index, id, ytext }) => {
           )}
         </Box>
       </Paper>
-      <AddCell index={index} />
     </Stack>
   );
 };

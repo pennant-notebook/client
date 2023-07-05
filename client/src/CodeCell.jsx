@@ -2,13 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import { Box, Stack, Typography } from '@mui/material';
 import { MonacoBinding } from 'y-monaco';
 import { checkStatus, sendToJudge, parseEngineResponse } from './services/codeExecutionService';
-import AddCell from './AddCell';
 import CodeToolbar from './CodeToolbar';
-import * as Y from 'yjs';
 import { Editor } from '@monaco-editor/react';
 import useNotebookContext from './NotebookContext';
 
-const CodeCell = ({ id, index, cell, ytext }) => {
+const CodeCell = ({ id, cell, ytext }) => {
   const { awareness, deleteCell } = useNotebookContext();
   const editorRef = useRef(null);
   const outputMap = cell.get('outputMap');
@@ -18,7 +16,6 @@ const CodeCell = ({ id, index, cell, ytext }) => {
 
   const handleEditorDidMount = (editor, monaco) => {
     editorRef.current = editor;
-    const undoManager = new Y.UndoManager(ytext);
     new MonacoBinding(ytext, editor.getModel(), new Set([editor]), awareness);
     const lineHeight = editor.getOption(monaco.editor.EditorOption.lineHeight);
     const lineCount = editor.getModel().getLineCount();
@@ -80,7 +77,6 @@ const CodeCell = ({ id, index, cell, ytext }) => {
           {processing ? 'Processing...' : output}
         </Typography>
       </Box>
-      <AddCell index={index} />
     </Stack>
   );
 };
