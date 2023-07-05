@@ -5,6 +5,7 @@ import MarkdownCell from './MarkdownCell';
 import CodeCell from './CodeCell';
 import AddCell from './AddCell';
 import { NotebookContext } from './NotebookContext';
+import Header from './Header';
 
 const roomToProviderMap = new Map();
 const roomToDocMap = new Map();
@@ -44,7 +45,7 @@ const Notebook = ({ roomID }) => {
   const addCellAtIndex = (idx, type) => {
     const cellArray = doc.current.getArray('cells');
     const cell = createCell(type);
-    console.log('cell from within addCellAtIndex', cell)
+    console.log('cell from within addCellAtIndex', cell);
     if (idx >= cellArray.length) {
       cellArray.push([cell]);
     } else {
@@ -60,8 +61,18 @@ const Notebook = ({ roomID }) => {
     provider: provider.current
   };
 
+  const codeCellsForDredd = cellsYArray
+    .filter(c => c.get('type') === 'code')
+    .map(c => ({
+      id: c.get('id'),
+      code: c.get('editorContent').toString()
+    }));
+  console.log(codeCellsForDredd);
+
   return (
     <NotebookContext.Provider value={contextValue}>
+      <Header roomID={roomID} codeCells={codeCellsForDredd} />
+
       <Box sx={{ mx: 5, py: 1 }}>
         {cellsYArray &&
           cellsYArray.map((cell, index) => {
@@ -92,4 +103,3 @@ const Notebook = ({ roomID }) => {
 };
 
 export default Notebook;
-
