@@ -6,9 +6,6 @@ import { Box } from '@mui/material';
 import { initializeYDoc, initializeProvider } from './notebookHelpers';
 
 const Notebook = lazy(() => import('./Notebook'));
-  const ydoc = initializeYDoc();
-  const provider = initializeProvider(ydoc, 'LADYGAGA');
-const Room = () => {
 
 const Room = () => {
   const location = useLocation();
