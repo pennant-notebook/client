@@ -43,8 +43,7 @@ export const checkDreddStatus = async token => {
 
 export const resetContext = async (notebookId) => {
   try {
-    notebookId = HARD_CODED_NOTE_BOOK_ID;
-    return await axios.post(`${BASE_URL}/reset/${notebookId}`);
+    return await axios.post(`${BASE_URL}/api/reset/${notebookId}`);
   } catch (error) {
     throw new Error(error.message);
   }
@@ -64,8 +63,8 @@ export const resetContext = async (notebookId) => {
 
 export const sendManyToDredd = async (notebookId, cells) => {
   try {
-    const result = await axios.post(`${BASE_URL}/submit`, {
-      notebookId: HARD_CODED_NOTE_BOOK_ID,
+    const result = await axios.post(`${BASE_URL}/api/submit`, {
+      notebookId,
       cells,
     });
     return result.data.submissionId;

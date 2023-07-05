@@ -1,10 +1,11 @@
-import { useEffect, useState, useRef } from 'react';
-import { Box } from '@mui/material';
-import { createCell, initializeProvider } from './notebookHelpers';
-import MarkdownCell from './MarkdownCell';
-import CodeCell from './CodeCell';
-import AddCell from './AddCell';
-import { NotebookContext } from './NotebookContext';
+import { useEffect, useState, useRef } from "react";
+import { Box } from "@mui/material";
+import { createCell, initializeProvider } from "./notebookHelpers";
+import MarkdownCell from "./MarkdownCell";
+import CodeCell from "./CodeCell";
+import AddCell from "./AddCell";
+import { NotebookContext } from "./NotebookContext";
+import Header from "./Header";
 
 const roomToProviderMap = new Map();
 const roomToDocMap = new Map();
@@ -12,7 +13,9 @@ const roomToDocMap = new Map();
 const Notebook = ({ roomID }) => {
   const provider = useRef(roomToProviderMap.get(roomID));
   const doc = useRef(roomToDocMap.get(roomID));
-  const awareness = useRef(provider.current ? provider.current.awareness : null);
+  const awareness = useRef(
+    provider.current ? provider.current.awareness : null
+  );
   const [cellsYArray, setCellsYArray] = useState([]);
 
   useEffect(() => {
@@ -25,7 +28,7 @@ const Notebook = ({ roomID }) => {
         doc.current = provider.current.document;
       }
 
-      const cells = doc.current.getArray('cells');
+      const cells = doc.current.getArray("cells");
 
       const observer = () => {
         setCellsYArray(cells.toArray());
@@ -35,16 +38,16 @@ const Notebook = ({ roomID }) => {
     }
   }, [roomID]);
 
-  const deleteCell = id => {
-    const cellArray = doc.current.getArray('cells');
-    const cellIndex = cellArray.toArray().findIndex(c => c.get('id') === id);
+  const deleteCell = (id) => {
+    const cellArray = doc.current.getArray("cells");
+    const cellIndex = cellArray.toArray().findIndex((c) => c.get("id") === id);
     if (cellIndex !== -1) cellArray.delete(cellIndex);
   };
 
   const addCellAtIndex = (idx, type) => {
-    const cellArray = doc.current.getArray('cells');
+    const cellArray = doc.current.getArray("cells");
     const cell = createCell(type);
-    console.log('cell from within addCellAtIndex', cell)
+    console.log("cell from within addCellAtIndex", cell);
     if (idx >= cellArray.length) {
       cellArray.push([cell]);
     } else {
@@ -57,28 +60,45 @@ const Notebook = ({ roomID }) => {
     deleteCell,
     awareness: awareness.current,
     doc: doc.current,
-    provider: provider.current
+    provider: provider.current,
   };
+
+  //   {
+  //     "cellId": "4",
+  //     "code": "const age = 30"
+  // },
+
+  const codeCellsForDredd = cellsYArray.filter(c => c.get('type') === 'code').map((c) => ({
+    id: c.get("id"),
+    code: c.get("editorContent").toString(),
+  }));
+  console.log(codeCellsForDredd);
 
   return (
     <NotebookContext.Provider value={contextValue}>
+      <Header roomID={roomID} codeCells={codeCellsForDredd} />
       <Box sx={{ mx: 5, py: 1 }}>
         {cellsYArray &&
           cellsYArray.map((cell, index) => {
-            const id = cell.get('id');
-            const type = cell.get('type');
-            const text = cell.get('editorContent');
+            const id = cell.get("id");
+            const type = cell.get("type");
+            const text = cell.get("editorContent");
             return (
               <Box key={id || index}>
-                {type === 'markdown' && (
+                {type === "markdown" && (
                   <Box>
                     <MarkdownCell id={id} ytext={text} />
                     <AddCell index={index} />
                   </Box>
                 )}
-                {type === 'code' && (
+                {type === "code" && (
                   <Box>
-                    <CodeCell cellID={id} roomID={roomID} cell={cell} ytext={text} />
+                    <CodeCell
+                      cellID={id}
+                      roomID={roomID}
+                      cell={cell}
+                      ytext={text}
+                    />
                     <AddCell index={index} />
                   </Box>
                 )}
@@ -92,4 +112,3 @@ const Notebook = ({ roomID }) => {
 };
 
 export default Notebook;
-
