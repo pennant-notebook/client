@@ -4,7 +4,7 @@ import { createCell, initializeProvider } from '../../utils/notebookHelpers';
 import MarkdownCell from '../Cells/Markdown/MarkdownCell';
 import CodeCell from '../Cells/Code/CodeCell';
 import AddCell from '../Cells/AddCell';
-import { NotebookContext } from '../../contexts/NotebookContext';
+import { NotebookContext } from './contexts/NotebookContext';
 import Header from './Header';
 
 const roomToProviderMap = new Map();
