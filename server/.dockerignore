@@ -1,0 +1,2 @@
+/node_modules
+#get dist by making new production build on front end, copy past into server dir
