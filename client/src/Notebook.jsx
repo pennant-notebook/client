@@ -67,7 +67,7 @@ const Notebook = ({ roomID }) => {
       id: c.get('id'),
       code: c.get('editorContent').toString()
     }));
-  console.log(codeCellsForDredd);
+  // console.log(codeCellsForDredd);
 
   return (
     <NotebookContext.Provider value={contextValue}>
