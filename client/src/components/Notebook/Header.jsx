@@ -1,8 +1,8 @@
-import logo from './assets/logo.png';
+import logo from '../../assets/logo.png';
 import { Box, IconButton, Typography, Stack } from '@mui/material';
 import { PlayCircleOutlineTwoTone, Refresh } from '@mui/icons-material';
-import { checkDreddStatus, sendManyToDredd, resetContext } from './services/dreddExecutionService';
-import useNotebookContext from './NotebookContext';
+import { checkDreddStatus, sendManyToDredd, resetContext } from '../../services/dreddExecutionService';
+import useNotebookContext from '../Contexts/NotebookContext';
 
 const Header = ({ roomID, codeCells }) => {
   const { doc } = useNotebookContext();

@@ -1,6 +1,6 @@
 import { Add, Code } from '@mui/icons-material';
 import { Box, Divider, IconButton, Tooltip } from '@mui/material';
-import useNotebookContext from './NotebookContext';
+import useNotebookContext from '../Contexts/NotebookContext';
 
 const AddCell = ({ index }) => {
   const { addCellAtIndex } = useNotebookContext();

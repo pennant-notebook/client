@@ -5,7 +5,7 @@ import { duotoneDark, duotoneSpace } from 'react-syntax-highlighter/dist/esm/sty
 import ReactMarkdown from 'react-markdown';
 import TextareaAutosize from 'react-textarea-autosize';
 import { CloseSharp } from '@mui/icons-material';
-import useNotebookContext from './NotebookContext';
+import useNotebookContext from '../../Contexts/NotebookContext';
 
 const MarkdownCell = ({ id, ytext }) => {
   const { deleteCell } = useNotebookContext();
