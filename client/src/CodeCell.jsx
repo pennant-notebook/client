@@ -11,8 +11,11 @@ const CodeCell = ({ cellID, roomID, cell, ytext }) => {
   const { awareness, deleteCell } = useNotebookContext();
   const editorRef = useRef(null);
   const outputMap = cell.get('outputMap');
+  const outputData = outputMap.get('data');
+  console.log({ outputData });
   const [processing, setProcessing] = useState(false);
-  const [output, setOutput] = useState(outputMap);
+  const [output, setOutput] = useState(outputMap.get('data'));
+  console.log('output is: ', output);
   const [editorHeight, setEditorHeight] = useState('5vh');
 
   const handleEditorDidMount = (editor, monaco) => {
@@ -32,6 +35,8 @@ const CodeCell = ({ cellID, roomID, cell, ytext }) => {
     if (outputMap) {
       outputMap.observe(() => {
         const data = outputMap.get('data');
+        console.log({ data });
+
         setOutput(data);
       });
     }
@@ -47,6 +52,7 @@ const CodeCell = ({ cellID, roomID, cell, ytext }) => {
     const token = await sendToDredd(roomID, cellID, editorRef.current.getValue()); // 2nd arg is input
     const response = await checkDreddStatus(token);
     const processedResponse = parseDreddResponse(response);
+    console.log({ processedResponse });
     setProcessing(false); // for Toast
     outputMap.set('data', processedResponse);
   };
