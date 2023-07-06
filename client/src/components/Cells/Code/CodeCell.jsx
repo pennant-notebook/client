@@ -4,10 +4,12 @@ import { MonacoBinding } from 'y-monaco';
 import { checkStatus, sendToJudge, parseEngineResponse } from '../../../services/codeExecutionService';
 import CodeToolbar from './CodeToolbar';
 import { Editor } from '@monaco-editor/react';
-import useNotebookContext from '../../Contexts/NotebookContext';
+import useNotebookContext from '../../../contexts/NotebookContext';
 import { sendToDredd, checkDreddStatus } from '../../../services/dreddExecutionService';
+import { yPrettyPrint } from '../../../utils/yPrettyPrint';
 
 const CodeCell = ({ cellID, roomID, cell, ytext }) => {
+  yPrettyPrint(cell);
   const { awareness, deleteCell } = useNotebookContext();
   const editorRef = useRef(null);
   const outputMap = cell.get('outputMap');
@@ -34,7 +36,7 @@ const CodeCell = ({ cellID, roomID, cell, ytext }) => {
   useEffect(() => {
     if (outputMap) {
       outputMap.observe(() => {
-        const data = outputMap.get('data');
+        const data = cell.get('outputMap').get('data');
         console.log({ data });
 
         setOutput(data);
