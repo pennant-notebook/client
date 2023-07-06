@@ -1,10 +1,10 @@
 import { useEffect, useState, useRef } from 'react';
 import { Box } from '@mui/material';
-import { createCell, initializeProvider } from './notebookHelpers';
-import MarkdownCell from './MarkdownCell';
-import CodeCell from './CodeCell';
-import AddCell from './AddCell';
-import { NotebookContext } from './NotebookContext';
+import { createCell, initializeProvider } from '../../utils/notebookHelpers';
+import MarkdownCell from '../Cells/Markdown/MarkdownCell';
+import CodeCell from '../Cells/Code/CodeCell';
+import AddCell from '../Cells/AddCell';
+import { NotebookContext } from '../Contexts/NotebookContext';
 import Header from './Header';
 
 const roomToProviderMap = new Map();
@@ -67,7 +67,7 @@ const Notebook = ({ roomID }) => {
       id: c.get('id'),
       code: c.get('editorContent').toString()
     }));
-  // console.log(codeCellsForDredd);
+
 
   return (
     <NotebookContext.Provider value={contextValue}>
@@ -88,10 +88,12 @@ const Notebook = ({ roomID }) => {
                   </Box>
                 )}
                 {type === 'code' && (
-                  <Box>
-                    <CodeCell cellID={id} roomID={roomID} cell={cell} ytext={text} />
-                    <AddCell index={index} />
-                  </Box>
+                  <div>
+                    <Box>
+                      <CodeCell cellID={id} roomID={roomID} cell={cell} ytext={text} />
+                      <AddCell index={index} />
+                    </Box>
+                  </div>
                 )}
               </Box>
             );

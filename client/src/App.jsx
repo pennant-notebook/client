@@ -4,7 +4,7 @@ import ShortUniqueId from 'short-unique-id';
 import LoadingSpinner from './components/UI/LoadingSpinner';
 import { Box } from '@mui/material';
 
-const Notebook = lazy(() => import('./Notebook'));
+const Notebook = lazy(() => import('./components/Notebook/Notebook'));
 const uuid = new ShortUniqueId({ length: 6 });
 
 const Room = () => {
