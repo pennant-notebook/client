@@ -10,11 +10,12 @@ export const initializeProvider = roomID => {
 
   const notebookMetadata = provider.document.getMap("metaData");
   const cellsArray = provider.document.getArray("cells");
-  const notebookExecutionCount = notebookMetadata.get("executionCount");
+  // const notebookExecutionCount = notebookMetadata.get("executionCount");
   const awareness = provider.awareness;
 
   provider.on("synced", () => {
-    if (notebookExecutionCount === undefined) {
+    console.log(notebookMetadata.get("executionCount"), "exe count at sync");
+    if (provider.document.get("metaData").get("executionCount") === undefined) {
       notebookMetadata.set("executionCount", 0);
     }
   });
@@ -23,7 +24,7 @@ export const initializeProvider = roomID => {
     roomID,
     awareness,
     notebookMetadata,
-    notebookExecutionCount,
+    // notebookExecutionCount,
     cellsArray,
     doc: provider.document,
     provider
