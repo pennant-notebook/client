@@ -12,7 +12,7 @@ import * as Y from 'yjs';
 
 const CodeCell = ({ cellID, roomID, cell, ytext}) => {
   // yPrettyPrint(cell);
-  const { deleteCell, exeCountNotebookRef } = useNotebookContext();
+  const { deleteCell } = useNotebookContext();
   const {doc, provider, awareness, cellsArray, notebookMetadata, notebookExecutionCount} = useProviderContext();
 
   const editorRef = useRef(null);
@@ -62,6 +62,11 @@ const CodeCell = ({ cellID, roomID, cell, ytext}) => {
   };
 
   const handleOnClickRun = async () => {
+    const numNotebookExecutions = notebookMetadata.get('executionCount');
+
+    cellMetaData.set('exeCount', numNotebookExecutions + 1);
+    notebookMetadata.set('executionCount', numNotebookExecutions + 1);
+
 
     yPrettyPrint(cell);
     handleDredd();
