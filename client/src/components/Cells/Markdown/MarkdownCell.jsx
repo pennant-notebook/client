@@ -1,38 +1,52 @@
-import { useEffect, useState, useRef } from 'react';
 import { Box, IconButton, Paper, Stack, Tooltip } from '@mui/material';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { duotoneDark, duotoneSpace } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import ReactMarkdown from 'react-markdown';
-import TextareaAutosize from 'react-textarea-autosize';
 import { CloseSharp } from '@mui/icons-material';
-import useNotebookContext from '../../Contexts/NotebookContext';
+import useNotebookContext from '../../../contexts/NotebookContext';
+import { BlockNoteView, useBlockNote } from '@blocknote/react';
+import '@blocknote/core/style.css';
+import { useEffect, useState } from 'react';
 
-const MarkdownCell = ({ id, ytext }) => {
-  const { deleteCell } = useNotebookContext();
-  const textareaRef = useRef();
-  const [text, setText] = useState('');
-  const [editing, setEditing] = useState(false);
+const initialBlocks = [
+  {
+    type: 'paragraph',
+    content: [
+      {
+        type: 'text',
+        text: 'Hello',
+        styles: {}
+      }
+    ]
+  },
+  {
+    type: 'paragraph',
+    content: [
+      {
+        type: 'text',
+        text: 'World',
+        styles: {}
+      }
+    ]
+  }
+];
 
-  useEffect(() => {
-    const type = ytext;
-    setText(type.toString());
+const MarkdownCell = ({ id, xmlFragment }) => {
+  const { deleteCell, provider } = useNotebookContext();
+  const [initialBlocksInserted, setInitialBlocksInserted] = useState(false);
 
-    const updateText = () => {
-      setText(type.toString());
-    };
-
-    type.observe(() => {
-      updateText();
-    
-    });
-  }, [ytext]);
-
-  const handleTextareaChange = e => {
-    ytext.doc.transact(() => {
-      ytext.delete(0, ytext.length);
-      ytext.insert(0, e.target.value);
-    }, textareaRef.current);
-  };
+  const editor = useBlockNote({
+    onEditorContentChange: editor => {
+      const textBlocks = editor.topLevelBlocks.flatMap(block => block.content.map(c => c.text));
+      console.log(textBlocks); // should log ['Hello', 'World']
+      console.log(xmlFragment.toString());
+    },
+    collaboration: {
+      provider,
+      fragment: xmlFragment,
+      user: {
+        name: 'Sarah',
+        color: '#ff0000'
+      }
+    }
+  });
 
   return (
     <Stack>
@@ -56,48 +70,7 @@ const MarkdownCell = ({ id, ytext }) => {
           </Tooltip>
         </Box>
         <Box sx={{ width: '100%', height: '100%' }} className='markdown'>
-          {editing ? (
-            <TextareaAutosize
-              ref={textareaRef}
-              value={text}
-              onChange={handleTextareaChange}
-              onBlur={() => setEditing(false)}
-              style={{
-                width: '100%',
-                height: '100%',
-                border: 'none',
-                background: 'transparent',
-                outline: 'none',
-                resize: 'none'
-              }}
-              autoFocus
-            />
-          ) : (
-            <div onClick={() => setEditing(true)}>
-              <ReactMarkdown
-                className='prose'
-                children={text || 'Enter some markdown text here...'}
-                components={{
-                  code: ({ node, inline, className, children, ...props }) => {
-                    const match = /language-(\w+)/.exec(className || '');
-                    return !inline && match ? (
-                      <SyntaxHighlighter
-                        style={match[1] === 'js' ? duotoneDark : duotoneSpace}
-                        language={match[1]}
-                        PreTag='div'
-                        children={String(children).replace(/\n$/, '')}
-                        {...props}
-                      />
-                    ) : (
-                      <code className={className} {...props}>
-                        {children}
-                      </code>
-                    );
-                  }
-                }}
-              />
-            </div>
-          )}
+          <BlockNoteView id={id} editor={editor} />
         </Box>
       </Paper>
     </Stack>

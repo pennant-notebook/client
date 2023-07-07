@@ -1,21 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 import { Box, Stack, Typography, Grid } from '@mui/material';
 import { MonacoBinding } from 'y-monaco';
-import { checkStatus, sendToJudge, parseEngineResponse } from '../../../services/codeExecutionService';
 import CodeToolbar from './CodeToolbar';
 import { Editor } from '@monaco-editor/react';
-import useNotebookContext from '../../Contexts/NotebookContext';
+import useNotebookContext from '../../../contexts/NotebookContext';
 import { sendToDredd, checkDreddStatus } from '../../../services/dreddExecutionService';
 
 const CodeCell = ({ cellID, roomID, cell, ytext }) => {
   const { awareness, deleteCell } = useNotebookContext();
   const editorRef = useRef(null);
   const outputMap = cell.get('outputMap');
-  const outputData = outputMap.get('data');
-  console.log({ outputData });
   const [processing, setProcessing] = useState(false);
   const [output, setOutput] = useState(outputMap.get('data'));
-  console.log('output is: ', output);
   const [editorHeight, setEditorHeight] = useState('5vh');
 
   const handleEditorDidMount = (editor, monaco) => {
@@ -58,62 +54,38 @@ const CodeCell = ({ cellID, roomID, cell, ytext }) => {
   };
 
   return (
-    <Box
-      style={{
-      width: '80%',
-      margin: '0 auto',
-      borderRadius: '5px',
-      paddingBottom: output ? '4px' : '0',
-    }}>
-    <Grid 
-      container spacing={2}
-      direction="row"
-      justifyContent="flex-end"
-      alignItems="center"
-    >
-      <Grid 
-        item xs={1}
-      >
-        [count]
-      </Grid>
-      <Grid item xs={10}>
-        <Stack>
-          <Box
-            className='codecell-container'
-            style={{
-              width: '100%',
-              margin: '0 auto',
-              border: '1px solid dimgray',
-              borderRadius: '5px',
-              paddingBottom: output ? '4px' : '0',
-              backgroundColor: 'navajowhite'
-            }}>
-            <Box>
-              <CodeToolbar onClickRun={handleDredd} id={cellID} onDelete={deleteCell} />
-              <Editor
-                aria-labelledby='Code Editor'
-                className='justify-center'
-                height={editorHeight}
-                defaultLanguage='javascript'
-                theme='vs-dark'
-                onMount={handleEditorDidMount}
-                options={{
-                  cursorBlinking: 'smooth',
-                  minimap: { enabled: false },
-                  scrollbar: { vertical: 'hidden', horizontal: 'hidden' },
-                  scrollBeyondLastLine: false,
-                  lineHeight: 22
-                }}
-              />
-              <Typography sx={{ fontFamily: 'monospace', ml: '5px', backgroundColor: 'charcoal' }}>
-                {processing ? 'Processing...' : output}
-              </Typography>
-            </Box>
-          </Box>
-        </Stack>
-      </Grid>
-    </Grid>
-    </Box>
+    <Stack>
+      <Box
+        className='codecell-container'
+        style={{
+          width: '80%',
+          margin: '0 auto',
+          border: '1px solid dimgray',
+          borderRadius: '5px',
+          paddingBottom: output ? '4px' : '0',
+          backgroundColor: 'navajowhite'
+        }}>
+        <CodeToolbar onClickRun={handleDredd} id={cellID} onDelete={deleteCell} />
+        <Editor
+          aria-labelledby='Code Editor'
+          className='justify-center'
+          height={editorHeight}
+          defaultLanguage='javascript'
+          theme='vs-dark'
+          onMount={handleEditorDidMount}
+          options={{
+            cursorBlinking: 'smooth',
+            minimap: { enabled: false },
+            scrollbar: { vertical: 'hidden', horizontal: 'hidden' },
+            scrollBeyondLastLine: false,
+            lineHeight: 22
+          }}
+        />
+        <Typography sx={{ fontFamily: 'monospace', ml: '5px', backgroundColor: 'charcoal' }}>
+          {processing ? 'Processing...' : output}
+        </Typography>
+      </Box>
+    </Stack>
   );
 };
 

@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import ShortUniqueId from 'short-unique-id';
 import LoadingSpinner from './components/UI/LoadingSpinner';
 import { Box } from '@mui/material';
+import './App.css';
 
 const Notebook = lazy(() => import('./components/Notebook/Notebook'));
 const uuid = new ShortUniqueId({ length: 6 });
