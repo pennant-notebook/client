@@ -1,6 +1,6 @@
-import * as Y from 'yjs';
-import { v4 as uuidv4 } from 'uuid';
-import { HocuspocusProvider } from '@hocuspocus/provider';
+import * as Y from "yjs";
+import { v4 as uuidv4 } from "uuid";
+import { HocuspocusProvider } from "@hocuspocus/provider";
 
 export const initializeProvider = roomID => {
   const provider = new HocuspocusProvider({
@@ -12,11 +12,16 @@ export const initializeProvider = roomID => {
 
 export const createCell = type => {
   const cell = new Y.Map();
-  cell.set('id', uuidv4());
-  cell.set('type', type);
-  cell.set('editorContent', new Y.Text(''));
-  if (type === 'code') {
-    const outputMap = cell.set('outputMap', new Y.Map());
+  cell.set("id", uuidv4());
+  cell.set("type", type);
+  cell.set("editorContent", new Y.Text(""));
+  if (type === "code") {
+    const outputMap = cell.set("outputMap", new Y.Map());
   }
+
+  const _metaMap = new Y.Map();
+  _metaMap.set("exeCount", 0);
+  cell.set("metaData", _metaMap);
+
   return cell;
 };

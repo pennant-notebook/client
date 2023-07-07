@@ -4,8 +4,9 @@ import { createCell, initializeProvider } from '../../utils/notebookHelpers';
 import MarkdownCell from '../Cells/Markdown/MarkdownCell';
 import CodeCell from '../Cells/Code/CodeCell';
 import AddCell from '../Cells/AddCell';
-import { NotebookContext } from './contexts/NotebookContext';
+import { NotebookContext } from '../../contexts/NotebookContext';
 import Header from './Header';
+import { yPrettyPrint } from '../../utils/yPrettyPrint';
 
 const roomToProviderMap = new Map();
 const roomToDocMap = new Map();
@@ -16,19 +17,53 @@ const Notebook = ({ roomID }) => {
   const awareness = useRef(provider.current ? provider.current.awareness : null);
   const [cellsYArray, setCellsYArray] = useState([]);
 
+  const notebookMetadataRef = useRef(null)
+
+  const exeCountNotebookRef = useRef(0)
+  // yPrettyPrint(doc.current)
+
   useEffect(() => {
     if (!provider.current) {
-      provider.current = initializeProvider(roomID);
-      roomToProviderMap.set(roomID, provider.current);
-      awareness.current = provider.current.awareness;
+      const hocusPocus = initializeProvider(roomID);
+      const _document = hocusPocus.document;
 
-      if (!doc.current) {
-        doc.current = provider.current.document;
+      doc.current = _document;
+      provider.current = hocusPocus;
+      awareness.current = provider.current.awareness;
+      roomToProviderMap.set(roomID, provider.current);
+      
+      const cells = _document.getArray('cells');
+      const metaData = _document.getMap('metaData');
+
+      notebookMetadataRef.current = metaData
+
+      if (!metaData.get('exeCount')) {
+        metaData.set('exeCount', 0)
       }
 
-      const cells = doc.current.getArray('cells');
+      exeCountNotebookRef.current = metaData.get('exeCount')
+
+      // event driven features based on current metadata
+      metaData.observe(event => {
+        // look for changes in total notebook execution count and update the exeCountNotebookRef
+        if (event.keysChanged.has('exeCount')) {
+          exeCountNotebookRef.current = metaData.get('exeCount')
+        }
+      })
+
+
+      
+
+      
+
+      
+      
+      // if (doc.current && !metaData.get('exeCount')) {
+      //   metaData.set('exeCount', 0);
+      // }
 
       const observer = () => {
+        yPrettyPrint(hocusPocus.document)
         setCellsYArray(cells.toArray());
       };
 
@@ -54,6 +89,8 @@ const Notebook = ({ roomID }) => {
   };
 
   const contextValue = {
+    notebookMetadataRef: notebookMetadataRef,
+    exeCountNotebookRef: exeCountNotebookRef,
     addCellAtIndex,
     deleteCell,
     awareness: awareness.current,
