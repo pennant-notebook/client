@@ -7,78 +7,37 @@ import AddCell from '../Cells/AddCell';
 import { NotebookContext } from '../../contexts/NotebookContext';
 import Header from './Header';
 import { yPrettyPrint } from '../../utils/yPrettyPrint';
+import useProviderContext from '../../contexts/ProviderContext';
 
 const roomToProviderMap = new Map();
 const roomToDocMap = new Map();
 
 const Notebook = ({ roomID }) => {
-  const provider = useRef(roomToProviderMap.get(roomID));
-  const doc = useRef(roomToDocMap.get(roomID));
-  const awareness = useRef(provider.current ? provider.current.awareness : null);
-  const [cellsYArray, setCellsYArray] = useState([]);
+  const {doc, provider, awareness, cellsArray, notebookMetadata, notebookExecutionCount} = useProviderContext();
 
-  const notebookMetadataRef = useRef(null)
-
-  const exeCountNotebookRef = useRef(0)
-  // yPrettyPrint(doc.current)
+  const [cellsYArray, setCellsYArray] = useState(cellsArray.toArray());
 
   useEffect(() => {
     if (!provider.current) {
-      const hocusPocus = initializeProvider(roomID);
-      const _document = hocusPocus.document;
-
-      doc.current = _document;
-      provider.current = hocusPocus;
-      awareness.current = provider.current.awareness;
-      roomToProviderMap.set(roomID, provider.current);
+      roomToProviderMap.set(roomID, provider);
       
-      const cells = _document.getArray('cells');
-      const metaData = _document.getMap('metaData');
-
-      notebookMetadataRef.current = metaData
-
-      if (!metaData.get('exeCount')) {
-        metaData.set('exeCount', 0)
-      }
-
-      exeCountNotebookRef.current = metaData.get('exeCount')
-
-      // event driven features based on current metadata
-      metaData.observe(event => {
-        // look for changes in total notebook execution count and update the exeCountNotebookRef
-        if (event.keysChanged.has('exeCount')) {
-          exeCountNotebookRef.current = metaData.get('exeCount')
-        }
-      })
-
-
-      
-
-      
-
-      
-      
-      // if (doc.current && !metaData.get('exeCount')) {
-      //   metaData.set('exeCount', 0);
-      // }
-
       const observer = () => {
-        yPrettyPrint(hocusPocus.document)
-        setCellsYArray(cells.toArray());
+        yPrettyPrint(doc)
+        setCellsYArray(cellsArray.toArray());
       };
 
-      cells.observe(observer);
+      cellsArray.observe(observer);
     }
   }, [roomID]);
 
   const deleteCell = id => {
-    const cellArray = doc.current.getArray('cells');
+    const cellArray = doc.getArray('cells');
     const cellIndex = cellArray.toArray().findIndex(c => c.get('id') === id);
     if (cellIndex !== -1) cellArray.delete(cellIndex);
   };
 
   const addCellAtIndex = (idx, type) => {
-    const cellArray = doc.current.getArray('cells');
+    const cellArray = doc.getArray('cells');
     const cell = createCell(type);
     console.log('cell from within addCellAtIndex', cell);
     if (idx >= cellArray.length) {
@@ -89,13 +48,13 @@ const Notebook = ({ roomID }) => {
   };
 
   const contextValue = {
-    notebookMetadataRef: notebookMetadataRef,
-    exeCountNotebookRef: exeCountNotebookRef,
+    notebookMetadata,
+    exeCountNotebook: notebookExecutionCount,
     addCellAtIndex,
     deleteCell,
-    awareness: awareness.current,
-    doc: doc.current,
-    provider: provider.current
+    awareness,
+    doc,
+    provider
   };
 
   const codeCellsForDredd = cellsYArray

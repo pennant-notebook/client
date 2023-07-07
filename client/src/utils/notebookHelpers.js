@@ -9,8 +9,9 @@ export const initializeProvider = roomID => {
   });
 
   const notebookMetadata = provider.document.getMap("metaData");
-  const cellsYArray = provider.document.getArray("cells");
-  const notebookExecutionCount = metadata.get("executionCount");
+  const cellsArray = provider.document.getArray("cells");
+  const notebookExecutionCount = notebookMetadata.get("executionCount");
+  const awareness = provider.awareness;
 
   provider.on("synced", () => {
     if (notebookExecutionCount === undefined) {
@@ -20,11 +21,12 @@ export const initializeProvider = roomID => {
 
   const contextValue = {
     roomID,
+    awareness,
     notebookMetadata,
     notebookExecutionCount,
-    cellsYArray,
+    cellsArray,
     doc: provider.document,
-    provider: provider
+    provider
   };
 
   return [provider, contextValue];

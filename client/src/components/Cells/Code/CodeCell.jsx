@@ -10,10 +10,13 @@ import { sendToDredd, checkDreddStatus } from '../../../services/dreddExecutionS
 import { yPrettyPrint } from '../../../utils/yPrettyPrint';
 import * as Y from 'yjs';
 
-const CodeCell = ({ cellID, roomID, cell, ytext, doc }) => {
+const CodeCell = ({ cellID, roomID, cell, ytext}) => {
   // yPrettyPrint(cell);
-  const { awareness, deleteCell, exeCountNotebookRef } = useNotebookContext();
+  const { deleteCell, exeCountNotebookRef } = useNotebookContext();
+  const {doc, provider, awareness, cellsArray, notebookMetadata, notebookExecutionCount} = useProviderContext();
+
   const editorRef = useRef(null);
+  const [editorHeight, setEditorHeight] = useState('5vh');
 
   const outputMap = cell.get('outputMap');
   const cellMetaData = cell.get('metaData');
@@ -25,9 +28,8 @@ const CodeCell = ({ cellID, roomID, cell, ytext, doc }) => {
   const [processing, setProcessing] = useState(false);
   const [output, setOutput] = useState(outputMap.get('data'));
   // console.log('output is: ', output);
-  const [editorHeight, setEditorHeight] = useState('5vh');
+  
 
-  const cellExeCountRef = useRef(0);
 
   const handleEditorDidMount = (editor, monaco) => {
     editorRef.current = editor;
@@ -60,19 +62,8 @@ const CodeCell = ({ cellID, roomID, cell, ytext, doc }) => {
   };
 
   const handleOnClickRun = async () => {
-    // doc.get('metaData').get('exeCount')
-    const notebookTotalExecutions = ++exeCountNotebookRef.current;
-    exeCountNotebookRef.current = notebookTotalExecutions;
-
-    // metaData.set('exeCount', notebookTotalExecutions);
-
-    
-    cellMetaData.set('exeCount', notebookTotalExecutions);
 
     yPrettyPrint(cell);
-    
-
-
     handleDredd();
   }
   const handleDredd = async () => {
