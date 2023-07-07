@@ -7,7 +7,27 @@ export const initializeProvider = roomID => {
     url: import.meta.env.VITE_WEBSOCKET_SERVER,
     name: roomID
   });
-  return provider;
+
+  const notebookMetadata = provider.document.getMap("metaData");
+  const cellsYArray = provider.document.getArray("cells");
+  const notebookExecutionCount = metadata.get("executionCount");
+
+  provider.on("synced", () => {
+    if (notebookExecutionCount === undefined) {
+      notebookMetadata.set("executionCount", 0);
+    }
+  });
+
+  const contextValue = {
+    roomID,
+    notebookMetadata,
+    notebookExecutionCount,
+    cellsYArray,
+    doc: provider.document,
+    provider: provider
+  };
+
+  return [provider, contextValue];
 };
 
 export const createCell = type => {

@@ -5,6 +5,7 @@ import { checkStatus, sendToJudge, parseEngineResponse } from '../../../services
 import CodeToolbar from './CodeToolbar';
 import { Editor } from '@monaco-editor/react';
 import useNotebookContext from '../../../contexts/NotebookContext';
+import useProviderContext from '../../../contexts/ProviderContext';
 import { sendToDredd, checkDreddStatus } from '../../../services/dreddExecutionService';
 import { yPrettyPrint } from '../../../utils/yPrettyPrint';
 import * as Y from 'yjs';
