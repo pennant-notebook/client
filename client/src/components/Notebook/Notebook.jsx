@@ -13,21 +13,19 @@ const roomToProviderMap = new Map();
 const roomToDocMap = new Map();
 
 const Notebook = ({ roomID }) => {
-  const {doc, provider, awareness, cellsArray, notebookMetadata, notebookExecutionCount} = useProviderContext();
+  const {doc, provider, awareness, cellsArray, notebookMetadata} = useProviderContext();
 
   const [cellsYArray, setCellsYArray] = useState(cellsArray.toArray());
 
   useEffect(() => {
-    if (!provider.current) {
-      roomToProviderMap.set(roomID, provider);
-      
-      const observer = () => {
-        yPrettyPrint(doc)
-        setCellsYArray(cellsArray.toArray());
-      };
+    roomToProviderMap.set(roomID, provider);
+    
+    const observer = () => {
+      yPrettyPrint(doc)
+      setCellsYArray(cellsArray.toArray());
+    };
 
-      cellsArray.observe(observer);
-    }
+    cellsArray.observe(observer);
   }, [roomID]);
 
   const deleteCell = id => {
@@ -49,7 +47,6 @@ const Notebook = ({ roomID }) => {
 
   const contextValue = {
     notebookMetadata,
-    exeCountNotebook: notebookExecutionCount,
     addCellAtIndex,
     deleteCell,
     awareness,

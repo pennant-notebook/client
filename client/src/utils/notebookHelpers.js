@@ -24,7 +24,6 @@ export const initializeProvider = roomID => {
     roomID,
     awareness,
     notebookMetadata,
-    // notebookExecutionCount,
     cellsArray,
     doc: provider.document,
     provider

@@ -13,7 +13,7 @@ import * as Y from 'yjs';
 const CodeCell = ({ cellID, roomID, cell, ytext}) => {
   // yPrettyPrint(cell);
   const { deleteCell } = useNotebookContext();
-  const {doc, provider, awareness, cellsArray, notebookMetadata, notebookExecutionCount} = useProviderContext();
+  const {awareness, notebookMetadata} = useProviderContext();
 
   const editorRef = useRef(null);
   const [editorHeight, setEditorHeight] = useState('5vh');
@@ -22,14 +22,10 @@ const CodeCell = ({ cellID, roomID, cell, ytext}) => {
   const cellMetaData = cell.get('metaData');
   const cellExeCount = cellMetaData.get('exeCount');
 
-
-  const outputData = outputMap.get('data');
   // console.log({ outputData });
   const [processing, setProcessing] = useState(false);
   const [output, setOutput] = useState(outputMap.get('data'));
   // console.log('output is: ', output);
-  
-
 
   const handleEditorDidMount = (editor, monaco) => {
     editorRef.current = editor;
@@ -45,7 +41,6 @@ const CodeCell = ({ cellID, roomID, cell, ytext}) => {
   };
 
   useEffect(() => {
-
     if (outputMap) {
       // this is getting called twice for some reason
       outputMap.observe(() => {
