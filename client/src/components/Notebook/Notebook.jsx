@@ -1,11 +1,8 @@
 import { useEffect, useState, useRef } from 'react';
-import { Box } from '@mui/material';
 import { createCell, initializeProvider } from '../../utils/notebookHelpers';
-import MarkdownCell from '../Cells/Markdown/MarkdownCell';
-import CodeCell from '../Cells/Code/CodeCell';
-import AddCell from '../Cells/AddCell';
 import { NotebookContext } from '../../contexts/NotebookContext';
 import Header from './Header';
+import Cells from '../Cells/Cells';
 
 const roomToProviderMap = new Map();
 const roomToDocMap = new Map();
@@ -36,16 +33,15 @@ const Notebook = ({ roomID }) => {
     }
   }, [roomID]);
 
-  const deleteCell = id => {
+  const deleteCell = async id => {
     const cellArray = doc.current.getArray('cells');
     const cellIndex = cellArray.toArray().findIndex(c => c.get('id') === id);
     if (cellIndex !== -1) cellArray.delete(cellIndex);
   };
 
-  const addCellAtIndex = (idx, type) => {
+  const addCellAtIndex = async (idx, type) => {
     const cellArray = doc.current.getArray('cells');
     const cell = createCell(type);
-    // console.log('cell from within addCellAtIndex', cell);
     if (idx >= cellArray.length) {
       cellArray.push([cell]);
     } else {
@@ -53,52 +49,34 @@ const Notebook = ({ roomID }) => {
     }
   };
 
-  const contextValue = {
-    addCellAtIndex,
-    deleteCell,
-    awareness: awareness.current,
-    doc: doc.current,
-    provider: provider.current
+  const repositionCell = async (cell, newIndex) => {
+    const clone = cell.clone();
+    cell.set('id', 'delete');
+    await deleteCell('delete');
+    const cellArray = doc.current.getArray('cells');
+    cellArray.insert(newIndex, [clone]);
   };
 
   const codeCellsForDredd = cellDataArr
     .filter(c => c.get('type') === 'code')
     .map(c => ({
       id: c.get('id'),
-      code: c.get('editorContent').toString()
+      code: c.get('content').toString()
     }));
+
+  const contextValue = {
+    addCellAtIndex,
+    repositionCell,
+    deleteCell,
+    awareness: awareness.current,
+    doc: doc.current,
+    provider: provider.current
+  };
 
   return (
     <NotebookContext.Provider value={contextValue}>
       <Header roomID={roomID} codeCells={codeCellsForDredd} />
-
-      <Box sx={{ mx: 5, py: 1 }}>
-        {cellDataArr &&
-          cellDataArr.map((cell, index) => {
-            const id = cell.get('id');
-            const type = cell.get('type');
-            const ytext = cell.get('editorContent');
-            return (
-              <Box key={id || index}>
-                {type === 'markdown' && (
-                  <Box>
-                    <MarkdownCell id={id} xmlFragment={cell.get('xmlFragment')} cell={cell} />
-                    <AddCell index={index} />
-                  </Box>
-                )}
-                {type === 'code' && (
-                  <div>
-                    <Box>
-                      <CodeCell cellID={id} roomID={roomID} cell={cell} ytext={ytext} />
-                      <AddCell index={index} />
-                    </Box>
-                  </div>
-                )}
-              </Box>
-            );
-          })}
-      </Box>
-      {cellDataArr && cellDataArr.length === 0 && <AddCell index={0} />}
+      <Cells roomID={roomID} cells={cellDataArr} setCells={setCellDataArr} />
     </NotebookContext.Provider>
   );
 };

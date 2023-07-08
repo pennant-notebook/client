@@ -5,18 +5,19 @@ import CodeToolbar from './CodeToolbar';
 import { Editor } from '@monaco-editor/react';
 import useNotebookContext from '../../../contexts/NotebookContext';
 import { sendToDredd, checkDreddStatus } from '../../../services/dreddExecutionService';
+import * as Y from 'yjs';
 
-const CodeCell = ({ cellID, roomID, cell, ytext }) => {
+const CodeCell = ({ cellID, roomID, cell, content }) => {
   const { awareness, deleteCell } = useNotebookContext();
+  const outputMap = cell.get('outputMap') || cell.set('outputMap', new Y.Map());
   const editorRef = useRef(null);
-  const outputMap = cell.get('outputMap');
   const [processing, setProcessing] = useState(false);
   const [output, setOutput] = useState(outputMap.get('data'));
   const [editorHeight, setEditorHeight] = useState('5vh');
 
   const handleEditorDidMount = (editor, monaco) => {
     editorRef.current = editor;
-    new MonacoBinding(ytext, editor.getModel(), new Set([editor]), awareness);
+    new MonacoBinding(content, editor.getModel(), new Set([editor]), awareness);
     const lineHeight = editor.getOption(monaco.editor.EditorOption.lineHeight);
     const lineCount = editor.getModel().getLineCount();
     setEditorHeight(`${lineCount * lineHeight}px`);
@@ -54,7 +55,7 @@ const CodeCell = ({ cellID, roomID, cell, ytext }) => {
   };
 
   return (
-    <Stack>
+    <Stack sx={{ width: '100%' }}>
       <Box
         className='codecell-container'
         style={{
@@ -68,7 +69,6 @@ const CodeCell = ({ cellID, roomID, cell, ytext }) => {
         <CodeToolbar onClickRun={handleDredd} id={cellID} onDelete={deleteCell} />
         <Editor
           aria-labelledby='Code Editor'
-          className='justify-center'
           height={editorHeight}
           defaultLanguage='javascript'
           theme='vs-dark'
@@ -78,9 +78,12 @@ const CodeCell = ({ cellID, roomID, cell, ytext }) => {
             minimap: { enabled: false },
             scrollbar: { vertical: 'hidden', horizontal: 'hidden' },
             scrollBeyondLastLine: false,
-            lineHeight: 22
+            lineHeight: 24,
+            fontSize: 15,
+            fontFamily: 'Fira Code'
           }}
         />
+
         <Typography sx={{ fontFamily: 'monospace', ml: '5px', backgroundColor: 'charcoal' }}>
           {processing ? 'Processing...' : output}
         </Typography>
