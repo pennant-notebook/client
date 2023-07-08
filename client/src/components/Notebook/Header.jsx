@@ -8,21 +8,21 @@ const Header = ({ roomID, codeCells }) => {
   const { doc } = useNotebookContext();
 
   // handleRunAllCode not working currently - pending API fix to include cellIds in response
-  // const handleRunAllCode = async () => {
-  //   const token = await sendManyToDredd(roomID, codeCells);
-  //   const response = await checkDreddStatus(token);
+  const handleRunAllCode = async () => {
+    const token = await sendManyToDredd(roomID, codeCells);
+    const response = await checkDreddStatus(token);
 
-  //   response.forEach(codeCell => {
-  //     const cell = doc
-  //       .getArray('cells')
-  //       .toArray()
-  //       .find(c => c.get('id') === codeCell['cellId']);
-  //     if (cell && codeCell.output) {
-  //       const outputMap = cell.get('outputMap');
-  //       outputMap.set('data', codeCell.output);
-  //     }
-  //   });
-  // };
+    response.forEach(codeCell => {
+      const cell = doc
+        .getArray('cells')
+        .toArray()
+        .find(c => c.get('id') === codeCell['id']);
+      if (cell && codeCell.output) {
+        const outputMap = cell.get('outputMap');
+        outputMap.set('data', codeCell.output);
+      }
+    });
+  };
 
   const handleResetContext = async () => {
     await resetContext(roomID);
@@ -41,9 +41,9 @@ const Header = ({ roomID, codeCells }) => {
         <IconButton onClick={handleResetContext} sx={{ color: 'steelblue', '&:hover': { color: 'dodgerblue' } }}>
           <Refresh sx={{ fontSize: '48px' }} />
         </IconButton>
-        {/* <IconButton onClick={handleRunAllCode} sx={{ color: 'steelblue', '&:hover': { color: 'dodgerblue' } }}>
+        <IconButton onClick={handleRunAllCode} sx={{ color: 'steelblue', '&:hover': { color: 'dodgerblue' } }}>
           <PlayCircleOutlineTwoTone sx={{ fontSize: '48px' }} />
-        </IconButton> */}
+        </IconButton>
       </Box>
     </Stack>
   );

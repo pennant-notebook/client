@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Box, Stack, Typography, Grid } from '@mui/material';
 import { MonacoBinding } from 'y-monaco';
-import { checkStatus, sendToJudge, parseEngineResponse } from '../../../services/codeExecutionService';
 import CodeToolbar from './CodeToolbar';
 import { Editor } from '@monaco-editor/react';
 import useNotebookContext from '../../../contexts/NotebookContext';
@@ -25,7 +24,7 @@ const CodeCell = ({ cellID, roomID, cell, ytext}) => {
   // console.log({ outputData });
   const [processing, setProcessing] = useState(false);
   const [output, setOutput] = useState(outputMap.get('data'));
-  // console.log('output is: ', output);
+  const [editorHeight, setEditorHeight] = useState('5vh');
 
   const handleEditorDidMount = (editor, monaco) => {
     editorRef.current = editor;

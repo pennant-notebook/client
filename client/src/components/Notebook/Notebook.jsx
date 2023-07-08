@@ -5,6 +5,7 @@ import MarkdownCell from '../Cells/Markdown/MarkdownCell';
 import CodeCell from '../Cells/Code/CodeCell';
 import AddCell from '../Cells/AddCell';
 import { NotebookContext } from '../../contexts/NotebookContext';
+import { NotebookContext } from '../../contexts/NotebookContext';
 import Header from './Header';
 import { yPrettyPrint } from '../../utils/yPrettyPrint';
 import useProviderContext from '../../contexts/ProviderContext';
@@ -37,7 +38,7 @@ const Notebook = ({ roomID }) => {
   const addCellAtIndex = (idx, type) => {
     const cellArray = doc.getArray('cells');
     const cell = createCell(type);
-    console.log('cell from within addCellAtIndex', cell);
+    // console.log('cell from within addCellAtIndex', cell);
     if (idx >= cellArray.length) {
       cellArray.push([cell]);
     } else {
@@ -54,13 +55,12 @@ const Notebook = ({ roomID }) => {
     provider
   };
 
-  const codeCellsForDredd = cellsYArray
+  const codeCellsForDredd = cellDataArr
     .filter(c => c.get('type') === 'code')
     .map(c => ({
       id: c.get('id'),
       code: c.get('editorContent').toString()
     }));
-
 
   return (
     <NotebookContext.Provider value={contextValue}>
@@ -71,19 +71,19 @@ const Notebook = ({ roomID }) => {
           cellsYArray.map((cell, index) => {
             const id = cell.get('id');
             const type = cell.get('type');
-            const text = cell.get('editorContent');
+            const ytext = cell.get('editorContent');
             return (
               <Box key={id || index}>
                 {type === 'markdown' && (
                   <Box>
-                    <MarkdownCell id={id} ytext={text} />
+                    <MarkdownCell id={id} xmlFragment={cell.get('xmlFragment')} cell={cell} />
                     <AddCell index={index} />
                   </Box>
                 )}
                 {type === 'code' && (
                   <div>
                     <Box>
-                      <CodeCell cellID={id} roomID={roomID} cell={cell} ytext={text} />
+                      <CodeCell cellID={id} roomID={roomID} cell={cell} ytext={ytext} />
                       <AddCell index={index} />
                     </Box>
                   </div>

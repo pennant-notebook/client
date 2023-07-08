@@ -36,14 +36,21 @@ export const createCell = type => {
   const cell = new Y.Map();
   cell.set("id", uuidv4());
   cell.set("type", type);
-  cell.set("editorContent", new Y.Text(""));
   if (type === "code") {
-    const outputMap = cell.set("outputMap", new Y.Map());
+    cell.set("editorContent", new Y.Text(""));
+    cell.set("outputMap", new Y.Map());
+  } else {
+    const xmlFragment = new Y.XmlFragment();
+    const paragraph = new Y.XmlElement("paragraph");
+    const text = new Y.XmlText("Hello World");
+    paragraph.insert(0, [text]);
+    xmlFragment.insert(0, [paragraph]);
+    cell.set("xmlFragment", xmlFragment);
   }
 
-  const _metaMap = new Y.Map();
-  _metaMap.set("exeCount", 0);
-  cell.set("metaData", _metaMap);
+  const _cellMetaDataMap = new Y.Map();
+  _cellMetaDataMap.set("exeCount", 0);
+  cell.set("metaData", _cellMetaDataMap);
 
   return cell;
 };

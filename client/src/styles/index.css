@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.ProseMirror-yjs-cursor > div {
+  display: none;
+}
+
 .yRemoteSelection {
   background-color: rgb(250, 129, 0, 0.5);
 }
