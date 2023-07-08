@@ -1,13 +1,15 @@
 import { useEffect, useState, useRef } from 'react';
 import { Box } from '@mui/material';
+
 import { createCell, initializeProvider } from '../../utils/notebookHelpers';
+import { yPrettyPrint } from '../../utils/yPrettyPrint';
+
+import Header from './Header';
 import MarkdownCell from '../Cells/Markdown/MarkdownCell';
 import CodeCell from '../Cells/Code/CodeCell';
 import AddCell from '../Cells/AddCell';
+
 import { NotebookContext } from '../../contexts/NotebookContext';
-import { NotebookContext } from '../../contexts/NotebookContext';
-import Header from './Header';
-import { yPrettyPrint } from '../../utils/yPrettyPrint';
 import useProviderContext from '../../contexts/ProviderContext';
 
 const roomToProviderMap = new Map();
@@ -55,7 +57,7 @@ const Notebook = ({ roomID }) => {
     provider
   };
 
-  const codeCellsForDredd = cellDataArr
+  const codeCellsForDredd = cellsYArray
     .filter(c => c.get('type') === 'code')
     .map(c => ({
       id: c.get('id'),

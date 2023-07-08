@@ -1,16 +1,19 @@
 import { useEffect, useRef, useState } from 'react';
 import { Box, Stack, Typography, Grid } from '@mui/material';
-import { MonacoBinding } from 'y-monaco';
-import CodeToolbar from './CodeToolbar';
-import { Editor } from '@monaco-editor/react';
-import useNotebookContext from '../../../contexts/NotebookContext';
-import useProviderContext from '../../../contexts/ProviderContext';
-import { sendToDredd, checkDreddStatus } from '../../../services/dreddExecutionService';
+
 import { yPrettyPrint } from '../../../utils/yPrettyPrint';
 import * as Y from 'yjs';
 
+import useNotebookContext from '../../../contexts/NotebookContext';
+import useProviderContext from '../../../contexts/ProviderContext';
+
+import { MonacoBinding } from 'y-monaco';
+import { Editor } from '@monaco-editor/react';
+import CodeToolbar from './CodeToolbar';
+
+import { sendToDredd, checkDreddStatus } from '../../../services/dreddExecutionService';
+
 const CodeCell = ({ cellID, roomID, cell, ytext}) => {
-  // yPrettyPrint(cell);
   const { deleteCell } = useNotebookContext();
   const {awareness, notebookMetadata} = useProviderContext();
 
@@ -18,13 +21,12 @@ const CodeCell = ({ cellID, roomID, cell, ytext}) => {
   const [editorHeight, setEditorHeight] = useState('5vh');
 
   const outputMap = cell.get('outputMap');
-  const cellMetaData = cell.get('metaData');
-  const cellExeCount = cellMetaData.get('exeCount');
-
-  // console.log({ outputData });
-  const [processing, setProcessing] = useState(false);
   const [output, setOutput] = useState(outputMap.get('data'));
-  const [editorHeight, setEditorHeight] = useState('5vh');
+
+  const cellMetaData = cell.get('metaData');
+  const [cellExeCount, setCellExeCount] = useState(cellMetaData.get('exeCount'));
+
+  const [processing, setProcessing] = useState(false);
 
   const handleEditorDidMount = (editor, monaco) => {
     editorRef.current = editor;
@@ -40,15 +42,26 @@ const CodeCell = ({ cellID, roomID, cell, ytext}) => {
   };
 
   useEffect(() => {
-    if (outputMap) {
+
       // this is getting called twice for some reason
       outputMap.observe(() => {
         const data = cell.get('outputMap').get('data');
         // console.log({ data });
         setOutput(data);
       });
-    }
-  }, [outputMap]);
+
+      cellMetaData.observe((e) => {
+        console.log('output map event detected')
+        console.log(e)
+        e.changes.keys.forEach((change, key) => {
+          console.log('key that changed => ', key)
+          if (key === 'exeCount') {
+            console.log('exeCount change detected by key observer')
+            setCellExeCount(cellMetaData.get('exeCount'));
+          }
+      })})
+    
+  }, []);
 
   const parseDreddResponse = response => {
     // console.log(response);
@@ -59,6 +72,7 @@ const CodeCell = ({ cellID, roomID, cell, ytext}) => {
     const numNotebookExecutions = notebookMetadata.get('executionCount');
 
     cellMetaData.set('exeCount', numNotebookExecutions + 1);
+    // setCellExeCount((prevCount) => prevCount + 1);
     notebookMetadata.set('executionCount', numNotebookExecutions + 1);
 
 
@@ -92,9 +106,9 @@ const CodeCell = ({ cellID, roomID, cell, ytext}) => {
       <Grid 
         item xs={1}
       >
-        {cellExeCount ? cellExeCount : '*'}
+        [{cellExeCount ? cellExeCount : '*'}]
       </Grid>
-      <Grid item xs={10}>
+      <Grid item xs={11}>
         <Stack>
           <Box
             className='codecell-container'
