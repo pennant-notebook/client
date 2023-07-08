@@ -12,9 +12,8 @@ import { Editor } from '@monaco-editor/react';
 import CodeToolbar from './CodeToolbar';
 
 import { sendToDredd, checkDreddStatus } from '../../../services/dreddExecutionService';
-import * as Y from 'yjs';
 
-const CodeCell = ({ cellID, roomID, cell, ytext}) => {
+const CodeCell = ({ cellID, roomID, cell, content}) => {
   const { deleteCell } = useNotebookContext();
   const {awareness, notebookMetadata} = useProviderContext();
 

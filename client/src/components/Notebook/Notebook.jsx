@@ -52,11 +52,11 @@ const Notebook = ({ roomID }) => {
     const clone = cell.clone();
     cell.set('id', 'delete');
     await deleteCell('delete');
-    const cellArray = doc.current.getArray('cells');
-    cellArray.insert(newIndex, [clone]);
+    // const cellArray = doc.current.get('cells');
+    cellsArray.insert(newIndex, [clone]);
   };
 
-  const codeCellsForDredd = cellDataArr
+  const codeCellsForDredd = cellsYArray
     .filter(c => c.get('type') === 'code')
     .map(c => ({
       id: c.get('id'),
@@ -76,7 +76,7 @@ const Notebook = ({ roomID }) => {
   return (
     <NotebookContext.Provider value={contextValue}>
       <Header roomID={roomID} codeCells={codeCellsForDredd} />
-      <Cells roomID={roomID} cells={cellDataArr} setCells={setCellDataArr} />
+      <Cells roomID={roomID} cells={cellsYArray} setCells={setCellsYArray} />
     </NotebookContext.Provider>
   );
 };

@@ -42,16 +42,6 @@ const createContent = type => {
   return xmlFragment;
 };
 
-const createContent = type => {
-  if (type === "code") return new Y.Text("");
-  const xmlFragment = new Y.XmlFragment();
-  const paragraph = new Y.XmlElement("paragraph");
-  const text = new Y.XmlText("Hello World");
-  paragraph.insert(0, [text]);
-  xmlFragment.insert(0, [paragraph]);
-  return xmlFragment;
-};
-
 export const createCell = type => {
   const cell = new Y.Map();
   cell.set("id", uuidv4());
