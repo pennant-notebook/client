@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { CloseSharp, PlayCircle } from '@mui/icons-material';
+import { CloseSharp, DragIndicator, PlayCircle } from '@mui/icons-material';
 import { Box, Stack, Tooltip, IconButton, Typography } from '@mui/material';
 
 const CodeToolbar = memo(({ onClickRun, onDelete, id }) => {

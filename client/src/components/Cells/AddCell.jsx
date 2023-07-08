@@ -2,7 +2,7 @@ import { Add, Code } from '@mui/icons-material';
 import { Box, Divider, IconButton, Tooltip } from '@mui/material';
 import useNotebookContext from '../../contexts/NotebookContext';
 
-const AddCell = ({ index }) => {
+const AddCell = ({ index, type }) => {
   const { addCellAtIndex } = useNotebookContext();
 
   return (
@@ -12,8 +12,10 @@ const AddCell = ({ index }) => {
         sx={{
           ml: '30px',
           opacity: '1',
-          width: '82%',
-          color: 'gray'
+          width: '78%',
+          color: 'gray',
+          marginTop: type === 'code' ? '10px' : '0px',
+          marginBottom: type === 'markdown' ? '10px' : '0px'
         }}>
         <Tooltip title='Add Markdown Cell'>
           <IconButton

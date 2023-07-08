@@ -11,6 +11,7 @@ import AddCell from '../Cells/AddCell';
 
 import { NotebookContext } from '../../contexts/NotebookContext';
 import useProviderContext from '../../contexts/ProviderContext';
+import Cells from '../Cells/Cells';
 
 const roomToProviderMap = new Map();
 const roomToDocMap = new Map();
@@ -40,7 +41,6 @@ const Notebook = ({ roomID }) => {
   const addCellAtIndex = (idx, type) => {
     const cellArray = doc.getArray('cells');
     const cell = createCell(type);
-    // console.log('cell from within addCellAtIndex', cell);
     if (idx >= cellArray.length) {
       cellArray.push([cell]);
     } else {
@@ -48,53 +48,35 @@ const Notebook = ({ roomID }) => {
     }
   };
 
+  const repositionCell = async (cell, newIndex) => {
+    const clone = cell.clone();
+    cell.set('id', 'delete');
+    await deleteCell('delete');
+    const cellArray = doc.current.getArray('cells');
+    cellArray.insert(newIndex, [clone]);
+  };
+
+  const codeCellsForDredd = cellDataArr
+    .filter(c => c.get('type') === 'code')
+    .map(c => ({
+      id: c.get('id'),
+      code: c.get('content').toString()
+    }));
+
   const contextValue = {
     notebookMetadata,
     addCellAtIndex,
+    repositionCell,
     deleteCell,
     awareness,
     doc,
     provider
   };
 
-  const codeCellsForDredd = cellsYArray
-    .filter(c => c.get('type') === 'code')
-    .map(c => ({
-      id: c.get('id'),
-      code: c.get('editorContent').toString()
-    }));
-
   return (
     <NotebookContext.Provider value={contextValue}>
       <Header roomID={roomID} codeCells={codeCellsForDredd} />
-
-      <Box sx={{ mx: 5, py: 1 }}>
-        {cellsYArray &&
-          cellsYArray.map((cell, index) => {
-            const id = cell.get('id');
-            const type = cell.get('type');
-            const ytext = cell.get('editorContent');
-            return (
-              <Box key={id || index}>
-                {type === 'markdown' && (
-                  <Box>
-                    <MarkdownCell id={id} xmlFragment={cell.get('xmlFragment')} cell={cell} />
-                    <AddCell index={index} />
-                  </Box>
-                )}
-                {type === 'code' && (
-                  <div>
-                    <Box>
-                      <CodeCell cellID={id} roomID={roomID} cell={cell} ytext={ytext} />
-                      <AddCell index={index} />
-                    </Box>
-                  </div>
-                )}
-              </Box>
-            );
-          })}
-      </Box>
-      {cellsYArray && cellsYArray.length === 0 && <AddCell index={0} />}
+      <Cells roomID={roomID} cells={cellDataArr} setCells={setCellDataArr} />
     </NotebookContext.Provider>
   );
 };

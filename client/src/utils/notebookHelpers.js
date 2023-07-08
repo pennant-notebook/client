@@ -32,20 +32,33 @@ export const initializeProvider = roomID => {
   return [provider, contextValue];
 };
 
+const createContent = type => {
+  if (type === "code") return new Y.Text("");
+  const xmlFragment = new Y.XmlFragment();
+  const paragraph = new Y.XmlElement("paragraph");
+  const text = new Y.XmlText("Hello World");
+  paragraph.insert(0, [text]);
+  xmlFragment.insert(0, [paragraph]);
+  return xmlFragment;
+};
+
+const createContent = type => {
+  if (type === "code") return new Y.Text("");
+  const xmlFragment = new Y.XmlFragment();
+  const paragraph = new Y.XmlElement("paragraph");
+  const text = new Y.XmlText("Hello World");
+  paragraph.insert(0, [text]);
+  xmlFragment.insert(0, [paragraph]);
+  return xmlFragment;
+};
+
 export const createCell = type => {
   const cell = new Y.Map();
   cell.set("id", uuidv4());
   cell.set("type", type);
+  cell.set("content", createContent(type));
   if (type === "code") {
-    cell.set("editorContent", new Y.Text(""));
     cell.set("outputMap", new Y.Map());
-  } else {
-    const xmlFragment = new Y.XmlFragment();
-    const paragraph = new Y.XmlElement("paragraph");
-    const text = new Y.XmlText("Hello World");
-    paragraph.insert(0, [text]);
-    xmlFragment.insert(0, [paragraph]);
-    cell.set("xmlFragment", xmlFragment);
   }
 
   const _cellMetaDataMap = new Y.Map();
