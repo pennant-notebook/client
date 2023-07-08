@@ -1,49 +1,44 @@
 import { useEffect, useState, useRef } from 'react';
 import { Box } from '@mui/material';
+
 import { createCell, initializeProvider } from '../../utils/notebookHelpers';
+import { yPrettyPrint } from '../../utils/yPrettyPrint';
+
+import Header from './Header';
 import MarkdownCell from '../Cells/Markdown/MarkdownCell';
 import CodeCell from '../Cells/Code/CodeCell';
 import AddCell from '../Cells/AddCell';
+
 import { NotebookContext } from '../../contexts/NotebookContext';
-import Header from './Header';
+import useProviderContext from '../../contexts/ProviderContext';
 
 const roomToProviderMap = new Map();
 const roomToDocMap = new Map();
 
 const Notebook = ({ roomID }) => {
-  const provider = useRef(roomToProviderMap.get(roomID));
-  const doc = useRef(roomToDocMap.get(roomID));
-  const awareness = useRef(provider.current ? provider.current.awareness : null);
-  const [cellDataArr, setCellDataArr] = useState([]);
+  const {doc, provider, awareness, cellsArray, notebookMetadata} = useProviderContext();
+
+  const [cellsYArray, setCellsYArray] = useState(cellsArray.toArray());
 
   useEffect(() => {
-    if (!provider.current) {
-      provider.current = initializeProvider(roomID);
-      roomToProviderMap.set(roomID, provider.current);
-      awareness.current = provider.current.awareness;
+    roomToProviderMap.set(roomID, provider);
+    
+    const observer = () => {
+      yPrettyPrint(doc)
+      setCellsYArray(cellsArray.toArray());
+    };
 
-      if (!doc.current) {
-        doc.current = provider.current.document;
-      }
-
-      const cells = doc.current.getArray('cells');
-
-      const observer = () => {
-        setCellDataArr(cells.toArray());
-      };
-
-      cells.observe(observer);
-    }
+    cellsArray.observe(observer);
   }, [roomID]);
 
   const deleteCell = id => {
-    const cellArray = doc.current.getArray('cells');
+    const cellArray = doc.getArray('cells');
     const cellIndex = cellArray.toArray().findIndex(c => c.get('id') === id);
     if (cellIndex !== -1) cellArray.delete(cellIndex);
   };
 
   const addCellAtIndex = (idx, type) => {
-    const cellArray = doc.current.getArray('cells');
+    const cellArray = doc.getArray('cells');
     const cell = createCell(type);
     // console.log('cell from within addCellAtIndex', cell);
     if (idx >= cellArray.length) {
@@ -54,14 +49,15 @@ const Notebook = ({ roomID }) => {
   };
 
   const contextValue = {
+    notebookMetadata,
     addCellAtIndex,
     deleteCell,
-    awareness: awareness.current,
-    doc: doc.current,
-    provider: provider.current
+    awareness,
+    doc,
+    provider
   };
 
-  const codeCellsForDredd = cellDataArr
+  const codeCellsForDredd = cellsYArray
     .filter(c => c.get('type') === 'code')
     .map(c => ({
       id: c.get('id'),
@@ -73,8 +69,8 @@ const Notebook = ({ roomID }) => {
       <Header roomID={roomID} codeCells={codeCellsForDredd} />
 
       <Box sx={{ mx: 5, py: 1 }}>
-        {cellDataArr &&
-          cellDataArr.map((cell, index) => {
+        {cellsYArray &&
+          cellsYArray.map((cell, index) => {
             const id = cell.get('id');
             const type = cell.get('type');
             const ytext = cell.get('editorContent');
@@ -98,7 +94,7 @@ const Notebook = ({ roomID }) => {
             );
           })}
       </Box>
-      {cellDataArr && cellDataArr.length === 0 && <AddCell index={0} />}
+      {cellsYArray && cellsYArray.length === 0 && <AddCell index={0} />}
     </NotebookContext.Provider>
   );
 };
