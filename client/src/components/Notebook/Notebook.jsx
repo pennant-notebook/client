@@ -4,7 +4,7 @@ import { createCell, initializeProvider } from '../../utils/notebookHelpers';
 import MarkdownCell from '../Cells/Markdown/MarkdownCell';
 import CodeCell from '../Cells/Code/CodeCell';
 import AddCell from '../Cells/AddCell';
-import { NotebookContext } from '../Contexts/NotebookContext';
+import { NotebookContext } from '../../contexts/NotebookContext';
 import Header from './Header';
 
 const roomToProviderMap = new Map();
@@ -14,7 +14,7 @@ const Notebook = ({ roomID }) => {
   const provider = useRef(roomToProviderMap.get(roomID));
   const doc = useRef(roomToDocMap.get(roomID));
   const awareness = useRef(provider.current ? provider.current.awareness : null);
-  const [cellsYArray, setCellsYArray] = useState([]);
+  const [cellDataArr, setCellDataArr] = useState([]);
 
   useEffect(() => {
     if (!provider.current) {
@@ -29,7 +29,7 @@ const Notebook = ({ roomID }) => {
       const cells = doc.current.getArray('cells');
 
       const observer = () => {
-        setCellsYArray(cells.toArray());
+        setCellDataArr(cells.toArray());
       };
 
       cells.observe(observer);
@@ -45,7 +45,7 @@ const Notebook = ({ roomID }) => {
   const addCellAtIndex = (idx, type) => {
     const cellArray = doc.current.getArray('cells');
     const cell = createCell(type);
-    console.log('cell from within addCellAtIndex', cell);
+    // console.log('cell from within addCellAtIndex', cell);
     if (idx >= cellArray.length) {
       cellArray.push([cell]);
     } else {
@@ -61,36 +61,35 @@ const Notebook = ({ roomID }) => {
     provider: provider.current
   };
 
-  const codeCellsForDredd = cellsYArray
+  const codeCellsForDredd = cellDataArr
     .filter(c => c.get('type') === 'code')
     .map(c => ({
       id: c.get('id'),
       code: c.get('editorContent').toString()
     }));
 
-
   return (
     <NotebookContext.Provider value={contextValue}>
       <Header roomID={roomID} codeCells={codeCellsForDredd} />
 
       <Box sx={{ mx: 5, py: 1 }}>
-        {cellsYArray &&
-          cellsYArray.map((cell, index) => {
+        {cellDataArr &&
+          cellDataArr.map((cell, index) => {
             const id = cell.get('id');
             const type = cell.get('type');
-            const text = cell.get('editorContent');
+            const ytext = cell.get('editorContent');
             return (
               <Box key={id || index}>
                 {type === 'markdown' && (
                   <Box>
-                    <MarkdownCell id={id} ytext={text} />
+                    <MarkdownCell id={id} xmlFragment={cell.get('xmlFragment')} cell={cell} />
                     <AddCell index={index} />
                   </Box>
                 )}
                 {type === 'code' && (
                   <div>
                     <Box>
-                      <CodeCell cellID={id} roomID={roomID} cell={cell} ytext={text} />
+                      <CodeCell cellID={id} roomID={roomID} cell={cell} ytext={ytext} />
                       <AddCell index={index} />
                     </Box>
                   </div>
@@ -99,7 +98,7 @@ const Notebook = ({ roomID }) => {
             );
           })}
       </Box>
-      {cellsYArray && cellsYArray.length === 0 && <AddCell index={0} />}
+      {cellDataArr && cellDataArr.length === 0 && <AddCell index={0} />}
     </NotebookContext.Provider>
   );
 };
