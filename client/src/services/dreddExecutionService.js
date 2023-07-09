@@ -8,7 +8,7 @@ export const sendToDredd = async (notebookId, cellId, code) => {
       notebookId,
       cells: [
         {
-          cellId: cellId,
+          id: cellId,
           code
         }
       ]
@@ -61,7 +61,7 @@ export const resetContext = async notebookId => {
 export const sendManyToDredd = async (notebookId, cells) => {
   try {
     const result = await axios.post(`${BASE_URL}/submit`, {
-      notebookId: HARD_CODED_NOTE_BOOK_ID,
+      notebookId,
       cells
     });
     return result.data.submissionId;

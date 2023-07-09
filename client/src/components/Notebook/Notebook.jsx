@@ -1,51 +1,46 @@
 import { useEffect, useState, useRef } from 'react';
 import { Box } from '@mui/material';
-import { createCell, initializeProvider } from './notebookHelpers';
-import MarkdownCell from './MarkdownCell';
-import CodeCell from './CodeCell';
-import AddCell from './AddCell';
-import { NotebookContext } from './NotebookContext';
+
+import { createCell, initializeProvider } from '../../utils/notebookHelpers';
+import { yPrettyPrint } from '../../utils/yPrettyPrint';
+
 import Header from './Header';
+import MarkdownCell from '../Cells/Markdown/MarkdownCell';
+import CodeCell from '../Cells/Code/CodeCell';
+import AddCell from '../Cells/AddCell';
+
+import { NotebookContext } from '../../contexts/NotebookContext';
+import useProviderContext from '../../contexts/ProviderContext';
 
 const roomToProviderMap = new Map();
 const roomToDocMap = new Map();
 
 const Notebook = ({ roomID }) => {
-  const provider = useRef(roomToProviderMap.get(roomID));
-  const doc = useRef(roomToDocMap.get(roomID));
-  const awareness = useRef(provider.current ? provider.current.awareness : null);
-  const [cellsYArray, setCellsYArray] = useState([]);
+  const {doc, provider, awareness, cellsArray, notebookMetadata} = useProviderContext();
+
+  const [cellsYArray, setCellsYArray] = useState(cellsArray.toArray());
 
   useEffect(() => {
-    if (!provider.current) {
-      provider.current = initializeProvider(roomID);
-      roomToProviderMap.set(roomID, provider.current);
-      awareness.current = provider.current.awareness;
+    roomToProviderMap.set(roomID, provider);
+    
+    const observer = () => {
+      yPrettyPrint(doc)
+      setCellsYArray(cellsArray.toArray());
+    };
 
-      if (!doc.current) {
-        doc.current = provider.current.document;
-      }
-
-      const cells = doc.current.getArray('cells');
-
-      const observer = () => {
-        setCellsYArray(cells.toArray());
-      };
-
-      cells.observe(observer);
-    }
+    cellsArray.observe(observer);
   }, [roomID]);
 
   const deleteCell = id => {
-    const cellArray = doc.current.getArray('cells');
+    const cellArray = doc.getArray('cells');
     const cellIndex = cellArray.toArray().findIndex(c => c.get('id') === id);
     if (cellIndex !== -1) cellArray.delete(cellIndex);
   };
 
   const addCellAtIndex = (idx, type) => {
-    const cellArray = doc.current.getArray('cells');
+    const cellArray = doc.getArray('cells');
     const cell = createCell(type);
-    console.log('cell from within addCellAtIndex', cell);
+    // console.log('cell from within addCellAtIndex', cell);
     if (idx >= cellArray.length) {
       cellArray.push([cell]);
     } else {
@@ -54,11 +49,12 @@ const Notebook = ({ roomID }) => {
   };
 
   const contextValue = {
+    notebookMetadata,
     addCellAtIndex,
     deleteCell,
-    awareness: awareness.current,
-    doc: doc.current,
-    provider: provider.current
+    awareness,
+    doc,
+    provider
   };
 
   const codeCellsForDredd = cellsYArray
@@ -67,7 +63,6 @@ const Notebook = ({ roomID }) => {
       id: c.get('id'),
       code: c.get('editorContent').toString()
     }));
-  console.log(codeCellsForDredd);
 
   return (
     <NotebookContext.Provider value={contextValue}>
@@ -78,20 +73,22 @@ const Notebook = ({ roomID }) => {
           cellsYArray.map((cell, index) => {
             const id = cell.get('id');
             const type = cell.get('type');
-            const text = cell.get('editorContent');
+            const ytext = cell.get('editorContent');
             return (
               <Box key={id || index}>
                 {type === 'markdown' && (
                   <Box>
-                    <MarkdownCell id={id} ytext={text} />
+                    <MarkdownCell id={id} xmlFragment={cell.get('xmlFragment')} cell={cell} />
                     <AddCell index={index} />
                   </Box>
                 )}
                 {type === 'code' && (
-                  <Box>
-                    <CodeCell cellID={id} roomID={roomID} cell={cell} ytext={text} />
-                    <AddCell index={index} />
-                  </Box>
+                  <div>
+                    <Box>
+                      <CodeCell cellID={id} roomID={roomID} cell={cell} ytext={ytext} />
+                      <AddCell index={index} />
+                    </Box>
+                  </div>
                 )}
               </Box>
             );
