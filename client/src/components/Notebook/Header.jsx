@@ -9,9 +9,13 @@ const Header = ({ roomID, codeCells }) => {
   const { doc } = useProviderContext();
   const [anchorEl, setAnchorEl] = useState(null);
   const notebookList = ['Notebook 1', 'Notebook 2', 'Notebook 3'];
+  const codeCellsForDredd = codeCells.map(c => ({
+    id: c.get('id'),
+    code: c.get('content').toString()
+  }));
 
   const handleRunAllCode = async () => {
-    const token = await sendManyToDredd(roomID, codeCells);
+    const token = await sendManyToDredd(roomID, codeCellsForDredd);
     const response = await checkDreddStatus(token);
 
     response.forEach(codeCell => {
@@ -28,6 +32,9 @@ const Header = ({ roomID, codeCells }) => {
 
   const handleResetContext = async () => {
     await resetContext(roomID);
+    codeCells.forEach(cell => {
+      cell.get('outputMap').set('stdout', '');
+    });
   };
 
   return (

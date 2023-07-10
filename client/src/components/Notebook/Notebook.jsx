@@ -42,12 +42,7 @@ const Notebook = ({ roomID }) => {
     cellsArray.insert(newIndex, [clone]);
   };
 
-  const codeCellsForDredd = cellDataArr
-    .filter(c => c.get('type') === 'code')
-    .map(c => ({
-      id: c.get('id'),
-      code: c.get('content').toString()
-    }));
+  const codeCellsForDredd = cellDataArr.filter(c => c.get('type') === 'code');
 
   const contextValue = {
     addCellAtIndex,
