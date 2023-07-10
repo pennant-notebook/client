@@ -2,10 +2,10 @@ import logo from '../../assets/logo.png';
 import { Box, IconButton, Typography, Stack } from '@mui/material';
 import { PlayCircleOutlineTwoTone, Refresh } from '@mui/icons-material';
 import { checkDreddStatus, sendManyToDredd, resetContext } from '../../services/dreddExecutionService';
-import useNotebookContext from '../../contexts/NotebookContext';
+import useProviderContext from '../../contexts/ProviderContext';
 
 const Header = ({ roomID, codeCells }) => {
-  const { doc } = useNotebookContext();
+  const { doc } = useProviderContext();
 
   // handleRunAllCode not working currently - pending API fix to include cellIds in response
   const handleRunAllCode = async () => {
@@ -19,7 +19,7 @@ const Header = ({ roomID, codeCells }) => {
         .find(c => c.get('id') === codeCell['id']);
       if (cell && codeCell.output) {
         const outputMap = cell.get('outputMap');
-        outputMap.set('data', codeCell.output);
+        outputMap.set('stdout', codeCell.output);
       }
     });
   };
@@ -33,9 +33,6 @@ const Header = ({ roomID, codeCells }) => {
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'left', flex: '1' }}>
         {/* <img src={logo} width='48px' /> */}
         <Typography sx={{ fontSize: '40px' }}>🏴‍☠️</Typography>
-        <Typography variant='overline' sx={{ fontSize: '1.5rem', ml: '0.5rem' }}>
-          Cell Mateys
-        </Typography>
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', flex: '1' }}>
         <IconButton onClick={handleResetContext} sx={{ color: 'steelblue', '&:hover': { color: 'dodgerblue' } }}>

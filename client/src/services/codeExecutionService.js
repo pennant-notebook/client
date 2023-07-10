@@ -1,36 +1,5 @@
 import axios from 'axios';
 
-export const sendToJudge = async (code, customInput, languageId) => {
-  const formData = {
-    language_id: languageId, // 63: JavaScript
-    source_code: btoa(code),
-    stdin: btoa(customInput)
-  };
-
-  const options = {
-    method: 'POST',
-    url: import.meta.env.VITE_RAPID_API_URL,
-    params: { base64_encoded: 'true', fields: '*' },
-    headers: {
-      'content-type': 'application/json',
-      'Content-Type': 'application/json',
-      'X-RapidAPI-Host': import.meta.env.VITE_RAPID_API_HOST,
-      'X-RapidAPI-Key': import.meta.env.VITE_RAPID_API_KEY
-    },
-    data: formData
-  };
-
-  return axios.request(options).catch(err => {
-    let error = err.response ? err.response.data : err;
-    let status = err.response?.status;
-    console.log('status', status);
-    if (status === 429) {
-      console.log('too many requests', status);
-    }
-    console.log('catch block...', error);
-  });
-};
-
 export const checkStatus = async token => {
   try {
     const options = {
