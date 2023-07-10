@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import logo from '../../assets/agora2.png';
-import { Box, Button, IconButton, Menu, MenuItem } from '@mui/material';
+import { Box, Button, IconButton, Menu, MenuItem, Link } from '@mui/material';
 import { PlayCircleOutlineTwoTone, Refresh, Menu as MenuIcon } from '@mui/icons-material';
 import { checkDreddStatus, sendManyToDredd, resetContext } from '../../services/dreddExecutionService';
 import useProviderContext from '../../contexts/ProviderContext';
@@ -8,7 +8,7 @@ import useProviderContext from '../../contexts/ProviderContext';
 const Header = ({ roomID, codeCells }) => {
   const { doc, notebookMetadata } = useProviderContext();
   const [anchorEl, setAnchorEl] = useState(null);
-  const notebookList = ['Notebook 1', 'Notebook 2', 'Notebook 3'];
+  const notebookList = ['rb-109', 'ls-180', 'Fibona'];
   const codeCellsForDredd = codeCells.map(c => ({
     id: c.get('id'),
     code: c.get('content').toString()
@@ -75,8 +75,10 @@ const Header = ({ roomID, codeCells }) => {
           open={Boolean(anchorEl)}
           onClose={() => setAnchorEl(null)}>
           {notebookList.map((notebook, index) => (
-            <MenuItem key={index} onClick={() => setAnchorEl(null)}>
-              {notebook}
+            <MenuItem key={index} href={"rb109"}>
+              <Link href={notebook} underline="hover">
+  {notebook}
+</Link>
             </MenuItem>
           ))}
         </Menu>
