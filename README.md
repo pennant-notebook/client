@@ -5,5 +5,4 @@ stable version with internal dredd execution engine plus engine reset button
 stable version with internal dredd execution engine
 
 230705-0 - version 0.1
-
-This branch is deployed to latest.trypennant.com as pennantmvp2.fly.dev
+This branch is deployed to latest.trypennant.com as pennantmvp2.fly.dev****

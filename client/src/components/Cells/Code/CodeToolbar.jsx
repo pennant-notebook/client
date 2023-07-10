@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { CloseSharp, PlayCircle } from '@mui/icons-material';
+import { CloseSharp, DragIndicator, PlayCircle } from '@mui/icons-material';
 import { Box, Stack, Tooltip, IconButton, Typography } from '@mui/material';
 
 const CodeToolbar = memo(({ onClickRun, onDelete, id }) => {
@@ -15,7 +15,9 @@ const CodeToolbar = memo(({ onClickRun, onDelete, id }) => {
           </IconButton>
         </Tooltip>
         <Tooltip title='Remove cell'>
-          <IconButton onClick={() => onDelete(id)} sx={{ '&:hover': { backgroundColor: 'transparent' } }}>
+          <IconButton
+            onClick={() => onDelete(id)}
+            sx={{ opacity: 0.5, '&:hover': { opacity: 1, backgroundColor: 'transparent' } }}>
             <CloseSharp sx={{ color: 'lightgray' }} />
           </IconButton>
         </Tooltip>
