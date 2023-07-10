@@ -6,7 +6,7 @@ import { checkDreddStatus, sendManyToDredd, resetContext } from '../../services/
 import useProviderContext from '../../contexts/ProviderContext';
 
 const Header = ({ roomID, codeCells }) => {
-  const { doc } = useProviderContext();
+  const { doc, notebookMetadata } = useProviderContext();
   const [anchorEl, setAnchorEl] = useState(null);
   const notebookList = ['Notebook 1', 'Notebook 2', 'Notebook 3'];
   const codeCellsForDredd = codeCells.map(c => ({
@@ -32,8 +32,10 @@ const Header = ({ roomID, codeCells }) => {
 
   const handleResetContext = async () => {
     await resetContext(roomID);
+    notebookMetadata.set('executionCount', 0);
     codeCells.forEach(cell => {
       cell.get('outputMap').set('stdout', '');
+      cell.get('metaData').set('exeCount', '*');
     });
   };
 
