@@ -52,7 +52,13 @@ const Notebook = ({ roomID }) => {
 
   return (
     <NotebookContext.Provider value={contextValue}>
-      <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100vh',
+          alignItems: 'center'
+        }}>
         <Header roomID={roomID} codeCells={codeCellsForDredd} />
         <Cells roomID={roomID} cells={cellDataArr} setCells={setCellDataArr} />
       </Box>

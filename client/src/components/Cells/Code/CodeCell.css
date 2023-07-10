@@ -1,0 +1,19 @@
+.exeCount {
+  background-color: #617ad5;
+  color: #fff;
+  box-shadow: rgba(227, 195, 242, 0.3) 0px 0px 0px 3px;
+  border-radius: 4px;
+  padding: 3px 5px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  font-family: 'Fira Code';
+}
+
+.codecell-container {
+  mask-image: radial-gradient(circle, black 100%, transparent 100%);
+  flex-grow: 1;
+  width: 90%;
+  border: 1px solid dimgray;
+  border-radius: 5px;
+  background-color: navajowhite;
+}

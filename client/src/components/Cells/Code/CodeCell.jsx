@@ -7,6 +7,7 @@ import useNotebookContext from '../../../contexts/NotebookContext';
 import useProviderContext from '../../../contexts/ProviderContext';
 import { editorOptions, updateMetadata, updateEditorHeight } from '../../../utils/codeHelpers';
 import { sendToDredd, checkDreddStatus } from '../../../services/dreddExecutionService';
+import './CodeCell.css';
 
 const CodeCell = ({ cellID, roomID, cell, content }) => {
   const { deleteCell } = useNotebookContext();
@@ -61,33 +62,33 @@ const CodeCell = ({ cellID, roomID, cell, content }) => {
   }, [outputMap, cellMetadata]);
 
   return (
-    <Stack direction='row' sx={{ width: '82%', alignItems: 'center', margin: '0 auto' }}>
-      <Typography sx={{ mr: '18px' }}>[{cellExeCount ? cellExeCount : '*'}]</Typography>
+    <Box sx={{ position: 'relative', display: 'flex', justifyContent: 'center', width: '100%' }}>
       <Box
-        id='monaco-container'
-        className='codecell-container'
-        style={{
-          flexGrow: 1,
-          width: '90%',
-          border: '1px solid dimgray',
-          borderRadius: '5px',
-          paddingBottom: output ? '4px' : '0',
-          backgroundColor: 'navajowhite'
+        sx={{
+          position: 'absolute',
+          left: { xs: '2vw', sm: '5vw', lg: '6vw' },
+          top: '50%',
+          transform: 'translateY(-50%)'
         }}>
-        <CodeToolbar onClickRun={handleRunCode} id={cellID} onDelete={deleteCell} />
-        <Editor
-          aria-labelledby='Code Editor'
-          height={editorHeight}
-          defaultLanguage='javascript'
-          theme='vs-dark'
-          onMount={handleEditorDidMount}
-          options={editorOptions}
-        />
-        <Typography sx={{ fontFamily: 'monospace', ml: '5px', backgroundColor: 'charcoal' }}>
-          {processing ? 'Processing...' : output}
-        </Typography>
+        <Typography className='exeCount'>{cellExeCount ? cellExeCount : '*'}</Typography>
       </Box>
-    </Stack>
+      <Stack direction='row' sx={{ width: '82%', alignItems: 'center', margin: '0 auto' }}>
+        <Box className='codecell-container'>
+          <CodeToolbar onClickRun={handleRunCode} id={cellID} onDelete={deleteCell} />
+          <Editor
+            aria-labelledby='Code Editor'
+            height={editorHeight}
+            defaultLanguage='javascript'
+            theme='vs-dark'
+            onMount={handleEditorDidMount}
+            options={editorOptions}
+          />
+          <Typography sx={{ fontFamily: 'monospace', ml: '5px', backgroundColor: 'charcoal' }}>
+            {processing ? 'Processing...' : output}
+          </Typography>
+        </Box>
+      </Stack>
+    </Box>
   );
 };
 
