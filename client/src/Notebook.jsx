@@ -72,8 +72,9 @@ const Notebook = ({ roomID }) => {
   return (
     <NotebookContext.Provider value={contextValue}>
       <Header roomID={roomID} codeCells={codeCellsForDredd} />
-
+      
       <Box sx={{ mx: 5, py: 1 }}>
+      <AddCell index={-1}></AddCell>
         {cellsYArray &&
           cellsYArray.map((cell, index) => {
             const id = cell.get('id');
@@ -97,7 +98,7 @@ const Notebook = ({ roomID }) => {
             );
           })}
       </Box>
-      {cellsYArray && cellsYArray.length === 0 && <AddCell index={0} />}
+      {/* {cellsYArray && cellsYArray.length === 0 && <AddCell index={0} />} */}
     </NotebookContext.Provider>
   );
 };
