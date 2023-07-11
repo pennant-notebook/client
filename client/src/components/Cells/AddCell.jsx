@@ -1,10 +1,8 @@
-import { Add, Code } from '@mui/icons-material';
-import { Box, Divider, IconButton, Tooltip } from '@mui/material';
+import { Box, Add, Code, Divider, IconButton, Tooltip } from '../MuiImports';
 import useNotebookContext from '../../contexts/NotebookContext';
 
 const AddCell = ({ index, type }) => {
   const { addCellAtIndex } = useNotebookContext();
-
   return (
     <Box
       sx={{
@@ -17,10 +15,9 @@ const AddCell = ({ index, type }) => {
         flexItem
         sx={{
           opacity: '1',
-          width: '100%', // Change the width to be 100% of the parent
-          color: 'gray',
-          marginTop: type === 'code' ? '10px' : '0px',
-          marginBottom: type === 'markdown' ? '10px' : '0px'
+          width: '100%',
+          marginTop: type === 'code' ? '20px' : '0px',
+          marginBottom: '20px'
         }}>
         <Tooltip title='Add Markdown Cell'>
           <IconButton

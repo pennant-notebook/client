@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import logo from '../../assets/agora2.png';
-import { Box, Button, IconButton, Menu, MenuItem } from '@mui/material';
-import { PlayCircleOutlineTwoTone, Refresh, Menu as MenuIcon } from '@mui/icons-material';
+import logo from '../../assets/pennant-logo.png';
 import { checkDreddStatus, sendManyToDredd, resetContext } from '../../services/dreddExecutionService';
 import useProviderContext from '../../contexts/ProviderContext';
+import { Box, Button, IconButton, Menu, MenuItem, PlayCircleOutlineTwoTone, Refresh, MenuIcon } from '../MuiImports';
 
 const Header = ({ roomID, codeCells }) => {
   const { doc, notebookMetadata } = useProviderContext();
@@ -35,7 +34,7 @@ const Header = ({ roomID, codeCells }) => {
     notebookMetadata.set('executionCount', 0);
     codeCells.forEach(cell => {
       cell.get('outputMap').set('stdout', '');
-      cell.get('metaData').set('exeCount', '*');
+      cell.get('metaData').set('exeCount', 0);
     });
   };
 
@@ -53,7 +52,7 @@ const Header = ({ roomID, codeCells }) => {
         padding: '0 20px'
       }}>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <img src={logo} width='100px' />
+        <img src={logo} width='120px' />
         <Button
           aria-controls='simple-menu'
           aria-haspopup='true'

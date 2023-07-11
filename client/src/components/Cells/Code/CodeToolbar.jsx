@@ -1,6 +1,5 @@
 import { memo } from 'react';
-import { CloseSharp, DragIndicator, PlayCircle } from '@mui/icons-material';
-import { Box, Stack, Tooltip, IconButton, Typography } from '@mui/material';
+import { CloseSharp, DragIndicator, PlayCircle, Box, Stack, Tooltip, IconButton, Typography } from '../../MuiImports';
 
 const CodeToolbar = memo(({ onClickRun, onDelete, id }) => {
   return (

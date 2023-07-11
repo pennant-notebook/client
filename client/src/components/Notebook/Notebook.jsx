@@ -1,10 +1,10 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { createCell } from '../../utils/notebookHelpers';
 import { NotebookContext } from '../../contexts/NotebookContext';
 import Cells from '../Cells/Cells';
 import useProviderContext from '../../contexts/ProviderContext';
-import { Box } from '@mui/material';
 import Header from './Header';
+import { Box } from '../MuiImports';
 
 const Notebook = ({ roomID }) => {
   const { doc } = useProviderContext();
@@ -52,7 +52,13 @@ const Notebook = ({ roomID }) => {
 
   return (
     <NotebookContext.Provider value={contextValue}>
-      <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100vh',
+          alignItems: 'center'
+        }}>
         <Header roomID={roomID} codeCells={codeCellsForDredd} />
         <Cells roomID={roomID} cells={cellDataArr} setCells={setCellDataArr} />
       </Box>
