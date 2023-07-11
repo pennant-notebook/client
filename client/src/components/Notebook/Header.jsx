@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import logo from '../../assets/pennant-logo.png';
-import { Box, Button, IconButton, Menu, MenuItem } from '@mui/material';
-import { PlayCircleOutlineTwoTone, Refresh, Menu as MenuIcon } from '@mui/icons-material';
 import { checkDreddStatus, sendManyToDredd, resetContext } from '../../services/dreddExecutionService';
 import useProviderContext from '../../contexts/ProviderContext';
+import { Box, Button, IconButton, Menu, MenuItem, PlayCircleOutlineTwoTone, Refresh, MenuIcon } from '../MuiImports';
 
 const Header = ({ roomID, codeCells }) => {
   const { doc, notebookMetadata } = useProviderContext();

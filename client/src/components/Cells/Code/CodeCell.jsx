@@ -1,5 +1,5 @@
+import { Box, Stack, Typography } from '../../MuiImports';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Box, Stack, Typography } from '@mui/material';
 import { MonacoBinding } from 'y-monaco';
 import CodeToolbar from './CodeToolbar';
 import { Editor } from '@monaco-editor/react';
@@ -62,17 +62,17 @@ const CodeCell = ({ cellID, roomID, cell, content }) => {
   }, [outputMap, cellMetadata]);
 
   return (
-    <Box sx={{ position: 'relative', display: 'flex', justifyContent: 'center', width: '100%' }}>
+    <Box sx={{ position: 'relative', display: 'flex', margin: '0 auto', width: '100%' }}>
       <Box
         sx={{
           position: 'absolute',
-          left: { xs: '2vw', sm: '5vw', lg: '6vw' },
+          left: { xs: '3vw', sm: '4vw', lg: '5vw' },
           top: '50%',
           transform: 'translateY(-50%)'
         }}>
         <Typography className='exeCount'>{cellExeCount ? cellExeCount : '*'}</Typography>
       </Box>
-      <Stack direction='row' sx={{ width: '82%', alignItems: 'center', margin: '0 auto' }}>
+      <Stack direction='row' sx={{ width: '82%', alignItems: 'center', margin: '0 auto', pl: { sm: '2%', lg: '1%' } }}>
         <Box className='codecell-container'>
           <CodeToolbar onClickRun={handleRunCode} id={cellID} onDelete={deleteCell} />
           <Editor

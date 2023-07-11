@@ -1,8 +1,8 @@
-import { React, lazy, Suspense } from 'react';
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import ShortUniqueId from 'short-unique-id';
 import LoadingSpinner from './components/UI/LoadingSpinner';
-import { Box } from '@mui/material';
+import { Box } from './components/MuiImports';
 import './App.css';
 import { ProviderContext, initializeProvider } from './contexts/ProviderContext';
 

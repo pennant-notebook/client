@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Typography } from '../MuiImports';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import MarkdownCell from '../Cells/Markdown/MarkdownCell';
 import CodeCell from '../Cells/Code/CodeCell';
@@ -31,8 +31,9 @@ const Cells = ({ roomID, cells, setCells }) => {
 
   return (
     <Box sx={{ mx: 5, py: 1, width: '100%' }}>
-      <AddCell index={-1} />
       <Typography variant='h5' sx={{ textAlign: 'center', my: '40px', opacity: 0.7 }}></Typography>
+      <AddCell index={-1} noLine={true} />
+
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId='cells'>
           {provided => (

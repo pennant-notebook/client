@@ -1,10 +1,10 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { createCell } from '../../utils/notebookHelpers';
 import { NotebookContext } from '../../contexts/NotebookContext';
 import Cells from '../Cells/Cells';
 import useProviderContext from '../../contexts/ProviderContext';
-import { Box } from '@mui/material';
 import Header from './Header';
+import { Box } from '../MuiImports';
 
 const Notebook = ({ roomID }) => {
   const { doc } = useProviderContext();
