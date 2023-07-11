@@ -32,7 +32,6 @@ const Cells = ({ roomID, cells, setCells }) => {
   return (
     <Box sx={{ mx: 5, py: 1, width: '100%' }}>
       <AddCell index={-1} />
-
       <Typography variant='h5' sx={{ textAlign: 'center', my: '40px', opacity: 0.7 }}></Typography>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId='cells'>

@@ -6,61 +6,15 @@
   display: none;
 }
 
-.yRemoteSelection {
-  background-color: rgb(250, 129, 0, 0.5);
-}
-
-.yRemoteSelectionHead {
-  position: absolute;
-  border-left: #3482f6 solid 2px;
-  border-top: #3482f6 solid 2px;
-  border-bottom: #3482f6 solid 2px;
-  height: 100%;
-  box-sizing: border-box;
-}
-
-.yRemoteSelectionHead::after {
-  position: absolute;
-  content: ' ';
-  border: 3px solid #3482f6;
-  border-radius: 4px;
-  left: -4px;
-  top: -5px;
-}
-
-.markdown p {
-  @apply m-0 p-0 text-gray-900;
-}
-.markdown h1 {
-  @apply m-0 p-0 text-purple-600;
-}
-.markdown h2 {
-  @apply m-0 p-0 text-green-500;
-}
-.markdown h3 {
-  @apply m-0 p-0 text-red-600;
-}
-.markdown h4 {
-  @apply m-0 p-0 text-red-800;
-}
-.markdown h5 {
-  @apply m-0 p-0 text-blue-500;
-}
-.markdown h6 {
-  @apply m-0 p-0 text-fuchsia-500;
-}
-
 @layer utilities {
-  @variants responsive {
-    /* Hide scrollbar for Chrome, Safari and Opera */
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 
-    /* Hide scrollbar for IE, Edge and Firefox */
-    .no-scrollbar {
-      -ms-overflow-style: none; /* IE and Edge */
-      scrollbar-width: none; /* Firefox */
-    }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
   }
 }

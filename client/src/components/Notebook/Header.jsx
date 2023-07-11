@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import logo from '../../assets/agora4.png';
-import { Box, Button, IconButton, Menu, MenuItem, Stack, Typography } from '@mui/material';
+import logo from '../../assets/pennant-logo.png';
+import { Box, Button, IconButton, Menu, MenuItem } from '@mui/material';
 import { PlayCircleOutlineTwoTone, Refresh, Menu as MenuIcon } from '@mui/icons-material';
 import { checkDreddStatus, sendManyToDredd, resetContext } from '../../services/dreddExecutionService';
 import useProviderContext from '../../contexts/ProviderContext';
