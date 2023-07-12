@@ -5,9 +5,11 @@ import Cells from '../Cells/Cells';
 import useProviderContext from '../../contexts/ProviderContext';
 import { Box } from '@mui/material';
 import Header from './Header';
+import { yPrettyPrint } from '../../utils/yPrettyPrint.js';
 
 const Notebook = ({ roomID }) => {
   const { doc } = useProviderContext();
+  yPrettyPrint(doc)
   const cellsArray = doc.getArray('cells');
   const [cellDataArr, setCellDataArr] = useState(cellsArray.toArray());
 

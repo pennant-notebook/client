@@ -9,9 +9,10 @@ const Header = ({ roomID, codeCells }) => {
   const { doc, notebookMetadata } = useProviderContext();
   const [anchorEl, setAnchorEl] = useState(null);
   const notebookList = ['rb-109', 'ls-180', 'Fibona'];
+
   const codeCellsForDredd = codeCells.map(c => ({
     id: c.get('id'),
-    code: c.get('content').toString()
+    code: c.get('editorContent').toString()
   }));
 
   const handleRunAllCode = async () => {
