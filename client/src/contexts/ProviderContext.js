@@ -1,5 +1,6 @@
-import { HocuspocusProvider } from '@hocuspocus/provider';
-import { createContext, useContext } from 'react';
+import { HocuspocusProvider } from "@hocuspocus/provider";
+import { createContext, useContext } from "react";
+import { yPrettyPrint } from "../utils/yPrettyPrint";
 
 export const ProviderContext = createContext();
 
@@ -11,11 +12,13 @@ const roomToProviderMap = new Map();
 const roomToDocMap = new Map();
 
 export const initializeProvider = roomID => {
+  console.log("token -> ", import.meta.env.VITE_HP_ACCESS_TOKEN);
   let provider = roomToProviderMap.get(roomID);
   if (!provider) {
     provider = new HocuspocusProvider({
       url: import.meta.env.VITE_WEBSOCKET_SERVER,
-      name: roomID
+      name: roomID,
+      token: import.meta.env.VITE_HP_ACCESS_TOKEN
     });
     roomToProviderMap.set(roomID, provider);
   }
@@ -26,13 +29,14 @@ export const initializeProvider = roomID => {
     roomToDocMap.set(roomID, doc);
   }
 
-  const notebookMetadata = doc.getMap('metaData');
-  const cellsArray = doc.getArray('cells');
+  const notebookMetadata = doc.getMap("metaData");
+  const cellsArray = doc.getArray("cells");
 
-  provider.on('synced', () => {
+  provider.on("synced", () => {
+    yPrettyPrint(doc, "doc at sync");
     // console.log(notebookMetadata.get('executionCount'), 'exe count at sync');
-    if (provider.document.get('metaData').get('executionCount') === undefined) {
-      notebookMetadata.set('executionCount', 0);
+    if (provider.document.get("metaData").get("executionCount") === undefined) {
+      notebookMetadata.set("executionCount", 0);
     }
   });
 
