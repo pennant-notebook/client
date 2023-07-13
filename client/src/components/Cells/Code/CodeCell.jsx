@@ -27,18 +27,23 @@ const CodeCell = ({ cellID, roomID, cell, content }) => {
     updateEditorHeight(editor, setEditorHeight);
   }, []);
 
+  const handleDredd = async () => {
+    try {
+      updateMetadata(cellMetadata, notebookMetadata);
+      const token = await sendToDredd(roomID, cellID, editorRef.current.getValue());
+      const response = await checkDreddStatus(token);
+      // TODO if we return error we shoud chck if we even need to return something else besides (response[0].output)
+      const processedResponse = response[0].output;
+      outputMap.set('stdout', processedResponse);
+    } catch (error) {
+      console.log('logging the error from service call:', error);
+    }
+  };
+
   const handleRunCode = () => {
     setProcessing(true);
     handleDredd();
     setProcessing(false);
-  };
-
-  const handleDredd = async () => {
-    updateMetadata(cellMetadata, notebookMetadata);
-    const token = await sendToDredd(roomID, cellID, editorRef.current.getValue());
-    const response = await checkDreddStatus(token);
-    const processedResponse = response[0].output;
-    outputMap.set('stdout', processedResponse);
   };
 
   useEffect(() => {

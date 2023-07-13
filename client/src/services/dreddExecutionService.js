@@ -8,7 +8,7 @@ export const sendToDredd = async (notebookId, cellId, code) => {
       notebookId,
       cells: [
         {
-          id: cellId,
+          cellId,
           code
         }
       ]
@@ -19,10 +19,19 @@ export const sendToDredd = async (notebookId, cellId, code) => {
   }
 };
 
+
+// TODO
+// HTTP Status 400, 500 handling
+// Timeout , critical error handling
 export const checkDreddStatus = async token => {
   try {
     const response = await axios.get(`${BASE_URL}/api/status/${token}`);
+    // ! for error testing
+    // const response = await axios.get(`${BASE_URL}/api/status/INVALID_TOKEN_32542352`);
     const statusId = response.data.status;
+    if (statusId === 'critical error') {
+      throw new Error('critical error');
+    }
 
     if (statusId === 'pending') {
       await new Promise(resolve => setTimeout(resolve, 1500));
@@ -34,6 +43,14 @@ export const checkDreddStatus = async token => {
       return response.data.results;
     }
   } catch (error) {
+    // TODO logic for changing ui to error state, or rethrow and catch in calling ui component
+    if (error.hasOwnProperty('response')) {
+      if (error.response.status === 500) {
+        console.log('server error');
+      } else if (error.response.status === 400) {
+        console.log('bad request');
+      }
+    }
     throw new Error(error.message);
   }
 };
