@@ -32,11 +32,16 @@ const CodeCell = ({ cellID, roomID, cell, content }) => {
       updateMetadata(cellMetadata, notebookMetadata);
       const token = await sendToDredd(roomID, cellID, editorRef.current.getValue());
       const response = await checkDreddStatus(token);
-      // TODO if we return error we shoud chck if we even need to return something else besides (response[0].output)
       const processedResponse = response[0].output;
       outputMap.set('stdout', processedResponse);
     } catch (error) {
-      console.log('logging the error from service call:', error);
+      if (error.message === "Request failed with status code 500") {
+        outputMap.set('stdout', 'A server error occurred, please try again');
+      } else if (error.message === 'critical error'){
+        outputMap.set('stdout', error.message + " code has timed out");
+      } else {
+        outputMap.set('stdout', 'An error occurred');
+      }
     }
   };
 
