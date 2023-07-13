@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from '../../MuiImports';
+import { Box, Stack, Typography, Tooltip } from '../../MuiImports';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { MonacoBinding } from 'y-monaco';
 import CodeToolbar from './CodeToolbar';
@@ -10,6 +10,7 @@ import { sendToDredd, checkDreddStatus } from '../../../services/dreddExecutionS
 import './CodeCell.css';
 
 const CodeCell = ({ cellID, roomID, cell, content }) => {
+  const [warningText, setWarningText] = useState(null);
   const { deleteCell } = useNotebookContext();
   const { awareness, notebookMetadata } = useProviderContext();
   const cellMetadata = cell.get('metaData');
@@ -25,6 +26,7 @@ const CodeCell = ({ cellID, roomID, cell, content }) => {
     editorRef.current = editor;
     new MonacoBinding(content, editor.getModel(), new Set([editor]), awareness);
     updateEditorHeight(editor, setEditorHeight);
+    editor.onDidChangeModelContent(handleConst)
   }, []);
 
   const handleRunCode = () => {
@@ -61,7 +63,17 @@ const CodeCell = ({ cellID, roomID, cell, content }) => {
     });
   }, [outputMap, cellMetadata]);
 
+  const handleConst = () => {
+    if (editorRef.current.getValue().match(/const$/)) {
+      setWarningText(true);
+      setTimeout(() => {
+        setWarningText(null)
+      }, 3000)
+    } 
+  }
+
   return (
+    <Tooltip disableHoverListener title={warningText == null ? "" : "const declarations do not prevent variable renassignment in this notebook"}>
     <Box sx={{ position: 'relative', display: 'flex', margin: '0 auto', width: '100%' }}>
       <Box
         sx={{
@@ -73,8 +85,8 @@ const CodeCell = ({ cellID, roomID, cell, content }) => {
         <Typography className='exeCount'>{cellExeCount ? cellExeCount : '*'}</Typography>
       </Box>
       <Stack direction='row' sx={{ width: '82%', alignItems: 'center', margin: '0 auto', pl: { sm: '2%', lg: '1%' } }}>
-        <Box className='codecell-container'>
-          <CodeToolbar onClickRun={handleRunCode} id={cellID} onDelete={deleteCell} />
+        <Box className='codecell-container'>        
+          <CodeToolbar onClickRun={handleRunCode} id={cellID} onDelete={deleteCell} />  
           <Editor
             aria-labelledby='Code Editor'
             height={editorHeight}
@@ -82,13 +94,14 @@ const CodeCell = ({ cellID, roomID, cell, content }) => {
             theme='vs-dark'
             onMount={handleEditorDidMount}
             options={editorOptions}
-          />
+          />  
           <Typography sx={{ fontFamily: 'monospace', ml: '5px', backgroundColor: 'charcoal' }}>
             {processing ? 'Processing...' : output}
           </Typography>
         </Box>
       </Stack>
     </Box>
+    </Tooltip>
   );
 };
 

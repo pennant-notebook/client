@@ -1,7 +1,7 @@
-// import * as Y from "yjs";
+import * as Y from "yjs";
 
-// export const yPrettyPrint = (ydoc, msg = "") => {
-//   console.log(
-//     "\n\n==> " + msg + ": \n" + JSON.stringify(ydoc.toJSON(), null, 4) + "\n\n"
-//   );
-// };
+export const yPrettyPrint = (ydoc, msg = "") => {
+  console.log(
+    "\n\n==> " + msg + ": \n" + JSON.stringify(ydoc.toJSON(), null, 4) + "\n\n"
+  );
+};
