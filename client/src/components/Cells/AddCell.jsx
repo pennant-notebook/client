@@ -1,7 +1,7 @@
 import { Box, Add, Code, Divider, IconButton, Tooltip } from '../../utils/MuiImports';
 import useNotebookContext from '../../contexts/NotebookContext';
 
-const AddCell = ({ index, type }) => {
+const AddCell = ({ index }) => {
   const { addCellAtIndex } = useNotebookContext();
   return (
     <Box sx={{ my: '10px' }}>
