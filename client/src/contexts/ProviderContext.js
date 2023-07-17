@@ -1,34 +1,17 @@
-import { HocuspocusProvider } from "@hocuspocus/provider";
-import { createContext, useContext } from "react";
-import { yPrettyPrint } from "../utils/yPrettyPrint";
+import { HocuspocusProvider } from '@hocuspocus/provider';
+import { createContext, useContext } from 'react';
+import { yPrettyPrint } from '../utils/yPrettyPrint';
 
 const idToProviderMap = new Map();
 const idtoDocMap = new Map();
 
-<<<<<<< HEAD
 export const initializeProvider = (docID, user) => {
-  // console.log('token -> ', import.meta.env.VITE_HP_ACCESS_TOKEN);
+  console.log('token -> ', import.meta.env.VITE_HP_ACCESS_TOKEN);
   let provider = idToProviderMap.get(docID);
   if (!provider) {
     provider = new HocuspocusProvider({
       url: import.meta.env.VITE_WEBSOCKET_SERVER,
       name: docID,
-=======
-const useProviderContext = () => useContext(ProviderContext);
-
-export default useProviderContext;
-
-const roomToProviderMap = new Map();
-const roomToDocMap = new Map();
-
-export const initializeProvider = roomID => {
-  console.log("token -> ", import.meta.env.VITE_HP_ACCESS_TOKEN);
-  let provider = roomToProviderMap.get(roomID);
-  if (!provider) {
-    provider = new HocuspocusProvider({
-      url: import.meta.env.VITE_WEBSOCKET_SERVER,
-      name: roomID,
->>>>>>> main
       token: import.meta.env.VITE_HP_ACCESS_TOKEN
     });
     idToProviderMap.set(docID, provider);
@@ -40,20 +23,14 @@ export const initializeProvider = roomID => {
     idtoDocMap.set(docID, doc);
   }
 
-  const notebookMetadata = doc.getMap("metaData");
-  const cellsArray = doc.getArray("cells");
+  const notebookMetadata = doc.getMap('metaData');
+  const cellsArray = doc.getArray('cells');
 
-<<<<<<< HEAD
   provider.on('synced', () => {
+    yPrettyPrint(doc, 'doc at sync');
+    // console.log(notebookMetadata.get('executionCount'), 'exe count at sync');
     if (provider.document.get('metaData').get('executionCount') === undefined) {
       notebookMetadata.set('executionCount', 0);
-=======
-  provider.on("synced", () => {
-    yPrettyPrint(doc, "doc at sync");
-    // console.log(notebookMetadata.get('executionCount'), 'exe count at sync');
-    if (provider.document.get("metaData").get("executionCount") === undefined) {
-      notebookMetadata.set("executionCount", 0);
->>>>>>> main
     }
     console.log('PROVIDER SYNCED');
   });
