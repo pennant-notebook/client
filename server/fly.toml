@@ -12,4 +12,8 @@ primary_region = "sea"
   auto_stop_machines = true
   auto_start_machines = true
   min_machines_running = 0
+<<<<<<< HEAD
   processes = ["app"]
+=======
+  processes = ["app"]
+>>>>>>> main

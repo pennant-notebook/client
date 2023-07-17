@@ -18,7 +18,11 @@ FROM base as build
 
 # Install packages needed to build node modules
 RUN apt-get update -qq && \
+<<<<<<< HEAD
   apt-get install -y python pkg-config build-essential 
+=======
+    apt-get install -y python pkg-config build-essential 
+>>>>>>> main
 
 # Install node modules
 COPY --link package-lock.json package.json ./
@@ -36,4 +40,8 @@ COPY --from=build /app /app
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
+<<<<<<< HEAD
 CMD [ "npm", "run", "start" ]
+=======
+CMD [ "npm", "run", "start" ]
+>>>>>>> main
