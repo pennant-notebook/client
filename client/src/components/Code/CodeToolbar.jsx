@@ -8,7 +8,7 @@ import {
   IconButton,
   Typography,
   CircularProgress
-} from '../../../utils/MuiImports';
+} from '../../utils/MuiImports';
 
 const CodeToolbar = memo(({ onClickRun, onDelete, id, processing, type }) => {
   return (

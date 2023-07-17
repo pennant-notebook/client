@@ -1,7 +1,7 @@
 import { Box, DragIndicator, Stack, Typography } from '../../utils/MuiImports';
 import { DragDropContext, Draggable } from 'react-beautiful-dnd';
-import MarkdownCell from './Markdown/MarkdownCell';
-import CodeCell from './Code/CodeCell';
+import MarkdownCell from '../Markdown/MarkdownCell';
+import CodeCell from '../Code/CodeCell';
 import AddCell from './AddCell';
 import useNotebookContext from '../../contexts/NotebookContext';
 import useProviderContext from '../../contexts/ProviderContext';

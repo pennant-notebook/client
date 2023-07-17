@@ -1,10 +1,10 @@
-import { Box, Stack, Typography } from '../../../utils/MuiImports';
+import { Box, Stack, Typography } from '../../utils/MuiImports';
 import { useEffect, useRef, useState } from 'react';
-import useProviderContext from '../../../contexts/ProviderContext';
-import useNotebookContext from '../../../contexts/NotebookContext';
+import useProviderContext from '../../contexts/ProviderContext';
+import useNotebookContext from '../../contexts/NotebookContext';
 import CodeToolbar from './CodeToolbar';
-import createEditorState from '../../../utils/createEditor';
-import { handleDredd, updateMetadata } from '../../../utils/codeHelpers';
+import createEditorState from '../../utils/createEditor';
+import { handleDredd, updateMetadata } from '../../utils/codeHelpers';
 
 const CodeCell = ({ cellId, cell, content }) => {
   const { awareness, notebookMetadata, docID } = useProviderContext();

@@ -1,9 +1,9 @@
 import { useRef } from 'react';
-import { Box } from '../../../utils/MuiImports';
-import useNotebookContext from '../../../contexts/NotebookContext';
+import { Box } from '../../utils/MuiImports';
+import useNotebookContext from '../../contexts/NotebookContext';
 import { BlockNoteView, useBlockNote } from '@blocknote/react';
-import { getUserObjects } from '../../../utils/awarenessHelpers';
-import useProviderContext from '../../../contexts/ProviderContext';
+import { getUserObjects } from '../../utils/awarenessHelpers';
+import useProviderContext from '../../contexts/ProviderContext';
 import CodeToolbar from '../Code/CodeToolbar';
 import '@blocknote/core/style.css';
 
