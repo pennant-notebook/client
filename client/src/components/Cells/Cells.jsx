@@ -1,12 +1,13 @@
-import { Box, Typography } from '../MuiImports';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import MarkdownCell from '../Cells/Markdown/MarkdownCell';
-import CodeCell from '../Cells/Code/CodeCell';
+import { Box, DragIndicator, Stack, Typography } from '../../utils/MuiImports';
+import { DragDropContext, Draggable } from 'react-beautiful-dnd';
+import MarkdownCell from './Markdown/MarkdownCell';
+import CodeCell from './Code/CodeCell';
 import AddCell from './AddCell';
 import useNotebookContext from '../../contexts/NotebookContext';
 import useProviderContext from '../../contexts/ProviderContext';
+import StrictModeDroppable from './StrictModeDroppable';
 
-const Cells = ({ roomID, cells, setCells }) => {
+const Cells = ({ cells, setCells }) => {
   const { repositionCell } = useNotebookContext();
   const { provider } = useProviderContext();
 
@@ -30,41 +31,49 @@ const Cells = ({ roomID, cells, setCells }) => {
   };
 
   return (
-    <Box sx={{ mx: 5, py: 1, width: '100%' }}>
-      <AddCell index={-1} />
-      <Typography variant='h5' sx={{ textAlign: 'center', my: '40px', opacity: 0.7 }}></Typography>
-      <AddCell index={-1} noLine={true} />
-
+    <Box sx={{ py: 2, width: { xs: '90%', lg: '80%' }, mx: 'auto' }}>
       <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId='cells'>
+        <StrictModeDroppable droppableId='cells'>
           {provided => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
+              <AddCell index={-1} />
               {cells &&
                 cells.map((cell, index) => {
                   const id = cell.get('id');
                   const type = cell.get('type');
                   const content = cell.get('content');
                   return (
-                    <Draggable key={id} draggableId={id.toString()} index={index}>
-                      {provided => (
-                        <Box ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                          <Box alignItems='center' width='100%'>
-                            {type === 'markdown' && <MarkdownCell id={id} content={content} provider={provider} />}
-                            {type === 'code' && <CodeCell cellID={id} roomID={roomID} cell={cell} content={content} />}
+                    <Box width='100%' key={id}>
+                      <Draggable key={id} draggableId={id.toString()} index={index}>
+                        {provided => (
+                          <Box ref={provided.innerRef} {...provided.draggableProps}>
+                            <Stack direction='row' alignItems='center' sx={{ my: '0px' }}>
+                              <Box display='flex' alignItems='center' width='90%'>
+                                <Box className='dragIndicator' {...provided.dragHandleProps}>
+                                  <DragIndicator sx={{ opacity: '0.5', mt: 0.5 }} />
+                                </Box>
+                                <Box alignItems='center' sx={{ flexGrow: 1, zIndex: 0, ml: 2 }}>
+                                  {type === 'markdown' && (
+                                    <MarkdownCell id={id} content={content} provider={provider} />
+                                  )}
+                                  {type === 'code' && <CodeCell cellId={id} cell={cell} content={content} />}
+                                </Box>
+                              </Box>
+                            </Stack>
                           </Box>
-                          <AddCell index={index} type={type} />
-                        </Box>
-                      )}
-                    </Draggable>
+                        )}
+                      </Draggable>
+                      <AddCell index={index} type={type} />
+                    </Box>
                   );
                 })}
               {provided.placeholder}
             </div>
           )}
-        </Droppable>
+        </StrictModeDroppable>
       </DragDropContext>
-      {/* {cells && cells.length === 0 && <AddCell index={0} />} */}
     </Box>
   );
 };
+
 export default Cells;

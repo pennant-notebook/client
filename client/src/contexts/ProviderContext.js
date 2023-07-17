@@ -1,43 +1,41 @@
 import { HocuspocusProvider } from '@hocuspocus/provider';
 import { createContext, useContext } from 'react';
 
-export const ProviderContext = createContext();
+const idToProviderMap = new Map();
+const idtoDocMap = new Map();
 
-const useProviderContext = () => useContext(ProviderContext);
-
-export default useProviderContext;
-
-const roomToProviderMap = new Map();
-const roomToDocMap = new Map();
-
-export const initializeProvider = roomID => {
-  let provider = roomToProviderMap.get(roomID);
+export const initializeProvider = (docID, user) => {
+  // console.log('token -> ', import.meta.env.VITE_HP_ACCESS_TOKEN);
+  let provider = idToProviderMap.get(docID);
   if (!provider) {
     provider = new HocuspocusProvider({
       url: import.meta.env.VITE_WEBSOCKET_SERVER,
-      name: roomID
+      name: docID,
+      token: import.meta.env.VITE_HP_ACCESS_TOKEN
     });
-    roomToProviderMap.set(roomID, provider);
+    idToProviderMap.set(docID, provider);
   }
 
-  let doc = roomToDocMap.get(roomID);
+  let doc = idtoDocMap.get(docID);
   if (!doc) {
     doc = provider.document;
-    roomToDocMap.set(roomID, doc);
+    idtoDocMap.set(docID, doc);
   }
 
   const notebookMetadata = doc.getMap('metaData');
   const cellsArray = doc.getArray('cells');
 
   provider.on('synced', () => {
-    // console.log(notebookMetadata.get('executionCount'), 'exe count at sync');
     if (provider.document.get('metaData').get('executionCount') === undefined) {
       notebookMetadata.set('executionCount', 0);
     }
+    console.log('PROVIDER SYNCED');
   });
 
   const contextValue = {
     notebookMetadata,
+    user,
+    docID,
     doc,
     provider,
     awareness: provider.awareness
@@ -45,3 +43,9 @@ export const initializeProvider = roomID => {
 
   return contextValue;
 };
+
+export const ProviderContext = createContext();
+
+const useProviderContext = () => useContext(ProviderContext);
+
+export default useProviderContext;
