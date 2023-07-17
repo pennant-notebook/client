@@ -1,24 +1,11 @@
-import { Box, Add, Code, Divider, IconButton, Tooltip } from '../MuiImports';
+import { Box, Add, Code, Divider, IconButton, Tooltip } from '../../utils/MuiImports';
 import useNotebookContext from '../../contexts/NotebookContext';
 
-const AddCell = ({ index, type }) => {
+const AddCell = ({ index }) => {
   const { addCellAtIndex } = useNotebookContext();
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        width: '80%',
-        margin: '0 auto'
-      }}>
-      <Divider
-        flexItem
-        sx={{
-          opacity: '1',
-          width: '100%',
-          marginTop: type === 'code' ? '20px' : '0px',
-          marginBottom: '20px'
-        }}>
+    <Box sx={{ my: '10px' }}>
+      <Divider flexItem sx={{ width: '90%', borderColor: 'transparent' }}>
         <Tooltip title='Add Markdown Cell'>
           <IconButton
             onClick={() => addCellAtIndex(index, 'markdown')}

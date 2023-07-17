@@ -23,3 +23,14 @@ export const createCell = type => {
   }
   return cell;
 };
+
+export const yPrettyPrint = (ydoc, msg = '') => {
+  console.log('\n\n==> ' + msg + ': \n' + JSON.stringify(ydoc.toJSON(), null, 4) + '\n\n');
+};
+
+export const slugify = title => {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^\-|\-$/g, '');
+};

@@ -1,0 +1,23 @@
+.client-avatars {
+  display: flex;
+  flex-direction: column;
+  width: 6%;
+  max-width: 100px;
+  padding-top: 28px;
+  align-items: center;
+  border-left: 1px solid #e0e0e0;
+  gap: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.client-avatars::-webkit-scrollbar {
+  display: none;
+}
+
+.client-avatar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}

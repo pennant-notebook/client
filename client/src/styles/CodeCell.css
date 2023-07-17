@@ -1,0 +1,38 @@
+.exeCount {
+  background-color: #2d313c;
+  color: #fff;
+  box-shadow: rgba(227, 195, 242, 0.3) 0px 0px 0px 3px;
+  border-radius: 4px;
+  padding: 2px 4px;
+  font-family: 'Fira Code', 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+  font-weight: bold;
+  opacity: 0.7;
+}
+
+.codecell-container {
+  mask-image: radial-gradient(circle, black 100%, transparent 100%);
+  width: 100%;
+  border: 2px solid dimgray;
+  border-radius: 5px;
+  background-color: navajowhite;
+}
+
+.markdown-container {
+  mask-image: radial-gradient(circle, black 100%, transparent 100%);
+  width: 100%;
+  border: 2px solid lightgray;
+  border-radius: 6px;
+}
+
+.block-cell {
+  padding: 0 calc((100% - 731px) / 2);
+  height: 100%;
+  overflow: auto;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  resize: none;
+}
+
+.codecell-container .editor {
+  transition: height 12s ease-in-out;
+}

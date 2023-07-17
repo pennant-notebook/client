@@ -46,18 +46,6 @@ export const resetContext = async notebookId => {
   }
 };
 
-// export const sendManyToDredd = async (notebookId, cells) => {
-//   try {
-//     const result = await axios.post(`${BASE_URL}/submit`, {
-//       notebookId: HARD_CODED_NOTE_BOOK_ID,
-//       cells,
-//     });
-//     return result.data.submissionId;
-//   } catch (error) {
-//     throw new Error(error.message);
-//   }
-// }
-
 export const sendManyToDredd = async (notebookId, cells) => {
   try {
     const result = await axios.post(`${BASE_URL}/submit`, {
