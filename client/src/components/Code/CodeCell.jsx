@@ -43,6 +43,7 @@ const CodeCell = ({ cellId, cell, content }) => {
     setProcessing(true);
     updateMetadata(cellMetadata, notebookMetadata);
     const response = await handleDredd(docID, cellId, editorRef.current.state.doc.text);
+    console.log(response);
     outputMap.set('stdout', response);
     setProcessing(false);
   };

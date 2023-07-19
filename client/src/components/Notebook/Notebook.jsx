@@ -97,9 +97,7 @@ const Notebook = ({ docID }) => {
   return (
     <NotebookContext.Provider value={contextValue}>
       <Navbar codeCells={codeCellsForDredd} clients={clients} provider={provider} setClients={setClients} />
-      <Box className='notebook-column'>
-        <Cells cells={cellDataArr} setCells={setCellDataArr} />
-      </Box>
+      <Cells cells={cellDataArr} setCells={setCellDataArr} />
     </NotebookContext.Provider>
   );
 };

@@ -5,7 +5,7 @@ const AddCell = ({ index }) => {
   const { addCellAtIndex } = useNotebookContext();
   return (
     <Box sx={{ my: '10px' }}>
-      <Divider flexItem sx={{ width: '90%', borderColor: 'transparent' }}>
+      <Divider flexItem sx={{ width: '100%', borderColor: 'transparent' }}>
         <Tooltip title='Add Markdown Cell'>
           <IconButton
             onClick={() => addCellAtIndex(index, 'markdown')}

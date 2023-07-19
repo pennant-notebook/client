@@ -31,8 +31,7 @@ const Cells = ({ cells, setCells }) => {
   };
 
   return (
-    // <Box sx={{ py: 2, width: { xs: '90%', lg: '80%' }, mx: 'auto' }}>
-    <Box sx={{ width: '80%', justifyContent: 'center', alignItems: 'center' }}>
+    <Box sx={{ py: 2, width: '80%', mx: 'auto' }}>
       <DragDropContext onDragEnd={onDragEnd}>
         <StrictModeDroppable droppableId='cells'>
           {provided => (
@@ -49,7 +48,7 @@ const Cells = ({ cells, setCells }) => {
                         {provided => (
                           <Box ref={provided.innerRef} {...provided.draggableProps}>
                             <Stack direction='row' alignItems='center' sx={{ my: '0px' }}>
-                              <Box display='flex' alignItems='center' width='90%'>
+                              <Box display='flex' alignItems='center' width='100%'>
                                 <Box className='dragIndicator' {...provided.dragHandleProps}>
                                   <DragIndicator sx={{ opacity: '0.5', mt: 0.5 }} />
                                 </Box>

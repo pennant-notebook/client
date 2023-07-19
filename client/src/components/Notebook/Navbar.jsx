@@ -19,15 +19,17 @@ const Navbar = ({ codeCells, clients, provider, setClients }) => {
 
   return (
     <AppBar position='sticky' sx={{ backgroundColor: '#34568B' }}>
-      <Toolbar sx={{ justifyContent: 'space-between' }}>
-        <IconButton edge='start' color='inherit' aria-label='logo' onClick={() => navigate(`/`)}>
-          <img src={logo} width='64px' />
-        </IconButton>
-        {clients && <Clients clients={clients} />}
-        <Box className='notebook-title'>{docID && <DocTitle />}</Box>
+      <Toolbar sx={{ width: '97%', justifyContent: 'space-between' }}>
+        <Toolbar id='logo-clients' sx={{ textAlign: 'left' }}>
+          <IconButton edge='start' color='inherit' aria-label='logo' onClick={() => navigate(`/`)}>
+            <img src={logo} width='64px' />
+          </IconButton>
+          {clients && <Clients clients={clients} />}
+        </Toolbar>
+        <Box id='doc-title'>{docID && <DocTitle />}</Box>
 
-        <Stack direction='row' spacing={0}>
-          {docID && <DreddButtons codeCells={codeCells} />}
+        <Stack id='action-buttons' direction='row' spacing={0}>
+          <Box>{docID && <DreddButtons codeCells={codeCells} />}</Box>
           <IconButton onClick={handleClientDisconnect} color='inherit' disabled={!docID || !provider}>
             <Typography variant='body1' sx={{ marginLeft: 1 }}>
               {username}

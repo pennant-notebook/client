@@ -29,14 +29,12 @@ const LandingPage = () => {
   return (
     <Box
       sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100vh',
+        textAlign: 'center',
+        height: '75vh',
+        paddingY: '25vh',
         backgroundColor: 'rgb(35, 70, 89)'
       }}>
-      <img src={bigLogo} alt='logo' style={{ marginBottom: '3vh', width: '20%' }} />
+      <img src={bigLogo} alt='logo' style={{ marginBottom: '3vh', width: '30%' }} />
       <Typography variant='h2' sx={{ marginBottom: 3, color: '#fff' }}>
         Welcome to Pennant
       </Typography>

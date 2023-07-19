@@ -13,24 +13,12 @@ const DreddButtons = ({ codeCells }) => {
 
   const handleRunAll = async () => {
     setRunning(true);
-    await new Promise(resolve => {
-      setTimeout(() => {
-        console.log('hadouken');
-        resolve();
-      }, 2000);
-    });
     handleRunAllCode(docID, codeCells, notebookMetadata);
     setRunning(false);
   };
 
   const handleReset = async () => {
     setResetting(true);
-    await new Promise(resolve => {
-      setTimeout(() => {
-        console.log('hadouken');
-        resolve();
-      }, 2000);
-    });
     handleResetContext(docID, notebookMetadata, codeCells);
     setResetting(false);
   };
