@@ -32,6 +32,7 @@
     "unique-names-generator": "^4.7.1",
     "uuid": "^9.0.0",
     "y-codemirror.next": "^0.3.2",
+    "y-protocols": "^1.0.5",
     "yjs": "^13.5.44"
   },
   "devDependencies": {

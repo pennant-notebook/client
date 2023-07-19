@@ -31,7 +31,8 @@ const Cells = ({ cells, setCells }) => {
   };
 
   return (
-    <Box sx={{ py: 2, width: { xs: '90%', lg: '80%' }, mx: 'auto' }}>
+    // <Box sx={{ py: 2, width: { xs: '90%', lg: '80%' }, mx: 'auto' }}>
+    <Box sx={{ width: '80%', justifyContent: 'center', alignItems: 'center' }}>
       <DragDropContext onDragEnd={onDragEnd}>
         <StrictModeDroppable droppableId='cells'>
           {provided => (
@@ -54,7 +55,7 @@ const Cells = ({ cells, setCells }) => {
                                 </Box>
                                 <Box alignItems='center' sx={{ flexGrow: 1, zIndex: 0, ml: 2 }}>
                                   {type === 'markdown' && (
-                                    <MarkdownCell id={id} content={content} provider={provider} />
+                                    <MarkdownCell id={id} content={content} provider={provider} cell={cell} />
                                   )}
                                   {type === 'code' && <CodeCell cellId={id} cell={cell} content={content} />}
                                 </Box>

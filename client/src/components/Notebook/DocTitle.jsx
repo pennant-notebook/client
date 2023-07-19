@@ -7,27 +7,30 @@ import {
   TextField,
   DialogActions,
   Button,
+  Box,
   Typography,
-  Box
+  IconButton
 } from '../../utils/MuiImports';
-import { useNavigate, useParams } from 'react-router-dom';
+import CreateTwoTone from '@mui/icons-material/CreateTwoTone';
+import { useParams } from 'react-router-dom';
 import { editDocTitleInDynamo, fetchDocFromDynamo } from '../../services/dynamo';
 import { slugify } from '../../utils/notebookHelpers';
+import useNotebookContext from '../../contexts/NotebookContext';
 
-const EditTitle = () => {
-  const [open, setOpen] = useState(false);
+const DocTitle = () => {
   const { username, docID } = useParams();
-
-  const [title, setTitle] = useState(docID);
+  const { handleTitleChange, title } = useNotebookContext();
+  const [open, setOpen] = useState(false);
   const [tempTitle, setTempTitle] = useState('');
   const [notebook, setNotebook] = useState(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     async function getNotebook() {
       const fetchedNotebook = await fetchDocFromDynamo(username, docID);
       setNotebook(fetchedNotebook);
-      setTitle(fetchedNotebook.title);
+      if (fetchedNotebook.title) {
+        handleTitleChange(fetchedNotebook.title);
+      }
     }
     getNotebook();
   }, []);
@@ -35,23 +38,21 @@ const EditTitle = () => {
   const handleEditTitle = async () => {
     try {
       const slug = slugify(tempTitle);
-
       const newNotebookData = await editDocTitleInDynamo(username, notebook.docID, tempTitle, slug);
-      setTitle(newNotebookData.title);
+      handleTitleChange(newNotebookData.title);
       setTempTitle('');
       setOpen(false);
-      navigate(`/${username}/${slug}`);
     } catch (error) {
       console.error('Error updating notebook title:', error);
     }
   };
 
   return (
-    <Box sx={{ display: 'flex', flexGrow: '1', flexDirection: 'row' }}>
-      <Typography sx={{ opacity: 0.5, fontSize: '18px' }} onClick={() => setOpen(true)}>
-        {title === notebook?.docID ? 'untitled' : title}
-      </Typography>
-
+    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <Typography sx={{ opacity: 0.5, fontSize: '18px' }}>{title === notebook?.docID ? 'untitled' : title}</Typography>
+      <IconButton onClick={() => setOpen(true)} color='inherit' sx={{ p: 0, m: 0, ml: 1 }}>
+        <CreateTwoTone sx={{ fontSize: '16px' }} />
+      </IconButton>
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogTitle>Edit Notebook Title</DialogTitle>
         <DialogContent>
@@ -62,7 +63,7 @@ const EditTitle = () => {
             label='New title'
             type='text'
             fullWidth
-            value={title === docID && !tempTitle ? '' : tempTitle}
+            value={tempTitle}
             onChange={event => setTempTitle(event.target.value)}
           />
         </DialogContent>
@@ -75,4 +76,4 @@ const EditTitle = () => {
   );
 };
 
-export default EditTitle;
+export default DocTitle;

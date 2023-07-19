@@ -1,4 +1,4 @@
-import { sendManyToDredd, checkDreddStatus, resetContext, sendToDredd } from '../services/dreddExecutionService';
+import { checkDreddStatus, resetContext, sendToDredd } from '../services/dreddExecutionService';
 
 export const formatCellsForDredd = codeCells => {
   return codeCells.map(c => ({
@@ -30,42 +30,18 @@ export const handleResetContext = async (docID, notebookMetadata, codeCells) => 
   });
 };
 
-export const updateEditorHeight = (editor, setEditorHeight) => {
-  const resize = () => {
-    const lineHeight = editor.getOption(monaco.editor.EditorOption.lineHeight);
-    const lineCount = Math.max(editor.getModel().getLineCount(), 3);
-    setEditorHeight(`${lineCount * lineHeight}px`);
-  };
-  resize();
-  editor.onDidContentSizeChange(resize);
-};
+export const handleRunAllCode = async (docID, codeCells, notebookMetadata) => {
+  console.log('RUNNING ALL CODE - BUTTON DISABLED');
+  for (const cell of codeCells) {
+    updateMetadata(cell.get('metaData'), notebookMetadata);
+    const id = cell.get('id');
+    const code = cell.get('content').toString();
 
-export const editorOptions = {
-  minimap: { enabled: false },
-  scrollbar: { vertical: 'hidden', horizontal: 'hidden' },
-  scrollBeyondLastLine: false,
-  cursorBlinking: 'smooth',
-  lineHeight: 24,
-  fontSize: 14,
-  fontFamily: 'Fira Code',
-  wordWrap: 'on',
-  wrappingStrategy: 'advanced',
-  overviewRulerLanes: 0
-};
-
-export const handleRunAllCode = async (doc, docID, codeCells) => {
-  const codeCellsForDredd = formatCellsForDredd(codeCells);
-  const token = await sendManyToDredd(docID, codeCellsForDredd);
-  const response = await checkDreddStatus(token);
-
-  response.forEach(codeCell => {
-    const cell = doc
-      .getArray('cells')
-      .toArray()
-      .find(c => c.get('id') === codeCell['id']);
-    if (cell && codeCell.output) {
+    const token = await sendToDredd(docID, id, code);
+    const response = await checkDreddStatus(token);
+    if (response[0].output) {
       const outputMap = cell.get('outputMap');
-      outputMap.set('stdout', codeCell.output);
+      outputMap.set('stdout', response[0].output);
     }
-  });
+  }
 };

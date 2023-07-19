@@ -21,7 +21,7 @@
   mask-image: radial-gradient(circle, black 100%, transparent 100%);
   width: 100%;
   border: 2px solid lightgray;
-  border-radius: 6px;
+  border-radius: 2px;
 }
 
 .block-cell {

@@ -10,32 +10,30 @@ import {
   CircularProgress
 } from '../../utils/MuiImports';
 
-const CodeToolbar = memo(({ onClickRun, onDelete, id, processing, type }) => {
+const CodeToolbar = memo(({ onClickRun, onDelete, id, processing }) => {
   return (
     <Box
       sx={{
-        backgroundColor: type === 'markdown' ? '#fff' : '#282A35',
+        backgroundColor: '#282A35',
         height: '40px',
         margin: 0,
         padding: 0,
-        borderBottom: type === 'code' ? '1px solid gray' : 'none',
+        borderBottom: '1px solid gray',
         zIndex: 0
       }}>
       <Stack direction='row' sx={{ justifyContent: 'end', position: 'relative', alignItems: 'center' }}>
         <Typography variant='overline' sx={{ color: 'lightgray', position: 'absolute', left: '12px' }}>
-          {type === 'markdown' ? 'Markdown' : 'JavaScript'}
+          JavaScript
         </Typography>
-        {type !== 'markdown' && (
-          <Tooltip title='Run code'>
-            <IconButton onClick={onClickRun} sx={{ '&:hover': { backgroundColor: 'transparent' } }}>
-              {processing ? (
-                <CircularProgress size={24} sx={{ color: 'lightgray' }} />
-              ) : (
-                <PlayCircle sx={{ color: 'lightgray' }} />
-              )}
-            </IconButton>
-          </Tooltip>
-        )}
+        <Tooltip title='Run code'>
+          <IconButton disabled={processing} onClick={onClickRun} sx={{ '&:hover': { backgroundColor: 'transparent' } }}>
+            {processing ? (
+              <CircularProgress size={24} sx={{ color: 'lightgray' }} />
+            ) : (
+              <PlayCircle sx={{ color: 'lightgray' }} />
+            )}
+          </IconButton>
+        </Tooltip>
         <Tooltip title='Remove cell'>
           <IconButton
             onClick={() => onDelete(id)}

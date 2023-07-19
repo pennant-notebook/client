@@ -8,7 +8,7 @@ export const sendToDredd = async (notebookId, cellId, code) => {
       notebookId,
       cells: [
         {
-          id: cellId,
+          cellId: cellId,
           code
         }
       ]
@@ -23,17 +23,24 @@ export const checkDreddStatus = async token => {
   try {
     const response = await axios.get(`${BASE_URL}/api/status/${token}`);
     const statusId = response.data.status;
+    if (statusId === 'critical error') {
+      throw new Error('critical error');
+    }
 
     if (statusId === 'pending') {
       await new Promise(resolve => setTimeout(resolve, 1500));
       return checkDreddStatus(token);
     } else {
-      console.log('🐐 request order: ', response.data.requestOrder);
-      console.log('🐑 response order: ', response.data.cellsExecuted);
-
       return response.data.results;
     }
   } catch (error) {
+    if (error.hasOwnProperty('response')) {
+      if (error.response.status === 500) {
+        console.log('server error');
+      } else if (error.response.status === 400) {
+        console.log('bad request');
+      }
+    }
     throw new Error(error.message);
   }
 };
@@ -46,14 +53,14 @@ export const resetContext = async notebookId => {
   }
 };
 
-export const sendManyToDredd = async (notebookId, cells) => {
-  try {
-    const result = await axios.post(`${BASE_URL}/submit`, {
-      notebookId,
-      cells
-    });
-    return result.data.submissionId;
-  } catch (error) {
-    throw new Error(error.message);
-  }
-};
+// export const sendManyToDredd = async (notebookId, cells) => {
+//   try {
+//     const result = await axios.post(`${BASE_URL}/submit`, {
+//       notebookId,
+//       cells
+//     });
+//     return result.data.submissionId;
+//   } catch (error) {
+//     throw new Error(error.message);
+//   }
+// };

@@ -15,7 +15,7 @@ const Dashboard = () => {
     async function fetchUserNotebooks() {
       const userbooks = await fetchUserFromDynamo(username);
       setNotebooks(userbooks);
-      console.log(userbooks);
+      // console.log(userbooks);
     }
     if (username) fetchUserNotebooks();
   }, [username]);
@@ -32,6 +32,7 @@ const Dashboard = () => {
   const handleCreateNotebook = async () => {
     const newNotebook = await createDocInDynamo(username);
     const docID = newNotebook.docID;
+    console.log(docID);
     navigate(`/${username}/${docID}`);
   };
 
@@ -73,7 +74,7 @@ const Dashboard = () => {
               <Card
                 className='button-4'
                 style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-                onClick={() => navigate(`/${username}/${slugify(notebook.title)}`)}>
+                onClick={() => navigate(`/${username}/${notebook.docID}`)}>
                 <Typography
                   sx={{
                     fontFamily: 'Lato Code',

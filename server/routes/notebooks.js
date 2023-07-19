@@ -61,15 +61,37 @@ router.get('/:username/:slug', async (req, res) => {
 });
 
 // CREATE NEW NOTEBOOK FOR USER
-router.post('/:username', async (req, res) => {
+router.post('/doc/:username', async (req, res) => {
   const newDocId = uuidv4();
+
+  // Fetch the userID of the given username
+  const userParams = {
+    TableName: 'notebookusers',
+    Key: {
+      username: req.params.username
+    }
+  };
+
+  let userID;
+  try {
+    const user = await dynamoDb.get(userParams);
+    if (!user.Item) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    userID = user.Item.userID;
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    return res.status(500).json({ error: 'Could not fetch user' });
+  }
+
   const params = {
     TableName: 'notebooks',
     Item: {
       docID: newDocId,
       slug: newDocId,
       title: newDocId,
-      username: req.params.username || 'trypennant'
+      username: req.params.username,
+      userID: userID
     }
   };
 
@@ -79,6 +101,26 @@ router.post('/:username', async (req, res) => {
   } catch (error) {
     console.error('Error creating notebook:', error);
     res.status(500).json({ error: 'Could not create notebook' });
+  }
+});
+
+// CREATE NEW USER
+router.post('/user/:username', async (req, res) => {
+  const id = uuidv4();
+
+  const params = {
+    TableName: 'notebookusers',
+    Item: {
+      userID: id,
+      username: req.params.username
+    }
+  };
+  try {
+    await dynamoDb.put(params);
+    res.json(params.Item);
+  } catch (error) {
+    console.error('Error creating user:', error);
+    res.status(500).json({ error: 'Could not create user' });
   }
 });
 

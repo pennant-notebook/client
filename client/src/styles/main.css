@@ -1,7 +1,7 @@
 @import url('./Client.css');
 @import url('./CodeCell.css');
 @import url('./LoadingSpinner.css');
-@import url('./button-4.css');
+@import url('./button.css');
 
 div[id*='tippy'] > div[class*='tippy-box'][data-placement='left'] {
   display: none !important;
@@ -25,4 +25,13 @@ div[id*='tippy'] > div[class*='tippy-box'][data-placement='left'] {
   flex-direction: column;
   align-items: center;
   margin-left: 20px;
+}
+
+.notebook-title {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  justify-content: center;
 }
