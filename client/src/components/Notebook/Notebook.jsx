@@ -7,11 +7,14 @@ import useProviderContext from '../../contexts/ProviderContext';
 import { createCell, getUserObjects, generateRandomName, randomColor } from '../../utils/notebookHelpers';
 
 const Notebook = ({ docID }) => {
-  const [title, setTitle] = useState(docID);
   const { doc, provider, awareness, notebookMetadata } = useProviderContext();
+  const [title, setTitle] = useState(docID);
+
   const cellsArray = doc.getArray('cells');
   const [cellDataArr, setCellDataArr] = useState(cellsArray.toArray());
+
   const [clients, setClients] = useState([]);
+  const [hideClients, setHideClients] = useState(true);
 
   useEffect(() => {
     const cells = doc.getArray('cells');
@@ -31,9 +34,14 @@ const Notebook = ({ docID }) => {
     awareness.setLocalStateField('user', { name, color });
 
     const updateClients = () => {
-      var jsonData = awareness.getStates();
-      const clientObjects = getUserObjects(jsonData);
+      const states = Array.from(awareness.getStates());
+      const clientObjects = getUserObjects(states);
       setClients(clientObjects);
+      if (states.length > 1) {
+        setHideClients(false);
+      } else {
+        setHideClients(true);
+      }
     };
 
     awareness.on('update', updateClients);
@@ -96,7 +104,13 @@ const Notebook = ({ docID }) => {
 
   return (
     <NotebookContext.Provider value={contextValue}>
-      <Navbar codeCells={codeCellsForDredd} clients={clients} provider={provider} setClients={setClients} />
+      <Navbar
+        codeCells={codeCellsForDredd}
+        provider={provider}
+        clients={clients}
+        setClients={setClients}
+        hideClients={hideClients}
+      />
       <Cells cells={cellDataArr} setCells={setCellDataArr} />
     </NotebookContext.Provider>
   );

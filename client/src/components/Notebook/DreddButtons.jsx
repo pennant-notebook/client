@@ -24,7 +24,7 @@ const DreddButtons = ({ codeCells }) => {
     setResetting(false);
   };
   return (
-    <Stack direction='row' spacing={2}>
+    <Stack direction='row' spacing={{ xs: 0, sm: 1, md: 2 }}>
       <Tooltip title='Reset'>
         <span>
           <IconButton disabled={resetting || running} onClick={handleReset} color='inherit'>

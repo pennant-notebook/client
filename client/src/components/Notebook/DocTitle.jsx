@@ -48,11 +48,15 @@ const DocTitle = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <Typography sx={{ opacity: 0.5, fontSize: '18px' }}>{title === notebook?.docID ? 'untitled' : title}</Typography>
-      <IconButton onClick={() => setOpen(true)} color='inherit' sx={{ p: 0, m: 0, ml: 1 }}>
-        <CreateTwoTone sx={{ fontSize: '16px' }} />
-      </IconButton>
+    <Box className='notebook-title'>
+      <Box onClick={() => setOpen(true)} sx={{ ml: { xs: 3, sm: 0, lg: 2, xl: 4 } }}>
+        <Typography sx={{ opacity: 0.5, fontSize: '18px' }}>
+          {title === notebook?.docID ? 'untitled' : title}
+        </Typography>
+      </Box>
+      {/* <IconButton edge='start' onClick={() => setOpen(true)} sx={{ p: 0, m: 0, ml: 1, color: '#adb4e4' }}>
+        <CreateTwoTone sx={{ fontSize: '16px', '&:hover': { color: '#a37cbc' } }} />
+      </IconButton> */}
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogTitle>Edit Notebook Title</DialogTitle>
         <DialogContent>

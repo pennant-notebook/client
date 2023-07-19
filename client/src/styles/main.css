@@ -1,7 +1,7 @@
 @import url('./Client.css');
 @import url('./CodeCell.css');
 @import url('./LoadingSpinner.css');
-@import url('./button.css');
+@import url('./buttons.css');
 
 div[id*='tippy'] > div[class*='tippy-box'][data-placement='left'] {
   display: none !important;
@@ -28,6 +28,9 @@ div[id*='tippy'] > div[class*='tippy-box'][data-placement='left'] {
 }
 
 .notebook-title {
-  flex: 1;
-  flex-direction: column;
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+  min-width: 50%;
 }
