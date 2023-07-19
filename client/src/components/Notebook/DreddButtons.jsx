@@ -20,6 +20,7 @@ const DreddButtons = ({ codeCells }) => {
   const handleReset = async () => {
     setResetting(true);
     handleResetContext(docID, notebookMetadata, codeCells);
+
     setResetting(false);
   };
   return (

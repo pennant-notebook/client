@@ -34,6 +34,8 @@ const CodeCell = ({ cellId, cell, content }) => {
       e.changes.keys.forEach((change, key) => {
         if (key === 'exeCount') {
           setCellExeCount(cellMetadata.get('exeCount'));
+        } else if (key === 'isRunning') {
+          setProcessing(cellMetadata.get('isRunning'));
         }
       });
     });
@@ -41,10 +43,12 @@ const CodeCell = ({ cellId, cell, content }) => {
 
   const handleRunCode = async () => {
     setProcessing(true);
+    cellMetadata.set('isRunning', true);
     updateMetadata(cellMetadata, notebookMetadata);
     const response = await handleDredd(docID, cellId, editorRef.current.state.doc.text);
     console.log(response);
     outputMap.set('stdout', response);
+    cellMetadata.set('isRunning', false);
     setProcessing(false);
   };
 

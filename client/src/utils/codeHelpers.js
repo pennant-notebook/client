@@ -26,7 +26,9 @@ export const handleResetContext = async (docID, notebookMetadata, codeCells) => 
   notebookMetadata.set('executionCount', 0);
   codeCells.forEach(cell => {
     cell.get('outputMap').set('stdout', '');
-    cell.get('metaData').set('exeCount', 0);
+    const metadata = cell.get('metaData');
+    metadata.set('exeCount', 0);
+    metadata.set('isRunning', false);
   });
 };
 
