@@ -15,10 +15,10 @@ const MySwitch = styled(Switch)(({ theme }) => ({
   }
 }));
 
-export default function ToggleSwitch({ toggleTheme }) {
+export default function ToggleSwitch({ toggleTheme, cellTheme }) {
   return (
     <div>
-      <MySwitch onChange={toggleTheme} />
+      <MySwitch onChange={toggleTheme} checked={cellTheme === 'dark'} />
     </div>
   );
 }

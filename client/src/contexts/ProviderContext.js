@@ -1,11 +1,11 @@
 import { HocuspocusProvider } from '@hocuspocus/provider';
 import { createContext, useContext } from 'react';
 
-const hocuspocusURL = import.meta.env.VITE_MAFISHI_SERVER;
-
 export const initializeProvider = (docID, user) => {
+  // const awsContainerURl = `${import.meta.env.VITE_AWS_CONTAINER_URL}/collaboration/${docID}`;
+
   const provider = new HocuspocusProvider({
-    url: hocuspocusURL,
+    url: import.meta.env.VITE_WEBSOCKET_SERVER,
     name: docID,
     token: import.meta.env.VITE_HP_ACCESS_TOKEN
   });

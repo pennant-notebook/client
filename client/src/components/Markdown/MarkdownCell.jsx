@@ -28,7 +28,7 @@ const MarkdownCell = ({ id, content, provider, cell }) => {
       }
     },
     editorDOMAttributes: {
-      style: 'padding: 0px 24px; border-radius: 0px'
+      style: 'padding: 8px 24px; border-radius: 0px'
     }
   });
 

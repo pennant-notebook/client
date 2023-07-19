@@ -12,6 +12,14 @@ export const updateClients = provider => {
   }
 };
 
+export const resetClients = provider => {
+  if (provider) {
+    const allClientIds = Array.from(provider.awareness.getStates().keys());
+    console.log(allClientIds);
+    awarenessProtocol.removeAwarenessStates(provider.awareness, allClientIds, 'reset by server');
+  }
+};
+
 // export const createStateFieldForClient = () => {
 //   awarenessProtocol.a
 // }

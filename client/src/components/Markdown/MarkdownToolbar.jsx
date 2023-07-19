@@ -18,7 +18,7 @@ const MarkdownToolbar = memo(({ onDelete, id, theme, toggleTheme }) => {
           Markdown
         </Typography>
 
-        <ToggleSwitch toggleTheme={toggleTheme} />
+        <ToggleSwitch cellTheme={theme} toggleTheme={toggleTheme} />
 
         <Tooltip title='Remove cell'>
           <IconButton
