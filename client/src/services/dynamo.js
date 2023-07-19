@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3001/api';
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const fetchUserFromDynamo = async username => {
   const user = username.substring(1);
@@ -13,6 +13,7 @@ export const fetchUserFromDynamo = async username => {
 };
 
 export const createUserInDynamo = async username => {
+  console.log(username);
   try {
     const response = await axios.post(`${API_URL}/user/${username}`);
     return response.data;
@@ -33,6 +34,7 @@ export const fetchDocFromDynamo = async (username, docID) => {
 
 export const createDocInDynamo = async username => {
   const user = username.substring(1);
+  console.log(user);
   try {
     const response = await axios.post(`${API_URL}/doc/${user}`);
     return response.data;
