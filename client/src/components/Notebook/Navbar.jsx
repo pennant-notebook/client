@@ -16,7 +16,7 @@ const Navbar = ({ codeCells, clients, provider, setClients, hideClients }) => {
 
   const navigate = useNavigate();
 
-  const handleClientDisconnect = () => {
+  const handleDisconnect = () => {
     const currentClients = updateClients(provider);
     setClients(currentClients);
     console.log(currentClients.length);
@@ -31,14 +31,16 @@ const Navbar = ({ codeCells, clients, provider, setClients, hideClients }) => {
             <img src={logo} width='64px' />
           </IconButton>
 
-          <Box id='CLIENTS' sx={{ ml: '10px' }}>
-            <IconButton onClick={() => setShow(!show)} sx={{ color: '#adb4e4' }}>
-              {show ? <VisibilityIcon fontSize='small' /> : <VisibilityOffIcon fontSize='small' />}
-              <Typography variant='body1' sx={{ ml: 1, color: 'inherit' }}>
-                {`${clients && clients.length} Clients`}
-              </Typography>
-            </IconButton>
-          </Box>
+          {docID && (
+            <Box id='CLIENTS' sx={{ ml: '10px' }}>
+              <IconButton onClick={() => setShow(!show)} sx={{ color: '#adb4e4' }}>
+                {show ? <VisibilityIcon fontSize='small' /> : <VisibilityOffIcon fontSize='small' />}
+                <Typography variant='body1' sx={{ ml: 1, color: 'inherit' }}>
+                  {`${clients && clients.length} Clients`}
+                </Typography>
+              </IconButton>
+            </Box>
+          )}
           {!hideClients && <Clients clients={clients} show={show} />}
         </Toolbar>
 
@@ -46,8 +48,8 @@ const Navbar = ({ codeCells, clients, provider, setClients, hideClients }) => {
 
         <Stack id='DREDD-BUTTONS' direction='row' spacing={0}>
           <Box>{docID && <DreddButtons codeCells={codeCells} />}</Box>
-          <IconButton onClick={handleClientDisconnect} sx={{ color: '#adb4e4' }} disabled={!docID || !provider}>
-            <Typography variant='body1' sx={{ marginLeft: 1 }}>
+          <IconButton onClick={handleDisconnect} sx={{ color: '#adb4e4' }} disabled={!docID || !provider}>
+            <Typography variant='body1' sx={{ marginLeft: 1, color: docID ? '#adb4e4' : 'lightgray' }}>
               {username}
             </Typography>
           </IconButton>

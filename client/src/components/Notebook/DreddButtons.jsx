@@ -20,14 +20,22 @@ const DreddButtons = ({ codeCells }) => {
   const handleReset = async () => {
     setResetting(true);
     handleResetContext(docID, notebookMetadata, codeCells);
-
     setResetting(false);
   };
+
+  const isDisabledRun = () => {
+    return running || resetting || codeCells.length < 1;
+  };
+
+  const isDisabledReset = () => {
+    return running || resetting || codeCells.length < 1;
+  };
+
   return (
     <Stack direction='row' spacing={{ xs: 0, sm: 1, md: 2 }}>
       <Tooltip title='Reset'>
         <span>
-          <IconButton disabled={resetting || running} onClick={handleReset} color='inherit'>
+          <IconButton disabled={isDisabledReset()} onClick={handleReset} color='inherit'>
             {resetting ? <CircularProgress size={24} sx={{ color: 'lightgray' }} /> : <Refresh />}
           </IconButton>
         </span>
@@ -35,7 +43,7 @@ const DreddButtons = ({ codeCells }) => {
 
       <Tooltip title='Run All'>
         <span>
-          <IconButton disabled={resetting || running} onClick={handleRunAll} color='inherit'>
+          <IconButton disabled={isDisabledRun()} onClick={handleRunAll} color='inherit'>
             {running ? <CircularProgress size={24} sx={{ color: 'lightgray' }} /> : <PlayCircleOutlineTwoTone />}
           </IconButton>
         </span>
