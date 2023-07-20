@@ -2,33 +2,42 @@ import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-export const fetchUserFromDynamo = async username => {
-  const user = username.substring(1);
-  try {
-    const response = await axios.get(`${API_URL}/${user}`);
-    return response.data;
-  } catch (error) {
-    console.error('Error retrieving notebook from DynamoDB:', error);
-  }
-};
-
 export const createUserInDynamo = async username => {
-  console.log(username);
   try {
     const response = await axios.post(`${API_URL}/user/${username}`);
     return response.data;
   } catch (error) {
-    console.error('Error creating notebook in DynamoDB:', error);
+    console.error('Error creating user in DynamoDB:', error);
+  }
+};
+
+export const fetchUserFromDynamo = async username => {
+  const user = username.substring(1);
+  try {
+    const response = await axios.get(`${API_URL}/user/${user}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error retrieving user from DynamoDB:', error);
   }
 };
 
 export const fetchDocFromDynamo = async (username, docID) => {
   const user = username.substring(1);
   try {
-    const response = await axios.get(`${API_URL}/${user}/${docID}`);
+    const response = await axios.get(`${API_URL}/doc/${user}/${docID}`);
     return response.data;
   } catch (error) {
     console.error('Error retrieving notebook from DynamoDB:', error);
+  }
+};
+
+export const fetchNotebooksFromDynamo = async username => {
+  const user = username.substring(1);
+  try {
+    const response = await axios.get(`${API_URL}/notebooks/${user}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error retrieving notebooks from DynamoDB:', error);
   }
 };
 

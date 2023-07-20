@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Box, TextField, Button, Grid, Card, Typography, Add } from '../../utils/MuiImports';
 import Navbar from '../Notebook/Navbar';
-import { createDocInDynamo, fetchUserFromDynamo } from '../../services/dynamo';
+import { createDocInDynamo, fetchNotebooksFromDynamo } from '../../services/dynamo';
 import { useNavigate, useParams } from 'react-router';
 import { slugify } from '../../utils/notebookHelpers';
 
@@ -13,7 +13,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     async function fetchUserNotebooks() {
-      const userbooks = await fetchUserFromDynamo(username);
+      const userbooks = await fetchNotebooksFromDynamo(username);
       setNotebooks(userbooks);
       // console.log(userbooks);
     }
@@ -38,7 +38,7 @@ const Dashboard = () => {
 
   return (
     <Box>
-      <Navbar />
+      <Navbar hideClients={true} />
       <Box
         sx={{
           display: 'flex',
@@ -69,26 +69,27 @@ const Dashboard = () => {
         </Box>
       ) : (
         <Grid container spacing={5} justifyContent='center' style={{ width: '80%', margin: 'auto', padding: '20px 0' }}>
-          {filteredNotebooks?.map((notebook, index) => (
-            <Grid item key={notebook.docID} xs={12} sm={6} md={4}>
-              <Card
-                className='button-4'
-                style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-                onClick={() => navigate(`/${username}/${notebook.docID}`)}>
-                <Typography
-                  sx={{
-                    fontFamily: 'Lato Code',
-                    fontSize: '20px',
-                    textOverflow: 'ellipsis',
-                    overflow: 'hidden',
-                    whiteSpace: 'nowrap',
-                    color: '#283655'
-                  }}>
-                  {notebook.title}
-                </Typography>
-              </Card>
-            </Grid>
-          ))}
+          {filteredNotebooks.length > 0 &&
+            filteredNotebooks.map((notebook, index) => (
+              <Grid item key={notebook.docID} xs={12} sm={6} md={4}>
+                <Card
+                  className='button-4'
+                  style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                  onClick={() => navigate(`/${username}/${notebook.docID}`)}>
+                  <Typography
+                    sx={{
+                      fontFamily: 'Lato Code',
+                      fontSize: '20px',
+                      textOverflow: 'ellipsis',
+                      overflow: 'hidden',
+                      whiteSpace: 'nowrap',
+                      color: '#283655'
+                    }}>
+                    {notebook.title || 'untitled-' + (index + 1)}
+                  </Typography>
+                </Card>
+              </Grid>
+            ))}
         </Grid>
       )}
     </Box>
