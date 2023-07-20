@@ -52,6 +52,9 @@ const createEditorState = (content, awareness, id, handleRunCode) => {
           marginTop: '8px',
           marginBottom: '8px',
           fontSize: '15px'
+        },
+        '.cm-tooltip': {
+          zIndex: 12
         }
       }),
       oneDark
