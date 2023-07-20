@@ -118,14 +118,16 @@ const Notebook = ({ docID }) => {
 
   return (
     <NotebookContext.Provider value={contextValue}>
-      <Navbar
-        codeCells={codeCellsForDredd}
-        provider={provider}
-        clients={clients}
-        setClients={setClients}
-        hideClients={hideClients}
-      />
-      <Cells cells={cellDataArr} setCells={setCellDataArr} />
+      <Box className='main-content'>
+        <Navbar
+          codeCells={codeCellsForDredd}
+          provider={provider}
+          clients={clients}
+          setClients={setClients}
+          hideClients={hideClients}
+        />
+        <Cells cells={cellDataArr} setCells={setCellDataArr} />
+      </Box>
     </NotebookContext.Provider>
   );
 };

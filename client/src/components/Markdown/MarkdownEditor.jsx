@@ -19,8 +19,7 @@ const MarkdownEditor = ({ cell, content, provider, currentUser, theme }) => {
     onEditorReady: editor => {
       // console.log('editor ready');
       const paragraph = document.querySelector(`#blockcell-${id} div div p`);
-      if (paragraph) {
-        console.log(paragraph);
+      if (paragraph && paragraph.textContent === ' ') {
         paragraph.textContent = '';
       }
     }

@@ -3,6 +3,10 @@
 @import url('./LoadingSpinner.css');
 @import url('./buttons.css');
 
+.main-content {
+  padding-bottom: 60px; /* same height as client avatars footer */
+}
+
 div[id*='tippy'] > div[class*='tippy-box'][data-placement='left'] {
   display: none !important;
 }

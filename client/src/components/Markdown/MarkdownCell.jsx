@@ -29,14 +29,6 @@ const MarkdownCell = ({ id, content, cell, provider, refreshCount }) => {
     }
   }, [theme, id]);
 
-  const initParagraph = () => {
-    const paragraph = document.querySelector(`#blockcell-${id} div div p`);
-    if (paragraph) {
-      console.log(paragraph);
-      paragraph.textContent = '';
-    }
-  };
-
   return (
     <Box
       ref={cellRef}

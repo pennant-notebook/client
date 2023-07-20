@@ -1,28 +1,22 @@
-.clients {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  z-index: 10;
-  width: 100%;
-  height: 60px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #fff;
-}
-
 .avatars-row {
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
   gap: 10px;
   overflow-x: auto;
   overflow-y: hidden;
   border-top: 1px solid #e0e0e0;
+  background-color: #fff;
   opacity: 0.5;
 }
 
-.client {
+.client-avatar {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -30,28 +24,4 @@
   font-size: 0.7em;
 
   margin-inline: 16px;
-}
-
-.client-avatars {
-  display: flex;
-  flex-direction: column;
-  width: 6%;
-  max-width: 100px;
-  padding-top: 28px;
-  align-items: center;
-  border-left: 1px solid #e0e0e0;
-  gap: 10px;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-.client-avatars::-webkit-scrollbar {
-  display: none;
-}
-
-.client-avatar {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
 }

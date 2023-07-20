@@ -4,7 +4,6 @@ import { ProviderContext, initializeProvider } from '../../contexts/ProviderCont
 import LoadingSpinner from '../UI/LoadingSpinner';
 import Notebook from '../Notebook/Notebook';
 import { fetchDocFromDynamo } from '../../services/dynamo';
-import { resetClients } from '../../utils/awarenessHelpers';
 
 export const NotebookRoute = () => {
   const [notebook, setNotebook] = useState(null);
@@ -24,9 +23,6 @@ export const NotebookRoute = () => {
     if (notebook) {
       const value = initializeProvider(notebook.docID, username.substring(1));
       setContextValue(value);
-      // const { provider } = value;
-      // resetClients(provider);
-      // console.log(provider);
     }
   }, [notebook]);
 

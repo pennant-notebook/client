@@ -1,13 +1,13 @@
 import * as awarenessProtocol from 'y-protocols/awareness.js';
 import { getUserObjects } from './notebookHelpers';
 
-export const updateClients = provider => {
+export const updateDisconnectedClient = provider => {
   if (provider) {
     const clientId = provider.document.clientID;
     awarenessProtocol.removeAwarenessStates(provider.awareness, [clientId], 'user navigation');
     const currentStates = provider.awareness.getStates();
     provider.disconnect();
-    console.log(Array.from(currentStates).length);
+    // console.log(Array.from(currentStates).length);
     return getUserObjects(currentStates);
   }
 };
@@ -19,7 +19,3 @@ export const resetClients = provider => {
     awarenessProtocol.removeAwarenessStates(provider.awareness, allClientIds, 'reset by server');
   }
 };
-
-// export const createStateFieldForClient = () => {
-//   awarenessProtocol.a
-// }

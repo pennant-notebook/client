@@ -15,6 +15,7 @@
   "dependencies": {
     "@blocknote/core": "^0.8.2",
     "@blocknote/react": "^0.8.2",
+    "@codemirror/autocomplete": "^6.9.0",
     "@codemirror/commands": "^6.2.4",
     "@codemirror/lang-javascript": "^6.0.0",
     "@codemirror/state": "^6.0.0",

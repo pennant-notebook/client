@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router';
 import DocTitle from './DocTitle';
 import Clients from '../UI/Awareness/Clients';
 import DreddButtons from './DreddButtons';
-import { updateClients } from '../../utils/awarenessHelpers';
+import { updateDisconnectedClient } from '../../utils/awarenessHelpers';
 import { useState } from 'react';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
@@ -16,18 +16,25 @@ const Navbar = ({ codeCells, clients, provider, setClients, hideClients }) => {
 
   const navigate = useNavigate();
 
-  const handleDisconnect = () => {
-    const currentClients = updateClients(provider);
-    setClients(currentClients);
-    console.log(currentClients.length);
-    navigate(`/${username}`);
+  const handleDisconnect = destination => {
+    if (docID) {
+      const currentClients = updateDisconnectedClient(provider);
+      setClients(currentClients);
+      // console.log(currentClients.length);
+    }
+    navigate(destination);
   };
 
   return (
     <AppBar position='sticky' sx={{ backgroundColor: '#34568B' }}>
       <Toolbar sx={{ width: '97%', justifyContent: 'space-between' }}>
         <Toolbar id='logo-clients' sx={{ textAlign: 'left' }}>
-          <IconButton edge='start' color='inherit' aria-label='logo' onClick={() => navigate(`/`)} sx={{ ml: '-32px' }}>
+          <IconButton
+            edge='start'
+            color='inherit'
+            aria-label='logo'
+            onClick={() => handleDisconnect(`/`)}
+            sx={{ ml: '-32px' }}>
             <img src={logo} width='64px' />
           </IconButton>
 
@@ -48,7 +55,10 @@ const Navbar = ({ codeCells, clients, provider, setClients, hideClients }) => {
 
         <Stack id='DREDD-BUTTONS' direction='row' spacing={0}>
           <Box>{docID && <DreddButtons codeCells={codeCells} />}</Box>
-          <IconButton onClick={handleDisconnect} sx={{ color: '#adb4e4' }} disabled={!docID || !provider}>
+          <IconButton
+            onClick={() => handleDisconnect(`/${username}`)}
+            sx={{ color: '#adb4e4' }}
+            disabled={!docID || !provider}>
             <Typography variant='body1' sx={{ marginLeft: 1, color: docID ? '#adb4e4' : 'lightgray' }}>
               {username}
             </Typography>
