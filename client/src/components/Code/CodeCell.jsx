@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import useProviderContext from '../../contexts/ProviderContext';
 import useNotebookContext from '../../contexts/NotebookContext';
 import CodeToolbar from './CodeToolbar';
-import createEditorState from '../../utils/createEditor';
+import createCodeEditor from './createCodeEditor';
 import { handleDredd, updateMetadata } from '../../utils/codeHelpers';
 
 const CodeCell = ({ cellId, cell, content }) => {
@@ -24,7 +24,7 @@ const CodeCell = ({ cellId, cell, content }) => {
       editorContainer.removeChild(editorContainer.firstChild);
     }
 
-    editorRef.current = createEditorState(content, awareness, cellId, handleRunCode);
+    editorRef.current = createCodeEditor(content, awareness, cellId, handleRunCode);
     editorContainer.appendChild(editorRef.current.dom);
   }, [content]);
 
@@ -48,12 +48,10 @@ const CodeCell = ({ cellId, cell, content }) => {
 
   const handleRunCode = async () => {
     setProcessing(true);
-    console.log(editorRef.current.state.doc.text);
     cellMetadata.set('isRunning', true);
     updateMetadata(cellMetadata, notebookMetadata);
     let response;
     try {
-      console.log(cell.get('content').toString());
       response = await handleDredd(docID, cellId, cell.get('content').toString());
       console.log(response);
     } catch (error) {

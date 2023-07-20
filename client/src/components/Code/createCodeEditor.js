@@ -30,7 +30,7 @@ const betterTab = ({ state, dispatch }) => {
   }
 };
 
-const createEditorState = (content, awareness, id, handleRunCode) => {
+const createCodeEditor = (content, awareness, id, handleRunCode) => {
   const customKeymap = keymap.of([
     { key: 'Alt-Enter', mac: 'Alt-Enter', run: handleRunCode, preventDefault: true },
     { key: 'Tab', run: betterTab },
@@ -67,4 +67,4 @@ const createEditorState = (content, awareness, id, handleRunCode) => {
   });
 };
 
-export default createEditorState;
+export default createCodeEditor;
