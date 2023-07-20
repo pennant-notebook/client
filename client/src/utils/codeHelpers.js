@@ -14,7 +14,8 @@ export const updateMetadata = (cellMetadata, notebookMetadata) => {
 };
 
 export const handleDredd = async (docID, cellId, editorContent) => {
-  const token = await sendToDredd(docID, cellId, editorContent.join('\n'));
+  console.log(editorContent);
+  const token = await sendToDredd(docID, cellId, editorContent);
   const response = await checkDreddStatus(token);
   const processedResponse = response[0].output;
   return processedResponse;
@@ -33,7 +34,8 @@ export const handleResetContext = async (docID, notebookMetadata, codeCells) => 
 };
 
 export const handleRunAllCode = async (docID, codeCells, notebookMetadata) => {
-  console.log('RUNNING ALL CODE - BUTTON DISABLED');
+  console.log('RUNNING ALL CODE');
+  await resetContext(docID);
   for (const cell of codeCells) {
     updateMetadata(cell.get('metaData'), notebookMetadata);
     const id = cell.get('id');

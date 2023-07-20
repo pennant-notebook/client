@@ -20,12 +20,7 @@ export const sendToDredd = async (notebookId, cellId, code) => {
   }
 };
 
-let count = 0;
 export const checkDreddStatus = async token => {
-  if (count > 2) {
-    let count = 0;
-    console.log(`tried ${count} times, giving up for now`);
-  }
   try {
     const response = await axios.get(`${BASE_URL}/api/status/${token}`);
     const statusId = response.data.status;
@@ -34,7 +29,6 @@ export const checkDreddStatus = async token => {
     }
 
     if (statusId === 'pending') {
-      count++;
       await new Promise(resolve => setTimeout(resolve, 1500));
       return checkDreddStatus(token);
     } else {

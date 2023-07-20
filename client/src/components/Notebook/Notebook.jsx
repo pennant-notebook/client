@@ -70,6 +70,11 @@ const Notebook = ({ docID }) => {
     } else {
       cellsArray.insert(idx + 1, [cell]);
     }
+    updatePositions();
+  };
+
+  const updatePositions = () => {
+    cellsArray.toArray().forEach((c, i) => c.set('pos', i));
   };
 
   const repositionCell = async (cell, newIndex) => {
@@ -77,6 +82,7 @@ const Notebook = ({ docID }) => {
     cell.set('id', 'delete');
     await deleteCell('delete');
     cellsArray.insert(newIndex, [clone]);
+    updatePositions();
   };
 
   const handleTitleChange = newTitle => {

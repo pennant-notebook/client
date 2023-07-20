@@ -48,10 +48,17 @@ const CodeCell = ({ cellId, cell, content }) => {
 
   const handleRunCode = async () => {
     setProcessing(true);
+    console.log(editorRef.current.state.doc.text);
     cellMetadata.set('isRunning', true);
     updateMetadata(cellMetadata, notebookMetadata);
-    const response = await handleDredd(docID, cellId, editorRef.current.state.doc.text);
-    console.log(response);
+    let response;
+    try {
+      console.log(cell.get('content').toString());
+      response = await handleDredd(docID, cellId, cell.get('content').toString());
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
     outputMap.set('stdout', response);
     cellMetadata.set('isRunning', false);
     setProcessing(false);

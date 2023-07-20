@@ -52,6 +52,7 @@ const Cells = ({ cells, setCells }) => {
                         {provided => (
                           <Box ref={provided.innerRef} {...provided.draggableProps}>
                             <Stack direction='row' alignItems='center' sx={{ my: '0px' }}>
+                              {cell.get('pos')}
                               <Box display='flex' alignItems='center' width='100%'>
                                 <Box className='dragIndicator' {...provided.dragHandleProps}>
                                   <DragIndicator sx={{ opacity: '0.5', mt: 0.5 }} />

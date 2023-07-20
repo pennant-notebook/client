@@ -13,7 +13,9 @@ const DreddButtons = ({ codeCells }) => {
 
   const handleRunAll = async () => {
     setRunning(true);
-    handleRunAllCode(docID, codeCells, notebookMetadata);
+    const orderedCells = codeCells.sort((a, b) => a.get('pos') - b.get('pos'));
+    handleRunAllCode(docID, orderedCells, notebookMetadata);
+
     setRunning(false);
   };
 
