@@ -4,7 +4,7 @@ import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import notebooksRouter from '../routes/notebooks.js';
+import apiRouter from '../routes/api.js';
 
 const app = express();
 app.use(cors());
@@ -17,7 +17,7 @@ if (process.env.NODE_ENV !== 'development') {
   app.use(express.static(path.join(__dirname, '../dist')));
 }
 
-app.use('/api', notebooksRouter);
+app.use('/api', apiRouter);
 
 app.post('/api/hocuspocus', (req, res) => {
   const event = req.body.event;

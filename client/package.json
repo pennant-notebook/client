@@ -4,8 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "start": "vite --host",
     "dev": "vite --port 3000",
-    "build": "vite build",
+    "build": "NODE_OPTIONS='--max-old-space-size=4096' npm run build",
+    "dev:all": "concurrently \"npm run dev\" \"cd ../server && npm run dev\"",
+    "build:ui": "npm run build && cp -r dist ../server",
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },

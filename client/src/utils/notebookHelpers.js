@@ -2,11 +2,12 @@ import * as Y from 'yjs';
 import { v4 as uuidv4 } from 'uuid';
 import { uniqueNamesGenerator, adjectives, animals } from 'unique-names-generator';
 
-export const createContent = (type, defaultText = ' ') => {
+export const createContent = type => {
   if (type === 'code') return new Y.Text('');
   const xmlFragment = new Y.XmlFragment();
   const paragraph = new Y.XmlElement('paragraph');
-  const text = new Y.XmlText(defaultText);
+  paragraph.setAttribute('data-block-id', 'turtle');
+  const text = new Y.XmlText(' ');
   paragraph.insert(0, [text]);
   xmlFragment.insert(0, [paragraph]);
   return xmlFragment;
@@ -58,11 +59,11 @@ export const getUserObjects = states => {
     }));
 };
 
-export function randomColor() {
+export const randomColor = () => {
   const letters = '0123456789ABCDEF';
   let color = '#';
   for (let i = 0; i < 6; i++) {
     color += letters[Math.floor(Math.random() * 16)];
   }
   return color;
-}
+};

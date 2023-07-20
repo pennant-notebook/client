@@ -1,61 +1,45 @@
 import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
-import dynamoDb from '../config/dynamo.js';
+import dynamodb from '../config/dynamodb.js';
 const router = express.Router();
 
 // Fetch USER to display user's notebooks
 router.get('/:username', async (req, res) => {
   const params = {
-    TableName: 'notebooks',
-    FilterExpression: 'username = :username',
-    ExpressionAttributeValues: {
-      ':username': req.params.username
-    }
-  };
-
-  try {
-    const data = await dynamoDb.scan(params);
-    res.json(data.Items);
-  } catch (error) {
-    console.error(`Error fetching notebooks for username ${req.params.username}:`, error);
-    res.status(500).json({ error: 'Could not fetch notebooks' });
-  }
-});
-
-// FETCH USER NOTEBOOK
-router.get('/:username/:slug', async (req, res) => {
-  let params = {
-    TableName: 'notebooks',
+    TableName: 'notebookusers',
     Key: {
-      docID: req.params.slug,
       username: req.params.username
     }
   };
 
   try {
-    let data = await dynamoDb.get(params);
+    const data = await dynamodb.get(params);
+    res.json(data.Item);
+  } catch (error) {
+    console.error(`Error fetching user ${req.params.username}:`, error);
+    res.status(500).json({ error: 'Could not fetch user' });
+  }
+});
+
+// FETCH USER NOTEBOOK
+router.get('/:username/:docID', async (req, res) => {
+  const params = {
+    TableName: 'notebooks',
+    Key: {
+      docID: req.params.docID,
+      username: req.params.username
+    }
+  };
+
+  try {
+    const data = await dynamodb.get(params);
     if (!data.Item) {
-      // Document not found by docID, try to find by slug
-      params = {
-        TableName: 'notebooks',
-        IndexName: 'username-slug-index', // You need to create this GSI in your DynamoDB table
-        KeyConditionExpression: 'username = :username and slug = :slug',
-        ExpressionAttributeValues: {
-          ':username': req.params.username,
-          ':slug': req.params.slug
-        }
-      };
-      data = await dynamoDb.query(params);
-      if (!data.Items || !data.Items.length) {
-        res.status(404).json({ error: 'Notebook not found' });
-        return;
-      }
-      res.json(data.Items[0]);
+      res.status(404).json({ error: 'Notebook not found' });
     } else {
       res.json(data.Item);
     }
   } catch (error) {
-    console.error(`Error fetching notebook ${req.params.slug}:`, error);
+    console.error(`Error fetching notebook ${req.params.docID}:`, error);
     res.status(500).json({ error: 'Could not fetch notebook' });
   }
 });
@@ -74,7 +58,7 @@ router.post('/doc/:username', async (req, res) => {
 
   let userID;
   try {
-    const user = await dynamoDb.get(userParams);
+    const user = await dynamodb.get(userParams);
     if (!user.Item) {
       return res.status(404).json({ error: 'User not found' });
     }
@@ -88,15 +72,13 @@ router.post('/doc/:username', async (req, res) => {
     TableName: 'notebooks',
     Item: {
       docID: newDocId,
-      slug: newDocId,
-      title: newDocId,
       username: req.params.username,
       userID: userID
     }
   };
 
   try {
-    await dynamoDb.put(params);
+    await dynamodb.put(params);
     res.json(params.Item);
   } catch (error) {
     console.error('Error creating notebook:', error);
@@ -116,7 +98,7 @@ router.post('/user/:username', async (req, res) => {
     }
   };
   try {
-    await dynamoDb.put(params);
+    await dynamodb.put(params);
     res.json(params.Item);
   } catch (error) {
     console.error('Error creating user:', error);
@@ -132,16 +114,15 @@ router.put('/:username/:docID', async (req, res) => {
       docID: req.params.docID,
       username: req.params.username
     },
-    UpdateExpression: 'set title = :title, slug = :slug',
+    UpdateExpression: 'set title = :title',
     ExpressionAttributeValues: {
-      ':title': req.body.title,
-      ':slug': req.body.slug
+      ':title': req.body.title
     },
     ReturnValues: 'UPDATED_NEW'
   };
 
   try {
-    const data = await dynamoDb.update(params);
+    const data = await dynamodb.update(params);
     res.json(data.Attributes);
   } catch (error) {
     console.error(`Error updating notebook ${req.params.docID}:`, error);

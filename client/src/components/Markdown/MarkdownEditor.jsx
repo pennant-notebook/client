@@ -15,6 +15,14 @@ const MarkdownEditor = ({ cell, content, provider, currentUser, theme }) => {
     },
     editorDOMAttributes: {
       style: 'padding: 8px 24px; border-radius: 0px'
+    },
+    onEditorReady: editor => {
+      // console.log('editor ready');
+      const paragraph = document.querySelector(`#blockcell-${id} div div p`);
+      if (paragraph) {
+        console.log(paragraph);
+        paragraph.textContent = '';
+      }
     }
   });
 

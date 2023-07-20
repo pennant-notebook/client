@@ -35,7 +35,7 @@ const Cells = ({ cells, setCells }) => {
   };
 
   return (
-    <Box sx={{ py: 2, width: '80%', mx: 'auto' }}>
+    <Box sx={{ py: 2, width: '75%', mx: 'auto' }}>
       <DragDropContext onDragEnd={onDragEnd}>
         <StrictModeDroppable droppableId='cells'>
           {provided => (

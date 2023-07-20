@@ -87,7 +87,7 @@ const Notebook = ({ docID }) => {
   useEffect(() => {
     const titleObserver = () => {
       const docTitle = notebookMetadata.get('title');
-      setTitle(docTitle.toString() || 'untitled');
+      setTitle(docTitle ? docTitle.toString() : 'Untitled');
     };
 
     if (notebookMetadata) {

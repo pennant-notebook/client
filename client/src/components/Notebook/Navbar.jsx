@@ -1,6 +1,5 @@
 import logo from '../../assets/pen-navlogo.png';
 import { AppBar, Toolbar, IconButton, Box, Typography, Stack } from '../../utils/MuiImports';
-import { Button } from '../../utils/MuiImports';
 import { useNavigate, useParams } from 'react-router';
 import DocTitle from './DocTitle';
 import Clients from '../UI/Awareness/Clients';
@@ -9,6 +8,7 @@ import { updateClients } from '../../utils/awarenessHelpers';
 import { useState } from 'react';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+
 // Navbar in: UserRoute, Dashboard and Notebook.jsx
 const Navbar = ({ codeCells, clients, provider, setClients, hideClients }) => {
   const { username, docID } = useParams();
