@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Box } from '../../utils/MuiImports';
 import Cells from '../Cells/Cells';
 import Navbar from './Navbar';
@@ -12,19 +12,26 @@ const Notebook = ({ docID }) => {
 
   const cellsArray = doc.getArray('cells');
   const [cellDataArr, setCellDataArr] = useState(cellsArray.toArray());
+  const cellOrderRef = useRef(0);
 
   const [clients, setClients] = useState([]);
   const [hideClients, setHideClients] = useState(true);
 
   useEffect(() => {
-    const cells = doc.getArray('cells');
+    let cells;
+    if (cellOrderRef.current > 0) {
+      const newYArrayName = `cells${cellOrderRef.current}`;
+      cells = doc.getArray(newYArrayName);
+    } else {
+      cells = doc.getArray('cells');
+    }
 
     const observer = () => {
       setCellDataArr(cells.toArray());
     };
 
     cells.observe(observer);
-  }, [docID]);
+  }, [docID, cellOrderRef.current]);
 
   useEffect(() => {
     if (!awareness) return;
@@ -99,7 +106,8 @@ const Notebook = ({ docID }) => {
     repositionCell,
     deleteCell,
     title,
-    handleTitleChange
+    handleTitleChange,
+    cellOrderRef
   };
 
   return (

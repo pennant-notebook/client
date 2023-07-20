@@ -2,7 +2,7 @@ import { HocuspocusProvider } from '@hocuspocus/provider';
 import { createContext, useContext } from 'react';
 
 export const initializeProvider = (docID, user) => {
-  // const awsContainerURl = `${import.meta.env.VITE_AWS_CONTAINER_URL}/collaboration/${docID}`;
+  const awsContainerURl = `${import.meta.env.VITE_ALB_DNS}/collaboration/${docID}`;
 
   const provider = new HocuspocusProvider({
     url: import.meta.env.VITE_WEBSOCKET_SERVER,
@@ -13,7 +13,7 @@ export const initializeProvider = (docID, user) => {
   const doc = provider.document;
 
   const notebookMetadata = doc.getMap('metaData');
-  const cellsArray = doc.getArray('cells');
+  // const cellsArray = doc.getArray('cells');
 
   provider.on('synced', () => {
     console.log('🔮 PROVIDER SYNCED 🔮 ');

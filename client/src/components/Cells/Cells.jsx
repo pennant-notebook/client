@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { Box, DragIndicator, Stack, Typography } from '../../utils/MuiImports';
 import { DragDropContext, Draggable } from 'react-beautiful-dnd';
 import MarkdownCell from '../Markdown/MarkdownCell';
@@ -10,6 +12,7 @@ import StrictModeDroppable from './StrictModeDroppable';
 const Cells = ({ cells, setCells }) => {
   const { repositionCell } = useNotebookContext();
   const { provider } = useProviderContext();
+  const [refreshCount, setRefreshCount] = useState(0);
 
   const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
@@ -28,6 +31,7 @@ const Cells = ({ cells, setCells }) => {
 
     const cell = cells[result.source.index];
     await repositionCell(cell, result.destination.index);
+    setRefreshCount(count => count + 1);
   };
 
   return (
@@ -54,7 +58,13 @@ const Cells = ({ cells, setCells }) => {
                                 </Box>
                                 <Box alignItems='center' sx={{ flexGrow: 1, zIndex: 0, ml: 2 }}>
                                   {type === 'markdown' && (
-                                    <MarkdownCell id={id} content={content} provider={provider} cell={cell} />
+                                    <MarkdownCell
+                                      id={id}
+                                      content={content}
+                                      provider={provider}
+                                      cell={cell}
+                                      refreshCount={refreshCount}
+                                    />
                                   )}
                                   {type === 'code' && <CodeCell cellId={id} cell={cell} content={content} />}
                                 </Box>

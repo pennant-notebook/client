@@ -34,7 +34,6 @@ export const fetchDocFromDynamo = async (username, docID) => {
 
 export const createDocInDynamo = async username => {
   const user = username.substring(1);
-  console.log(user);
   try {
     const response = await axios.post(`${API_URL}/doc/${user}`);
     return response.data;

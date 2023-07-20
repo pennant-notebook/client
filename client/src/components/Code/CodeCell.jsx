@@ -18,10 +18,15 @@ const CodeCell = ({ cellId, cell, content }) => {
   const editorRef = useRef(null);
 
   useEffect(() => {
-    if (!editorRef.current) {
-      editorRef.current = createEditorState(content, awareness, cellId, handleRunCode);
+    console.log('cell being moved?');
+    const editorContainer = document.querySelector(`#editor-${cellId}`);
+    if (editorContainer && editorContainer.firstChild) {
+      editorContainer.removeChild(editorContainer.firstChild);
     }
-  }, []);
+
+    editorRef.current = createEditorState(content, awareness, cellId, handleRunCode);
+    editorContainer.appendChild(editorRef.current.dom);
+  }, [content]);
 
   useEffect(() => {
     if (outputMap) {

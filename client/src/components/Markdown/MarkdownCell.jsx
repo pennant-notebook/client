@@ -1,40 +1,24 @@
 import { useRef, useEffect, useState } from 'react';
 import { Box } from '../../utils/MuiImports';
 import useNotebookContext from '../../contexts/NotebookContext';
-import { BlockNoteView, useBlockNote } from '@blocknote/react';
-import { getUserObjects } from '../../utils/notebookHelpers';
-import useProviderContext from '../../contexts/ProviderContext';
 import MarkdownToolbar from './MarkdownToolbar';
+import { getUserObjects } from '../../utils/notebookHelpers';
 
 import '@blocknote/core/style.css';
+import MarkdownEditor from './MarkdownEditor';
+import useProviderContext from '../../contexts/ProviderContext';
 
-const MarkdownCell = ({ id, content, provider, cell }) => {
+const MarkdownCell = ({ id, content, cell, provider, refreshCount }) => {
   const { awareness } = useProviderContext();
-  const [theme, setTheme] = useState(cell.get('theme').toString());
   const { deleteCell } = useNotebookContext();
-  const cellRef = useRef(null);
-
+  const cellRef = useRef(0);
   const users = getUserObjects(awareness.getStates());
   const currentUser = users[0];
 
-  const editor = useBlockNote({
-    theme: cell.get('theme').toString(),
-    collaboration: {
-      provider,
-      fragment: content,
-      user: {
-        name: currentUser ? currentUser.name : 'Default',
-        color: currentUser ? currentUser.color : '#ff0000'
-      }
-    },
-    editorDOMAttributes: {
-      style: 'padding: 8px 24px; border-radius: 0px'
-    }
-  });
+  const [theme, setTheme] = useState(cell.get('theme').toString());
 
   const toggleTheme = () => {
     setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
-    // Add logic here to target the div with id blockcell-id and change the data-theme attribute for that div
   };
 
   useEffect(() => {
@@ -59,7 +43,15 @@ const MarkdownCell = ({ id, content, provider, cell }) => {
       <Box className='markdown-container'>
         <MarkdownToolbar id={id} onDelete={deleteCell} theme={theme} toggleTheme={toggleTheme} />
         <Box id={`blockcell-${id}`}>
-          <BlockNoteView id={id} editor={editor} />
+          <MarkdownEditor
+            id={`markdown-editor-${id}`}
+            key={`${id}-${refreshCount}`}
+            cell={cell}
+            content={content}
+            provider={provider}
+            currentUser={currentUser}
+            theme={theme}
+          />
         </Box>
       </Box>
     </Box>
