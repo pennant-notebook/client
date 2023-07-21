@@ -11,6 +11,10 @@ div[id*='tippy'] > div[class*='tippy-box'][data-placement='left'] {
   display: none !important;
 }
 
+div[id*='blockcell'] > div > div[data-theme='dark'] {
+  background-color: #282c34 !important;
+}
+
 .cm-ySelectionInfo {
   opacity: 1 !important;
   transition-delay: 0s !important;
@@ -33,7 +37,14 @@ div[id*='tippy'] > div[class*='tippy-box'][data-placement='left'] {
 
 .notebook-title {
   display: flex;
+  flex: 1;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   min-width: 50%;
+}
+
+div.notebook-title p {
+  font-family: 'Lato', 'sans-serif';
+  text-align: center;
 }

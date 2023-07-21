@@ -12,26 +12,19 @@ const Notebook = ({ docID }) => {
 
   const cellsArray = doc.getArray('cells');
   const [cellDataArr, setCellDataArr] = useState(cellsArray.toArray());
-  const cellOrderRef = useRef(0);
 
   const [clients, setClients] = useState([]);
   const [hideClients, setHideClients] = useState(true);
 
   useEffect(() => {
-    let cells;
-    if (cellOrderRef.current > 0) {
-      const newYArrayName = `cells${cellOrderRef.current}`;
-      cells = doc.getArray(newYArrayName);
-    } else {
-      cells = doc.getArray('cells');
-    }
+    const cells = doc.getArray('cells');
 
     const observer = () => {
       setCellDataArr(cells.toArray());
     };
 
     cells.observe(observer);
-  }, [docID, cellOrderRef.current]);
+  }, [docID]);
 
   useEffect(() => {
     if (!awareness) return;
@@ -112,8 +105,7 @@ const Notebook = ({ docID }) => {
     repositionCell,
     deleteCell,
     title,
-    handleTitleChange,
-    cellOrderRef
+    handleTitleChange
   };
 
   return (

@@ -3,7 +3,27 @@ import { v4 as uuidv4 } from 'uuid';
 import dynamodb from '../config/dynamodb.js';
 const router = express.Router();
 
-// ************ GET: FETCH USER, FETCH USER NOTEBOOKS **********
+// createUserInDynamo
+router.post('/user/:username', async (req, res) => {
+  const id = uuidv4();
+
+  const params = {
+    TableName: 'notebookusers',
+    Item: {
+      userID: id,
+      username: req.params.username
+    }
+  };
+  try {
+    await dynamodb.put(params);
+    res.json(params.Item);
+  } catch (error) {
+    console.error('Error creating user:', error);
+    res.status(500).json({ error: 'Could not create user' });
+  }
+});
+
+// fetchUserFromDynamo
 router.get('/user/:username', async (req, res) => {
   const userParams = {
     TableName: 'notebookusers',
@@ -25,7 +45,8 @@ router.get('/user/:username', async (req, res) => {
   }
 });
 
-router.get('/notebooks/:username', async (req, res) => {
+// fetchNotebooksFromDynamo
+router.get('/user/:username/notebooks', async (req, res) => {
   const notebooksParams = {
     TableName: 'notebooks',
     FilterExpression: 'username = :username',
@@ -43,8 +64,8 @@ router.get('/notebooks/:username', async (req, res) => {
   }
 });
 
-// FETCH SINGLE NOTEBOOK
-router.get('/doc/:username/:docID', async (req, res) => {
+// fetchDocFromDynamo
+router.get('/doc/:docID/:username', async (req, res) => {
   const params = {
     TableName: 'notebooks',
     Key: {
@@ -66,9 +87,7 @@ router.get('/doc/:username/:docID', async (req, res) => {
   }
 });
 
-// ************ POST/PUT: CREATE USER, CREATE/EDIT NOTEBOOK **********
-
-// CREATE NEW NOTEBOOK FOR USER
+// createDocInDynamo
 router.post('/doc/:username', async (req, res) => {
   const newDocId = uuidv4();
 
@@ -110,28 +129,11 @@ router.post('/doc/:username', async (req, res) => {
   }
 });
 
-// CREATE NEW USER
-router.post('/user/:username', async (req, res) => {
-  const id = uuidv4();
-
-  const params = {
-    TableName: 'notebookusers',
-    Item: {
-      userID: id,
-      username: req.params.username
-    }
-  };
-  try {
-    await dynamodb.put(params);
-    res.json(params.Item);
-  } catch (error) {
-    console.error('Error creating user:', error);
-    res.status(500).json({ error: 'Could not create user' });
+// editDocTitleInDynamo
+router.put('/doc/:docID/:username', async (req, res) => {
+  if (!req.body.title) {
+    return res.status(400).json({ error: 'Missing title' });
   }
-});
-
-// EDIT USER DOCUMENT
-router.put('/:username/:docID', async (req, res) => {
   const params = {
     TableName: 'notebooks',
     Key: {

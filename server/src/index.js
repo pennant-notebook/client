@@ -13,9 +13,9 @@ app.use(express.json());
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-if (process.env.NODE_ENV !== 'development') {
-  app.use(express.static(path.join(__dirname, '../dist')));
-}
+// if (process.env.NODE_ENV !== 'development') {
+//   app.use(express.static(path.join(__dirname, '../dist')));
+// }
 
 app.use('/api', apiRouter);
 
@@ -28,11 +28,11 @@ app.post('/api/hocuspocus', (req, res) => {
   res.status(200).send('OK');
 });
 
-if (process.env.NODE_ENV !== 'development') {
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../dist/index.html'));
-  });
-}
+// if (process.env.NODE_ENV !== 'development') {
+//   app.get('*', (req, res) => {
+//     res.sendFile(path.join(__dirname, '../dist/index.html'));
+//   });
+// }
 
 const PORT = process.env.PORT || 3001;
 

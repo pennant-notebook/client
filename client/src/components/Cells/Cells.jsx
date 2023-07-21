@@ -35,7 +35,7 @@ const Cells = ({ cells, setCells }) => {
   };
 
   return (
-    <Box sx={{ py: 2, width: '75%', mx: 'auto' }}>
+    <Box sx={{ py: 2, width: '80%', mx: 'auto' }}>
       <DragDropContext onDragEnd={onDragEnd}>
         <StrictModeDroppable droppableId='cells'>
           {provided => (
@@ -52,14 +52,11 @@ const Cells = ({ cells, setCells }) => {
                         {provided => (
                           <Box ref={provided.innerRef} {...provided.draggableProps}>
                             <Stack direction='row' alignItems='center' sx={{ my: '0px' }}>
-                              <Typography variant='caption' sx={{ opacity: '0.5' }}>
-                                {cell.get('pos')}
-                              </Typography>
                               <Box display='flex' alignItems='center' width='100%'>
                                 <Box className='dragIndicator' {...provided.dragHandleProps}>
                                   <DragIndicator sx={{ opacity: '0.5', mt: 0.5 }} />
                                 </Box>
-                                <Box alignItems='center' sx={{ flexGrow: 1, zIndex: 0, ml: 2 }}>
+                                <Box alignItems='center' sx={{ flexGrow: 1, zIndex: 0 }}>
                                   {type === 'markdown' && (
                                     <MarkdownCell
                                       id={id}

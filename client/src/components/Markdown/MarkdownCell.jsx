@@ -4,9 +4,9 @@ import useNotebookContext from '../../contexts/NotebookContext';
 import MarkdownToolbar from './MarkdownToolbar';
 import { getUserObjects } from '../../utils/notebookHelpers';
 
-import '@blocknote/core/style.css';
 import MarkdownEditor from './MarkdownEditor';
 import useProviderContext from '../../contexts/ProviderContext';
+import '@blocknote/core/style.css';
 
 const MarkdownCell = ({ id, content, cell, provider, refreshCount }) => {
   const { awareness } = useProviderContext();
@@ -38,7 +38,7 @@ const MarkdownCell = ({ id, content, cell, provider, refreshCount }) => {
         flexGrow: 0,
         wordBreak: 'break-all',
         overflorWrap: 'break-word',
-        ml: 3.5
+        ml: 4.2
       }}>
       <Box className='markdown-container'>
         <MarkdownToolbar id={id} onDelete={deleteCell} theme={theme} toggleTheme={toggleTheme} />

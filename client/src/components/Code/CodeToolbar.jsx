@@ -18,7 +18,7 @@ const CodeToolbar = memo(({ onClickRun, onDelete, id, processing }) => {
         height: '40px',
         margin: 0,
         padding: 0,
-        borderBottom: '1px solid gray',
+        // borderBottom: '1px solid gray',
         zIndex: 0
       }}>
       <Stack direction='row' sx={{ justifyContent: 'end', position: 'relative', alignItems: 'center' }}>

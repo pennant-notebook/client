@@ -13,12 +13,11 @@ const CodeCell = ({ cellId, cell, content }) => {
   const outputMap = cell.get('outputMap');
 
   const [cellExeCount, setCellExeCount] = useState(cellMetadata.get('exeCount'));
-  const [output, setOutput] = useState(outputMap.get('stdout'));
+  const [output, setOutput] = useState(outputMap.get('stdout'.split('\n')));
   const [processing, setProcessing] = useState(false);
   const editorRef = useRef(null);
 
   useEffect(() => {
-    console.log('cell being moved?');
     const editorContainer = document.querySelector(`#editor-${cellId}`);
     if (editorContainer && editorContainer.firstChild) {
       editorContainer.removeChild(editorContainer.firstChild);
@@ -53,7 +52,6 @@ const CodeCell = ({ cellId, cell, content }) => {
     let response;
     try {
       response = await handleDredd(docID, cellId, cell.get('content').toString());
-      console.log(response);
     } catch (error) {
       console.log(error);
     }
@@ -70,15 +68,24 @@ const CodeCell = ({ cellId, cell, content }) => {
         width: '100%'
       }}>
       <Stack direction='row' sx={{ width: '100%', alignItems: 'center' }}>
-        <Typography sx={{ fontSize: '0.85rem', flexShrink: 0, mr: 2 }} className='exeCount'>
+        <Typography sx={{ fontSize: '0.8rem', flexShrink: 0, mr: 2, textAlign: 'center' }} className='exeCount'>
           {cellExeCount || '*'}
         </Typography>
         <Box className='codecell-container'>
           <CodeToolbar onClickRun={handleRunCode} id={cellId} onDelete={deleteCell} processing={processing} />
           <Box id={`editor-${cellId}`}></Box>
-          <Typography sx={{ fontFamily: 'monospace', ml: '5px', backgroundColor: 'charcoal' }}>
-            {processing ? 'Processing...' : output}
-          </Typography>
+          <Box className='codecell-output' sx={{ py: output ? '4px' : 0 }}>
+            {processing ? (
+              <Typography sx={{ ml: '5px', color: '#cfd1d8' }}>Processing...</Typography>
+            ) : (
+              output &&
+              output.split('\n').map((stdout, idx) => (
+                <Typography key={idx} sx={{ ml: '5px', color: '#cfd1d8' }}>
+                  {stdout}
+                </Typography>
+              ))
+            )}
+          </Box>
         </Box>
       </Stack>
     </Box>

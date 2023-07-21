@@ -8,13 +8,10 @@ import {
   DialogActions,
   Button,
   Box,
-  Typography,
-  IconButton
+  Typography
 } from '../../utils/MuiImports';
-import CreateTwoTone from '@mui/icons-material/CreateTwoTone';
 import { useParams } from 'react-router-dom';
 import { editDocTitleInDynamo, fetchDocFromDynamo } from '../../services/dynamo';
-import { slugify } from '../../utils/notebookHelpers';
 import useNotebookContext from '../../contexts/NotebookContext';
 
 const DocTitle = () => {
@@ -26,7 +23,7 @@ const DocTitle = () => {
 
   useEffect(() => {
     async function getNotebook() {
-      const fetchedNotebook = await fetchDocFromDynamo(username, docID);
+      const fetchedNotebook = await fetchDocFromDynamo(docID, username);
       setNotebook(fetchedNotebook);
       if (fetchedNotebook.title) {
         handleTitleChange(fetchedNotebook.title);
@@ -37,8 +34,8 @@ const DocTitle = () => {
 
   const handleEditTitle = async () => {
     try {
-      const slug = slugify(tempTitle);
-      const newNotebookData = await editDocTitleInDynamo(username, notebook.docID, tempTitle, slug);
+      // const slug = slugify(tempTitle);
+      const newNotebookData = await editDocTitleInDynamo(notebook.docID, tempTitle, username);
       handleTitleChange(newNotebookData.title);
       setTempTitle('');
       setOpen(false);
@@ -50,17 +47,14 @@ const DocTitle = () => {
   return (
     <Box className='notebook-title'>
       <Box onClick={() => setOpen(true)} sx={{ ml: { xs: 3, sm: 0, lg: 2, xl: 4 } }}>
-        <Typography sx={{ opacity: 0.5, fontSize: '18px' }}>
+        <Typography sx={{ opacity: 0.5, fontSize: '20px' }}>
           {title === notebook?.docID ? 'untitled' : title}
         </Typography>
       </Box>
-      {/* <IconButton edge='start' onClick={() => setOpen(true)} sx={{ p: 0, m: 0, ml: 1, color: '#adb4e4' }}>
-        <CreateTwoTone sx={{ fontSize: '16px', '&:hover': { color: '#a37cbc' } }} />
-      </IconButton> */}
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogTitle>Edit Notebook Title</DialogTitle>
         <DialogContent>
-          <DialogContentText>To edit the title, please enter the new title here.</DialogContentText>
+          <DialogContentText>Enter the new title here.</DialogContentText>
           <TextField
             autoFocus
             margin='dense'

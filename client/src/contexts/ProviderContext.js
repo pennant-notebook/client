@@ -1,9 +1,8 @@
 import { HocuspocusProvider } from '@hocuspocus/provider';
 import { createContext, useContext } from 'react';
 
-export const initializeProvider = (docID, user) => {
+export const initializeProvider = (docID, username) => {
   // const awsContainerURl = `${import.meta.env.VITE_ALB_DNS}/${docID}`;
-
   const provider = new HocuspocusProvider({
     url: import.meta.env.VITE_WEBSOCKET_SERVER,
     name: docID,
@@ -23,7 +22,7 @@ export const initializeProvider = (docID, user) => {
 
   const contextValue = {
     notebookMetadata,
-    user,
+    user: username.slice(1),
     docID,
     doc,
     provider,

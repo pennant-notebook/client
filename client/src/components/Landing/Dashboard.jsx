@@ -15,7 +15,6 @@ const Dashboard = () => {
     async function fetchUserNotebooks() {
       const userbooks = await fetchNotebooksFromDynamo(username);
       setNotebooks(userbooks);
-      // console.log(userbooks);
     }
     if (username) fetchUserNotebooks();
   }, [username]);
@@ -26,7 +25,7 @@ const Dashboard = () => {
 
   const filteredNotebooks =
     notebooks && searchTerm
-      ? notebooks.filter(notebook => notebook.title.toLowerCase().includes(searchTerm.toLowerCase()))
+      ? notebooks.filter(notebook => notebook.title?.toLowerCase().includes(searchTerm.toLowerCase()))
       : notebooks;
 
   const handleCreateNotebook = async () => {
@@ -37,16 +36,18 @@ const Dashboard = () => {
   };
 
   return (
-    <Box>
+    <Box sx={{}}>
       <Navbar hideClients={true} />
       <Box
         sx={{
+          paddingTop: '40px',
+          paddingBottom: '20px',
+
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
           minHeight: '60px',
-          backgroundColor: '#F9F6EE',
-          padding: '10px 20px'
+          backgroundColor: '#F9F6EE'
         }}>
         <TextField
           autoComplete='off'
@@ -64,11 +65,13 @@ const Dashboard = () => {
       </Box>
 
       {!filteredNotebooks || filteredNotebooks.length === 0 ? (
-        <Box display='flex' justifyContent='center' alignItems='center' padding='10px 20px'>
-          <Typography variant='h5'>No notebooks</Typography>
+        <Box display='flex' justifyContent='center' alignItems='center' padding='20px 20px'>
+          <Typography variant='h5' sx={{ fontFamily: 'Lato', opacity: '0.8', fontStyle: 'italic' }}>
+            Nothing to see here yet...
+          </Typography>
         </Box>
       ) : (
-        <Grid container spacing={5} justifyContent='center' style={{ width: '80%', margin: 'auto', padding: '20px 0' }}>
+        <Grid container spacing={5} justifyContent='center' sx={{ width: '80%', margin: 'auto', padding: '20px 0' }}>
           {filteredNotebooks.length > 0 &&
             filteredNotebooks.map((notebook, index) => (
               <Grid item key={notebook.docID} xs={12} sm={6} md={4}>
@@ -78,7 +81,7 @@ const Dashboard = () => {
                   onClick={() => navigate(`/${username}/${notebook.docID}`)}>
                   <Typography
                     sx={{
-                      fontFamily: 'Lato Code',
+                      fontFamily: 'Lato',
                       fontSize: '20px',
                       textOverflow: 'ellipsis',
                       overflow: 'hidden',

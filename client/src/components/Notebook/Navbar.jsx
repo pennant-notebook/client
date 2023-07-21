@@ -9,7 +9,6 @@ import { useState } from 'react';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
-// Navbar in: UserRoute, Dashboard and Notebook.jsx
 const Navbar = ({ codeCells, clients, provider, setClients, hideClients }) => {
   const { username, docID } = useParams();
   const [show, setShow] = useState(true);
@@ -27,19 +26,26 @@ const Navbar = ({ codeCells, clients, provider, setClients, hideClients }) => {
 
   return (
     <AppBar position='sticky' sx={{ backgroundColor: '#34568B' }}>
-      <Toolbar sx={{ width: '97%', justifyContent: 'space-between' }}>
+      <Toolbar
+        sx={{
+          width: { sm: '91%', md: '97%', lg: '95%', xl: '96%' },
+          justifyContent: 'space-between',
+          mx: 'auto'
+        }}>
         <Toolbar id='logo-clients' sx={{ textAlign: 'left' }}>
-          <IconButton
-            edge='start'
-            color='inherit'
-            aria-label='logo'
-            onClick={() => handleDisconnect(`/`)}
-            sx={{ ml: '-32px' }}>
-            <img src={logo} width='64px' />
-          </IconButton>
+          <Box sx={{ minWidth: '60px', ml: { xs: '-20px', sm: '-42px', md: '-36px', lg: '-40px' } }}>
+            <IconButton
+              edge='start'
+              color='inherit'
+              aria-label='logo'
+              onClick={() => handleDisconnect(`/`)}
+              sx={{ p: '10px 8px' }}>
+              <img src={logo} width='64px' />
+            </IconButton>
+          </Box>
 
           {docID && (
-            <Box id='CLIENTS' sx={{ ml: '10px' }}>
+            <Box id='CLIENTS' sx={{ ml: '6px' }}>
               <IconButton onClick={() => setShow(!show)} sx={{ color: '#adb4e4' }}>
                 {show ? <VisibilityIcon fontSize='small' /> : <VisibilityOffIcon fontSize='small' />}
                 <Typography variant='body1' sx={{ ml: 1, color: 'inherit' }}>
@@ -50,9 +56,9 @@ const Navbar = ({ codeCells, clients, provider, setClients, hideClients }) => {
           )}
           {!hideClients && <Clients clients={clients} show={show} />}
         </Toolbar>
-
+        <Box flexGrow={1} /> {/* Spacer */}
         <Box id='TITLE'>{docID && <DocTitle />}</Box>
-
+        <Box flexGrow={1} /> {/* Spacer */}
         <Stack id='DREDD-BUTTONS' direction='row' spacing={0}>
           <Box>{docID && <DreddButtons codeCells={codeCells} />}</Box>
           <IconButton

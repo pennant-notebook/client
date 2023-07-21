@@ -3,7 +3,8 @@
   color: #fff;
   box-shadow: rgba(227, 195, 242, 0.3) 0px 0px 0px 3px;
   border-radius: 4px;
-  padding: 2px 4px;
+  padding: 2px 3px;
+  width: 14px;
   font-family: 'Fira Code', 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
   font-weight: bold;
   opacity: 0.7;
@@ -14,13 +15,26 @@
   width: 100%;
   border: 2px solid dimgray;
   border-radius: 5px;
-  background-color: navajowhite;
+  background-color: #3d414d;
+}
+
+.codecell-output {
+  padding: 0 4px;
+  border-top: 1px solid dimgray;
+  opacity: 0.9;
+}
+
+.codecell-output p {
+  margin-left: 5px;
+  color: '#cfd1d8';
+  font-family: 'Fira Code', 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+  font-size: 14px;
 }
 
 .markdown-container {
   mask-image: radial-gradient(circle, black 100%, transparent 100%);
   width: 100%;
-  border: 2px solid lightgray;
+  border: 1px solid lightgray;
   border-radius: 2px;
 }
 
@@ -31,8 +45,4 @@
   word-wrap: break-word;
   white-space: pre-wrap;
   resize: none;
-}
-
-.codecell-container .editor {
-  transition: height 12s ease-in-out;
 }
