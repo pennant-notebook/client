@@ -3,7 +3,6 @@ import axios from 'axios';
 const BASE_URL = import.meta.env.VITE_ENGINE_SERVER;
 
 export const sendToDredd = async (notebookId, cellId, code) => {
-  console.log(code);
   try {
     const result = await axios.post(`${BASE_URL}/api/submit`, {
       notebookId,

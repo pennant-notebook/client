@@ -14,7 +14,6 @@ export const updateMetadata = (cellMetadata, notebookMetadata) => {
 };
 
 export const handleDredd = async (docID, cellId, editorContent) => {
-  console.log(editorContent);
   const token = await sendToDredd(docID, cellId, editorContent);
   const response = await checkDreddStatus(token);
   const processedResponse = response[0].output;
@@ -22,7 +21,7 @@ export const handleDredd = async (docID, cellId, editorContent) => {
 };
 
 export const handleResetContext = async (docID, notebookMetadata, codeCells) => {
-  console.log('resetting context for notebookID: ' + docID);
+  console.log('💫 Resetting context for notebookID: ' + docID);
   await resetContext(docID);
   notebookMetadata.set('executionCount', 0);
   codeCells.forEach(cell => {
@@ -34,7 +33,7 @@ export const handleResetContext = async (docID, notebookMetadata, codeCells) => 
 };
 
 export const handleRunAllCode = async (docID, codeCells, notebookMetadata) => {
-  console.log('RUNNING ALL CODE');
+  console.log('🥁 Running All Code');
   await resetContext(docID);
   for (const cell of codeCells) {
     updateMetadata(cell.get('metaData'), notebookMetadata);
