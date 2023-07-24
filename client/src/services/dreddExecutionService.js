@@ -8,7 +8,7 @@ export const sendToDredd = async (notebookId, cellId, code) => {
       notebookId,
       cells: [
         {
-          cellId: cellId,
+          cellId,
           code
         }
       ]

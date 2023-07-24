@@ -22,17 +22,18 @@ const CodeCell = ({ cellId, cell, content, getStartingLineNumber }) => {
   const editorRef = useRef(null);
 
   const handleRunCode = useCallback(async () => {
-    setProcessing(true);
-    let response;
     try {
-      response = await handleDredd(docID, cellId, cell.get('content').toString(), cell.get('outputMap'));
+      setProcessing(true);
+      const response = await handleDredd(docID, cellId, cell.get('content').toString());
+      console.log(response);
+      const outputMap = cell.get('outputMap');
+      outputMap.set('stdout', response.output);
+      outputMap.set('status', response.type);
     } catch (error) {
-      console.log(error);
+      console.error(error);
+    } finally {
+      setProcessing(false);
     }
-    outputMap.set('stdout', response.output);
-    outputMap.set('status', response.type);
-
-    setProcessing(false);
     updateMetadata(cellMetadata, notebookMetadata);
   }, []);
 
@@ -49,12 +50,10 @@ const CodeCell = ({ cellId, cell, content, getStartingLineNumber }) => {
   }, [content]);
 
   useEffect(() => {
-    if (outputMap) {
-      outputMap.observe(() => {
-        setOutput(outputMap.get('stdout'));
-        setStatus(outputMap.get('status') || 'output');
-      });
-    }
+    cell.get('outputMap').observe(() => {
+      setOutput(outputMap.get('stdout'));
+      setStatus(outputMap.get('status') || 'output');
+    });
 
     cellMetadata.observe(e => {
       e.changes.keys.forEach((change, key) => {
@@ -88,7 +87,7 @@ const CodeCell = ({ cellId, cell, content, getStartingLineNumber }) => {
               <Typography sx={{ ml: '5px', color: '#cfd1d8' }}>Processing...</Typography>
             ) : (
               output &&
-              output.split('\n').map((stdout, idx) => (
+              output?.split('\n').map((stdout, idx) => (
                 <Typography key={idx} sx={{ ml: '5px', color: '#cfd1d8' }}>
                   {stdout}
                 </Typography>

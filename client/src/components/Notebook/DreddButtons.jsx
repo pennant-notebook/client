@@ -21,22 +21,32 @@ const DreddButtons = ({ codeCells }) => {
   const [running, setRunning] = useState(false);
 
   const handleRunAll = async () => {
-    setRunning(true);
-    setAllRunning(true);
-    const orderedCells = codeCells.sort((a, b) => a.get('pos') - b.get('pos'));
-    await handleRunAllCode(docID, orderedCells, notebookMetadata);
-    setAllRunning(false);
-    setRunning(false);
+    try {
+      setRunning(true);
+      setAllRunning(true);
+      const orderedCells = codeCells.sort((a, b) => a.get('pos') - b.get('pos'));
+      await handleRunAllCode(docID, orderedCells, notebookMetadata);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setAllRunning(false);
+      setRunning(false);
+    }
   };
 
   const handleReset = async () => {
-    setResetting(true);
-    setAllRunning(true);
-    await handleResetContext(docID, notebookMetadata, codeCells);
-    setAllRunning(false);
-    setResetting(false);
-    codeCells.forEach(c => c.get('outputMap').set('status', ''));
-    toast.success('Context successfully reset');
+    try {
+      setResetting(true);
+      setAllRunning(true);
+      await handleResetContext(docID, notebookMetadata, codeCells);
+      codeCells.forEach(c => c.get('outputMap').set('status', ''));
+      toast.success('Context successfully reset');
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setAllRunning(false);
+      setResetting(false);
+    }
   };
 
   const isDisabledRun = () => {
