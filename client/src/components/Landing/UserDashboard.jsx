@@ -1,23 +1,19 @@
-import { useState, useEffect } from 'react';
-import { Box, TextField, Button, Grid, Card, Typography, Add } from '../../utils/MuiImports';
+import { useQuery } from 'react-query';
+import { useState } from 'react';
+import { useParams, useNavigate } from 'react-router';
+import { Box, TextField, Button, Grid, Card, Typography } from '../../utils/MuiImports';
+import LoadingSpinner from '../UI/LoadingSpinner';
 import Navbar from '../Notebook/Navbar';
-import { createDocInDynamo, fetchNotebooksFromDynamo } from '../../services/dynamo';
-import { useNavigate, useParams } from 'react-router';
-import { slugify } from '../../utils/notebookHelpers';
+import { createDoc } from '../../services/dynamoPost';
+import { fetchNotebooks } from '../../services/dynamoFetch';
+import { useTheme } from '@emotion/react';
 
-const Dashboard = () => {
+export const UserDashboardContent = ({ username, notebooks }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [notebooks, setNotebooks] = useState([]);
-  const { username } = useParams();
   const navigate = useNavigate();
+  const theme = useTheme();
 
-  useEffect(() => {
-    async function fetchUserNotebooks() {
-      const userbooks = await fetchNotebooksFromDynamo(username);
-      setNotebooks(userbooks);
-    }
-    if (username) fetchUserNotebooks();
-  }, [username]);
+  document.title = 'Dashboard | ' + username;
 
   const handleSearchChange = event => {
     setSearchTerm(event.target.value);
@@ -29,26 +25,17 @@ const Dashboard = () => {
       : notebooks;
 
   const handleCreateNotebook = async () => {
-    const newNotebook = await createDocInDynamo(username);
+    const newNotebook = await createDoc(username);
     const docID = newNotebook.docID;
-    console.log(docID);
     navigate(`/${username}/${docID}`);
   };
 
-  return (
-    <Box sx={{}}>
-      <Navbar hideClients={true} />
-      <Box
-        sx={{
-          paddingTop: '40px',
-          paddingBottom: '20px',
+  console.log(theme);
 
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          minHeight: '60px',
-          backgroundColor: '#F9F6EE'
-        }}>
+  return (
+    <Box>
+      <Navbar hideClients={true} title='Notebooks' />
+      <Box className={`user-dashboard ${theme.palette.mode}`}>
         <TextField
           autoComplete='off'
           value={searchTerm}
@@ -76,20 +63,10 @@ const Dashboard = () => {
             filteredNotebooks.map((notebook, index) => (
               <Grid item key={notebook.docID} xs={12} sm={6} md={4}>
                 <Card
-                  className='button-4'
+                  className={`button-4 ${theme.palette.mode}`}
                   style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
                   onClick={() => navigate(`/${username}/${notebook.docID}`)}>
-                  <Typography
-                    sx={{
-                      fontFamily: 'Lato',
-                      fontSize: '20px',
-                      textOverflow: 'ellipsis',
-                      overflow: 'hidden',
-                      whiteSpace: 'nowrap',
-                      color: '#283655'
-                    }}>
-                    {notebook.title || 'untitled-' + (index + 1)}
-                  </Typography>
+                  <Typography className='card-title'>{notebook.title || 'untitled-' + (index + 1)}</Typography>
                 </Card>
               </Grid>
             ))}
@@ -99,4 +76,14 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export const UserDashboard = () => {
+  const { username } = useParams();
+  const { data, loading, error } = useQuery(['notebooks', username], () => fetchNotebooks(username));
+
+  if (loading) return <LoadingSpinner />;
+  if (error) return 'Error!';
+
+  return <UserDashboardContent username={username} notebooks={data} />;
+};
+
+export default UserDashboard;

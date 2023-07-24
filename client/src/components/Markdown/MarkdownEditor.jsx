@@ -1,34 +1,10 @@
-import {
-  BlockNoteView,
-  useBlockNote,
-  InlineContent,
-  ReactSlashMenuItem,
-  defaultReactSlashMenuItems,
-  createReactBlockSpec
-} from '@blocknote/react';
-import { defaultBlockSchema, defaultProps } from '@blocknote/core';
+import { BlockNoteView, useBlockNote, ReactSlashMenuItem, defaultReactSlashMenuItems } from '@blocknote/react';
+import { defaultBlockSchema } from '@blocknote/core';
 import ImageIcon from '@mui/icons-material/Image';
+import { ImageBlock } from './CustomBlockTypes';
 
 const MarkdownEditor = ({ cell, content, provider, currentUser, theme }) => {
   const id = cell.get('id');
-  const ImageBlock = createReactBlockSpec({
-    type: 'image',
-    propSchema: defaultProps,
-    containsInlineContent: true,
-    render: ({ block }) => (
-      <div id='image-wrapper'>
-        {block.props.src && (
-          <img
-            style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
-            src={block.props.src}
-            alt={'Image'}
-            contentEditable={false}
-          />
-        )}
-        <InlineContent />
-      </div>
-    )
-  });
 
   const insertImage = new ReactSlashMenuItem(
     'Insert Image',
@@ -69,7 +45,7 @@ const MarkdownEditor = ({ cell, content, provider, currentUser, theme }) => {
       }
     },
     editorDOMAttributes: {
-      style: 'padding: 8px 24px; border-radius: 0px;'
+      class: 'blocknote-editor'
     },
     onEditorReady: editor => {
       const paragraph = document.querySelector(`#blockcell-${id} div div p`);

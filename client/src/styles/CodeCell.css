@@ -1,13 +1,8 @@
-.exeCount {
+.exeBadge {
   background-color: #2d313c;
-  color: #fff;
-  box-shadow: rgba(227, 195, 242, 0.3) 0px 0px 0px 3px;
-  border-radius: 4px;
-  padding: 2px 3px;
-  width: 14px;
+  border: 2px solid gray;
   font-family: 'Fira Code', 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
   font-weight: bold;
-  opacity: 0.7;
 }
 
 .codecell-container {
@@ -20,7 +15,6 @@
 
 .codecell-output {
   padding: 0 4px;
-  border-top: 1px solid dimgray;
   opacity: 0.9;
 }
 
@@ -31,8 +25,12 @@
   font-size: 14px;
 }
 
+.codecell-output.error {
+  background-color: crimson;
+}
+
 .markdown-container {
-  mask-image: radial-gradient(circle, black 100%, transparent 100%);
+  /* mask-image: radial-gradient(circle, black 100%, transparent 100%); */
   width: 100%;
   border: 1px solid lightgray;
   border-radius: 2px;
@@ -46,3 +44,7 @@
   white-space: pre-wrap;
   resize: none;
 }
+
+/* .cm-gutters .cm-lineNumbers .cm-gutterElement {
+  visibility: hidden;
+} */

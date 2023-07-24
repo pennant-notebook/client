@@ -1,16 +1,17 @@
-import bigLogo from '../../assets/pen-navlogo.png';
+import bigLogo from '../../assets/pennant-color.png';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Box, Typography, Button, Grid } from '../../utils/MuiImports';
-import { createDocInDynamo, createUserInDynamo } from '../../services/dynamo';
+import { createDoc, createUser } from '../../services/dynamoPost';
 
 const LandingPage = () => {
   const [username, setUsername] = useState('');
   const navigate = useNavigate();
+  document.title = 'Pennant';
 
   const handleEnter = async () => {
     try {
-      const data = await createUserInDynamo(username);
+      const data = await createUser(username);
       navigate(`/@${data.username}`);
     } catch (error) {
       console.error('Error finding or creating user: ', error);
@@ -19,7 +20,7 @@ const LandingPage = () => {
 
   const handleTry = async () => {
     try {
-      const notebookData = await createDocInDynamo('@trypennant');
+      const notebookData = await createDoc('@trypennant');
       navigate(`/@trypennant/${notebookData.docID}`);
     } catch (error) {
       console.error('Error creating @trypennant notebook: ', error);

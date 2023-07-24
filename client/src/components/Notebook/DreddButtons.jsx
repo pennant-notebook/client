@@ -1,28 +1,42 @@
-import { AppBar, Toolbar, IconButton, Box, Typography } from '../../utils/MuiImports';
-import { Stack, PlayCircleOutlineTwoTone, Refresh, CircularProgress, Tooltip } from '../../utils/MuiImports';
-import { handleResetContext, handleRunAllCode } from '../../utils/codeHelpers';
-import useProviderContext from '../../contexts/ProviderContext';
 import { useState } from 'react';
 import { useParams } from 'react-router';
+import {
+  Stack,
+  PlayCircleOutlineTwoTone,
+  Refresh,
+  CircularProgress,
+  Tooltip,
+  IconButton
+} from '../../utils/MuiImports';
+import useNotebookContext from '../../contexts/NotebookContext';
+import useProviderContext from '../../contexts/ProviderContext';
+import { handleResetContext, handleRunAllCode } from '../../services/dreddExecutionService';
+import { toast } from 'react-toastify';
 
 const DreddButtons = ({ codeCells }) => {
   const { notebookMetadata } = useProviderContext();
+  const { setAllRunning } = useNotebookContext();
   const { docID } = useParams();
   const [resetting, setResetting] = useState(false);
   const [running, setRunning] = useState(false);
 
   const handleRunAll = async () => {
     setRunning(true);
+    setAllRunning(true);
     const orderedCells = codeCells.sort((a, b) => a.get('pos') - b.get('pos'));
-    handleRunAllCode(docID, orderedCells, notebookMetadata);
-
+    await handleRunAllCode(docID, orderedCells, notebookMetadata);
+    setAllRunning(false);
     setRunning(false);
   };
 
   const handleReset = async () => {
     setResetting(true);
-    handleResetContext(docID, notebookMetadata, codeCells);
+    setAllRunning(true);
+    await handleResetContext(docID, notebookMetadata, codeCells);
+    setAllRunning(false);
     setResetting(false);
+    codeCells.forEach(c => c.get('outputMap').set('status', ''));
+    toast.success('Context successfully reset');
   };
 
   const isDisabledRun = () => {
@@ -32,7 +46,6 @@ const DreddButtons = ({ codeCells }) => {
   const isDisabledReset = () => {
     return running || resetting || codeCells.length < 1;
   };
-
   return (
     <Stack direction='row' spacing={{ xs: 0, sm: 1, md: 2 }}>
       <Tooltip title='Reset'>
@@ -46,7 +59,7 @@ const DreddButtons = ({ codeCells }) => {
       <Tooltip title='Run All'>
         <span>
           <IconButton disabled={isDisabledRun()} onClick={handleRunAll} color='inherit'>
-            {running ? <CircularProgress size={24} sx={{ color: 'lightgray' }} /> : <PlayCircleOutlineTwoTone />}
+            {running ? <CircularProgress size={20} sx={{ color: 'lightgray' }} /> : <PlayCircleOutlineTwoTone />}
           </IconButton>
         </span>
       </Tooltip>

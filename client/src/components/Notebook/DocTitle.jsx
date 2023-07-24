@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -11,31 +11,24 @@ import {
   Typography
 } from '../../utils/MuiImports';
 import { useParams } from 'react-router-dom';
-import { editDocTitleInDynamo, fetchDocFromDynamo } from '../../services/dynamo';
+import { fetchDoc } from '../../services/dynamoFetch';
+import { editDocTitle } from '../../services/dynamoPost';
+
 import useNotebookContext from '../../contexts/NotebookContext';
+import { useQuery } from 'react-query';
 
 const DocTitle = () => {
   const { username, docID } = useParams();
+  const { data: notebook } = useQuery([docID, username], () => fetchDoc(docID, username));
+
   const { handleTitleChange, title } = useNotebookContext();
   const [open, setOpen] = useState(false);
-  const [tempTitle, setTempTitle] = useState('');
-  const [notebook, setNotebook] = useState(null);
 
-  useEffect(() => {
-    async function getNotebook() {
-      const fetchedNotebook = await fetchDocFromDynamo(docID, username);
-      setNotebook(fetchedNotebook);
-      if (fetchedNotebook.title) {
-        handleTitleChange(fetchedNotebook.title);
-      }
-    }
-    getNotebook();
-  }, []);
+  const [tempTitle, setTempTitle] = useState(notebook.title);
 
   const handleEditTitle = async () => {
     try {
-      // const slug = slugify(tempTitle);
-      const newNotebookData = await editDocTitleInDynamo(notebook.docID, tempTitle, username);
+      const newNotebookData = await editDocTitle(notebook.docID, tempTitle, username);
       handleTitleChange(newNotebookData.title);
       setTempTitle('');
       setOpen(false);

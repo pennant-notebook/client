@@ -14,6 +14,8 @@ export { default as Card } from '@mui/material/Card';
 export { default as Grid } from '@mui/material/Grid';
 export { default as AppBar } from '@mui/material/AppBar';
 export { default as Toolbar } from '@mui/material/Toolbar';
+export { default as Avatar } from '@mui/material/Avatar';
+export { default as Badge } from '@mui/material/Badge';
 
 export { default as Dialog } from '@mui/material/Dialog';
 export { default as DialogTitle } from '@mui/material/DialogTitle';

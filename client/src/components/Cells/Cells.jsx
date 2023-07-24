@@ -1,18 +1,17 @@
-import { useState } from 'react';
-
-import { Box, DragIndicator, Stack, Typography } from '../../utils/MuiImports';
-import { DragDropContext, Draggable } from 'react-beautiful-dnd';
+import { useReducer } from 'react';
+import { Box, DragIndicator, Stack } from '../../utils/MuiImports';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import MarkdownCell from '../Markdown/MarkdownCell';
 import CodeCell from '../Code/CodeCell';
 import AddCell from './AddCell';
 import useNotebookContext from '../../contexts/NotebookContext';
 import useProviderContext from '../../contexts/ProviderContext';
-import StrictModeDroppable from './StrictModeDroppable';
+import { CellPosAvatar } from '../UI/StyledBadge';
 
 const Cells = ({ cells, setCells }) => {
-  const { repositionCell } = useNotebookContext();
+  const { repositionCell, lineRefresh, incrementLineRefresh } = useNotebookContext();
   const { provider } = useProviderContext();
-  const [refreshCount, setRefreshCount] = useState(0);
+  const [refreshCount, incrementRefreshCount] = useReducer(count => count + 1, 0);
 
   const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
@@ -31,16 +30,33 @@ const Cells = ({ cells, setCells }) => {
 
     const cell = cells[result.source.index];
     await repositionCell(cell, result.destination.index);
-    setRefreshCount(count => count + 1);
+
+    incrementRefreshCount();
+    incrementLineRefresh();
+  };
+
+  const getStartingLineNumber = index => {
+    const codeCells = cells.filter(c => c.get('type') === 'code');
+
+    const lineCounts = codeCells.map(c => c.get('content').toString().split('\n').length);
+
+    const codeCellIndex = codeCells.findIndex(c => c.get('pos') === index);
+
+    if (codeCellIndex === -1) {
+      return undefined;
+    }
+
+    const totalLineCount = lineCounts.slice(0, codeCellIndex).reduce((a, b) => a + b, 0);
+    return totalLineCount + 1;
   };
 
   return (
-    <Box sx={{ py: 2, width: '80%', mx: 'auto' }}>
+    <Box sx={{ py: 2, width: '75%', mx: 'auto' }}>
       <DragDropContext onDragEnd={onDragEnd}>
-        <StrictModeDroppable droppableId='cells'>
+        <AddCell index={-1} />
+        <Droppable droppableId='cells'>
           {provided => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
-              <AddCell index={-1} />
               {cells &&
                 cells.map((cell, index) => {
                   const id = cell.get('id');
@@ -56,7 +72,7 @@ const Cells = ({ cells, setCells }) => {
                                 <Box className='dragIndicator' {...provided.dragHandleProps}>
                                   <DragIndicator sx={{ opacity: '0.5', mt: 0.5 }} />
                                 </Box>
-                                <Box alignItems='center' sx={{ flexGrow: 1, zIndex: 0 }}>
+                                <Box alignItems='center' sx={{ flexGrow: 1, position: 'relative' }}>
                                   {type === 'markdown' && (
                                     <MarkdownCell
                                       id={id}
@@ -66,7 +82,16 @@ const Cells = ({ cells, setCells }) => {
                                       refreshCount={refreshCount}
                                     />
                                   )}
-                                  {type === 'code' && <CodeCell cellId={id} cell={cell} content={content} />}
+                                  {type === 'code' && (
+                                    <CodeCell
+                                      key={`${id}-${lineRefresh}`}
+                                      cellId={id}
+                                      cell={cell}
+                                      content={content}
+                                      getStartingLineNumber={getStartingLineNumber}
+                                    />
+                                  )}
+                                  <CellPosAvatar pos={cell.get('pos')} />
                                 </Box>
                               </Box>
                             </Stack>
@@ -80,7 +105,7 @@ const Cells = ({ cells, setCells }) => {
               {provided.placeholder}
             </div>
           )}
-        </StrictModeDroppable>
+        </Droppable>
       </DragDropContext>
     </Box>
   );

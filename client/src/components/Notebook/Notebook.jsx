@@ -1,20 +1,26 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import { Box } from '../../utils/MuiImports';
 import Cells from '../Cells/Cells';
 import Navbar from './Navbar';
 import { NotebookContext } from '../../contexts/NotebookContext';
 import useProviderContext from '../../contexts/ProviderContext';
 import { createCell, getUserObjects, generateRandomName, randomColor } from '../../utils/notebookHelpers';
+import { useTheme } from '@mui/material';
 
-const Notebook = ({ docID }) => {
+const Notebook = ({ docID, resourceTitle }) => {
   const { doc, provider, awareness, notebookMetadata } = useProviderContext();
-  const [title, setTitle] = useState(docID);
+
+  const theme = useTheme();
+  const [lineRefresh, incrementLineRefresh] = useReducer(count => count + 1, 0);
+  const [title, setTitle] = useState(resourceTitle || docID);
 
   const cellsArray = doc.getArray('cells');
   const [cellDataArr, setCellDataArr] = useState(cellsArray.toArray());
 
   const [clients, setClients] = useState([]);
   const [hideClients, setHideClients] = useState(true);
+
+  const [allRunning, setAllRunning] = useState(false);
 
   useEffect(() => {
     const cells = doc.getArray('cells');
@@ -29,8 +35,19 @@ const Notebook = ({ docID }) => {
   useEffect(() => {
     if (!awareness) return;
 
-    const color = randomColor();
-    const name = generateRandomName();
+    let color, name;
+
+    const storedUserData = JSON.parse(localStorage.getItem('userData'));
+
+    if (storedUserData && storedUserData.setByUser) {
+      color = storedUserData.color;
+      name = storedUserData.name;
+    } else {
+      color = randomColor();
+      name = generateRandomName();
+      localStorage.setItem('userData', JSON.stringify({ name, color }));
+    }
+
     awareness.setLocalStateField('user', { name, color });
 
     const updateClients = () => {
@@ -54,16 +71,19 @@ const Notebook = ({ docID }) => {
   const deleteCell = async id => {
     const cellIndex = cellsArray.toArray().findIndex(c => c.get('id') === id);
     if (cellIndex !== -1) cellsArray.delete(cellIndex);
+    incrementLineRefresh();
   };
 
   const addCellAtIndex = async (idx, type) => {
     const cell = createCell(type);
+    cell.set('theme', theme.palette.mode);
     if (idx >= cellsArray.length) {
       cellsArray.push([cell]);
     } else {
       cellsArray.insert(idx + 1, [cell]);
     }
     updatePositions();
+    incrementLineRefresh();
   };
 
   const updatePositions = () => {
@@ -86,7 +106,9 @@ const Notebook = ({ docID }) => {
   useEffect(() => {
     const titleObserver = () => {
       const docTitle = notebookMetadata.get('title');
-      setTitle(docTitle ? docTitle.toString() : 'Untitled');
+      const displayTitle = docTitle ? docTitle.toString() : 'Untitled';
+      setTitle(displayTitle);
+      document.title = displayTitle;
     };
 
     if (notebookMetadata) {
@@ -105,7 +127,11 @@ const Notebook = ({ docID }) => {
     repositionCell,
     deleteCell,
     title,
-    handleTitleChange
+    handleTitleChange,
+    allRunning,
+    setAllRunning,
+    lineRefresh,
+    incrementLineRefresh
   };
 
   return (
@@ -118,6 +144,7 @@ const Notebook = ({ docID }) => {
           setClients={setClients}
           hideClients={hideClients}
         />
+
         <Cells cells={cellDataArr} setCells={setCellDataArr} />
       </Box>
     </NotebookContext.Provider>

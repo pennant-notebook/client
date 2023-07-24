@@ -1,17 +1,24 @@
-import logo from '../../assets/pen-navlogo.png';
+import logo from '../../assets/pennant-color.png';
+import darklogo from '../../assets/pennant-gray.png';
 import { AppBar, Toolbar, IconButton, Box, Typography, Stack } from '../../utils/MuiImports';
 import { useNavigate, useParams } from 'react-router';
 import DocTitle from './DocTitle';
 import Clients from '../UI/Awareness/Clients';
 import DreddButtons from './DreddButtons';
 import { updateDisconnectedClient } from '../../utils/awarenessHelpers';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import Avatar from 'react-avatar';
+import { useTheme } from '@mui/material';
 
-const Navbar = ({ codeCells, clients, provider, setClients, hideClients }) => {
+const Navbar = ({ codeCells, clients, provider, setClients, hideClients, title }) => {
   const { username, docID } = useParams();
   const [show, setShow] = useState(true);
+  const [avatar, setAvatar] = useState(null);
+
+  const theme = useTheme();
+  const logoSrc = theme.palette.mode === 'dark' ? darklogo : logo;
 
   const navigate = useNavigate();
 
@@ -19,16 +26,30 @@ const Navbar = ({ codeCells, clients, provider, setClients, hideClients }) => {
     if (docID) {
       const currentClients = updateDisconnectedClient(provider);
       setClients(currentClients);
-      // console.log(currentClients.length);
     }
     navigate(destination);
+  };
+
+  useEffect(() => {
+    if (clients && clients.length > 0) {
+      setAvatar(clients[0]);
+    }
+  }, [clients]);
+
+  const handleAvatarClick = () => {
+    let newName = window.prompt('Enter a new name:');
+    if (newName) {
+      setAvatar(prevAvatar => ({ ...prevAvatar, name: newName }));
+      provider.awareness.setLocalStateField('user', { ...avatar, name: newName, setByUser: true });
+      localStorage.setItem('userData', JSON.stringify({ name: newName, color: avatar.color, setByUser: true }));
+    }
   };
 
   return (
     <AppBar position='sticky' sx={{ backgroundColor: '#34568B' }}>
       <Toolbar
         sx={{
-          width: { sm: '91%', md: '97%', lg: '95%', xl: '96%' },
+          width: { sm: '91%', md: '100%' },
           justifyContent: 'space-between',
           mx: 'auto'
         }}>
@@ -39,8 +60,8 @@ const Navbar = ({ codeCells, clients, provider, setClients, hideClients }) => {
               color='inherit'
               aria-label='logo'
               onClick={() => handleDisconnect(`/`)}
-              sx={{ p: '10px 8px' }}>
-              <img src={logo} width='64px' />
+              sx={{ p: '10px 6px', ml: '4px', mr: '4px' }}>
+              <img src={logoSrc} width='64px' />
             </IconButton>
           </Box>
 
@@ -48,7 +69,7 @@ const Navbar = ({ codeCells, clients, provider, setClients, hideClients }) => {
             <Box id='CLIENTS' sx={{ ml: '6px' }}>
               <IconButton onClick={() => setShow(!show)} sx={{ color: '#adb4e4' }}>
                 {show ? <VisibilityIcon fontSize='small' /> : <VisibilityOffIcon fontSize='small' />}
-                <Typography variant='body1' sx={{ ml: 1, color: 'inherit' }}>
+                <Typography variant='body1' sx={{ ml: 1, color: 'inherit', fontFamily: 'Lato' }}>
                   {`${clients && clients.length} Clients`}
                 </Typography>
               </IconButton>
@@ -56,19 +77,26 @@ const Navbar = ({ codeCells, clients, provider, setClients, hideClients }) => {
           )}
           {!hideClients && <Clients clients={clients} show={show} />}
         </Toolbar>
-        <Box flexGrow={1} /> {/* Spacer */}
-        <Box id='TITLE'>{docID && <DocTitle />}</Box>
-        <Box flexGrow={1} /> {/* Spacer */}
-        <Stack id='DREDD-BUTTONS' direction='row' spacing={0}>
+        <Box flexGrow={1} />
+        <Box id='TITLE' sx={{ ml: { sm: 0, md: 4 } }}>
+          {docID && <DocTitle />}
+          <Typography sx={{ opacity: 0.5, fontSize: '20px' }}>{title && title}</Typography>
+        </Box>
+        <Box flexGrow={1} />
+        <Stack id='DREDD-BUTTONS' direction='row' spacing={0} sx={{ alignItems: 'center' }}>
           <Box>{docID && <DreddButtons codeCells={codeCells} />}</Box>
           <IconButton
             onClick={() => handleDisconnect(`/${username}`)}
             sx={{ color: '#adb4e4' }}
             disabled={!docID || !provider}>
-            <Typography variant='body1' sx={{ marginLeft: 1, color: docID ? '#adb4e4' : 'lightgray' }}>
+            <Typography variant='body1' sx={{ mx: 1, color: docID ? '#adb4e4' : 'lightgray', fontFamily: 'Lato' }}>
               {username}
             </Typography>
           </IconButton>
+
+          {avatar && (
+            <Avatar name={avatar.name} size={32} round='30px' color={avatar.color} onClick={handleAvatarClick} />
+          )}
         </Stack>
       </Toolbar>
     </AppBar>

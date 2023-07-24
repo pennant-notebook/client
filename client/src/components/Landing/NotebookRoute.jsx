@@ -1,55 +1,34 @@
-import { useState, useEffect, Suspense } from 'react';
 import { useParams } from 'react-router-dom';
-import { ProviderContext, initializeProvider } from '../../contexts/ProviderContext';
+import { ProviderContext, useProvider } from '../../contexts/ProviderContext';
 import LoadingSpinner from '../UI/LoadingSpinner';
 import Notebook from '../Notebook/Notebook';
-import { fetchDocFromDynamo } from '../../services/dynamo';
 import ErrorBoundary from '../../ErrorBoundary';
+import { fetchDoc } from '../../services/dynamoFetch';
+import { useQuery } from 'react-query';
 
-export const NotebookRoute = () => {
-  const [notebook, setNotebook] = useState(null);
-  const [contextValue, setContextValue] = useState(null);
-  const [loading, setLoading] = useState(true);
+const NotebookRoute = () => {
   const { username, docID } = useParams();
+  const { data: notebook, loading, error } = useQuery([docID, username], () => fetchDoc(docID, username));
+  const contextValue = useProvider(docID);
 
-  useEffect(() => {
-    const fetchNotebook = async () => {
-      const fetchedNotebook = await fetchDocFromDynamo(docID, username);
-      setNotebook(fetchedNotebook);
-      if (!fetchedNotebook) {
-        setLoading(false);
-      }
-    };
+  if (loading || !notebook) return <LoadingSpinner />;
+  if (error) return 'Error!';
 
-    fetchNotebook();
-  }, [docID]);
+  // if (!notebook) {
+  //   return (
+  //     <div>
+  //       <h2>Notebook not found</h2>
+  //     </div>
+  //   );
+  // }
 
-  useEffect(() => {
-    if (notebook) {
-      const value = initializeProvider(notebook.docID, username);
-      setContextValue(value);
-      setLoading(false);
-    }
-  }, [notebook]);
-
-  if (loading) {
-    return <LoadingSpinner />;
-  }
-
-  if (!contextValue) {
-    return (
-      <div>
-        <h2>Notebook not found</h2>
-      </div>
-    );
-  }
   return (
     <ErrorBoundary>
       <ProviderContext.Provider value={contextValue}>
-        <Suspense fallback={<LoadingSpinner />}>
-          <Notebook docID={docID} />
-        </Suspense>
+        <Notebook docID={docID} resourceTitle={notebook.title} />
       </ProviderContext.Provider>
     </ErrorBoundary>
   );
 };
+
+export default NotebookRoute;

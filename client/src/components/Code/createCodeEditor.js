@@ -3,37 +3,40 @@ import { oneDark } from '@codemirror/theme-one-dark';
 import { EditorView, basicSetup } from 'codemirror';
 import { yCollab } from 'y-codemirror.next';
 import { EditorState } from '@codemirror/state';
-import { defaultKeymap, indentMore, indentLess, indentSelection } from '@codemirror/commands';
-import { keymap } from '@codemirror/view';
-import { autocompletion } from '@codemirror/autocomplete';
+import { defaultKeymap, indentMore, indentLess } from '@codemirror/commands';
+import { keymap, lineNumbers } from '@codemirror/view';
+import { autocompletion, acceptCompletion} from '@codemirror/autocomplete';
+import beautify from 'js-beautify';
 
-const betterTab = ({ state, dispatch }) => {
-  let headPos = state.selection.main.head;
-  let lineContent = state.doc.lineAt(headPos).text;
 
-  if (lineContent.trim() === '') {
-    dispatch({
-      changes: { from: headPos, insert: '  ' },
-      selection: { anchor: headPos + 2 },
-      scrollIntoView: true
-    });
-    return true;
-  } else if (state.selection.ranges.some(r => !r.empty)) {
-    return indentMore(state, dispatch);
-  } else {
-    dispatch({
-      changes: { from: state.selection.main.from, insert: '  ' },
-      selection: { anchor: state.selection.main.from + 2 },
-      scrollIntoView: true
-    });
-    return true;
-  }
-};
+function formatCode(view) {
+  const code = view.state.doc.toString();
+  const formattedCode = beautify.js(code, { 
+    indent_size: 2, 
+    indent_with_tabs: false, 
+    end_with_newline: true, 
+    quote_style: 1
+  });
+  const transaction = view.state.update({
+    changes: { from: 0, to: view.state.doc.length, insert: formattedCode },
+  });
+  view.dispatch(transaction);
+}
 
-const createCodeEditor = (content, awareness, id, handleRunCode) => {
+
+const createCodeEditor = (content, awareness, id, handleRunCode, startingLineNumber) => {
   const customKeymap = keymap.of([
-    { key: 'Alt-Enter', mac: 'Alt-Enter', run: handleRunCode, preventDefault: true },
-    { key: 'Tab', run: betterTab },
+    { key: 'Alt-Enter', mac: 'Mod-Enter', run: handleRunCode, preventDefault: true },
+    {
+      key: 'Shift-F',
+      run: view => {
+        formatCode(view);
+        return true;
+      },
+      preventDefault: true
+    },
+    { key: 'Tab', run: acceptCompletion },
+    { key: 'Tab', run: indentMore },
     { key: 'Shift-Tab', run: indentLess },
     ...defaultKeymap
   ]);
@@ -47,24 +50,47 @@ const createCodeEditor = (content, awareness, id, handleRunCode) => {
       autocompletion(),
       yCollab(content, awareness),
       EditorView.lineWrapping,
+      lineNumbers({
+      formatNumber: (lineNo) => lineNo + startingLineNumber - 1,
+    }),
       EditorView.theme({
+        '&, .cm-scroller, .cm-content, .cm-gutter': {
+          overflow: 'visible !important'
+        },
         '.cm-content, .cm-gutter': {
           marginTop: '8px',
           marginBottom: '8px',
           fontSize: '15px'
         },
         '.cm-tooltip': {
-          zIndex: 12
+          zIndex: 1000
+        },
+        '.cm-scroller': {
+          minHeight: '50px'
         }
       }),
       oneDark
     ]
   });
 
-  return new EditorView({
+  let view = new EditorView({
     state,
     parent: document.querySelector('#editor-' + id)
   });
+
+  return view;
 };
+
+export const updateLineNumbers = (view, startingLineNumber) => {
+  const transaction = view.state.update({
+    reconfigure: {
+      [lineNumbers()]: lineNumbers({
+        formatNumber: (lineNo) => lineNo + startingLineNumber - 1,
+      })
+    }
+  });
+  view.dispatch(transaction);
+};
+
 
 export default createCodeEditor;

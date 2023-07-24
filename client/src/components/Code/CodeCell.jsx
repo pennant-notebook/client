@@ -1,64 +1,69 @@
 import { Box, Stack, Typography } from '../../utils/MuiImports';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import useProviderContext from '../../contexts/ProviderContext';
 import useNotebookContext from '../../contexts/NotebookContext';
 import CodeToolbar from './CodeToolbar';
-import createCodeEditor from './createCodeEditor';
-import { handleDredd, updateMetadata } from '../../utils/codeHelpers';
+import createCodeEditor, { updateLineNumbers } from './createCodeEditor';
+import { handleDredd, updateMetadata } from '../../services/dreddExecutionService';
+import StyledBadge from '../UI/StyledBadge';
 
-const CodeCell = ({ cellId, cell, content }) => {
+const CodeCell = ({ cellId, cell, content, getStartingLineNumber }) => {
   const { awareness, notebookMetadata, docID } = useProviderContext();
-  const { deleteCell } = useNotebookContext();
+  const { deleteCell, allRunning } = useNotebookContext();
+
   const cellMetadata = cell.get('metaData');
   const outputMap = cell.get('outputMap');
 
   const [cellExeCount, setCellExeCount] = useState(cellMetadata.get('exeCount'));
-  const [output, setOutput] = useState(outputMap.get('stdout'.split('\n')));
+  const [output, setOutput] = useState(outputMap.get('stdout'));
+  const [status, setStatus] = useState(outputMap.get('status'));
+
   const [processing, setProcessing] = useState(false);
   const editorRef = useRef(null);
+
+  const handleRunCode = useCallback(async () => {
+    setProcessing(true);
+    let response;
+    try {
+      response = await handleDredd(docID, cellId, cell.get('content').toString(), cell.get('outputMap'));
+    } catch (error) {
+      console.log(error);
+    }
+    outputMap.set('stdout', response.output);
+    outputMap.set('status', response.type);
+
+    setProcessing(false);
+    updateMetadata(cellMetadata, notebookMetadata);
+  }, []);
 
   useEffect(() => {
     const editorContainer = document.querySelector(`#editor-${cellId}`);
     if (editorContainer && editorContainer.firstChild) {
       editorContainer.removeChild(editorContainer.firstChild);
     }
-
-    editorRef.current = createCodeEditor(content, awareness, cellId, handleRunCode);
+    const startingLineNumber = getStartingLineNumber(cell.get('pos'));
+    editorRef.current = createCodeEditor(content, awareness, cellId, handleRunCode, startingLineNumber);
     editorContainer.appendChild(editorRef.current.dom);
+
+    updateLineNumbers(editorRef.current, startingLineNumber);
   }, [content]);
 
   useEffect(() => {
     if (outputMap) {
       outputMap.observe(() => {
         setOutput(outputMap.get('stdout'));
+        setStatus(outputMap.get('status') || 'output');
       });
     }
 
     cellMetadata.observe(e => {
       e.changes.keys.forEach((change, key) => {
         if (key === 'exeCount') {
-          setCellExeCount(cellMetadata.get('exeCount'));
-        } else if (key === 'isRunning') {
-          setProcessing(cellMetadata.get('isRunning'));
+          setCellExeCount(cellMetadata.get('exeCount') || '');
         }
       });
     });
   }, [outputMap, cellMetadata]);
-
-  const handleRunCode = async () => {
-    setProcessing(true);
-    cellMetadata.set('isRunning', true);
-    updateMetadata(cellMetadata, notebookMetadata);
-    let response;
-    try {
-      response = await handleDredd(docID, cellId, cell.get('content').toString());
-    } catch (error) {
-      console.log(error);
-    }
-    outputMap.set('stdout', response);
-    cellMetadata.set('isRunning', false);
-    setProcessing(false);
-  };
 
   return (
     <Box
@@ -68,13 +73,17 @@ const CodeCell = ({ cellId, cell, content }) => {
         width: '100%'
       }}>
       <Stack direction='row' sx={{ width: '100%', alignItems: 'center' }}>
-        <Typography sx={{ fontSize: '0.8rem', flexShrink: 0, mr: 2, textAlign: 'center' }} className='exeCount'>
-          {cellExeCount || '*'}
-        </Typography>
+        <StyledBadge badgeContent={processing || allRunning ? '*' : cellExeCount || ' '} status={status} />
         <Box className='codecell-container'>
-          <CodeToolbar onClickRun={handleRunCode} id={cellId} onDelete={deleteCell} processing={processing} />
+          <CodeToolbar
+            onClickRun={handleRunCode}
+            id={cellId}
+            onDelete={deleteCell}
+            processing={processing}
+            allRunning={allRunning}
+          />
           <Box id={`editor-${cellId}`}></Box>
-          <Box className='codecell-output' sx={{ py: output ? '4px' : 0 }}>
+          <Box className={`codecell-output ${status === 'error' ? 'error' : ''}`} sx={{ py: output ? '4px' : 0 }}>
             {processing ? (
               <Typography sx={{ ml: '5px', color: '#cfd1d8' }}>Processing...</Typography>
             ) : (

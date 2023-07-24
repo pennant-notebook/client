@@ -28,6 +28,11 @@
 .button-4:hover {
   background-color: #f3f4f6;
   text-decoration: none;
+}
+
+.button-4.dark:hover {
+  background-color: gray;
+  text-decoration: none;
   transition-duration: 0.1s;
 }
 
