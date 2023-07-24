@@ -8,7 +8,7 @@
 .codecell-container {
   mask-image: radial-gradient(circle, black 100%, transparent 100%);
   width: 100%;
-  border: 2px solid dimgray;
+  border: 1px solid dimgray;
   border-radius: 5px;
   background-color: #3d414d;
 }

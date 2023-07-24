@@ -4,7 +4,11 @@
 @import url('./buttons.css');
 
 .main-content {
-  padding-bottom: 60px; /* same height as client avatars footer */
+  padding-bottom: 60px;
+  /* display: flex;
+  flex-direction: column; */
+  align-items: center;
+  margin-inline: auto;
 }
 
 div[id*='tippy'] > div[class*='tippy-box'][data-placement='left'] {
@@ -97,4 +101,33 @@ div[data-theme='dark'].blocknote-editor code {
 div[data-theme='light'].blocknote-editor code {
   color: #474440 !important;
   background-color: #bfcad0 !important;
+}
+
+.landing .workspace-button,
+.landing .explore-button {
+  font-family: 'Lato';
+  font-size: 1.5rem;
+  font-weight: normal;
+  padding: 10px 50px;
+  width: 50vw;
+  max-width: 400px;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.landing .workspace-button {
+  background-color: #dbc6f2;
+}
+
+.landing .explore-button {
+  background-color: #7288d7;
+}
+
+.landing .workspace-button:hover {
+  background-color: #f4936f;
+}
+
+.landing .explore-button:hover {
+  background-color: #a9e4d6;
 }

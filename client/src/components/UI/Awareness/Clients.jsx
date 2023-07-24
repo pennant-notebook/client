@@ -1,11 +1,12 @@
 import Avatar from 'react-avatar';
-import { Typography, Box } from '../../../utils/MuiImports';
+import { Box, useTheme } from '../../../utils/MuiImports';
 
 const Clients = ({ clients, show }) => {
+  const theme = useTheme().palette.mode;
   return (
     <Box>
       <Box
-        className='avatars-row'
+        className={`avatars-row ${theme}`}
         sx={{ zIndex: 10, minWidth: '140px', opacity: show ? '0.95' : '0', whiteSpace: 'nowrap' }}>
         {show && (
           <Box sx={{ display: 'flex', flexDirection: 'row', pr: 1 }}>

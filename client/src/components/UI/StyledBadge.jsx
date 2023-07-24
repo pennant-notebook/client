@@ -1,7 +1,8 @@
-import { useTheme } from '@mui/material';
-import { Box, Badge, Avatar } from '../../utils/MuiImports';
+import { Box, Badge, Avatar, useTheme } from '../../utils/MuiImports';
 
 const StyledBadge = ({ badgeContent, status }) => {
+  const theme = useTheme().palette.mode;
+
   return (
     <Box sx={{ ml: 1.5, mr: 2.6, mb: 0.5 }}>
       <Badge
@@ -9,9 +10,9 @@ const StyledBadge = ({ badgeContent, status }) => {
         sx={{
           '.MuiBadge-badge': {
             borderRadius: '3px',
-            backgroundColor: status === 'error' ? 'crimson' : '#eff1f3',
-            border: '2px solid gray',
-            color: 'black',
+            backgroundColor: status === 'error' ? 'crimson' : theme === 'dark' ? '#282c34' : '#eff1f3',
+            border: theme === 'dark' ? '2px solid #2c3032' : '2px solid #dbd3d8',
+            color: theme === 'dark' ? '#fff' : '#000',
             width: badgeContent ? '22px' : '18px',
             minWidth: '18px',
             height: '24px',

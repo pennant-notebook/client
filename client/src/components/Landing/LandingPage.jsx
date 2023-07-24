@@ -1,11 +1,13 @@
 import bigLogo from '../../assets/pennant-color.png';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TextField, Box, Typography, Button, Grid } from '../../utils/MuiImports';
+import { TextField, Box, Typography, Button, Grid, IconButton, Stack } from '../../utils/MuiImports';
 import { createDoc, createUser } from '../../services/dynamoPost';
+import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 
 const LandingPage = () => {
   const [username, setUsername] = useState('');
+  const [showTextField, setShowTextField] = useState(false);
   const navigate = useNavigate();
   document.title = 'Pennant';
 
@@ -29,68 +31,92 @@ const LandingPage = () => {
 
   return (
     <Box
+      className='landing'
       sx={{
         textAlign: 'center',
-        height: '75vh',
-        paddingY: '25vh',
-        backgroundColor: 'rgb(35, 70, 89)'
+        height: '100vh',
+        backgroundColor: '#282c34',
+        paddingTop: '10%'
       }}>
       <img src={bigLogo} alt='logo' style={{ marginBottom: '3vh', width: '30%' }} />
-      <Typography variant='h2' sx={{ marginBottom: 3, color: '#fff' }}>
+      <Typography variant='h2' sx={{ marginBottom: 4, color: '#fff', fontFamily: 'Fira Code' }}>
         Welcome to Pennant
       </Typography>
-      <Grid container direction='row' spacing={2} justifyContent='center' alignItems='center'>
-        <Grid item>
-          <TextField
-            variant='outlined'
-            value={username}
-            onChange={e => setUsername(e.target.value)}
-            label='Enter your username'
-            onKeyDown={e => {
-              if (e.key === 'Enter') handleEnter();
-            }}
-            sx={{
-              width: '35vw',
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': {
-                  borderColor: '#fff'
-                },
-                '&:hover fieldset': {
-                  borderColor: '#ddd'
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: '#ddd'
-                }
-              },
-              '& .MuiInputBase-input': {
-                color: '#fff'
-              },
-              '& .MuiFormLabel-root': {
-                color: '#ddd'
-              },
-              '& .MuiFormLabel-root.Mui-focused': {
-                color: '#ddd'
-              }
-            }}
-          />
-        </Grid>
-        <Grid item>
-          <Button
-            variant='contained'
-            color='secondary'
-            onClick={handleEnter}
-            style={{ backgroundColor: '#ff9800', color: '#fff' }}>
-            Join or Create Workspace
+
+      <Box
+        component='form'
+        sx={{
+          '& .MuiTextField-root': { width: '45ch' },
+          '& .MuiButton-root': { width: '45ch' }
+        }}
+        noValidate
+        autoComplete='off'>
+        <Stack spacing={2.5} justifyContent='center' alignItems='center'>
+          <Stack direction='row' spacing={2} sx={{ ml: showTextField ? 8 : 0 }}>
+            {showTextField ? (
+              <Stack direction='row' sx={{ alignItems: 'center' }}>
+                <TextField
+                  fullWidth
+                  variant='outlined'
+                  value={username}
+                  onChange={e => setUsername(e.target.value)}
+                  label='Enter workspace name'
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') handleEnter();
+                  }}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      '& fieldset': {
+                        borderColor: '#fff',
+                        borderWidth: '2px'
+                      },
+                      '&:hover fieldset': {
+                        borderColor: '#ddd',
+                        borderWidth: '2px'
+                      },
+                      '&.Mui-focused fieldset': {
+                        borderColor: '#ddd',
+                        borderWidth: '2px'
+                      }
+                    },
+                    '& .MuiInputBase-input': {
+                      color: '#fff',
+                      fontSize: '1.35rem'
+                    },
+                    '& .MuiInputLabel-root': {
+                      color: '#ddd',
+                      fontSize: '1.2rem'
+                    },
+                    '& .MuiInputLabel-root.Mui-focused': {
+                      color: '#ddd'
+                    },
+                    '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
+                      transform: 'translate(14px, -8px) scale(0.64)'
+                    }
+                  }}
+                />
+                <IconButton
+                  onClick={handleEnter}
+                  sx={{
+                    backgroundColor: '#ff9800',
+                    color: '#fff',
+                    ml: 2,
+                    '&:hover': { backgroundColor: '#ffad33' }
+                  }}>
+                  <ArrowRightAltIcon fontSize='large' />
+                </IconButton>
+              </Stack>
+            ) : (
+              <Button variant='contained' onClick={() => setShowTextField(true)} className='workspace-button'>
+                Join or Create Workspace
+              </Button>
+            )}
+          </Stack>
+          <Button variant='contained' onClick={handleTry} className='explore-button'>
+            Explore Demo Notebook
           </Button>
-        </Grid>
-      </Grid>
-      <Button
-        variant='contained'
-        color='primary'
-        onClick={handleTry}
-        sx={{ marginTop: 2, backgroundColor: '#4caf50', color: '#fff' }}>
-        Explore Demo Notebook
-      </Button>
+        </Stack>
+      </Box>
     </Box>
   );
 };

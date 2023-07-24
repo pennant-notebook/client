@@ -1,6 +1,6 @@
 import logo from '../../assets/pennant-color.png';
 import darklogo from '../../assets/pennant-gray.png';
-import { AppBar, Toolbar, IconButton, Box, Typography, Stack } from '../../utils/MuiImports';
+import { AppBar, Toolbar, IconButton, Box, Typography, Stack, useTheme } from '../../utils/MuiImports';
 import { useNavigate, useParams } from 'react-router';
 import DocTitle from './DocTitle';
 import Clients from '../UI/Awareness/Clients';
@@ -10,7 +10,6 @@ import { useEffect, useState } from 'react';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import Avatar from 'react-avatar';
-import { useTheme } from '@mui/material';
 
 const Navbar = ({ codeCells, clients, provider, setClients, hideClients, title }) => {
   const { username, docID } = useParams();
@@ -49,24 +48,22 @@ const Navbar = ({ codeCells, clients, provider, setClients, hideClients, title }
     <AppBar position='sticky' sx={{ backgroundColor: '#34568B' }}>
       <Toolbar
         sx={{
-          width: { sm: '91%', md: '100%' },
-          justifyContent: 'space-between',
-          mx: 'auto'
+          width: '100%',
+          justifyContent: 'space-around'
         }}>
-        <Toolbar id='logo-clients' sx={{ textAlign: 'left' }}>
+        <Toolbar id='logo-clients' sx={{ width: { xs: '20%', sm: '15%', md: '20%', xl: '12.5%' } }}>
           <Box sx={{ minWidth: '60px', ml: { xs: '-20px', sm: '-42px', md: '-36px', lg: '-40px' } }}>
             <IconButton
               edge='start'
               color='inherit'
               aria-label='logo'
               onClick={() => handleDisconnect(`/`)}
-              sx={{ p: '10px 6px', ml: '4px', mr: '4px' }}>
+              sx={{ p: '10px 20px' }}>
               <img src={logoSrc} width='64px' />
             </IconButton>
           </Box>
-
           {docID && (
-            <Box id='CLIENTS' sx={{ ml: '6px' }}>
+            <Box id='CLIENTS'>
               <IconButton onClick={() => setShow(!show)} sx={{ color: '#adb4e4' }}>
                 {show ? <VisibilityIcon fontSize='small' /> : <VisibilityOffIcon fontSize='small' />}
                 <Typography variant='body1' sx={{ ml: 1, color: 'inherit', fontFamily: 'Lato' }}>
@@ -77,13 +74,17 @@ const Navbar = ({ codeCells, clients, provider, setClients, hideClients, title }
           )}
           {!hideClients && <Clients clients={clients} show={show} />}
         </Toolbar>
-        <Box flexGrow={1} />
-        <Box id='TITLE' sx={{ ml: { sm: 0, md: 4 } }}>
+
+        <Box id='TITLE' sx={{ width: { xs: '60%', sm: '70%', md: '60%', xl: '75%' }, mx: 'auto' }}>
           {docID && <DocTitle />}
           <Typography sx={{ opacity: 0.5, fontSize: '20px' }}>{title && title}</Typography>
         </Box>
-        <Box flexGrow={1} />
-        <Stack id='DREDD-BUTTONS' direction='row' spacing={0} sx={{ alignItems: 'center' }}>
+
+        <Stack
+          id='DREDD-BUTTONS'
+          direction='row'
+          spacing={0}
+          sx={{ alignItems: 'center', width: { xs: '20%', sm: '15%', md: '20%', xl: '12.5%' } }}>
           <Box>{docID && <DreddButtons codeCells={codeCells} />}</Box>
           <IconButton
             onClick={() => handleDisconnect(`/${username}`)}
@@ -95,7 +96,9 @@ const Navbar = ({ codeCells, clients, provider, setClients, hideClients, title }
           </IconButton>
 
           {avatar && (
-            <Avatar name={avatar.name} size={32} round='30px' color={avatar.color} onClick={handleAvatarClick} />
+            <div className='navbar-avatar'>
+              <Avatar name={avatar.name} size={32} round='30px' color={avatar.color} onClick={handleAvatarClick} />
+            </div>
           )}
         </Stack>
       </Toolbar>

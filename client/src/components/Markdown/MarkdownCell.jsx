@@ -3,20 +3,18 @@ import { Box } from '../../utils/MuiImports';
 import useNotebookContext from '../../contexts/NotebookContext';
 import MarkdownToolbar from './MarkdownToolbar';
 import { getUserObjects } from '../../utils/notebookHelpers';
-
 import MarkdownEditor from './MarkdownEditor';
 import useProviderContext from '../../contexts/ProviderContext';
 import '@blocknote/core/style.css';
-import { useTheme } from '@mui/material';
 
 const MarkdownCell = ({ id, content, cell, refreshCount }) => {
   const { provider, awareness } = useProviderContext();
   const { deleteCell } = useNotebookContext();
+  const [theme, setTheme] = useState(cell.get('theme').toString());
   const cellRef = useRef(0);
+
   const users = getUserObjects(awareness.getStates());
   const currentUser = users[0];
-  const globalTheme = useTheme();
-  const [theme, setTheme] = useState(cell.get('theme').toString());
 
   const toggleTheme = () => {
     setTheme(prev => {

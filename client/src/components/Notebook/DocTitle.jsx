@@ -39,7 +39,7 @@ const DocTitle = () => {
 
   return (
     <Box className='notebook-title'>
-      <Box onClick={() => setOpen(true)} sx={{ ml: { xs: 3, sm: 0, lg: 2, xl: 4 } }}>
+      <Box onClick={() => setOpen(true)}>
         <Typography sx={{ opacity: 0.5, fontSize: '20px' }}>
           {title === notebook?.docID ? 'untitled' : title}
         </Typography>

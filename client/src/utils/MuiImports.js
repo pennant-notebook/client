@@ -33,3 +33,5 @@ export { default as Refresh } from '@mui/icons-material/Refresh';
 export { default as MenuIcon } from '@mui/icons-material/Menu';
 export { default as Edit } from '@mui/icons-material/Edit';
 export { default as CreateTwoTone } from '@mui/icons-material/CreateTwoTone';
+
+export { default as useTheme } from '@mui/material/styles/useTheme';

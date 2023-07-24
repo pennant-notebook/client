@@ -1,11 +1,10 @@
 import { useEffect, useReducer, useState } from 'react';
-import { Box } from '../../utils/MuiImports';
+import { Box, useTheme } from '../../utils/MuiImports';
 import Cells from '../Cells/Cells';
 import Navbar from './Navbar';
 import { NotebookContext } from '../../contexts/NotebookContext';
 import useProviderContext from '../../contexts/ProviderContext';
 import { createCell, getUserObjects, generateRandomName, randomColor } from '../../utils/notebookHelpers';
-import { useTheme } from '@mui/material';
 
 const Notebook = ({ docID, resourceTitle }) => {
   const { doc, provider, awareness, notebookMetadata } = useProviderContext();

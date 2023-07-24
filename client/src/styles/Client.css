@@ -16,6 +16,10 @@
   opacity: 0.5;
 }
 
+.avatars-row.dark {
+  background-color: #5a5a5a;
+}
+
 .client-avatar {
   display: flex;
   flex-direction: column;
@@ -24,4 +28,16 @@
   font-size: 0.7em;
 
   margin-inline: 16px;
+}
+
+.navbar-avatar {
+  cursor: pointer;
+  font-family: 'Lato';
+  border: 1px solid transparent;
+}
+
+.navbar-avatar:hover {
+  opacity: 0.7;
+  border: 1px solid #e0e0e0;
+  border-radius: 30px;
 }

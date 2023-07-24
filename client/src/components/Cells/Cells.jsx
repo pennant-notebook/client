@@ -1,17 +1,18 @@
-import { useReducer } from 'react';
-import { Box, DragIndicator, Stack } from '../../utils/MuiImports';
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
-import MarkdownCell from '../Markdown/MarkdownCell';
-import CodeCell from '../Code/CodeCell';
+import { useReducer, useState } from 'react';
+import { Box } from '../../utils/MuiImports';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import AddCell from './AddCell';
 import useNotebookContext from '../../contexts/NotebookContext';
-import useProviderContext from '../../contexts/ProviderContext';
-import { CellPosAvatar } from '../UI/StyledBadge';
+import CellRow from './CellRow';
 
 const Cells = ({ cells, setCells }) => {
-  const { repositionCell, lineRefresh, incrementLineRefresh } = useNotebookContext();
-  const { provider } = useProviderContext();
+  const { repositionCell, incrementLineRefresh } = useNotebookContext();
   const [refreshCount, incrementRefreshCount] = useReducer(count => count + 1, 0);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const onDragStart = () => {
+    setIsDragging(true);
+  };
 
   const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
@@ -21,6 +22,8 @@ const Cells = ({ cells, setCells }) => {
   };
 
   const onDragEnd = async result => {
+    setIsDragging(false);
+
     if (!result.destination) {
       return;
     }
@@ -52,54 +55,22 @@ const Cells = ({ cells, setCells }) => {
 
   return (
     <Box sx={{ py: 2, width: '75%', mx: 'auto' }}>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <AddCell index={-1} />
+      <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
+        <AddCell index={-1} isDragging={isDragging} />
         <Droppable droppableId='cells'>
-          {provided => (
+          {(provided, snapshot) => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
               {cells &&
                 cells.map((cell, index) => {
-                  const id = cell.get('id');
-                  const type = cell.get('type');
-                  const content = cell.get('content');
                   return (
-                    <Box width='100%' key={id}>
-                      <Draggable key={id} draggableId={id.toString()} index={index}>
-                        {provided => (
-                          <Box ref={provided.innerRef} {...provided.draggableProps}>
-                            <Stack direction='row' alignItems='center' sx={{ my: '0px' }}>
-                              <Box display='flex' alignItems='center' width='100%'>
-                                <Box className='dragIndicator' {...provided.dragHandleProps}>
-                                  <DragIndicator sx={{ opacity: '0.5', mt: 0.5 }} />
-                                </Box>
-                                <Box alignItems='center' sx={{ flexGrow: 1, position: 'relative' }}>
-                                  {type === 'markdown' && (
-                                    <MarkdownCell
-                                      id={id}
-                                      content={content}
-                                      provider={provider}
-                                      cell={cell}
-                                      refreshCount={refreshCount}
-                                    />
-                                  )}
-                                  {type === 'code' && (
-                                    <CodeCell
-                                      key={`${id}-${lineRefresh}`}
-                                      cellId={id}
-                                      cell={cell}
-                                      content={content}
-                                      getStartingLineNumber={getStartingLineNumber}
-                                    />
-                                  )}
-                                  <CellPosAvatar pos={cell.get('pos')} />
-                                </Box>
-                              </Box>
-                            </Stack>
-                          </Box>
-                        )}
-                      </Draggable>
-                      <AddCell index={index} type={type} />
-                    </Box>
+                    <CellRow
+                      key={cell.get('id')}
+                      cell={cell}
+                      index={index}
+                      refreshCount={refreshCount}
+                      getStartingLineNumber={getStartingLineNumber}
+                      isDragging={isDragging}
+                    />
                   );
                 })}
               {provided.placeholder}

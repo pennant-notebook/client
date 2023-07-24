@@ -1,12 +1,11 @@
 import { useQuery } from 'react-query';
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
-import { Box, TextField, Button, Grid, Card, Typography } from '../../utils/MuiImports';
+import { Box, TextField, Button, Grid, Card, Typography, useTheme } from '../../utils/MuiImports';
 import LoadingSpinner from '../UI/LoadingSpinner';
 import Navbar from '../Notebook/Navbar';
 import { createDoc } from '../../services/dynamoPost';
 import { fetchNotebooks } from '../../services/dynamoFetch';
-import { useTheme } from '@emotion/react';
 
 export const UserDashboardContent = ({ username, notebooks }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -29,8 +28,6 @@ export const UserDashboardContent = ({ username, notebooks }) => {
     const docID = newNotebook.docID;
     navigate(`/${username}/${docID}`);
   };
-
-  console.log(theme);
 
   return (
     <Box>
