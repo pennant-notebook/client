@@ -12,6 +12,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          repository: PennantHQ/pennant-ui
+          ref: global-linecount-code-status
 
       - name: Install Node.js
         uses: actions/setup-node@v3
@@ -22,7 +25,7 @@ jobs:
         run: cd pennant-ui/client && npm ci
 
       - name: Build client
-        run: cd pennant-ui/client && NODE_OPTIONS='--max-old-space-size=4096' npm run build
+        run: NODE_OPTIONS='--max-old-space-size=4096' npm run build
 
       - name: Install dependencies (server)
         run: cd pennant-ui/server && npm ci
