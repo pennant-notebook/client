@@ -30,6 +30,13 @@ jobs:
       - name: Install dependencies (server)
         run: cd server && npm ci
 
+      - name: Prepare SSH key
+        run: |
+          mkdir -p ~/.ssh/ && touch ~/.ssh/known_hosts
+          ssh-keyscan ${{ secrets.DIGITALOCEAN_HOST }} >> ~/.ssh/known_hosts
+          eval $(ssh-agent)
+          ssh-add - <<< "${{ secrets.DIGITALOCEAN_SSH_KEY }}"
+
       - name: Deploy to DigitalOcean
         uses: appleboy/ssh-action@master
         with:
@@ -38,5 +45,5 @@ jobs:
           key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
           script: |
             rm -rf /pennant-ui/server/dist
-            cp -r /pennant-ui/client/dist /pennant-ui/server/dist
+            scp -r ./client/dist/ marwan@192.241.132.27:/pennant-ui/server/
             pm2 restart 1
