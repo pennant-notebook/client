@@ -1,9 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogContentText,
   TextField,
   DialogActions,
   Button,
@@ -24,18 +23,21 @@ const DocTitle = () => {
   const { handleTitleChange, title } = useNotebookContext();
   const [open, setOpen] = useState(false);
 
-  const [tempTitle, setTempTitle] = useState(notebook.title);
+  const [tempTitle, setTempTitle] = useState(notebook?.title || '');
 
   const handleEditTitle = async () => {
     try {
       const newNotebookData = await editDocTitle(notebook.docID, tempTitle, username);
       handleTitleChange(newNotebookData.title);
-      setTempTitle('');
       setOpen(false);
     } catch (error) {
       console.error('Error updating notebook title:', error);
     }
   };
+
+  useEffect(() => {
+    setTempTitle(notebook?.title || '');
+  }, [notebook?.title]);
 
   return (
     <Box className='notebook-title'>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { IconButton, Box, Typography, Stack, ArrowBack, FolderOpen, Button } from '../../../utils/MuiImports';
 import { Brightness4, Brightness7, useTheme, Edit, Folder, Drawer } from '../../../utils/MuiImports';
 import { getClientFromLocalStorage } from '../../../utils/awarenessHelpers';
@@ -33,10 +33,10 @@ const StyledButton = styled(Button)({
 const ClientDrawer = ({ handleDisconnect, clients = [] }) => {
   const [open, setOpen] = useState(false);
   const [showNotebooks, setShowNotebooks] = useState(false);
-  const { username, docID } = useParams();
+  const { username } = useParams();
   const [avatar, setAvatar] = useState(clients[0]);
   const { data: notebooks } = useQuery(['notebooks', username], () => fetchNotebooks(username));
-
+  const { provider } = useProviderContext();
   const {
     custom: { currTheme, toggleTheme }
   } = useTheme();
@@ -55,14 +55,19 @@ const ClientDrawer = ({ handleDisconnect, clients = [] }) => {
   };
 
   useEffect(() => {
-    if (clients.length > 0) {
+    if (clients && clients.length > 0) {
       setAvatar(clients[0]);
+      // console.log('setting avatar from clients', clients[0]);
+    } else {
+      const storedClient = getClientFromLocalStorage();
+      // console.log('setting avatar from local storage', storedClient);
+      setAvatar(storedClient);
     }
   }, [clients]);
 
   return (
     <Box sx={{ alignItems: 'center' }}>
-      {avatar && docID && !open ? (
+      {avatar && !open ? (
         <IconButton onClick={() => setOpen(true)} sx={{ mr: 1 }}>
           <Avatar
             name={avatar.name}

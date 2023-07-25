@@ -26,18 +26,23 @@ export const getCurrentClient = provider => {
   return current;
 };
 
+export const createClientAndStoreInLocalStorage = () => {
+  const color = randomColor();
+  const name = generateRandomName();
+  localStorage.setItem('userData', JSON.stringify({ name, color }));
+  return { name, color };
+};
+
 export const getClientFromLocalStorage = () => {
   let color, name;
 
   const storedUserData = JSON.parse(localStorage.getItem('userData'));
-
   if (storedUserData && storedUserData.setByUser) {
     color = storedUserData.color;
     name = storedUserData.name;
+    return { name, color };
   } else {
-    color = randomColor();
-    name = generateRandomName();
-    localStorage.setItem('userData', JSON.stringify({ name, color }));
+    const newClient = createClientAndStoreInLocalStorage();
+    return newClient;
   }
-  return { name, color };
 };

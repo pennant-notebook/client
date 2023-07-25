@@ -4,21 +4,19 @@ import Cells from '../Cells/Cells';
 import Navbar from './Navbar';
 import { NotebookContext } from '../../contexts/NotebookContext';
 import useProviderContext from '../../contexts/ProviderContext';
-import { createCell, getUserObjects, generateRandomName, randomColor } from '../../utils/notebookHelpers';
+import { createCell, getUserObjects } from '../../utils/notebookHelpers';
 import { getClientFromLocalStorage } from '../../utils/awarenessHelpers';
 
 const Notebook = ({ docID, resourceTitle }) => {
   const { doc, provider, awareness, notebookMetadata } = useProviderContext();
 
-  const [lineRefresh, incrementLineRefresh] = useReducer(count => count + 1, 0);
   const [title, setTitle] = useState(resourceTitle || docID);
-
   const cellsArray = doc.getArray('cells');
   const [cellDataArr, setCellDataArr] = useState(cellsArray.toArray());
 
   const [clients, setClients] = useState([]);
-  const [hideClients, setHideClients] = useState(false);
 
+  const [lineRefresh, incrementLineRefresh] = useReducer(count => count + 1, 0);
   const [allRunning, setAllRunning] = useState(false);
 
   useEffect(() => {
@@ -42,11 +40,6 @@ const Notebook = ({ docID, resourceTitle }) => {
       const states = Array.from(awareness.getStates());
       const clientObjects = getUserObjects(states);
       setClients(clientObjects);
-      // if (states.length > 1) {
-      //   setHideClients(false);
-      // } else {
-      //   setHideClients(true);
-      // }
     };
 
     awareness.on('update', updateClients);
@@ -124,13 +117,7 @@ const Notebook = ({ docID, resourceTitle }) => {
   return (
     <NotebookContext.Provider value={contextValue}>
       <Box className='main-content'>
-        <Navbar
-          codeCells={codeCellsForDredd}
-          provider={provider}
-          clients={clients}
-          setClients={setClients}
-          hideClients={hideClients}
-        />
+        <Navbar codeCells={codeCellsForDredd} provider={provider} clients={clients} setClients={setClients} />
 
         <Cells cells={cellDataArr} setCells={setCellDataArr} />
       </Box>

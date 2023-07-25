@@ -8,14 +8,12 @@ import DreddButtons from './DreddButtons';
 import { updateDisconnectedClient } from '../../utils/awarenessHelpers';
 import { useState } from 'react';
 import ClientDrawer from '../UI/Awareness/ClientDrawer';
-import { Visibility, VisibilityOff } from '../../utils/MuiImports';
 
-const Navbar = ({ codeCells, clients, provider, setClients, hideClients }) => {
+const Navbar = ({ codeCells, clients, provider, setClients }) => {
   const { username, docID } = useParams();
-  const [show, setShow] = useState(true);
   const navigate = useNavigate();
   const {
-    custom: { currTheme, toggleTheme }
+    custom: { currTheme }
   } = useTheme();
 
   const handleDisconnect = destination => {
@@ -49,24 +47,10 @@ const Navbar = ({ codeCells, clients, provider, setClients, hideClients }) => {
           </Box>
 
           {docID && (
-            <Stack
-              id='CLIENTS'
-              sx={{ mx: { xs: 1, sm: 2, md: 3, lg: 3.5 } }}
-              direction={{ xs: 'column', xm: 'row', md: 'row' }}>
-              {/* <IconButton onClick={() => setShow(!show)} sx={{ color: '#adb4e4' }}>
-                {show ? <Visibility fontSize='small' /> : <VisibilityOff fontSize='small' />}
-                <Typography
-                  sx={{
-                    ml: 2,
-                    color: 'inherit',
-                    fontFamily: 'Lato'
-                  }}>
-                  {`${clients && clients.length} client${clients.length > 1 ? 's' : ''}`}
-                </Typography>
-              </IconButton> */}
-            </Stack>
+            <Box id='CLIENTS' sx={{ ml: 4 }}>
+              <Clients clients={clients} />
+            </Box>
           )}
-          {!hideClients && <Clients clients={clients} show={show} />}
         </Box>
 
         <Box sx={{ display: 'flex', width: '100%' }}>
@@ -79,7 +63,7 @@ const Navbar = ({ codeCells, clients, provider, setClients, hideClients }) => {
         <Stack direction='row' spacing={{ xs: 0, sm: 1, md: 2 }} alignItems='center'>
           {docID && <DreddButtons codeCells={codeCells} />}
 
-          <ClientDrawer handleDisconnect={handleDisconnect} clients={clients} />
+          {docID && <ClientDrawer handleDisconnect={handleDisconnect} clients={clients} />}
         </Stack>
 
         {!docID && <Typography sx={{ fontFamily: 'Lato', opacity: '0.5' }}>{username}</Typography>}
