@@ -22,13 +22,13 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies (client)
-        run: cd pennant-ui/client && npm ci
+        run: cd client && npm ci
 
       - name: Build client
-        run: NODE_OPTIONS='--max-old-space-size=4096' npm run build
+        run: cd client && npm run build
 
       - name: Install dependencies (server)
-        run: cd pennant-ui/server && npm ci
+        run: cd server && npm ci
 
       - name: Deploy to DigitalOcean
         uses: appleboy/ssh-action@master
@@ -37,7 +37,6 @@ jobs:
           username: ${{ secrets.DIGITALOCEAN_USERNAME }}
           key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
           script: |
-            rm -rf /pennant-ui/client/dist
             rm -rf /pennant-ui/server/dist
-            cp -r /pennant-ui/client/dist /pennant-ui/server/dist
+            scp -r ./client/dist/ marwan@192.241.132.27:/pennant-ui/server/
             pm2 restart 13
