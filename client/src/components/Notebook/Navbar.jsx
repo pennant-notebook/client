@@ -8,7 +8,7 @@ import DreddButtons from './DreddButtons';
 import { updateDisconnectedClient } from '../../utils/awarenessHelpers';
 import { useState } from 'react';
 import ClientDrawer from '../UI/Awareness/ClientDrawer';
-import { Brightness4, Brightness7, Visibility, VisibilityOff } from '../../utils/MuiImports';
+import { Visibility, VisibilityOff } from '../../utils/MuiImports';
 
 const Navbar = ({ codeCells, clients, provider, setClients, hideClients }) => {
   const { username, docID } = useParams();
@@ -85,9 +85,6 @@ const Navbar = ({ codeCells, clients, provider, setClients, hideClients }) => {
         </Stack>
 
         {!docID && <Typography sx={{ fontFamily: 'Lato', opacity: '0.5' }}>{username}</Typography>}
-        {/* <IconButton onClick={toggleTheme}>
-          {currTheme === 'dark' ? <Brightness7 sx={{ color: '#fff' }} /> : <Brightness4 sx={{ color: '#fff' }} />}
-        </IconButton> */}
       </Toolbar>
     </AppBar>
   );

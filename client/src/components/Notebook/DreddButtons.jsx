@@ -5,7 +5,7 @@ import useNotebookContext from '../../contexts/NotebookContext';
 import useProviderContext from '../../contexts/ProviderContext';
 import { handleResetContext, handleRunAllCode } from '../../services/dreddExecutionService';
 import { toast } from 'react-toastify';
-import PlayAllIcon from '../../assets/newplay.png';
+import PlayAllIcon from '../../assets/allplay.png';
 
 const DreddButtons = ({ codeCells }) => {
   const { notebookMetadata } = useProviderContext();
