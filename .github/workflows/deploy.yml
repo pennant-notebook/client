@@ -36,8 +36,7 @@ jobs:
           host: ${{ secrets.DIGITALOCEAN_HOST }}
           username: ${{ secrets.DIGITALOCEAN_USERNAME }}
           key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
-          port: 22
-          sync: './client/dist/:/pennant-ui/server/dist'
           script: |
             rm -rf /pennant-ui/server/dist
+            cp -r /pennant-ui/client/dist /pennant-ui/server/dist
             pm2 restart 1
