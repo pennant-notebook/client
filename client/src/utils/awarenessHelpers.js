@@ -1,5 +1,5 @@
 import * as awarenessProtocol from 'y-protocols/awareness.js';
-import { getUserObjects } from './notebookHelpers';
+import { generateRandomName, getUserObjects, randomColor } from './notebookHelpers';
 
 export const updateDisconnectedClient = provider => {
   if (provider) {
@@ -23,13 +23,13 @@ export const resetClients = provider => {
 export const getCurrentClient = provider => {
   const clientId = provider.document.clientID;
   const current = provider.awareness.getStates().get(clientId);
-  console.log(current);
   return current;
 };
 
 export const getClientFromLocalStorage = () => {
-  const storedUserData = JSON.parse(localStorage.getItem('userData'));
   let color, name;
+
+  const storedUserData = JSON.parse(localStorage.getItem('userData'));
 
   if (storedUserData && storedUserData.setByUser) {
     color = storedUserData.color;

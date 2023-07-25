@@ -36,6 +36,7 @@ export { default as CreateTwoTone } from '@mui/icons-material/CreateTwoTone';
 export { default as DragIndicator } from '@mui/icons-material/DragIndicator';
 export { default as Edit } from '@mui/icons-material/Edit';
 export { default as Folder } from '@mui/icons-material/Folder';
+export { default as FolderOpen } from '@mui/icons-material/FolderOpen';
 export { default as MenuIcon } from '@mui/icons-material/Menu';
 export { default as PlayCircle } from '@mui/icons-material/PlayCircle';
 export { default as PlayCircleOutlineTwoTone } from '@mui/icons-material/PlayCircleOutlineTwoTone';
@@ -45,3 +46,4 @@ export { default as VisibilityOff } from '@mui/icons-material/VisibilityOff';
 
 // Styles
 export { default as useTheme } from '@mui/material/styles/useTheme';
+export { default as styled } from '@mui/material/styles/styled';

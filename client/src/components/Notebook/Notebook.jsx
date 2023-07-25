@@ -1,15 +1,15 @@
 import { useEffect, useReducer, useState } from 'react';
-import { Box, useTheme } from '../../utils/MuiImports';
+import { Box } from '../../utils/MuiImports';
 import Cells from '../Cells/Cells';
 import Navbar from './Navbar';
 import { NotebookContext } from '../../contexts/NotebookContext';
 import useProviderContext from '../../contexts/ProviderContext';
 import { createCell, getUserObjects, generateRandomName, randomColor } from '../../utils/notebookHelpers';
+import { getClientFromLocalStorage } from '../../utils/awarenessHelpers';
 
 const Notebook = ({ docID, resourceTitle }) => {
   const { doc, provider, awareness, notebookMetadata } = useProviderContext();
 
-  const theme = useTheme();
   const [lineRefresh, incrementLineRefresh] = useReducer(count => count + 1, 0);
   const [title, setTitle] = useState(resourceTitle || docID);
 
@@ -17,7 +17,7 @@ const Notebook = ({ docID, resourceTitle }) => {
   const [cellDataArr, setCellDataArr] = useState(cellsArray.toArray());
 
   const [clients, setClients] = useState([]);
-  const [hideClients, setHideClients] = useState(true);
+  const [hideClients, setHideClients] = useState(false);
 
   const [allRunning, setAllRunning] = useState(false);
 
@@ -34,18 +34,7 @@ const Notebook = ({ docID, resourceTitle }) => {
   useEffect(() => {
     if (!awareness) return;
 
-    let color, name;
-
-    const storedUserData = JSON.parse(localStorage.getItem('userData'));
-
-    if (storedUserData && storedUserData.setByUser) {
-      color = storedUserData.color;
-      name = storedUserData.name;
-    } else {
-      color = randomColor();
-      name = generateRandomName();
-      localStorage.setItem('userData', JSON.stringify({ name, color }));
-    }
+    const { name, color } = getClientFromLocalStorage();
 
     awareness.setLocalStateField('user', { name, color });
 
@@ -53,11 +42,11 @@ const Notebook = ({ docID, resourceTitle }) => {
       const states = Array.from(awareness.getStates());
       const clientObjects = getUserObjects(states);
       setClients(clientObjects);
-      if (states.length > 1) {
-        setHideClients(false);
-      } else {
-        setHideClients(true);
-      }
+      // if (states.length > 1) {
+      //   setHideClients(false);
+      // } else {
+      //   setHideClients(true);
+      // }
     };
 
     awareness.on('update', updateClients);

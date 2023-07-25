@@ -14,14 +14,6 @@ const NotebookRoute = () => {
   if (loading || !notebook) return <LoadingSpinner />;
   if (error) return 'Error!';
 
-  // if (!notebook) {
-  //   return (
-  //     <div>
-  //       <h2>Notebook not found</h2>
-  //     </div>
-  //   );
-  // }
-
   return (
     <ProviderContext.Provider value={contextValue}>
       <ErrorBoundary>
