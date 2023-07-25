@@ -23,8 +23,6 @@ export const createCell = type => {
     const metadata = cell.set('metaData', new Y.Map());
     metadata.set('exeCount', 0);
     metadata.set('isActive', 'true');
-  } else {
-    cell.set('theme', new Y.Text('light'));
   }
   return cell;
 };

@@ -31,7 +31,7 @@ export const UserDashboardContent = ({ username, notebooks }) => {
 
   return (
     <Box>
-      <Navbar hideClients={true} title='Notebooks' />
+      <Navbar hideClients={true} />
       <Box className={`user-dashboard ${theme.palette.mode}`}>
         <TextField
           autoComplete='off'

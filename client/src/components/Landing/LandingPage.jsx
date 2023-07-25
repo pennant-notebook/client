@@ -20,14 +20,14 @@ const LandingPage = () => {
     }
   };
 
-  const handleTry = async () => {
-    try {
-      const notebookData = await createDoc('@trypennant');
-      navigate(`/@trypennant/${notebookData.docID}`);
-    } catch (error) {
-      console.error('Error creating @trypennant notebook: ', error);
-    }
-  };
+  // const handleTry = async () => {
+  //   try {
+  //     const notebookData = await createDoc('@trypennant');
+  //     navigate(`/@trypennant/${notebookData.docID}`);
+  //   } catch (error) {
+  //     console.error('Error creating @trypennant notebook: ', error);
+  //   }
+  // };
 
   return (
     <Box
@@ -112,7 +112,7 @@ const LandingPage = () => {
               </Button>
             )}
           </Stack>
-          <Button variant='contained' onClick={handleTry} className='explore-button'>
+          <Button variant='contained' onClick={() => navigate(`/@trypennant`)} className='explore-button'>
             Explore Demo Notebook
           </Button>
         </Stack>

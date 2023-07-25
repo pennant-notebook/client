@@ -19,3 +19,25 @@ export const resetClients = provider => {
     awarenessProtocol.removeAwarenessStates(provider.awareness, allClientIds, 'reset by server');
   }
 };
+
+export const getCurrentClient = provider => {
+  const clientId = provider.document.clientID;
+  const current = provider.awareness.getStates().get(clientId);
+  console.log(current);
+  return current;
+};
+
+export const getClientFromLocalStorage = () => {
+  const storedUserData = JSON.parse(localStorage.getItem('userData'));
+  let color, name;
+
+  if (storedUserData && storedUserData.setByUser) {
+    color = storedUserData.color;
+    name = storedUserData.name;
+  } else {
+    color = randomColor();
+    name = generateRandomName();
+    localStorage.setItem('userData', JSON.stringify({ name, color }));
+  }
+  return { name, color };
+};

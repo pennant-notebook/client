@@ -35,7 +35,7 @@ const CodeCell = ({ cellId, cell, content, getStartingLineNumber }) => {
       setProcessing(false);
     }
     updateMetadata(cellMetadata, notebookMetadata);
-  }, []);
+  }, [docID, cellId, cell]);
 
   useEffect(() => {
     const editorContainer = document.querySelector(`#editor-${cellId}`);
@@ -43,7 +43,7 @@ const CodeCell = ({ cellId, cell, content, getStartingLineNumber }) => {
       editorContainer.removeChild(editorContainer.firstChild);
     }
     const startingLineNumber = getStartingLineNumber(cell.get('pos'));
-    editorRef.current = createCodeEditor(content, awareness, cellId, handleRunCode, startingLineNumber);
+    editorRef.current = createCodeEditor(content, awareness, cellId, startingLineNumber, handleRunCode);
     editorContainer.appendChild(editorRef.current.dom);
 
     updateLineNumbers(editorRef.current, startingLineNumber);

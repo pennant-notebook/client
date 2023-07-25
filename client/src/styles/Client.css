@@ -17,7 +17,9 @@
 }
 
 .avatars-row.dark {
-  background-color: #5a5a5a;
+  border-top: 1px solid #282828;
+
+  background-color: #2c3032;
 }
 
 .client-avatar {

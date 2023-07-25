@@ -5,28 +5,26 @@ import { yCollab } from 'y-codemirror.next';
 import { EditorState } from '@codemirror/state';
 import { defaultKeymap, indentMore, indentLess } from '@codemirror/commands';
 import { keymap, lineNumbers } from '@codemirror/view';
-import { autocompletion, acceptCompletion} from '@codemirror/autocomplete';
+import { autocompletion, acceptCompletion } from '@codemirror/autocomplete';
 import beautify from 'js-beautify';
-
 
 function formatCode(view) {
   const code = view.state.doc.toString();
-  const formattedCode = beautify.js(code, { 
-    indent_size: 2, 
-    indent_with_tabs: false, 
-    end_with_newline: true, 
+  const formattedCode = beautify.js(code, {
+    indent_size: 2,
+    indent_with_tabs: false,
+    end_with_newline: true,
     quote_style: 1
   });
   const transaction = view.state.update({
-    changes: { from: 0, to: view.state.doc.length, insert: formattedCode },
+    changes: { from: 0, to: view.state.doc.length, insert: formattedCode }
   });
   view.dispatch(transaction);
 }
 
-
-const createCodeEditor = (content, awareness, id, handleRunCode, startingLineNumber) => {
+const createCodeEditor = (content, awareness, id, startingLineNumber, handleRunCode) => {
   const customKeymap = keymap.of([
-    { key: 'Alt-Enter', mac: 'Mod-Enter', run: handleRunCode, preventDefault: true },
+    { key: 'Alt-Enter', mac: 'Alt-Enter', run: handleRunCode, preventDefault: true },
     {
       key: 'Shift-F',
       run: view => {
@@ -51,8 +49,8 @@ const createCodeEditor = (content, awareness, id, handleRunCode, startingLineNum
       yCollab(content, awareness),
       EditorView.lineWrapping,
       lineNumbers({
-      formatNumber: (lineNo) => lineNo + startingLineNumber - 1,
-    }),
+        formatNumber: lineNo => lineNo + startingLineNumber - 1
+      }),
       EditorView.theme({
         '&, .cm-scroller, .cm-content, .cm-gutter': {
           overflow: 'visible !important'
@@ -85,12 +83,11 @@ export const updateLineNumbers = (view, startingLineNumber) => {
   const transaction = view.state.update({
     reconfigure: {
       [lineNumbers()]: lineNumbers({
-        formatNumber: (lineNo) => lineNo + startingLineNumber - 1,
+        formatNumber: lineNo => lineNo + startingLineNumber - 1
       })
     }
   });
   view.dispatch(transaction);
 };
-
 
 export default createCodeEditor;

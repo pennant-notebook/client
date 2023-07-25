@@ -71,7 +71,7 @@ svg.checkbox {
 
 svg.checkbox .is_checked {
   opacity: 0;
-  fill: goldenrod;
+  fill: #2c3032;
   -webkit-transform-origin: 42% 42%;
   transform-origin: 42% 42%;
   -webkit-transform: translateX(100%) rotate(45deg);

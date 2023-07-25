@@ -75,7 +75,6 @@ const Notebook = ({ docID, resourceTitle }) => {
 
   const addCellAtIndex = async (idx, type) => {
     const cell = createCell(type);
-    cell.set('theme', theme.palette.mode);
     if (idx >= cellsArray.length) {
       cellsArray.push([cell]);
     } else {

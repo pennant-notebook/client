@@ -58,7 +58,7 @@ const Cells = ({ cells, setCells }) => {
       <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
         <AddCell index={-1} isDragging={isDragging} />
         <Droppable droppableId='cells'>
-          {(provided, snapshot) => (
+          {provided => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
               {cells &&
                 cells.map((cell, index) => {

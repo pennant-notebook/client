@@ -23,11 +23,11 @@ const NotebookRoute = () => {
   // }
 
   return (
-    <ErrorBoundary>
-      <ProviderContext.Provider value={contextValue}>
+    <ProviderContext.Provider value={contextValue}>
+      <ErrorBoundary>
         <Notebook docID={docID} resourceTitle={notebook.title} />
-      </ProviderContext.Provider>
-    </ErrorBoundary>
+      </ErrorBoundary>
+    </ProviderContext.Provider>
   );
 };
 

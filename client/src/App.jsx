@@ -6,10 +6,17 @@ import 'react-toastify/dist/ReactToastify.css';
 import UserDashboard from './components/Landing/UserDashboard';
 import NotebookRoute from './components/Landing/NotebookRoute';
 import ThemeManager from './contexts/ThemeManager';
+import { useState } from 'react';
 
 function App() {
+  const [theme, setTheme] = useState('light');
+
+  const toggleTheme = () => {
+    setTheme(theme === 'light' ? 'dark' : 'light');
+  };
+
   return (
-    <ThemeManager>
+    <ThemeManager theme={theme} toggleTheme={toggleTheme}>
       <Box sx={{ height: '100vh' }}>
         <ToastContainer />
         <BrowserRouter>

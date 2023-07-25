@@ -1,5 +1,5 @@
-import { useRef, useEffect, useState } from 'react';
-import { Box } from '../../utils/MuiImports';
+import { useRef, useEffect } from 'react';
+import { Box, useTheme } from '../../utils/MuiImports';
 import useNotebookContext from '../../contexts/NotebookContext';
 import MarkdownToolbar from './MarkdownToolbar';
 import { getUserObjects } from '../../utils/notebookHelpers';
@@ -10,24 +10,15 @@ import '@blocknote/core/style.css';
 const MarkdownCell = ({ id, content, cell, refreshCount }) => {
   const { provider, awareness } = useProviderContext();
   const { deleteCell } = useNotebookContext();
-  const [theme, setTheme] = useState(cell.get('theme').toString());
   const cellRef = useRef(0);
-
+  const theme = useTheme().palette.mode;
   const users = getUserObjects(awareness.getStates());
   const currentUser = users[0];
-
-  const toggleTheme = () => {
-    setTheme(prev => {
-      const newTheme = prev === 'light' ? 'dark' : 'light';
-      cell.set('theme', newTheme);
-    });
-  };
 
   useEffect(() => {
     const element = document.querySelector(`#blockcell-${id} div div`);
     if (element) {
       element.setAttribute('data-theme', theme);
-      setTheme(cell.get('theme'));
     }
   }, [theme, id]);
 
@@ -43,7 +34,7 @@ const MarkdownCell = ({ id, content, cell, refreshCount }) => {
         ml: 4.2
       }}>
       <Box className='markdown-container'>
-        <MarkdownToolbar id={id} onDelete={deleteCell} cellTheme={cell.get('theme')} toggleTheme={toggleTheme} />
+        <MarkdownToolbar id={id} onDelete={deleteCell} cellTheme={theme} />
         <Box id={`blockcell-${id}`}>
           <MarkdownEditor
             id={`markdown-editor-${id}`}
@@ -52,7 +43,7 @@ const MarkdownCell = ({ id, content, cell, refreshCount }) => {
             content={content}
             provider={provider}
             currentUser={currentUser}
-            theme={cell.get('theme').toString()}
+            theme={theme}
           />
         </Box>
       </Box>

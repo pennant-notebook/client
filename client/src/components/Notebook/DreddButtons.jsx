@@ -1,17 +1,11 @@
 import { useState } from 'react';
 import { useParams } from 'react-router';
-import {
-  Stack,
-  PlayCircleOutlineTwoTone,
-  Refresh,
-  CircularProgress,
-  Tooltip,
-  IconButton
-} from '../../utils/MuiImports';
+import { Stack, Refresh, CircularProgress, Tooltip, IconButton } from '../../utils/MuiImports';
 import useNotebookContext from '../../contexts/NotebookContext';
 import useProviderContext from '../../contexts/ProviderContext';
 import { handleResetContext, handleRunAllCode } from '../../services/dreddExecutionService';
 import { toast } from 'react-toastify';
+import PlayAllIcon from '../../assets/newplay.png';
 
 const DreddButtons = ({ codeCells }) => {
   const { notebookMetadata } = useProviderContext();
@@ -56,20 +50,34 @@ const DreddButtons = ({ codeCells }) => {
   const isDisabledReset = () => {
     return running || resetting || codeCells.length < 1;
   };
+
+  const iconSize = '24px';
   return (
-    <Stack direction='row' spacing={{ xs: 0, sm: 1, md: 2 }}>
-      <Tooltip title='Reset'>
+    <Stack sx={{ alignItems: 'center' }} direction='row' spacing={1.5}>
+      <Tooltip title='Reset Code Execution Context'>
         <span>
           <IconButton disabled={isDisabledReset()} onClick={handleReset} color='inherit'>
-            {resetting ? <CircularProgress size={24} sx={{ color: 'lightgray' }} /> : <Refresh />}
+            {resetting ? (
+              <CircularProgress size={24} sx={{ color: 'lightgray', fontSize: iconSize }} />
+            ) : (
+              <Refresh sx={{ fontSize: iconSize }} />
+            )}
           </IconButton>
         </span>
       </Tooltip>
 
-      <Tooltip title='Run All'>
+      <Tooltip title='Run All Code Cells'>
         <span>
-          <IconButton disabled={isDisabledRun()} onClick={handleRunAll} color='inherit'>
-            {running ? <CircularProgress size={20} sx={{ color: 'lightgray' }} /> : <PlayCircleOutlineTwoTone />}
+          <IconButton
+            disabled={isDisabledRun()}
+            onClick={handleRunAll}
+            color='inherit'
+            sx={{ borderRadius: '2px', opacity: isDisabledRun() ? '0.3' : '1', p: 1 }}>
+            {running ? (
+              <CircularProgress size={24} sx={{ color: 'lightgray', width: iconSize }} />
+            ) : (
+              <img src={PlayAllIcon} style={{ color: '#fff', width: iconSize }} />
+            )}
           </IconButton>
         </span>
       </Tooltip>

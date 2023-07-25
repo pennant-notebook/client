@@ -40,14 +40,21 @@ const DocTitle = () => {
   return (
     <Box className='notebook-title'>
       <Box onClick={() => setOpen(true)}>
-        <Typography sx={{ opacity: 0.5, fontSize: '20px' }}>
+        <Typography
+          sx={{
+            maxWidth: { xs: '150px', sm: '200px', md: '400px' },
+            opacity: 0.5,
+            fontSize: '20px',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis'
+          }}>
           {title === notebook?.docID ? 'untitled' : title}
         </Typography>
       </Box>
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogTitle>Edit Notebook Title</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Enter the new title here.</DialogContentText>
+        <DialogContent sx={{ minWidth: '300px' }}>
           <TextField
             autoFocus
             margin='dense'
