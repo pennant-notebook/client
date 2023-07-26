@@ -5,11 +5,12 @@ import Navbar from './Navbar';
 import { NotebookContext } from '../../contexts/NotebookContext';
 import useProviderContext from '../../contexts/ProviderContext';
 import { createCell, getUserObjects } from '../../utils/notebookHelpers';
-import { getClientFromLocalStorage } from '../../utils/awarenessHelpers';
+import { getClientFromLocalStorage, updateDisconnectedClient } from '../../utils/awarenessHelpers';
+import { useNavigate } from 'react-router';
 
 const Notebook = ({ docID, resourceTitle }) => {
   const { doc, provider, awareness, notebookMetadata } = useProviderContext();
-
+  const navigate = useNavigate();
   const [title, setTitle] = useState(resourceTitle || docID);
   const cellsArray = doc.getArray('cells');
   const [cellDataArr, setCellDataArr] = useState(cellsArray.toArray());
@@ -100,6 +101,14 @@ const Notebook = ({ docID, resourceTitle }) => {
     };
   }, [title]);
 
+  const handleDisconnect = destination => {
+    if (docID) {
+      const currentClients = updateDisconnectedClient(provider);
+      setClients(currentClients);
+    }
+    navigate(destination);
+  };
+
   const codeCellsForDredd = cellDataArr.filter(c => c.get('type') === 'code');
 
   const contextValue = {
@@ -117,7 +126,12 @@ const Notebook = ({ docID, resourceTitle }) => {
   return (
     <NotebookContext.Provider value={contextValue}>
       <Box className='main-content'>
-        <Navbar codeCells={codeCellsForDredd} provider={provider} clients={clients} setClients={setClients} />
+        <Navbar
+          codeCells={codeCellsForDredd}
+          provider={provider}
+          clients={clients}
+          handleDisconnect={handleDisconnect}
+        />
 
         <Cells cells={cellDataArr} setCells={setCellDataArr} />
       </Box>

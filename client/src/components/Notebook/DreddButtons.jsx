@@ -54,7 +54,7 @@ const DreddButtons = ({ codeCells }) => {
   const iconSize = '24px';
   return (
     <Stack sx={{ alignItems: 'center' }} direction='row' spacing={1.5}>
-      <Tooltip title='Reset Code Execution Context'>
+      <Tooltip title='Reset Code Execution Context' enterDelay={1000}>
         <span>
           <IconButton disabled={isDisabledReset()} onClick={handleReset} color='inherit'>
             {resetting ? (
@@ -66,7 +66,7 @@ const DreddButtons = ({ codeCells }) => {
         </span>
       </Tooltip>
 
-      <Tooltip title='Run All Code Cells'>
+      <Tooltip title='Run All Code Cells' enterDelay={1000}>
         <span>
           <IconButton
             disabled={isDisabledRun()}

@@ -1,27 +1,23 @@
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
-import { Box, TextField, Button, Grid, Card, Typography, useTheme } from '../../utils/MuiImports';
+import { Box, TextField, Button, Grid, Typography, useTheme } from '../../utils/MuiImports';
 import LoadingSpinner from '../UI/LoadingSpinner';
 import Navbar from '../Notebook/Navbar';
 import { createDoc } from '../../services/dynamoPost';
 import { fetchNotebooks } from '../../services/dynamoFetch';
+import DashboardNotebook from './DashboardNotebook';
 
-export const UserDashboardContent = ({ username, notebooks }) => {
+export const UserDashboardContent = ({ username, notebooks, refetch }) => {
+  document.title = 'Dashboard | ' + username;
   const [searchTerm, setSearchTerm] = useState('');
+
   const navigate = useNavigate();
   const theme = useTheme();
-
-  document.title = 'Dashboard | ' + username;
 
   const handleSearchChange = event => {
     setSearchTerm(event.target.value);
   };
-
-  const filteredNotebooks =
-    notebooks && searchTerm
-      ? notebooks.filter(notebook => notebook.title?.toLowerCase().includes(searchTerm.toLowerCase()))
-      : notebooks;
 
   const handleCreateNotebook = async () => {
     const newNotebook = await createDoc(username);
@@ -29,9 +25,14 @@ export const UserDashboardContent = ({ username, notebooks }) => {
     navigate(`/${username}/${docID}`);
   };
 
+  const filteredNotebooks =
+    notebooks && searchTerm
+      ? notebooks.filter(notebook => notebook.title?.toLowerCase().includes(searchTerm.toLowerCase()))
+      : notebooks;
+
   return (
     <Box>
-      <Navbar hideClients={true} />
+      <Navbar hideClients={true} isDashboard={true} />
       <Box className={`user-dashboard ${theme.palette.mode}`}>
         <TextField
           autoComplete='off'
@@ -59,12 +60,7 @@ export const UserDashboardContent = ({ username, notebooks }) => {
           {filteredNotebooks.length > 0 &&
             filteredNotebooks.map((notebook, index) => (
               <Grid item key={notebook.docID} xs={12} sm={6} md={4}>
-                <Card
-                  className={`button-4 ${theme.palette.mode}`}
-                  style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-                  onClick={() => navigate(`/${username}/${notebook.docID}`)}>
-                  <Typography className='card-title'>{notebook.title || 'untitled-' + (index + 1)}</Typography>
-                </Card>
+                <DashboardNotebook docID={notebook.docID} title={notebook.title} index={index} refetch={refetch} />
               </Grid>
             ))}
         </Grid>
@@ -75,12 +71,13 @@ export const UserDashboardContent = ({ username, notebooks }) => {
 
 export const UserDashboard = () => {
   const { username } = useParams();
-  const { data, loading, error } = useQuery(['notebooks', username], () => fetchNotebooks(username));
-
+  const { data, refetch, loading, error } = useQuery(['notebooks', username], () => fetchNotebooks(username), {
+    refetchOnWindowFocus: false
+  });
   if (loading) return <LoadingSpinner />;
   if (error) return 'Error!';
 
-  return <UserDashboardContent username={username} notebooks={data} />;
+  return <UserDashboardContent username={username} notebooks={data} refetch={refetch} />;
 };
 
 export default UserDashboard;

@@ -28,7 +28,6 @@ const CodeCell = ({ cellId, cell, content, getStartingLineNumber }) => {
     try {
       setProcessing(true);
       const response = await handleDredd(docID, cellId, cell.get('content').toString());
-      console.log(response);
       const outputMap = cell.get('outputMap');
       outputMap.set('stdout', response.output);
       outputMap.set('status', response.type);

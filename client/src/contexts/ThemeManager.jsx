@@ -1,4 +1,4 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { useMediaQuery, ThemeProvider, createTheme } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import { oneDark } from '@codemirror/theme-one-dark';
@@ -17,6 +17,10 @@ export const CodeMirrorThemeContext = createContext();
 export const useCMThemeContext = () => useContext(CodeMirrorThemeContext);
 
 function ThemeManager({ children, theme, toggleTheme, toggleCMTheme, editorTheme }) {
+  // const [manuallyToggled, setManuallyToggled] = useState(false);
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  // const chosenTheme = manuallyToggled ? theme : prefersDarkMode ? 'dark' : 'light';
+
   const lightTheme = createTheme({
     palette: {
       mode: 'light',
@@ -43,11 +47,13 @@ function ThemeManager({ children, theme, toggleTheme, toggleCMTheme, editorTheme
     }
   });
 
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  // useEffect(() => {
+  //   setManuallyToggled(true);
+  // }, [theme]);
 
   return (
     <CodeMirrorThemeContext.Provider value={{ editorTheme, toggleCMTheme, codeMirrorThemes }}>
-      <ThemeProvider theme={theme === 'dark' || prefersDarkMode ? darkTheme : lightTheme}>
+      <ThemeProvider theme={theme === 'dark' ? darkTheme : lightTheme}>
         <CssBaseline />
         {children}
       </ThemeProvider>

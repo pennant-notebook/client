@@ -2,10 +2,18 @@ import { IconButton, Typography, Stack } from '../../utils/MuiImports';
 
 const IconRow = ({ icon, text, onClick }) => {
   return (
-    <IconButton onClick={onClick} sx={{ borderRadius: '12px', py: 2 }}>
-      <Stack direction='row' spacing={1} alignItems='center' justifyContent='center'>
+    <IconButton
+      onClick={onClick}
+      sx={{
+        borderRadius: text ? '12px' : 'auto',
+        py: text ? 2 : 1,
+        width: text ? '100%' : 'auto',
+        display: 'flex',
+        justifyContent: 'flex-start'
+      }}>
+      <Stack direction='row' spacing={1} alignItems='center'>
         {icon}
-        <Typography sx={{ fontFamily: 'Lato', fontSize: '1rem' }}>{text}</Typography>
+        {text && <Typography sx={{ fontFamily: 'Lato', fontSize: '1rem' }}>{text}</Typography>}
       </Stack>
     </IconButton>
   );

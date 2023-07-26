@@ -21,7 +21,8 @@ async function createDoc(username) {
   }
 }
 
-async function editDocTitle(docID, title, username) {
+async function editDocTitle({ docID, title, username }) {
+  console.log(docID, title, username);
   try {
     const response = await axios.put(`${URL}/doc/${docID}/${username.slice(1)}`, { title });
     return response.data;
@@ -30,4 +31,13 @@ async function editDocTitle(docID, title, username) {
   }
 }
 
-export { createUser, createDoc, editDocTitle };
+async function deleteDoc({ docID, username }) {
+  try {
+    const response = await axios.delete(`${URL}/doc/${docID}/${username.slice(1)}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting notebook in DynamoDB:', error);
+  }
+}
+
+export { createUser, createDoc, editDocTitle, deleteDoc };

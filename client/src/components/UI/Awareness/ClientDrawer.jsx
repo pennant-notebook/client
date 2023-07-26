@@ -58,6 +58,7 @@ const ClientDrawer = ({ handleDisconnect, clients = [] }) => {
           />
         </IconButton>
       )}
+
       <Drawer anchor='right' open={open} onClose={() => setOpen(false)}>
         <Box sx={{ width: '220px', padding: '20px' }}>
           <Stack spacing={3} sx={{ alignItems: 'left' }}>
@@ -72,14 +73,13 @@ const ClientDrawer = ({ handleDisconnect, clients = [] }) => {
                 </Stack>
               </Stack>
             )}
+
             <Box sx={{ width: '100%', textAlign: 'left' }}>
               <IconRow
                 onClick={toggleTheme}
                 text={`Toggle ${currTheme === 'dark' ? 'light' : 'dark'} mode`}
                 icon={currTheme === 'dark' ? <Brightness7 sx={{ color: '#e0e0e0' }} /> : <Brightness4 />}
               />
-
-              <IconRow onClick={() => handleDisconnect(`/${username}`)} text='Dashboard' icon={<ArrowBack />} />
 
               <ThemeSelector />
 
@@ -93,12 +93,20 @@ const ClientDrawer = ({ handleDisconnect, clients = [] }) => {
                   notebooks?.map((notebook, index) => (
                     <StyledButton
                       onClick={() => handleDisconnect(`/${username}/${notebook.docID}`)}
+                      style={{ textAlign: 'left' }}
                       key={notebook.docID}>
-                      <Typography noWrap sx={{ fontSize: '14px', fontFamily: 'Lato', color: grey[800] }}>
+                      <Typography
+                        noWrap
+                        sx={{
+                          fontSize: '14px',
+                          fontFamily: 'Lato',
+                          color: currTheme == 'dark' ? grey[300] : grey[700]
+                        }}>
                         {notebook.title || `Untitled-${index}`}
                       </Typography>
                     </StyledButton>
                   ))}
+                <IconRow onClick={() => handleDisconnect(`/${username}`)} text='Dashboard' icon={<ArrowBack />} />
               </Box>
             </Box>
           </Stack>

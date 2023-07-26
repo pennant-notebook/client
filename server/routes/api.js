@@ -156,4 +156,23 @@ router.put('/doc/:docID/:username', async (req, res) => {
   }
 });
 
+// deleteDocFromDynamo
+router.delete('/doc/:docID/:username', async (req, res) => {
+  const params = {
+    TableName: 'notebooks',
+    Key: {
+      docID: req.params.docID,
+      username: req.params.username
+    }
+  };
+
+  try {
+    await dynamodb.delete(params);
+    res.status(200).json({ message: 'Notebook deleted' });
+  } catch (error) {
+    console.error(`Error deleting notebook ${req.params.docID}:`, error);
+    res.status(500).json({ error: 'Could not delete notebook' });
+  }
+});
+
 export default router;

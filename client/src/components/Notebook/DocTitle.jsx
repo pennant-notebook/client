@@ -13,22 +13,25 @@ import { useParams } from 'react-router-dom';
 import { fetchDoc } from '../../services/dynamoFetch';
 import { editDocTitle } from '../../services/dynamoPost';
 
-import useNotebookContext from '../../contexts/NotebookContext';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 
 const DocTitle = () => {
   const { username, docID } = useParams();
-  const { data: notebook } = useQuery([docID, username], () => fetchDoc(docID, username));
+  const { data: notebook, refetch } = useQuery([docID, username], () => fetchDoc(docID, username));
 
-  const { handleTitleChange, title } = useNotebookContext();
   const [open, setOpen] = useState(false);
 
   const [tempTitle, setTempTitle] = useState(notebook?.title || '');
 
-  const handleEditTitle = async () => {
+  const editMutation = useMutation(editDocTitle, {
+    onSuccess: () => {
+      refetch();
+    }
+  });
+
+  const handleEditTitle = () => {
     try {
-      const newNotebookData = await editDocTitle(notebook.docID, tempTitle, username);
-      handleTitleChange(newNotebookData.title);
+      editMutation.mutate({ docID: notebook.docID, title: tempTitle, username });
       setOpen(false);
     } catch (error) {
       console.error('Error updating notebook title:', error);
@@ -51,7 +54,7 @@ const DocTitle = () => {
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis'
           }}>
-          {title === notebook?.docID ? 'untitled' : title}
+          {notebook?.title === notebook?.docID ? 'untitled' : notebook.title}
         </Typography>
       </Box>
       <Dialog open={open} onClose={() => setOpen(false)}>

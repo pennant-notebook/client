@@ -1,27 +1,30 @@
 import logo from '../../assets/pennant-color.png';
 import darklogo from '../../assets/pennant-gray.png';
-import { AppBar, Toolbar, IconButton, Box, Typography, Stack, useTheme } from '../../utils/MuiImports';
+import {
+  AppBar,
+  Toolbar,
+  IconButton,
+  Box,
+  Typography,
+  Stack,
+  useTheme,
+  Brightness7,
+  Brightness4,
+  Tooltip
+} from '../../utils/MuiImports';
 import { useNavigate, useParams } from 'react-router';
 import DocTitle from './DocTitle';
 import Clients from '../UI/Awareness/Clients';
 import DreddButtons from './DreddButtons';
-import { updateDisconnectedClient } from '../../utils/awarenessHelpers';
 import ClientDrawer from '../UI/Awareness/ClientDrawer';
+import IconRow from '../UI/IconRow';
 
-const Navbar = ({ codeCells, provider, clients = [], setClients }) => {
+const Navbar = ({ codeCells, clients = [], isDashboard, handleDisconnect }) => {
   const { username, docID } = useParams();
   const navigate = useNavigate();
   const {
-    custom: { currTheme }
+    custom: { currTheme, toggleTheme }
   } = useTheme();
-
-  const handleDisconnect = destination => {
-    if (docID) {
-      const currentClients = updateDisconnectedClient(provider);
-      setClients(currentClients);
-    }
-    navigate(destination);
-  };
 
   const clientCount = clients.length;
   return (
@@ -36,14 +39,16 @@ const Navbar = ({ codeCells, provider, clients = [], setClients }) => {
             sx={{
               alignItems: 'center'
             }}>
-            <IconButton
-              edge='start'
-              color='inherit'
-              aria-label='logo'
-              onClick={() => handleDisconnect(`/`)}
-              sx={{ py: 1, borderRadius: '2px' }}>
-              <img src={currTheme === 'dark' ? darklogo : logo} width='56px' />
-            </IconButton>
+            <Tooltip title={docID ? 'Dashbord' : 'Home'} arrow>
+              <IconButton
+                edge='start'
+                color='inherit'
+                aria-label='logo'
+                onClick={() => (docID ? handleDisconnect(`/${username}`) : navigate(`/`))}
+                sx={{ py: 1, borderRadius: '2px' }}>
+                <img src={currTheme === 'dark' ? darklogo : logo} width='56px' />
+              </IconButton>
+            </Tooltip>
           </Box>
           <Box id='CLIENTS' sx={{ ml: 4, pr: clientCount >= 4 ? 1.5 : 10 - clientCount }}>
             {docID && <Clients clients={clients} />}
@@ -51,7 +56,7 @@ const Navbar = ({ codeCells, provider, clients = [], setClients }) => {
         </Box>
 
         <Box sx={{ display: 'flex', justifyContent: 'center', flexGrow: 1 }}>
-          {docID ? <DocTitle /> : <Typography sx={{ opacity: 0.5, fontSize: '20px' }}>Notebooks</Typography>}
+          {docID ? <DocTitle /> : <Typography sx={{ opacity: 0.5, fontSize: '20px' }}></Typography>}
         </Box>
 
         <Stack direction='row' spacing={{ xs: 0, sm: 1, md: 2 }} alignItems='center'>
@@ -60,7 +65,13 @@ const Navbar = ({ codeCells, provider, clients = [], setClients }) => {
           {docID && <ClientDrawer handleDisconnect={handleDisconnect} clients={clients} />}
         </Stack>
 
-        {!docID && <Typography sx={{ fontFamily: 'Lato', opacity: '0.5' }}>{username}</Typography>}
+        {!docID && <Typography sx={{ fontFamily: 'Lato', opacity: '0.5', pr: 2 }}>{username}</Typography>}
+        {isDashboard && (
+          <IconRow
+            onClick={toggleTheme}
+            icon={currTheme === 'dark' ? <Brightness7 sx={{ color: '#e0e0e0' }} /> : <Brightness4 />}
+          />
+        )}
       </Toolbar>
     </AppBar>
   );

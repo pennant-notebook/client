@@ -48,3 +48,16 @@
 /* .cm-gutters .cm-lineNumbers .cm-gutterElement {
   visibility: hidden;
 } */
+
+span > .toolbutton {
+  color: lightgray;
+  margin: 0;
+  padding: 0;
+  /* box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 0px 0px inset; */
+}
+
+span > .toolbutton:hover {
+  color: #fff;
+  opacity: 1;
+  background-color: transparent;
+}
