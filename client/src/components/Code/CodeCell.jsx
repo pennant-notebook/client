@@ -1,4 +1,4 @@
-import { Box, Stack, Typography, useTheme } from '../../utils/MuiImports';
+import { Box, Stack, Typography } from '../../utils/MuiImports';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import useProviderContext from '../../contexts/ProviderContext';
 import useNotebookContext from '../../contexts/NotebookContext';
@@ -8,7 +8,7 @@ import { handleDredd, updateMetadata } from '../../services/dreddExecutionServic
 import StyledBadge from '../UI/StyledComponents';
 import { useCMThemeContext } from '../../contexts/ThemeManager';
 
-const CodeCell = ({ cellId, cell, content, getStartingLineNumber }) => {
+const CodeCell = ({ cellId, cell, content, getStartingLineNumber, reportRef = () => {} }) => {
   const { editorTheme } = useCMThemeContext();
   const { awareness, notebookMetadata, docID } = useProviderContext();
   const { deleteCell } = useNotebookContext();
@@ -22,6 +22,7 @@ const CodeCell = ({ cellId, cell, content, getStartingLineNumber }) => {
   const [status, setStatus] = useState(outputMap.get('status'));
   const [processing, setProcessing] = useState(cellRunning);
   const editorRef = useRef(null);
+  const cellRef = useRef(null);
 
   const handleRunCode = useCallback(async () => {
     try {
@@ -68,8 +69,13 @@ const CodeCell = ({ cellId, cell, content, getStartingLineNumber }) => {
     });
   }, [outputMap, cellMetadata, processing]);
 
+  useEffect(() => {
+    reportRef(cellRef);
+  }, [reportRef]);
+
   return (
     <Box
+      ref={cellRef}
       sx={{
         display: 'flex',
         alignItems: 'center',

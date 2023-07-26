@@ -1,4 +1,4 @@
-import { useReducer, useState } from 'react';
+import { useReducer, useRef, useState } from 'react';
 import { Box } from '../../utils/MuiImports';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import AddCell from './AddCell';
@@ -9,6 +9,7 @@ const Cells = ({ cells, setCells }) => {
   const { repositionCell, incrementLineRefresh } = useNotebookContext();
   const [refreshCount, incrementRefreshCount] = useReducer(count => count + 1, 0);
   const [isDragging, setIsDragging] = useState(false);
+  const cellRefs = useRef({});
 
   const onDragStart = () => {
     setIsDragging(true);
@@ -36,6 +37,12 @@ const Cells = ({ cells, setCells }) => {
 
     incrementRefreshCount();
     incrementLineRefresh();
+
+    const cellId = cells[result.source.index].get('id');
+    const draggedCellRef = cellRefs.current[cellId];
+    if (draggedCellRef) {
+      draggedCellRef.focus();
+    }
   };
 
   const getStartingLineNumber = index => {
@@ -70,6 +77,11 @@ const Cells = ({ cells, setCells }) => {
                       refreshCount={refreshCount}
                       getStartingLineNumber={getStartingLineNumber}
                       isDragging={isDragging}
+                      reportRef={ref => {
+                        if (cell.get('type') === 'code') {
+                          cellRefs.current[cell.get('id')] = ref;
+                        }
+                      }}
                     />
                   );
                 })}
