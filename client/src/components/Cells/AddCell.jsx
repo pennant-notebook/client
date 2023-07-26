@@ -6,14 +6,14 @@ const AddCell = ({ index, isDragging }) => {
   return (
     <Box sx={{ my: '10px', opacity: isDragging ? '0.5' : '1' }}>
       <Divider flexItem sx={{ width: '100%', borderColor: 'transparent' }}>
-        <Tooltip title='Add Markdown Cell'>
+        <Tooltip title='Add Markdown Cell' enterDelay={1000} enterNextDelay={1000}>
           <IconButton
             onClick={() => addCellAtIndex(index, 'markdown')}
             sx={{ opacity: 0.5, '&:hover': { backgroundColor: 'transparent', opacity: 1 } }}>
             <Add sx={{ fontSize: '24px', opacity: '0.6', '&:hover': { opacity: 1 } }} />
           </IconButton>
         </Tooltip>
-        <Tooltip title='Add Code Cell'>
+        <Tooltip title='Add Code Cell' enterDelay={1000} enterNextDelay={1000}>
           <IconButton
             onClick={() => addCellAtIndex(index, 'code')}
             sx={{ opacity: 0.5, '&:hover': { backgroundColor: 'transparent', opacity: 1 } }}>

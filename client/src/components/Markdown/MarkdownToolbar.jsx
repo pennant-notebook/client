@@ -18,7 +18,7 @@ const MarkdownToolbar = memo(({ onDelete, id, toggleTheme, cellTheme }) => {
         <Typography variant='overline' sx={{ color: buttonColor, position: 'absolute', left: '12px' }}>
           Markdown
         </Typography>
-        <Tooltip title='Remove cell'>
+        <Tooltip title='Remove cell' enterDelay={1000} enterNextDelay={1000}>
           <IconButton
             onClick={() => onDelete(id)}
             sx={{ opacity: 0.5, '&:hover': { opacity: 1, backgroundColor: 'transparent' } }}>

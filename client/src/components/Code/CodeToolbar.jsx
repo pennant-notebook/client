@@ -26,14 +26,14 @@ const CodeToolbar = ({ onClickRun, onDelete, id, processing }) => {
         <Typography variant='overline' sx={{ color: 'lightgray', position: 'absolute', left: '12px' }}>
           JavaScript
         </Typography>
-        <Tooltip title='Run code' enterDelay={1000}>
+        <Tooltip title='Run code' enterDelay={1000} enterNextDelay={1000}>
           <span>
             <IconButton className='toolbutton' disabled={processing} onClick={onClickRun}>
               {processing ? <CircularProgress size={24} /> : <PlayCircle size={24} />}
             </IconButton>
           </span>
         </Tooltip>
-        <Tooltip title='Remove cell' enterDelay={1000}>
+        <Tooltip title='Remove cell' enterDelay={1000} enterNextDelay={1000}>
           <span>
             <IconButton
               className='toolbutton'
