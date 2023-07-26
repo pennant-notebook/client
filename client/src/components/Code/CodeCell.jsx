@@ -1,13 +1,16 @@
-import { Box, Stack, Typography } from '../../utils/MuiImports';
+import { Box, Stack, Typography, useTheme } from '../../utils/MuiImports';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import useProviderContext from '../../contexts/ProviderContext';
 import useNotebookContext from '../../contexts/NotebookContext';
 import CodeToolbar from './CodeToolbar';
 import createCodeEditor, { updateLineNumbers } from './createCodeEditor';
 import { handleDredd, updateMetadata } from '../../services/dreddExecutionService';
-import StyledBadge from '../UI/StyledBadge';
+import StyledBadge from '../UI/StyledComponents';
+import { useCMThemeContext } from '../../contexts/ThemeManager';
 
 const CodeCell = ({ cellId, cell, content, getStartingLineNumber }) => {
+  const { editorTheme } = useCMThemeContext();
+
   const { awareness, notebookMetadata, docID } = useProviderContext();
   const { deleteCell, allRunning } = useNotebookContext();
 
@@ -43,11 +46,11 @@ const CodeCell = ({ cellId, cell, content, getStartingLineNumber }) => {
       editorContainer.removeChild(editorContainer.firstChild);
     }
     const startingLineNumber = getStartingLineNumber(cell.get('pos'));
-    editorRef.current = createCodeEditor(content, awareness, cellId, startingLineNumber, handleRunCode);
+    editorRef.current = createCodeEditor(content, awareness, cellId, startingLineNumber, handleRunCode, editorTheme);
     editorContainer.appendChild(editorRef.current.dom);
 
     updateLineNumbers(editorRef.current, startingLineNumber);
-  }, [content]);
+  }, [content, editorTheme]);
 
   useEffect(() => {
     cell.get('outputMap').observe(() => {

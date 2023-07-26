@@ -6,10 +6,9 @@ import DocTitle from './DocTitle';
 import Clients from '../UI/Awareness/Clients';
 import DreddButtons from './DreddButtons';
 import { updateDisconnectedClient } from '../../utils/awarenessHelpers';
-import { useState } from 'react';
 import ClientDrawer from '../UI/Awareness/ClientDrawer';
 
-const Navbar = ({ codeCells, clients, provider, setClients }) => {
+const Navbar = ({ codeCells, provider, clients = [], setClients }) => {
   const { username, docID } = useParams();
   const navigate = useNavigate();
   const {
@@ -24,8 +23,9 @@ const Navbar = ({ codeCells, clients, provider, setClients }) => {
     navigate(destination);
   };
 
+  const clientCount = clients.length;
   return (
-    <AppBar position='sticky' sx={{ backgroundColor: '#34568B' }}>
+    <AppBar position='sticky' sx={{ backgroundColor: currTheme === 'dark' ? '#1e202d' : '#34568B' }}>
       <Toolbar
         sx={{
           width: '100%',
@@ -45,19 +45,13 @@ const Navbar = ({ codeCells, clients, provider, setClients }) => {
               <img src={currTheme === 'dark' ? darklogo : logo} width='56px' />
             </IconButton>
           </Box>
-
-          {docID && (
-            <Box id='CLIENTS' sx={{ ml: 4 }}>
-              <Clients clients={clients} />
-            </Box>
-          )}
+          <Box id='CLIENTS' sx={{ ml: 4, pr: clientCount >= 4 ? 1.5 : 10 - clientCount }}>
+            {docID && <Clients clients={clients} />}
+          </Box>
         </Box>
 
-        <Box sx={{ display: 'flex', width: '100%' }}>
-          <Box sx={{ display: 'flex', flexGrow: 1 }} />
-
+        <Box sx={{ display: 'flex', justifyContent: 'center', flexGrow: 1 }}>
           {docID ? <DocTitle /> : <Typography sx={{ opacity: 0.5, fontSize: '20px' }}>Notebooks</Typography>}
-          <Box sx={{ display: 'flex', flexGrow: 1 }} />
         </Box>
 
         <Stack direction='row' spacing={{ xs: 0, sm: 1, md: 2 }} alignItems='center'>

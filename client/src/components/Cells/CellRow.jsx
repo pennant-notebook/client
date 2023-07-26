@@ -3,7 +3,7 @@ import { Draggable } from 'react-beautiful-dnd';
 import MarkdownCell from '../Markdown/MarkdownCell';
 import CodeCell from '../Code/CodeCell';
 import AddCell from './AddCell';
-import { CellPosAvatar } from '../UI/StyledBadge';
+import { CellPosAvatar } from '../UI/StyledComponents';
 import useNotebookContext from '../../contexts/NotebookContext';
 import useProviderContext from '../../contexts/ProviderContext';
 import { useState } from 'react';

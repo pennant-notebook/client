@@ -1,5 +1,4 @@
 import { javascript } from '@codemirror/lang-javascript';
-import { oneDark } from '@codemirror/theme-one-dark';
 import { EditorView, basicSetup } from 'codemirror';
 import { yCollab } from 'y-codemirror.next';
 import { EditorState } from '@codemirror/state';
@@ -22,7 +21,7 @@ function formatCode(view) {
   view.dispatch(transaction);
 }
 
-const createCodeEditor = (content, awareness, id, startingLineNumber, handleRunCode) => {
+const createCodeEditor = (content, awareness, id, startingLineNumber, handleRunCode, editorTheme) => {
   const customKeymap = keymap.of([
     { key: 'Alt-Enter', mac: 'Alt-Enter', run: handleRunCode, preventDefault: true },
     {
@@ -67,7 +66,7 @@ const createCodeEditor = (content, awareness, id, startingLineNumber, handleRunC
           minHeight: '50px'
         }
       }),
-      oneDark
+      editorTheme.theme
     ]
   });
 

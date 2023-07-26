@@ -1,6 +1,6 @@
 import * as Y from 'yjs';
 import { v4 as uuidv4 } from 'uuid';
-import { uniqueNamesGenerator, adjectives, animals } from 'unique-names-generator';
+import { uniqueNamesGenerator, animals } from 'unique-names-generator';
 
 export const createContent = type => {
   if (type === 'code') return new Y.Text('');

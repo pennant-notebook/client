@@ -30,6 +30,7 @@ export { default as Add } from '@mui/icons-material/Add';
 export { default as ArrowBack } from '@mui/icons-material/ArrowBack';
 export { default as Brightness4 } from '@mui/icons-material/Brightness4';
 export { default as Brightness7 } from '@mui/icons-material/Brightness7';
+export { default as BrushIcon } from '@mui/icons-material/Brush';
 export { default as Code } from '@mui/icons-material/Code';
 export { default as CloseSharp } from '@mui/icons-material/CloseSharp';
 export { default as CreateTwoTone } from '@mui/icons-material/CreateTwoTone';
@@ -47,3 +48,4 @@ export { default as VisibilityOff } from '@mui/icons-material/VisibilityOff';
 // Styles
 export { default as useTheme } from '@mui/material/styles/useTheme';
 export { default as styled } from '@mui/material/styles/styled';
+export { default as grey } from '@mui/material/colors/grey';
