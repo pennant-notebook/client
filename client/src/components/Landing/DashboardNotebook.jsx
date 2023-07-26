@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
-import { TextField, Card, Typography, useTheme } from '../../utils/MuiImports';
+import { Card, Typography, useTheme, InputBase } from '../../utils/MuiImports';
 import { Edit, DeleteIcon, CheckIcon, CloseIcon, IconButton } from '../../utils/MuiImports';
 import { useMutation } from 'react-query';
 import { deleteDoc, editDocTitle } from '../../services/dynamoPost';
@@ -34,8 +34,9 @@ const DashboardNotebook = ({ docID, title, index, refetch }) => {
 
   const handleCancelClick = e => {
     e.stopPropagation();
-    setIsEditing(false);
-    setNewTitle(title);
+    setTimeout(() => {
+      setIsEditing(false);
+    }, 100);
   };
 
   const handleDeleteClick = e => {
@@ -53,8 +54,18 @@ const DashboardNotebook = ({ docID, title, index, refetch }) => {
     }
   };
 
+  const handleKeyDown = e => {
+    if (e.key === 'Enter') {
+      handleSaveClick(e);
+    }
+    if (e.key === 'Escape') {
+      handleCancelClick(e);
+    }
+  };
+
   const handleEditClick = e => {
     e.stopPropagation();
+    setNewTitle(title);
     setIsEditing(true);
   };
 
@@ -70,7 +81,21 @@ const DashboardNotebook = ({ docID, title, index, refetch }) => {
       className={`button-4 ${theme.palette.mode}`}
       style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
       {isEditing ? (
-        <TextField value={newTitle} onChange={e => setNewTitle(e.target.value)} />
+        <InputBase
+          onBlur={handleCancelClick}
+          autoFocus
+          value={newTitle}
+          onChange={e => setNewTitle(e.target.value)}
+          onKeyDown={handleKeyDown}
+          fullWidth
+          sx={{
+            fontFamily: 'Lato',
+            fontSize: '0.9rem',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap'
+          }}
+        />
       ) : (
         <Typography
           sx={{
@@ -86,10 +111,10 @@ const DashboardNotebook = ({ docID, title, index, refetch }) => {
       <div>
         {isEditing ? (
           <>
-            <IconButton onClick={handleSaveClick} color='primary'>
+            <IconButton onClick={handleSaveClick} sx={{ color: 'green' }}>
               <CheckIcon sx={{ fontSize: iconSize }} />
             </IconButton>
-            <IconButton onClick={handleCancelClick} color='secondary'>
+            <IconButton onClick={handleCancelClick} sx={{ color: 'red' }}>
               <CloseIcon sx={{ fontSize: iconSize }} />
             </IconButton>
           </>

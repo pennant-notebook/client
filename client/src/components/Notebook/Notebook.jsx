@@ -18,7 +18,6 @@ const Notebook = ({ docID, resourceTitle }) => {
   const [clients, setClients] = useState([]);
 
   const [lineRefresh, incrementLineRefresh] = useReducer(count => count + 1, 0);
-  const [allRunning, setAllRunning] = useState(false);
 
   useEffect(() => {
     const cells = doc.getArray('cells');
@@ -117,8 +116,6 @@ const Notebook = ({ docID, resourceTitle }) => {
     deleteCell,
     title,
     handleTitleChange,
-    allRunning,
-    setAllRunning,
     lineRefresh,
     incrementLineRefresh
   };

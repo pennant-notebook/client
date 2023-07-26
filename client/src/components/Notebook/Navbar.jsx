@@ -39,7 +39,7 @@ const Navbar = ({ codeCells, clients = [], isDashboard, handleDisconnect }) => {
             sx={{
               alignItems: 'center'
             }}>
-            <Tooltip title={docID ? 'Dashbord' : 'Home'} arrow>
+            <Tooltip title={docID ? '⬅ Dashboard' : '⬅ Home'} arrow>
               <IconButton
                 edge='start'
                 color='inherit'

@@ -10,23 +10,22 @@ import { useCMThemeContext } from '../../contexts/ThemeManager';
 
 const CodeCell = ({ cellId, cell, content, getStartingLineNumber }) => {
   const { editorTheme } = useCMThemeContext();
-
   const { awareness, notebookMetadata, docID } = useProviderContext();
-  const { deleteCell, allRunning } = useNotebookContext();
+  const { deleteCell } = useNotebookContext();
 
   const cellMetadata = cell.get('metaData');
   const outputMap = cell.get('outputMap');
+  const cellRunning = cellMetadata.get('isRunning');
 
   const [cellExeCount, setCellExeCount] = useState(cellMetadata.get('exeCount'));
   const [output, setOutput] = useState(outputMap.get('stdout'));
   const [status, setStatus] = useState(outputMap.get('status'));
-
-  const [processing, setProcessing] = useState(false);
+  const [processing, setProcessing] = useState(cellRunning);
   const editorRef = useRef(null);
 
   const handleRunCode = useCallback(async () => {
     try {
-      setProcessing(true);
+      cellMetadata.set('isRunning', true);
       const response = await handleDredd(docID, cellId, cell.get('content').toString());
       const outputMap = cell.get('outputMap');
       outputMap.set('stdout', response.output);
@@ -34,10 +33,11 @@ const CodeCell = ({ cellId, cell, content, getStartingLineNumber }) => {
     } catch (error) {
       console.error(error);
     } finally {
-      setProcessing(false);
+      cellMetadata.set('isRunning', false);
     }
+
     updateMetadata(cellMetadata, notebookMetadata);
-  }, [docID, cellId, cell]);
+  }, [docID, cellId, cell, cellMetadata]);
 
   useEffect(() => {
     const editorContainer = document.querySelector(`#editor-${cellId}`);
@@ -61,10 +61,12 @@ const CodeCell = ({ cellId, cell, content, getStartingLineNumber }) => {
       e.changes.keys.forEach((change, key) => {
         if (key === 'exeCount') {
           setCellExeCount(cellMetadata.get('exeCount') || '');
+        } else if (key === 'isRunning') {
+          setProcessing(cellMetadata.get('isRunning') || false);
         }
       });
     });
-  }, [outputMap, cellMetadata]);
+  }, [outputMap, cellMetadata, processing]);
 
   return (
     <Box
@@ -74,15 +76,9 @@ const CodeCell = ({ cellId, cell, content, getStartingLineNumber }) => {
         width: '100%'
       }}>
       <Stack direction='row' sx={{ width: '100%', alignItems: 'center' }}>
-        <StyledBadge badgeContent={processing || allRunning ? '*' : cellExeCount || ' '} status={status} />
+        <StyledBadge badgeContent={processing ? '*' : cellExeCount || ' '} status={status} />
         <Box className='codecell-container'>
-          <CodeToolbar
-            onClickRun={handleRunCode}
-            id={cellId}
-            onDelete={deleteCell}
-            processing={processing}
-            allRunning={allRunning}
-          />
+          <CodeToolbar onClickRun={handleRunCode} id={cellId} onDelete={deleteCell} processing={processing} />
           <Box id={`editor-${cellId}`}></Box>
           <Box className={`codecell-output ${status === 'error' ? 'error' : ''}`} sx={{ py: output ? '4px' : 0 }}>
             {processing ? (

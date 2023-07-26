@@ -8,9 +8,12 @@ import NotebookRoute from './components/Landing/NotebookRoute';
 import ThemeManager from './contexts/ThemeManager';
 import { useState } from 'react';
 import { codeMirrorThemes } from './contexts/ThemeManager';
+import { useMediaQuery } from '@mui/material';
 
 function App() {
-  const [theme, setTheme] = useState('light');
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+
+  const [theme, setTheme] = useState(prefersDarkMode ? 'dark' : 'light');
   const [editorTheme, setEditorTheme] = useState(codeMirrorThemes[0]);
 
   const toggleTheme = () => {

@@ -9,7 +9,7 @@ import {
   CircularProgress
 } from '../../utils/MuiImports';
 
-const CodeToolbar = ({ onClickRun, onDelete, id, processing, allRunning }) => {
+const CodeToolbar = ({ onClickRun, onDelete, id, processing }) => {
   return (
     <Box
       sx={{
@@ -29,7 +29,7 @@ const CodeToolbar = ({ onClickRun, onDelete, id, processing, allRunning }) => {
         <Tooltip title='Run code' enterDelay={1000}>
           <span>
             <IconButton className='toolbutton' disabled={processing} onClick={onClickRun}>
-              {processing || allRunning ? <CircularProgress size={24} /> : <PlayCircle size={24} />}
+              {processing ? <CircularProgress size={24} /> : <PlayCircle size={24} />}
             </IconButton>
           </span>
         </Tooltip>

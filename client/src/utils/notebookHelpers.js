@@ -21,8 +21,8 @@ export const createCell = type => {
   if (type === 'code') {
     cell.set('outputMap', new Y.Map());
     const metadata = cell.set('metaData', new Y.Map());
+    metadata.set('isRunning', false);
     metadata.set('exeCount', 0);
-    metadata.set('isActive', 'true');
   }
   return cell;
 };
@@ -64,4 +64,13 @@ export const randomColor = () => {
     color += letters[Math.floor(Math.random() * 16)];
   }
   return color;
+};
+
+export const codeTestingPromise = async () => {
+  const promise = new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve('Success!');
+    }, 2000);
+  });
+  return promise;
 };

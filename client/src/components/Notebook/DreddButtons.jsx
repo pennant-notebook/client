@@ -6,24 +6,27 @@ import useProviderContext from '../../contexts/ProviderContext';
 import { handleResetContext, handleRunAllCode } from '../../services/dreddExecutionService';
 import { toast } from 'react-toastify';
 import PlayAllIcon from '../../assets/allplay.png';
+import { codeTestingPromise } from '../../utils/notebookHelpers';
 
 const DreddButtons = ({ codeCells }) => {
   const { notebookMetadata } = useProviderContext();
-  const { setAllRunning } = useNotebookContext();
   const { docID } = useParams();
   const [resetting, setResetting] = useState(false);
   const [running, setRunning] = useState(false);
 
   const handleRunAll = async () => {
+    const orderedCells = codeCells.sort((a, b) => a.get('pos') - b.get('pos'));
+
     try {
       setRunning(true);
-      setAllRunning(true);
-      const orderedCells = codeCells.sort((a, b) => a.get('pos') - b.get('pos'));
+      orderedCells.forEach(cell => cell.get('metaData').set('isRunning', true));
+
+      // await codeTestingPromise();
       await handleRunAllCode(docID, orderedCells, notebookMetadata);
     } catch (error) {
       console.error(error);
     } finally {
-      setAllRunning(false);
+      orderedCells.forEach(cell => cell.get('metaData').set('isRunning', false));
       setRunning(false);
     }
   };
@@ -31,14 +34,19 @@ const DreddButtons = ({ codeCells }) => {
   const handleReset = async () => {
     try {
       setResetting(true);
-      setAllRunning(true);
+      codeCells.forEach(c => {
+        c.get('metaData').set('isRunning', true);
+        c.get('outputMap').set('status', '');
+      });
+      // await codeTestingPromise();
+
       await handleResetContext(docID, notebookMetadata, codeCells);
-      codeCells.forEach(c => c.get('outputMap').set('status', ''));
+
       toast.success('Context successfully reset');
     } catch (error) {
       console.error(error);
     } finally {
-      setAllRunning(false);
+      codeCells.forEach(c => c.get('metaData').set('isRunning', false));
       setResetting(false);
     }
   };

@@ -69,8 +69,6 @@ export const updateMetadata = (cellMetadata, notebookMetadata) => {
 export const handleDredd = async (docID, cellId, editorContent) => {
   const token = await sendToDredd(docID, cellId, editorContent);
   const response = await checkDreddStatus(token);
-  // const processedResponse = response[0].output;
-  // const processedResponse = [{ type: 'error', output: 'hello world\n' }];
   return response[0];
 };
 
@@ -95,9 +93,6 @@ export const handleRunAllCode = async (docID, codeCells, notebookMetadata) => {
     const id = cell.get('id');
     const code = cell.get('content').toString();
     const outputMap = cell.get('outputMap');
-    // const response = [{ type: 'output', output: 'hello world' }];
-    // const errorResponse = [{ type: 'error', output: 'ReferenceError' }];
-
     const token = await sendToDredd(docID, id, code);
     const response = await checkDreddStatus(token);
 

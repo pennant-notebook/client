@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { useMediaQuery, ThemeProvider, createTheme } from '@mui/material';
+import { createTheme, useMediaQuery, ThemeProvider } from '../utils/MuiImports';
 import CssBaseline from '@mui/material/CssBaseline';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { tokyoNight } from '@uiw/codemirror-theme-tokyo-night';
@@ -17,10 +17,6 @@ export const CodeMirrorThemeContext = createContext();
 export const useCMThemeContext = () => useContext(CodeMirrorThemeContext);
 
 function ThemeManager({ children, theme, toggleTheme, toggleCMTheme, editorTheme }) {
-  // const [manuallyToggled, setManuallyToggled] = useState(false);
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-  // const chosenTheme = manuallyToggled ? theme : prefersDarkMode ? 'dark' : 'light';
-
   const lightTheme = createTheme({
     palette: {
       mode: 'light',
@@ -47,9 +43,14 @@ function ThemeManager({ children, theme, toggleTheme, toggleCMTheme, editorTheme
     }
   });
 
+  // const [manuallyToggled, setManuallyToggled] = useState(false);
+
   // useEffect(() => {
   //   setManuallyToggled(true);
   // }, [theme]);
+
+  // const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  // const chosenTheme = manuallyToggled ? theme : prefersDarkMode ? 'dark' : 'light';
 
   return (
     <CodeMirrorThemeContext.Provider value={{ editorTheme, toggleCMTheme, codeMirrorThemes }}>

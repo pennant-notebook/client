@@ -22,7 +22,6 @@ async function createDoc(username) {
 }
 
 async function editDocTitle({ docID, title, username }) {
-  console.log(docID, title, username);
   try {
     const response = await axios.put(`${URL}/doc/${docID}/${username.slice(1)}`, { title });
     return response.data;
