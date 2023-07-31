@@ -29,10 +29,16 @@ const CodeCell = ({ cellId, cell, content, reportRef = () => {} }) => {
       cellMetadata.set('isRunning', true);
       const response = await handleDredd(docID, cellId, cell.get('content').toString());
       const outputMap = cell.get('outputMap');
+      console.log(response);
       outputMap.set('stdout', response.output);
       outputMap.set('status', response.type);
     } catch (error) {
       console.error(error);
+      if (error.message === 'critical error') {
+        console.log('Caught critical error');
+        outputMap.set('status', 'critical');
+        outputMap.set('stdout', 'Critical error, please check your code and try again');
+      }
     } finally {
       cellMetadata.set('isRunning', false);
     }
@@ -92,7 +98,7 @@ const CodeCell = ({ cellId, cell, content, reportRef = () => {} }) => {
         <Box className='codecell-container'>
           <CodeToolbar onClickRun={handleRunCode} id={cellId} onDelete={deleteCell} processing={processing} />
           <Box id={`editor-${cellId}`}></Box>
-          <Box className={`codecell-output ${status === 'error' ? 'error' : ''}`} sx={{ py: output ? '4px' : 0 }}>
+          <Box className={`codecell-output ${status}`} sx={{ py: output ? '4px' : 0 }}>
             {processing ? (
               <Typography sx={{ ml: '5px', color: '#cfd1d8' }}>Processing...</Typography>
             ) : (

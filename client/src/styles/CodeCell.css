@@ -29,6 +29,14 @@
   background-color: crimson;
 }
 
+.codecell-output.critical {
+  background-color: yellow;
+}
+
+.codecell-output.critical p {
+  color: black;
+}
+
 .markdown-container {
   mask-image: radial-gradient(circle, black 100%, transparent 100%);
   width: 100%;

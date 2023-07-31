@@ -57,7 +57,14 @@ const StyledBadge = ({ badgeContent, status }) => {
         sx={{
           '.MuiBadge-badge': {
             borderRadius: '3px',
-            backgroundColor: status === 'error' ? 'crimson' : theme === 'dark' ? '#282c34' : '#eff1f3',
+            backgroundColor:
+              status === 'error'
+                ? 'crimson'
+                : status === 'critical'
+                ? 'yellow'
+                : theme === 'dark'
+                ? '#282c34'
+                : '#eff1f3',
             border: theme === 'dark' ? '2px solid #2c3032' : '2px solid #dbd3d8',
             color: theme === 'dark' ? '#fff' : '#000',
             width: badgeContent ? '22px' : '18px',
