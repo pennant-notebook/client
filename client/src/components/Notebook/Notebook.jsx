@@ -8,6 +8,7 @@ import { createCell, getUserObjects, generateRandomName, randomColor } from '../
 
 const Notebook = ({ docID, resourceTitle }) => {
   const { doc, provider, awareness, notebookMetadata } = useProviderContext();
+  const [refreshCount, incrementRefreshCount] = useReducer(count => count + 1, 0);
 
   const theme = useTheme();
   const [title, setTitle] = useState(resourceTitle || docID);
@@ -69,6 +70,7 @@ const Notebook = ({ docID, resourceTitle }) => {
   const deleteCell = async id => {
     const cellIndex = cellsArray.toArray().findIndex(c => c.get('id') === id);
     if (cellIndex !== -1) cellsArray.delete(cellIndex);
+    incrementRefreshCount();
   };
 
   const addCellAtIndex = async (idx, type) => {
@@ -92,6 +94,7 @@ const Notebook = ({ docID, resourceTitle }) => {
     await deleteCell('delete');
     cellsArray.insert(newIndex, [clone]);
     updatePositions();
+    incrementRefreshCount();
   };
 
   const handleTitleChange = newTitle => {
@@ -125,7 +128,9 @@ const Notebook = ({ docID, resourceTitle }) => {
     title,
     handleTitleChange,
     allRunning,
-    setAllRunning
+    setAllRunning,
+    refreshCount,
+    incrementRefreshCount
   };
 
   return (

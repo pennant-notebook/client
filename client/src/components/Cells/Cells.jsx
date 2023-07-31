@@ -1,4 +1,4 @@
-import { useReducer, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Box } from '../../utils/MuiImports';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import AddCell from './AddCell';
@@ -6,8 +6,7 @@ import useNotebookContext from '../../contexts/NotebookContext';
 import CellRow from './CellRow';
 
 const Cells = ({ cells, setCells }) => {
-  const { repositionCell } = useNotebookContext();
-  const [refreshCount, incrementRefreshCount] = useReducer(count => count + 1, 0);
+  const { repositionCell, refreshCount, incrementRefreshCount } = useNotebookContext();
 
   const [isDragging, setIsDragging] = useState(false);
   const cellRefs = useRef({});

@@ -75,15 +75,4 @@ const createCodeEditor = (content, id, awareness, handleRunCode, editorTheme) =>
   return view;
 };
 
-// export const updateLineNumbers = (view, startingLineNumber) => {
-//   const transaction = view.state.update({
-//     reconfigure: {
-//       [lineNumbers()]: lineNumbers({
-//         formatNumber: lineNo => lineNo + startingLineNumber - 1
-//       })
-//     }
-//   });
-//   view.dispatch(transaction);
-// };
-
 export default createCodeEditor;

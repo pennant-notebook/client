@@ -11,7 +11,6 @@ import { getUserObjects } from '../../utils/notebookHelpers';
 
 const CellRow = ({ index, cell, refreshCount, isDragging }) => {
   const { awareness } = useProviderContext();
-  const { lineRefresh } = useNotebookContext();
   const [isEditing, setIsEditing] = useState(false);
 
   const id = cell.get('id');
@@ -23,7 +22,7 @@ const CellRow = ({ index, cell, refreshCount, isDragging }) => {
 
   return (
     <Box width='100%'>
-      <Draggable key={id} draggableId={id.toString()} index={index} isDragDisabled={isEditing}>
+      <Draggable key={`${id}-${refreshCount}`} draggableId={id.toString()} index={index} isDragDisabled={isEditing}>
         {provided => (
           <Box ref={provided.innerRef} {...provided.draggableProps}>
             <Stack direction='row' alignItems='center' sx={{ my: '0px' }}>
@@ -43,12 +42,8 @@ const CellRow = ({ index, cell, refreshCount, isDragging }) => {
                   sx={{ flexGrow: 1, position: 'relative' }}
                   onFocus={() => setIsEditing(true)}
                   onBlur={() => setIsEditing(false)}>
-                  {type === 'markdown' && (
-                    <MarkdownCell id={id} content={content} cell={cell} refreshCount={refreshCount} />
-                  )}
-                  {type === 'code' && (
-                    <CodeCell key={`${id}-${lineRefresh}`} cellId={id} cell={cell} content={content} />
-                  )}
+                  {type === 'markdown' && <MarkdownCell id={id} content={content} cell={cell} />}
+                  {type === 'code' && <CodeCell key={`${id}`} cellId={id} cell={cell} content={content} />}
                   <CellPosAvatar pos={cell.get('pos')} />
                 </Box>
               </Box>
