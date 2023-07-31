@@ -39,8 +39,10 @@ const DocTitle = () => {
   };
 
   useEffect(() => {
-    setTempTitle(notebook?.title || '');
-  }, [notebook?.title]);
+    if (notebook) {
+      setTempTitle(notebook.title || '');
+    }
+  }, [notebook]);
 
   return (
     <Box className='notebook-title'>
@@ -54,7 +56,7 @@ const DocTitle = () => {
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis'
           }}>
-          {notebook?.title === notebook?.docID ? 'untitled' : notebook.title}
+          {notebook.title === notebook.docID ? 'untitled' : notebook.title ? notebook.title : 'untitled'}
         </Typography>
       </Box>
       <Dialog open={open} onClose={() => setOpen(false)}>
