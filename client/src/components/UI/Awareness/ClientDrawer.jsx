@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { useQuery } from 'react-query';
 import Avatar from 'react-avatar';
@@ -22,14 +22,14 @@ const ClientDrawer = ({ handleDisconnect, clients = [] }) => {
     custom: { currTheme, toggleTheme }
   } = useTheme();
 
-  const handleEditNameClick = () => {
+  const handleEditNameClick = useCallback(() => {
     let newName = window.prompt('Enter a new name:');
     if (newName) {
       setAvatar(prevAvatar => ({ ...prevAvatar, name: newName }));
       provider.awareness.setLocalStateField('user', { ...avatar, name: newName, setByUser: true });
       localStorage.setItem('userData', JSON.stringify({ name: newName, color: avatar.color, setByUser: true }));
     }
-  };
+  }, [avatar, provider.awareness]);
 
   const handleFolderClick = () => {
     setShowNotebooks(!showNotebooks);

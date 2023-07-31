@@ -3,12 +3,12 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import useProviderContext from '../../contexts/ProviderContext';
 import useNotebookContext from '../../contexts/NotebookContext';
 import CodeToolbar from './CodeToolbar';
-import createCodeEditor, { updateLineNumbers } from './createCodeEditor';
+import createCodeEditor from './createCodeEditor';
 import { handleDredd, updateMetadata } from '../../services/dreddExecutionService';
 import StyledBadge from '../UI/StyledComponents';
 import { useCMThemeContext } from '../../contexts/ThemeManager';
 
-const CodeCell = ({ cellId, cell, content, getStartingLineNumber, reportRef = () => {} }) => {
+const CodeCell = ({ cellId, cell, content, reportRef = () => {} }) => {
   const { editorTheme } = useCMThemeContext();
   const { awareness, notebookMetadata, docID } = useProviderContext();
   const { deleteCell } = useNotebookContext();
@@ -42,14 +42,20 @@ const CodeCell = ({ cellId, cell, content, getStartingLineNumber, reportRef = ()
 
   useEffect(() => {
     const editorContainer = document.querySelector(`#editor-${cellId}`);
-    if (editorContainer && editorContainer.firstChild) {
-      editorContainer.removeChild(editorContainer.firstChild);
+    if (!editorRef.current) {
+      editorRef.current = createCodeEditor(content, cellId, awareness, handleRunCode, editorTheme);
+      editorContainer.appendChild(editorRef.current.dom);
     }
-    const startingLineNumber = getStartingLineNumber(cell.get('pos'));
-    editorRef.current = createCodeEditor(content, awareness, cellId, startingLineNumber, handleRunCode, editorTheme);
-    editorContainer.appendChild(editorRef.current.dom);
 
-    updateLineNumbers(editorRef.current, startingLineNumber);
+    return () => {
+      if (editorContainer && editorContainer.firstChild) {
+        editorContainer.removeChild(editorContainer.firstChild);
+      }
+      if (editorRef.current) {
+        editorRef.current.destroy();
+        editorRef.current = null;
+      }
+    };
   }, [content, editorTheme]);
 
   useEffect(() => {

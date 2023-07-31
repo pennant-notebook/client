@@ -1,23 +1,24 @@
 import { useEffect, useReducer, useState } from 'react';
-import { Box } from '../../utils/MuiImports';
+import { Box, useTheme } from '../../utils/MuiImports';
 import Cells from '../Cells/Cells';
 import Navbar from './Navbar';
 import { NotebookContext } from '../../contexts/NotebookContext';
 import useProviderContext from '../../contexts/ProviderContext';
-import { createCell, getUserObjects } from '../../utils/notebookHelpers';
-import { getClientFromLocalStorage, updateDisconnectedClient } from '../../utils/awarenessHelpers';
-import { useNavigate } from 'react-router';
+import { createCell, getUserObjects, generateRandomName, randomColor } from '../../utils/notebookHelpers';
 
 const Notebook = ({ docID, resourceTitle }) => {
   const { doc, provider, awareness, notebookMetadata } = useProviderContext();
-  const navigate = useNavigate();
+
+  const theme = useTheme();
   const [title, setTitle] = useState(resourceTitle || docID);
+
   const cellsArray = doc.getArray('cells');
   const [cellDataArr, setCellDataArr] = useState(cellsArray.toArray());
 
   const [clients, setClients] = useState([]);
+  const [hideClients, setHideClients] = useState(true);
 
-  const [lineRefresh, incrementLineRefresh] = useReducer(count => count + 1, 0);
+  const [allRunning, setAllRunning] = useState(false);
 
   useEffect(() => {
     const cells = doc.getArray('cells');
@@ -32,7 +33,18 @@ const Notebook = ({ docID, resourceTitle }) => {
   useEffect(() => {
     if (!awareness) return;
 
-    const { name, color } = getClientFromLocalStorage();
+    let color, name;
+
+    const storedUserData = JSON.parse(localStorage.getItem('userData'));
+
+    if (storedUserData && storedUserData.setByUser) {
+      color = storedUserData.color;
+      name = storedUserData.name;
+    } else {
+      color = randomColor();
+      name = generateRandomName();
+      localStorage.setItem('userData', JSON.stringify({ name, color }));
+    }
 
     awareness.setLocalStateField('user', { name, color });
 
@@ -40,6 +52,11 @@ const Notebook = ({ docID, resourceTitle }) => {
       const states = Array.from(awareness.getStates());
       const clientObjects = getUserObjects(states);
       setClients(clientObjects);
+      if (states.length > 1) {
+        setHideClients(false);
+      } else {
+        setHideClients(true);
+      }
     };
 
     awareness.on('update', updateClients);
@@ -52,18 +69,17 @@ const Notebook = ({ docID, resourceTitle }) => {
   const deleteCell = async id => {
     const cellIndex = cellsArray.toArray().findIndex(c => c.get('id') === id);
     if (cellIndex !== -1) cellsArray.delete(cellIndex);
-    incrementLineRefresh();
   };
 
   const addCellAtIndex = async (idx, type) => {
     const cell = createCell(type);
+    cell.set('theme', theme.palette.mode);
     if (idx >= cellsArray.length) {
       cellsArray.push([cell]);
     } else {
       cellsArray.insert(idx + 1, [cell]);
     }
     updatePositions();
-    incrementLineRefresh();
   };
 
   const updatePositions = () => {
@@ -100,14 +116,6 @@ const Notebook = ({ docID, resourceTitle }) => {
     };
   }, [title]);
 
-  const handleDisconnect = destination => {
-    if (docID) {
-      const currentClients = updateDisconnectedClient(provider);
-      setClients(currentClients);
-    }
-    navigate(destination);
-  };
-
   const codeCellsForDredd = cellDataArr.filter(c => c.get('type') === 'code');
 
   const contextValue = {
@@ -116,8 +124,8 @@ const Notebook = ({ docID, resourceTitle }) => {
     deleteCell,
     title,
     handleTitleChange,
-    lineRefresh,
-    incrementLineRefresh
+    allRunning,
+    setAllRunning
   };
 
   return (
@@ -127,7 +135,8 @@ const Notebook = ({ docID, resourceTitle }) => {
           codeCells={codeCellsForDredd}
           provider={provider}
           clients={clients}
-          handleDisconnect={handleDisconnect}
+          setClients={setClients}
+          hideClients={hideClients}
         />
 
         <Cells cells={cellDataArr} setCells={setCellDataArr} />

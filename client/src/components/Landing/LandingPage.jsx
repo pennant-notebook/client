@@ -20,15 +20,6 @@ const LandingPage = () => {
     }
   };
 
-  // const handleTry = async () => {
-  //   try {
-  //     const notebookData = await createDoc('@trypennant');
-  //     navigate(`/@trypennant/${notebookData.docID}`);
-  //   } catch (error) {
-  //     console.error('Error creating @trypennant notebook: ', error);
-  //   }
-  // };
-
   return (
     <Box
       className='landing'

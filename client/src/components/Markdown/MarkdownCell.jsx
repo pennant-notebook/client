@@ -10,6 +10,7 @@ import '@blocknote/core/style.css';
 const MarkdownCell = ({ id, content, cell, refreshCount }) => {
   const { provider, awareness } = useProviderContext();
   const { deleteCell } = useNotebookContext();
+
   const cellRef = useRef(0);
   const theme = useTheme().palette.mode;
   const users = getUserObjects(awareness.getStates());
@@ -37,8 +38,8 @@ const MarkdownCell = ({ id, content, cell, refreshCount }) => {
         <MarkdownToolbar id={id} onDelete={deleteCell} cellTheme={theme} />
         <Box id={`blockcell-${id}`}>
           <MarkdownEditor
-            id={`markdown-editor-${id}`}
             key={`${id}-${refreshCount}`}
+            id={`markdown-editor-${id}`}
             cell={cell}
             content={content}
             provider={provider}

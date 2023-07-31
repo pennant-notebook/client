@@ -5,7 +5,7 @@ import { IndexeddbPersistence } from 'y-indexeddb';
 
 export const initializeProvider = docID => {
   const provider = new HocuspocusProvider({
-    url: import.meta.env.VITE_WEBSOCKET_SERVER,
+    url: `wss://hp.mafishi.io/collab/${docID}`,
     name: docID,
     token: import.meta.env.VITE_HP_ACCESS_TOKEN
   });
@@ -17,6 +17,8 @@ export const initializeProvider = docID => {
 
   persistence.on('synced', () => {
     console.log('🔮 IndexedDB synced 🔮 ');
+    console.log(provider.configuration.url);
+
     if (provider.document.get('metaData').get('executionCount') === undefined) {
       notebookMetadata.set('executionCount', 0);
     }

@@ -21,11 +21,11 @@ function formatCode(view) {
   view.dispatch(transaction);
 }
 
-const createCodeEditor = (content, awareness, id, startingLineNumber, handleRunCode, editorTheme) => {
+const createCodeEditor = (content, id, awareness, handleRunCode, editorTheme) => {
   const customKeymap = keymap.of([
     { key: 'Alt-Enter', mac: 'Alt-Enter', run: handleRunCode, preventDefault: true },
     {
-      key: 'Shift-F',
+      key: 'Alt-Shift-f',
       run: view => {
         formatCode(view);
         return true;
@@ -47,9 +47,6 @@ const createCodeEditor = (content, awareness, id, startingLineNumber, handleRunC
       autocompletion(),
       yCollab(content, awareness),
       EditorView.lineWrapping,
-      lineNumbers({
-        formatNumber: lineNo => lineNo + startingLineNumber - 1
-      }),
       EditorView.theme({
         '&, .cm-scroller, .cm-content, .cm-gutter': {
           overflow: 'visible !important'
@@ -78,15 +75,15 @@ const createCodeEditor = (content, awareness, id, startingLineNumber, handleRunC
   return view;
 };
 
-export const updateLineNumbers = (view, startingLineNumber) => {
-  const transaction = view.state.update({
-    reconfigure: {
-      [lineNumbers()]: lineNumbers({
-        formatNumber: lineNo => lineNo + startingLineNumber - 1
-      })
-    }
-  });
-  view.dispatch(transaction);
-};
+// export const updateLineNumbers = (view, startingLineNumber) => {
+//   const transaction = view.state.update({
+//     reconfigure: {
+//       [lineNumbers()]: lineNumbers({
+//         formatNumber: lineNo => lineNo + startingLineNumber - 1
+//       })
+//     }
+//   });
+//   view.dispatch(transaction);
+// };
 
 export default createCodeEditor;

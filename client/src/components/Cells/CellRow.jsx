@@ -9,7 +9,7 @@ import useProviderContext from '../../contexts/ProviderContext';
 import { useState } from 'react';
 import { getUserObjects } from '../../utils/notebookHelpers';
 
-const CellRow = ({ index, cell, refreshCount, getStartingLineNumber, isDragging }) => {
+const CellRow = ({ index, cell, refreshCount, isDragging }) => {
   const { awareness } = useProviderContext();
   const { lineRefresh } = useNotebookContext();
   const [isEditing, setIsEditing] = useState(false);
@@ -47,13 +47,7 @@ const CellRow = ({ index, cell, refreshCount, getStartingLineNumber, isDragging 
                     <MarkdownCell id={id} content={content} cell={cell} refreshCount={refreshCount} />
                   )}
                   {type === 'code' && (
-                    <CodeCell
-                      key={`${id}-${lineRefresh}`}
-                      cellId={id}
-                      cell={cell}
-                      content={content}
-                      getStartingLineNumber={getStartingLineNumber}
-                    />
+                    <CodeCell key={`${id}-${lineRefresh}`} cellId={id} cell={cell} content={content} />
                   )}
                   <CellPosAvatar pos={cell.get('pos')} />
                 </Box>

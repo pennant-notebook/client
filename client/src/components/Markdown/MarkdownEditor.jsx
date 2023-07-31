@@ -5,7 +5,6 @@ import { ImageBlock } from './CustomBlockTypes';
 
 const MarkdownEditor = ({ cell, content, provider, currentUser, theme }) => {
   const id = cell.get('id');
-
   const insertImage = new ReactSlashMenuItem(
     'Insert Image',
     editor => {
