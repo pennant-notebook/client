@@ -20,6 +20,7 @@ const Notebook = ({ docID, resourceTitle }) => {
   const [allRunning, setAllRunning] = useState(false);
   const [clients, setClients] = useState([]);
   const [title, setTitle] = useState(resourceTitle || docID);
+  document.title = resourceTitle || 'Untitled Notebook';
 
   useEffect(() => {
     const cells = doc.getArray('cells');

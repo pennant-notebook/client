@@ -11,7 +11,8 @@ const LandingPage = () => {
   const navigate = useNavigate();
   document.title = 'Pennant';
 
-  const handleEnter = async () => {
+  const handleEnter = async e => {
+    e.preventDefault();
     try {
       const data = await createUser(username);
       navigate(`/@${data.username}`);
@@ -53,7 +54,7 @@ const LandingPage = () => {
                   onChange={e => setUsername(e.target.value)}
                   label='Enter workspace name'
                   onKeyDown={e => {
-                    if (e.key === 'Enter') handleEnter();
+                    if (e.key === 'Enter') handleEnter(e);
                   }}
                   sx={{
                     '& .MuiOutlinedInput-root': {

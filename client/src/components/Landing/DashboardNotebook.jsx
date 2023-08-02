@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
 import { Card, Typography, useTheme, InputBase } from '../../utils/MuiImports';
@@ -7,12 +7,18 @@ import { useMutation } from 'react-query';
 import { deleteDoc, editDocTitle } from '../../services/dynamoPost';
 import { toast } from 'react-toastify';
 
-const DashboardNotebook = ({ docID, title, index, refetch }) => {
+const DashboardNotebook = ({ docID, title, index, refetch, isNewNotebook }) => {
   const { username } = useParams();
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(isNewNotebook);
   const [newTitle, setNewTitle] = useState('');
   const theme = useTheme();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isNewNotebook) {
+      setIsEditing(true);
+    }
+  }, [isNewNotebook]);
 
   const deleteMutation = useMutation(deleteDoc, {
     onSuccess: () => {
@@ -65,7 +71,7 @@ const DashboardNotebook = ({ docID, title, index, refetch }) => {
 
   const handleEditClick = e => {
     e.stopPropagation();
-    setNewTitle(title);
+    setNewTitle(title || '');
     setIsEditing(true);
   };
 

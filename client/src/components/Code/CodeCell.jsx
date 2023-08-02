@@ -29,15 +29,16 @@ const CodeCell = ({ cellId, cell, content, reportRef = () => {} }) => {
       cellMetadata.set('isRunning', true);
       const response = await handleDredd(docID, cellId, cell.get('content').toString());
       const outputMap = cell.get('outputMap');
-      console.log(response);
       outputMap.set('stdout', response.output);
       outputMap.set('status', response.type);
     } catch (error) {
-      console.error(error);
+      console.error(error.message);
       if (error.message === 'critical error') {
-        console.log('Caught critical error');
         outputMap.set('status', 'critical');
-        outputMap.set('stdout', 'Critical error, please check your code and try again');
+        outputMap.set(
+          'stdout',
+          '⚠️ Critical Error: Notebook has been reset. Remove or debug the code in this cell, and re-run all cells again.'
+        );
       }
     } finally {
       cellMetadata.set('isRunning', false);

@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from 'react-query';
+import { useQuery } from 'react-query';
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { Box, TextField, Button, Grid, Typography, useTheme } from '../../utils/MuiImports';
@@ -9,7 +9,7 @@ import { fetchNotebooks } from '../../services/dynamoFetch';
 import DashboardNotebook from './DashboardNotebook';
 
 export const UserDashboardContent = ({ username, notebooks, refetch }) => {
-  document.title = 'Dashboard | ' + username;
+  document.title = 'Board | ' + username;
   const [searchTerm, setSearchTerm] = useState('');
 
   const navigate = useNavigate();

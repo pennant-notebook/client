@@ -73,7 +73,7 @@ export const handleDredd = async (docID, cellId, editorContent) => {
 };
 
 export const handleResetContext = async (docID, notebookMetadata, codeCells) => {
-  console.log('💫 Resetting context for notebookID: ' + docID);
+  console.log('💫 Resetting execution context');
   await resetContext(docID);
   notebookMetadata.set('executionCount', 0);
   codeCells.forEach(cell => {

@@ -1,7 +1,17 @@
+@import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Fira+Code&display=swap');
 @import url('./Client.css');
 @import url('./CodeCell.css');
 @import url('./LoadingSpinner.css');
 @import url('./buttons.css');
+
+body {
+  font-family: 'Lato', sans-serif;
+}
+
+code {
+  font-family: 'Fira Code', monospace;
+}
 
 .main-content {
   padding-bottom: 60px;

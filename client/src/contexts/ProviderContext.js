@@ -16,8 +16,7 @@ export const initializeProvider = docID => {
   const notebookMetadata = doc.getMap('metaData');
 
   persistence.on('synced', () => {
-    console.log('🔮 IndexedDB synced 🔮 ');
-    console.log(provider.configuration.url);
+    console.log('🔮 Provider + IndexedDB Synced 🔮');
 
     if (provider.document.get('metaData').get('executionCount') === undefined) {
       notebookMetadata.set('executionCount', 0);

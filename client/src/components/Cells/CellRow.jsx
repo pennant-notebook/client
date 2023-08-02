@@ -4,21 +4,15 @@ import MarkdownCell from '../Markdown/MarkdownCell';
 import CodeCell from '../Code/CodeCell';
 import AddCell from './AddCell';
 import { CellPosAvatar } from '../UI/StyledComponents';
-import useNotebookContext from '../../contexts/NotebookContext';
-import useProviderContext from '../../contexts/ProviderContext';
 import { useState } from 'react';
 import { getUserObjects } from '../../utils/notebookHelpers';
 
 const CellRow = ({ index, cell, refreshCount, isDragging }) => {
-  const { awareness } = useProviderContext();
   const [isEditing, setIsEditing] = useState(false);
 
   const id = cell.get('id');
   const type = cell.get('type');
   const content = cell.get('content');
-
-  const users = getUserObjects(awareness.getStates());
-  const currentUser = users[0];
 
   return (
     <Box width='100%'>
@@ -30,10 +24,9 @@ const CellRow = ({ index, cell, refreshCount, isDragging }) => {
                 <Box className='dragIndicator' {...provided.dragHandleProps}>
                   <DragIndicator
                     sx={{
-                      opacity: isEditing ? '1' : '0.5',
+                      opacity: isEditing ? '0.75' : '0.5',
                       mt: 0.5,
-                      transform: 'rotate(90deg)',
-                      color: isEditing ? currentUser.color : 'normal'
+                      transform: 'rotate(90deg)'
                     }}
                   />
                 </Box>

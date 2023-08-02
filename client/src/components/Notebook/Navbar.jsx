@@ -1,5 +1,4 @@
 import logo from '../../assets/pennant-color.png';
-import darklogo from '../../assets/pennant-gray.png';
 import {
   AppBar,
   Toolbar,
@@ -46,7 +45,7 @@ const Navbar = ({ codeCells, clients = [], isDashboard, handleDisconnect }) => {
                 aria-label='logo'
                 onClick={() => (docID ? handleDisconnect(`/${username}`) : navigate(`/`))}
                 sx={{ py: 1, borderRadius: '2px' }}>
-                <img src={currTheme === 'dark' ? darklogo : logo} width='56px' />
+                <img src={logo} width='56px' />
               </IconButton>
             </Tooltip>
           </Box>
