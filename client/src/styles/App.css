@@ -2,6 +2,8 @@
 @import url('https://fonts.googleapis.com/css?family=Fira+Code&display=swap');
 @import url('./Client.css');
 @import url('./CodeCell.css');
+@import url('./MarkdownCell.css');
+
 @import url('./LoadingSpinner.css');
 @import url('./buttons.css');
 
@@ -15,18 +17,40 @@ code {
 
 .main-content {
   padding-bottom: 60px;
-  /* display: flex;
-  flex-direction: column; */
   align-items: center;
   margin-inline: auto;
 }
 
-div[id*='tippy'] > div[class*='tippy-box'][data-placement='left'] {
-  display: none !important;
+.navbar-actions.run,
+.navbar-actions.reset {
+  width: 40px;
+  height: 32.47px;
+  /* border: 1px solid red; */
+  border-radius: 2px;
+  opacity: 1;
+  box-shadow: rgba(6, 24, 44, 0.65) 0px 1px 2px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+}
+.navbar-actions.run:hover,
+.navbar-actions.reset:hover {
+  box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset, rgba(6, 24, 44, 0.4) 0px 0px 0px 1px;
 }
 
-div[id*='blockcell'] > div > div[data-theme='dark'] {
-  background-color: #282c34 !important;
+.navbar-actions.reset {
+  margin-right: 6px;
+  padding: 0.25rem 0.4rem;
+}
+
+.navbar-actions.run {
+  margin-right: 6px;
+}
+
+.navbar-actions.run:disabled {
+  opacity: 0.3;
+}
+
+.navbar-actions.reset:disabled {
+  color: lightgray;
+  opacity: 0.3;
 }
 
 .cm-ySelectionInfo {
@@ -88,29 +112,6 @@ div[id*='blockcell'] > div > div[data-theme='dark'] {
 div.notebook-title p {
   font-family: 'Lato', 'sans-serif';
   text-align: center;
-}
-
-.blocknote-editor {
-  padding: 8px 24px;
-  border-radius: 0px;
-}
-
-.blocknote-editor code {
-  font-family: 'Fira Code', 'Monaco', 'Mono Lisa', 'Monospace';
-  font-size: 0.9rem;
-  border-radius: 4px;
-  padding-inline: 4px;
-  padding-block: 1px;
-}
-
-div[data-theme='dark'].blocknote-editor code {
-  color: #fff !important;
-  background-color: #5a5a5a !important;
-}
-
-div[data-theme='light'].blocknote-editor code {
-  color: #474440 !important;
-  background-color: #bfcad0 !important;
 }
 
 .landing .workspace-button,

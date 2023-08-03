@@ -47,15 +47,10 @@ const ClientDrawer = ({ handleDisconnect, clients = [] }) => {
   return (
     <Box sx={{ alignItems: 'center' }}>
       {avatar && (
-        <IconButton onClick={() => setOpen(true)} sx={{ mr: 1 }}>
-          <Avatar
-            name={avatar.name}
-            size='28'
-            round='30px'
-            textSizeRatio={3}
-            color={avatar.color}
-            sx={{ fontSize: '26px' }}
-          />
+        <IconButton onClick={() => setOpen(true)} sx={{ mx: 1, p: 0 }}>
+          <Box className='local-widget'>
+            <Avatar name={avatar.name} size={30} round='30px' textSizeRatio={3} color={avatar.color} />
+          </Box>
         </IconButton>
       )}
 

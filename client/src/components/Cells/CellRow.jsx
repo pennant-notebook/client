@@ -5,7 +5,6 @@ import CodeCell from '../Code/CodeCell';
 import AddCell from './AddCell';
 import { CellPosAvatar } from '../UI/StyledComponents';
 import { useState } from 'react';
-import { getUserObjects } from '../../utils/notebookHelpers';
 
 const CellRow = ({ index, cell, refreshCount, isDragging }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -37,7 +36,7 @@ const CellRow = ({ index, cell, refreshCount, isDragging }) => {
                   onBlur={() => setIsEditing(false)}>
                   {type === 'markdown' && <MarkdownCell id={id} content={content} cell={cell} />}
                   {type === 'code' && <CodeCell key={`${id}`} cellId={id} cell={cell} content={content} />}
-                  <CellPosAvatar pos={cell.get('pos')} />
+                  <CellPosAvatar pos={cell.get('pos') + 1} />
                 </Box>
               </Box>
             </Stack>

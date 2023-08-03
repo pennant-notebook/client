@@ -42,7 +42,7 @@ const Notebook = ({ docID, resourceTitle }) => {
     const updateClients = () => {
       const states = Array.from(awareness.getStates());
       const clientObjects = getUserObjects(states);
-      setClients(clientObjects);
+      setTimeout(() => setClients(clientObjects), 0);
     };
 
     awareness.on('update', updateClients);
@@ -55,6 +55,7 @@ const Notebook = ({ docID, resourceTitle }) => {
   const deleteCell = async id => {
     const cellIndex = cellsArray.toArray().findIndex(c => c.get('id') === id);
     if (cellIndex !== -1) cellsArray.delete(cellIndex);
+    updatePositions();
   };
 
   const addCellAtIndex = async (idx, type) => {

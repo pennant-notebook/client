@@ -1,3 +1,8 @@
+:root {
+  --svg-color: #dbd3d8; /* Light mode color */
+  --svg-color-dark: #282a34; /* Dark mode color */
+}
+
 .exeBadge {
   background-color: #2d313c;
   border: 2px solid gray;
@@ -9,6 +14,14 @@
   mask-image: radial-gradient(circle, black 100%, transparent 100%);
   width: 100%;
   border: 1px solid dimgray;
+  border-radius: 3px;
+  background-color: #3d414d;
+}
+
+.codecell-container.dark {
+  mask-image: radial-gradient(circle, black 100%, transparent 100%);
+  width: 100%;
+  border: 2px solid dimgray;
   border-radius: 5px;
   background-color: #3d414d;
 }
@@ -35,22 +48,6 @@
 
 .codecell-output.critical p {
   color: black;
-}
-
-.markdown-container {
-  mask-image: radial-gradient(circle, black 100%, transparent 100%);
-  width: 100%;
-  border: 1px solid lightgray;
-  border-radius: 2px;
-}
-
-.block-cell {
-  padding: 0 calc((100% - 731px) / 2);
-  height: 100%;
-  overflow: auto;
-  word-wrap: break-word;
-  white-space: pre-wrap;
-  resize: none;
 }
 
 /* .cm-gutters .cm-lineNumbers .cm-gutterElement {

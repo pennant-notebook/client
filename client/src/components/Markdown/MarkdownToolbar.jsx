@@ -1,19 +1,10 @@
 import { memo } from 'react';
 import { CloseSharp, Box, Stack, Tooltip, IconButton, Typography } from '../../utils/MuiImports';
-import { grey } from '@mui/material/colors';
 
 const MarkdownToolbar = memo(({ onDelete, id, toggleTheme, cellTheme }) => {
   const buttonColor = cellTheme === 'dark' ? '#e1e1ea' : '#2c3032';
   return (
-    <Box
-      sx={{
-        backgroundColor: cellTheme === 'dark' ? '#282A35' : grey[100],
-        height: '40px',
-        margin: 0,
-        padding: 0,
-        borderBottom: 'none',
-        zIndex: 0
-      }}>
+    <Box className={`markdown-toolbar ${cellTheme}`}>
       <Stack direction='row' sx={{ justifyContent: 'end', position: 'relative', alignItems: 'center', mr: 1 }}>
         <Typography variant='overline' sx={{ color: buttonColor, position: 'absolute', left: '12px' }}>
           Markdown

@@ -26,8 +26,11 @@ const Navbar = ({ codeCells, clients = [], isDashboard, handleDisconnect }) => {
   } = useTheme();
 
   const clientCount = clients.length;
+  const paddingClient =
+    clientCount <= 1 ? 10 : clientCount === 2 ? 8 : clientCount === 3 ? 6 : clientCount >= 4 ? 0 : 10;
+
   return (
-    <AppBar position='sticky' sx={{ backgroundColor: currTheme === 'dark' ? '#1e202d' : '#34568B' }}>
+    <AppBar position='sticky' sx={{ backgroundColor: currTheme === 'dark' ? '#1e202d' : '#1D465B' }}>
       <Toolbar
         sx={{
           width: '100%',
@@ -49,7 +52,7 @@ const Navbar = ({ codeCells, clients = [], isDashboard, handleDisconnect }) => {
               </IconButton>
             </Tooltip>
           </Box>
-          <Box id='CLIENTS' sx={{ ml: 4, pr: clientCount >= 4 ? 1.5 : 10 - clientCount }}>
+          <Box id='CLIENTS' sx={{ ml: 4, pr: paddingClient }}>
             {docID && <Clients clients={clients} />}
           </Box>
         </Box>

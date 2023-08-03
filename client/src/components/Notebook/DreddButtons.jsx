@@ -1,12 +1,10 @@
 import { useState } from 'react';
 import { useParams } from 'react-router';
 import { Stack, Refresh, CircularProgress, Tooltip, IconButton } from '../../utils/MuiImports';
-import useNotebookContext from '../../contexts/NotebookContext';
 import useProviderContext from '../../contexts/ProviderContext';
 import { handleResetContext, handleRunAllCode } from '../../services/dreddExecutionService';
 import { toast } from 'react-toastify';
 import PlayAllIcon from '../../assets/allplay.png';
-import { codeTestingPromise } from '../../utils/notebookHelpers';
 
 const DreddButtons = ({ codeCells }) => {
   const { notebookMetadata } = useProviderContext();
@@ -20,8 +18,6 @@ const DreddButtons = ({ codeCells }) => {
     try {
       setRunning(true);
       orderedCells.forEach(cell => cell.get('metaData').set('isRunning', true));
-
-      // await codeTestingPromise();
       await handleRunAllCode(docID, orderedCells, notebookMetadata);
     } catch (error) {
       console.error(error);
@@ -38,7 +34,6 @@ const DreddButtons = ({ codeCells }) => {
         c.get('metaData').set('isRunning', true);
         c.get('outputMap').set('status', '');
       });
-      // await codeTestingPromise();
 
       await handleResetContext(docID, notebookMetadata, codeCells);
 
@@ -64,11 +59,15 @@ const DreddButtons = ({ codeCells }) => {
     <Stack sx={{ alignItems: 'center' }} direction='row' spacing={1.5}>
       <Tooltip title='Reset Code Execution Context' enterDelay={1000} enterNextDelay={1000}>
         <span>
-          <IconButton disabled={isDisabledReset()} onClick={handleReset} color='inherit'>
+          <IconButton
+            className='navbar-actions reset'
+            disabled={isDisabledReset()}
+            onClick={handleReset}
+            color='inherit'>
             {resetting ? (
               <CircularProgress size={24} sx={{ color: 'lightgray', fontSize: iconSize }} />
             ) : (
-              <Refresh sx={{ fontSize: iconSize }} />
+              <Refresh sx={{}} />
             )}
           </IconButton>
         </span>
@@ -76,11 +75,7 @@ const DreddButtons = ({ codeCells }) => {
 
       <Tooltip title='Run All Code Cells' enterDelay={1000} enterNextDelay={1000}>
         <span>
-          <IconButton
-            disabled={isDisabledRun()}
-            onClick={handleRunAll}
-            color='inherit'
-            sx={{ borderRadius: '2px', opacity: isDisabledRun() ? '0.3' : '1', p: 1 }}>
+          <IconButton disabled={isDisabledRun()} onClick={handleRunAll} color='inherit' className='navbar-actions run'>
             {running ? (
               <CircularProgress size={24} sx={{ color: 'lightgray', width: iconSize }} />
             ) : (

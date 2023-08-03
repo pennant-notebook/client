@@ -34,7 +34,7 @@ const MarkdownCell = ({ id, content, cell }) => {
         overflorWrap: 'break-word',
         ml: 4.2
       }}>
-      <Box className='markdown-container'>
+      <Box className={`markdown-container ${theme}`}>
         <MarkdownToolbar id={id} onDelete={deleteCell} cellTheme={theme} />
         <Box id={`blockcell-${id}`}>
           <MarkdownEditor

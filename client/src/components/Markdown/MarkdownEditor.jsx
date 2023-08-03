@@ -44,7 +44,7 @@ const MarkdownEditor = ({ cell, content, provider, currentUser, theme }) => {
       }
     },
     editorDOMAttributes: {
-      class: 'blocknote-editor'
+      class: `blocknote-editor ${theme}`
     },
     onEditorReady: editor => {
       const paragraph = document.querySelector(`#blockcell-${id} div div p`);

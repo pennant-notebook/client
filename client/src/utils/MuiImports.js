@@ -49,6 +49,7 @@ export { default as PlayCircleOutlineTwoTone } from '@mui/icons-material/PlayCir
 export { default as Refresh } from '@mui/icons-material/Refresh';
 export { default as Visibility } from '@mui/icons-material/Visibility';
 export { default as VisibilityOff } from '@mui/icons-material/VisibilityOff';
+export { default as TableChartIcon } from '@mui/icons-material/TableChart';
 
 // Styles
 export { default as useTheme } from '@mui/material/styles/useTheme';

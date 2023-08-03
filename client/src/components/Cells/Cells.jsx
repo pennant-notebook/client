@@ -6,7 +6,7 @@ import useNotebookContext from '../../contexts/NotebookContext';
 import CellRow from './CellRow';
 
 const Cells = ({ cells, setCells }) => {
-  const { repositionCell, refreshCount, incrementRefreshCount } = useNotebookContext();
+  const { repositionCell, refreshCount } = useNotebookContext();
 
   const [isDragging, setIsDragging] = useState(false);
   const cellRefs = useRef({});
@@ -34,8 +34,6 @@ const Cells = ({ cells, setCells }) => {
 
     const cell = cells[result.source.index];
     await repositionCell(cell, result.destination.index);
-
-    incrementRefreshCount();
 
     const cellId = cells[result.source.index].get('id');
     const draggedCellRef = cellRefs.current[cellId];

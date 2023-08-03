@@ -19,6 +19,18 @@ export const sendToDredd = async (notebookId, cellId, code) => {
   }
 };
 
+export const sendManyToDredd = async (notebookId, cells) => {
+  try {
+    const result = await axios.post(`${BASE_URL}/api/submit`, {
+      notebookId,
+      cells
+    });
+    return result.data.submissionId;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
 export const checkDreddStatus = async token => {
   try {
     const response = await axios.get(`${BASE_URL}/api/status/${token}`);
@@ -89,19 +101,22 @@ export const handleRunAllCode = async (docID, codeCells, notebookMetadata) => {
   console.log('🥁 Running All Code');
   await handleResetContext(docID, notebookMetadata, codeCells);
 
-  for (const cell of codeCells) {
-    const id = cell.get('id');
+  const dreddCells = codeCells.map(cell => {
+    const cellId = cell.get('id');
     const code = cell.get('content').toString();
+    return { cellId, code };
+  });
+
+  const token = await sendManyToDredd(docID, dreddCells);
+  const response = await checkDreddStatus(token);
+  console.log(response);
+  for (const returnedCell of response) {
+    const cell = codeCells.find(c => c.get('id') === returnedCell.cellId);
     const outputMap = cell.get('outputMap');
-    const token = await sendToDredd(docID, id, code);
-    const response = await checkDreddStatus(token);
-
-    if (response[0].output) {
-      outputMap.set('stdout', response[0].output);
+    if (returnedCell.output) {
+      outputMap.set('stdout', returnedCell.output);
     }
-
-    outputMap.set('status', response[0].type);
-
-    updateMetadata(cell.get('metaData'), notebookMetadata, true);
+    outputMap.set('status', returnedCell.type);
+    updateMetadata(cell.get('metaData'), notebookMetadata);
   }
 };

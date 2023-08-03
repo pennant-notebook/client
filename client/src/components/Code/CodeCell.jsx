@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from '../../utils/MuiImports';
+import { Box, Stack, Typography, useTheme } from '../../utils/MuiImports';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import useProviderContext from '../../contexts/ProviderContext';
 import useNotebookContext from '../../contexts/NotebookContext';
@@ -10,6 +10,7 @@ import { useCMThemeContext } from '../../contexts/ThemeManager';
 
 const CodeCell = ({ cellId, cell, content, reportRef = () => {} }) => {
   const { editorTheme } = useCMThemeContext();
+  const notebookTheme = useTheme().palette.mode;
   const { awareness, notebookMetadata, docID } = useProviderContext();
   const { deleteCell } = useNotebookContext();
 
@@ -96,7 +97,7 @@ const CodeCell = ({ cellId, cell, content, reportRef = () => {} }) => {
       }}>
       <Stack direction='row' sx={{ width: '100%', alignItems: 'center' }}>
         <StyledBadge badgeContent={processing ? '*' : cellExeCount || ' '} status={status} />
-        <Box className='codecell-container'>
+        <Box className={`codecell-container ${notebookTheme}`}>
           <CodeToolbar onClickRun={handleRunCode} id={cellId} onDelete={deleteCell} processing={processing} />
           <Box id={`editor-${cellId}`}></Box>
           <Box className={`codecell-output ${status}`} sx={{ py: output ? '4px' : 0 }}>
