@@ -4,6 +4,10 @@ import ImageIcon from '@mui/icons-material/Image';
 import { ImageBlock } from './CustomBlockTypes';
 
 const MarkdownEditor = ({ cell, content, provider, currentUser, theme }) => {
+  // Temporarily override console.log
+  const consoleLog = console.log;
+  console.log = () => {};
+
   const id = cell.get('id');
   const insertImage = new ReactSlashMenuItem(
     'Insert Image',
@@ -53,6 +57,9 @@ const MarkdownEditor = ({ cell, content, provider, currentUser, theme }) => {
       }
     }
   });
+
+  // Restore console.log
+  setTimeout(() => (console.log = consoleLog), 0);
 
   return <BlockNoteView id={id} editor={editor} />;
 };

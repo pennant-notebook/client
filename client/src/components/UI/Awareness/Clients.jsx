@@ -1,5 +1,5 @@
 import Avatar from 'react-avatar';
-import { Box, Tooltip } from '../../../utils/MuiImports';
+import { Box } from '../../../utils/MuiImports';
 
 const Clients = ({ clients }) => {
   return (

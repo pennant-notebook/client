@@ -27,6 +27,7 @@ const MarkdownCell = ({ id, content, cell }) => {
     <Box
       ref={cellRef}
       sx={{
+        width: '100%',
         display: 'flex',
         alignItems: 'center',
         flexGrow: 0,

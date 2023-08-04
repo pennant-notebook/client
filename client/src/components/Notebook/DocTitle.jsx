@@ -59,7 +59,19 @@ const DocTitle = () => {
           {notebook.title === notebook.docID ? 'untitled' : notebook.title ? notebook.title : 'untitled'}
         </Typography>
       </Box>
-      <Dialog open={open} onClose={() => setOpen(false)}>
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        PaperProps={{
+          style: {
+            position: 'absolute',
+            top: window.innerHeight > 768 ? '25%' : '20%',
+            width: '370px',
+            left: 0,
+            right: 0,
+            margin: 'auto'
+          }
+        }}>
         <DialogTitle>Edit Notebook Title</DialogTitle>
         <DialogContent sx={{ minWidth: '300px' }}>
           <TextField

@@ -11,10 +11,6 @@ const Cells = ({ cells, setCells }) => {
   const [isDragging, setIsDragging] = useState(false);
   const cellRefs = useRef({});
 
-  const onDragStart = () => {
-    setIsDragging(true);
-  };
-
   const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
@@ -43,33 +39,43 @@ const Cells = ({ cells, setCells }) => {
   };
 
   return (
-    <Box sx={{ py: 2, width: '75%', mx: 'auto' }}>
-      <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
-        <AddCell index={-1} isDragging={isDragging} />
-        <Droppable droppableId='cells'>
-          {provided => (
-            <div ref={provided.innerRef} {...provided.droppableProps}>
-              {cells &&
-                cells.map((cell, index) => {
-                  return (
-                    <CellRow
-                      key={cell.get('id')}
-                      cell={cell}
-                      index={index}
-                      refreshCount={refreshCount}
-                      isDragging={isDragging}
-                      reportRef={ref => {
-                        if (cell.get('type') === 'code') {
-                          cellRefs.current[cell.get('id')] = ref;
-                        }
-                      }}
-                    />
-                  );
-                })}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
+    <Box sx={{ py: 2, width: '100%', mx: 'auto' }}>
+      <DragDropContext onDragStart={() => setIsDragging(true)} onDragEnd={onDragEnd}>
+        <Box
+          sx={{
+            opacity: isDragging ? 0 : 1,
+            my: '0px',
+            width: { xs: '80%', sm: '75%', xl: '70%' },
+            mx: 'auto'
+          }}>
+          <AddCell index={-1} noCells={cells.length < 1} />
+        </Box>
+        <Box sx={{ width: '100%', mx: 'auto' }}>
+          <Droppable droppableId='cells'>
+            {provided => (
+              <div ref={provided.innerRef} {...provided.droppableProps}>
+                {cells &&
+                  cells.map((cell, index) => {
+                    return (
+                      <CellRow
+                        key={cell.get('id')}
+                        cell={cell}
+                        index={index}
+                        isDragging={isDragging}
+                        refreshCount={refreshCount}
+                        reportRef={ref => {
+                          if (cell.get('type') === 'code') {
+                            cellRefs.current[cell.get('id')] = ref;
+                          }
+                        }}
+                      />
+                    );
+                  })}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </Box>
       </DragDropContext>
     </Box>
   );

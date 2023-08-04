@@ -91,6 +91,7 @@ const StyledBadge = ({ badgeContent, status }) => {
     <Box sx={{ ml: 1.5, mr: 2.6, mb: 0.5 }}>
       <Badge
         badgeContent={badgeContent}
+        className='badge'
         sx={{
           '.MuiBadge-badge': {
             borderRadius: '3px',
@@ -102,16 +103,19 @@ const StyledBadge = ({ badgeContent, status }) => {
                 : theme === 'dark'
                 ? '#282c34'
                 : '#eff1f3',
-            border: theme === 'dark' ? '2px solid #2c3032' : '2px solid #dbd3d8',
             color: theme === 'dark' ? '#fff' : '#000',
-            width: badgeContent ? '22px' : '18px',
+            width: '20px',
             minWidth: '18px',
-            height: '24px',
-            fontSize: '0.9rem',
+            height: '22px',
+            fontSize: '0.77rem',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            opacity: '1'
+            opacity: '1',
+            boxShadow:
+              theme === 'light'
+                ? `rgba(6, 24, 44, 0.4) 0px 0px 0px 1px, rgba(6, 24, 44, 0.65) 0px 2px 2px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset`
+                : `rgba(3, 102, 214, 0.3) 0px 0px 0px 2px;`
           }
         }}
       />

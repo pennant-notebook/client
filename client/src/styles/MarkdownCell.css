@@ -21,6 +21,10 @@
   resize: none;
 }
 
+.has-text .isEmpty.hasAnchor .inlineContent:before {
+  content: '';
+}
+
 div[id*='tippy'] > div[class*='tippy-box'][data-placement='left'] {
   display: none !important;
 }
@@ -32,12 +36,14 @@ div[id*='blockcell'] > div > div[data-theme='dark'] {
 
 div[data-theme='dark'].blocknote-editor code {
   color: #fff !important;
-  background-color: #5a5a5a !important;
+  background-color: #3c4151 !important;
+  border: 1px solid #5d6579;
 }
 
 div[data-theme='light'].blocknote-editor code {
-  color: #474440 !important;
-  background-color: #bfcad0 !important;
+  color: #6e6e6e !important;
+  background-color: #fdfdfd !important;
+  border: 1px solid #eaeaec;
 }
 
 .blocknote-editor {

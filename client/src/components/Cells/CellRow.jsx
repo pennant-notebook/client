@@ -1,4 +1,4 @@
-import { Box, DragIndicator, Stack } from '../../utils/MuiImports';
+import { Box, DragIndicator, Stack, useTheme } from '../../utils/MuiImports';
 import { Draggable } from 'react-beautiful-dnd';
 import MarkdownCell from '../Markdown/MarkdownCell';
 import CodeCell from '../Code/CodeCell';
@@ -8,7 +8,7 @@ import { useState } from 'react';
 
 const CellRow = ({ index, cell, refreshCount, isDragging }) => {
   const [isEditing, setIsEditing] = useState(false);
-
+  const theme = useTheme().palette.mode;
   const id = cell.get('id');
   const type = cell.get('type');
   const content = cell.get('content');
@@ -18,14 +18,28 @@ const CellRow = ({ index, cell, refreshCount, isDragging }) => {
       <Draggable key={`${id}-${refreshCount}`} draggableId={id.toString()} index={index} isDragDisabled={isEditing}>
         {provided => (
           <Box ref={provided.innerRef} {...provided.draggableProps}>
-            <Stack direction='row' alignItems='center' sx={{ my: '0px' }}>
+            <Stack
+              direction='row'
+              alignItems='center'
+              sx={{
+                my: '0px',
+                width: { xs: '80%', sm: '75%', xl: '70%' },
+                mx: 'auto'
+              }}>
               <Box display='flex' alignItems='center' width='100%'>
                 <Box className='dragIndicator' {...provided.dragHandleProps}>
                   <DragIndicator
                     sx={{
+                      border: isEditing ? '' : '1px solid transparent',
                       opacity: isEditing ? '0.75' : '0.5',
+                      borderRadius: '3px',
                       mt: 0.5,
-                      transform: 'rotate(90deg)'
+                      mr: { sm: '0px', md: 0.8 },
+                      '&:hover': {
+                        border: isEditing ? '' : '1px solid gray',
+                        backgroundColor: isEditing ? '' : theme === 'dark' ? '#7288d7' : '#eaeaea',
+                        opacity: 1
+                      }
                     }}
                   />
                 </Box>
@@ -43,7 +57,15 @@ const CellRow = ({ index, cell, refreshCount, isDragging }) => {
           </Box>
         )}
       </Draggable>
-      <AddCell index={index} isDragging={isDragging} />
+      <Box
+        sx={{
+          opacity: isDragging ? 0 : 1,
+          my: '0px',
+          width: { xs: '80%', sm: '75%', xl: '70%' },
+          mx: 'auto'
+        }}>
+        <AddCell index={index} />
+      </Box>
     </Box>
   );
 };
