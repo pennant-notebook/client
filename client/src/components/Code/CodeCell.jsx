@@ -12,7 +12,6 @@ const CodeCell = ({ cellId, cell, content, reportRef = () => {} }) => {
   const { editorTheme } = useCMThemeContext();
   const notebookTheme = useTheme().palette.mode;
   const { awareness, notebookMetadata, docID } = useProviderContext();
-  const { deleteCell } = useNotebookContext();
 
   const cellMetadata = cell.get('metaData');
   const outputMap = cell.get('outputMap');
@@ -51,7 +50,8 @@ const CodeCell = ({ cellId, cell, content, reportRef = () => {} }) => {
   useEffect(() => {
     const editorContainer = document.querySelector(`#editor-${cellId}`);
     if (!editorRef.current) {
-      editorRef.current = createCodeEditor(content, cellId, awareness, handleRunCode, editorTheme);
+      const hasOutput = cell.get('outputMap').get('stdout');
+      editorRef.current = createCodeEditor(content, cellId, awareness, handleRunCode, editorTheme, hasOutput);
       editorContainer.appendChild(editorRef.current.dom);
     }
 
@@ -98,7 +98,7 @@ const CodeCell = ({ cellId, cell, content, reportRef = () => {} }) => {
       <Stack direction='row' sx={{ width: '100%', alignItems: 'center' }}>
         <StyledBadge badgeContent={processing ? '*' : cellExeCount || ' '} status={status} />
         <Box className={`codecell-container ${notebookTheme}`}>
-          <CodeToolbar onClickRun={handleRunCode} id={cellId} onDelete={deleteCell} processing={processing} />
+          <CodeToolbar onClickRun={handleRunCode} id={cellId} processing={processing} />
           <Box id={`editor-${cellId}`}></Box>
           <Box className={`codecell-output ${status}`} sx={{ py: output ? '4px' : 0 }}>
             {processing ? (

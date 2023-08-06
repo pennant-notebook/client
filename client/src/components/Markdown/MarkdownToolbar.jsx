@@ -1,7 +1,10 @@
 import { memo } from 'react';
 import { CloseSharp, Box, Stack, Tooltip, IconButton, Typography } from '../../utils/MuiImports';
+import useNotebookContext from '../../contexts/NotebookContext';
 
-const MarkdownToolbar = memo(({ onDelete, id, toggleTheme, cellTheme }) => {
+const MarkdownToolbar = memo(({ id, cellTheme }) => {
+  const { deleteCell } = useNotebookContext();
+
   const buttonColor = cellTheme === 'dark' ? '#e1e1ea' : '#2c3032';
   return (
     <Box className={`markdown-toolbar ${cellTheme}`}>
@@ -11,7 +14,7 @@ const MarkdownToolbar = memo(({ onDelete, id, toggleTheme, cellTheme }) => {
         </Typography>
         <Tooltip title='Remove cell' enterDelay={1000} enterNextDelay={1000}>
           <IconButton
-            onClick={() => onDelete(id)}
+            onClick={() => deleteCell(id)}
             sx={{ opacity: 0.5, '&:hover': { opacity: 1, backgroundColor: 'transparent' } }}>
             <CloseSharp sx={{ color: buttonColor }} />
           </IconButton>

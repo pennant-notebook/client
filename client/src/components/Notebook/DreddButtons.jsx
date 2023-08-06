@@ -64,11 +64,7 @@ const DreddButtons = ({ codeCells }) => {
             disabled={isDisabledReset()}
             onClick={handleReset}
             color='inherit'>
-            {resetting ? (
-              <CircularProgress size={24} sx={{ color: 'lightgray', fontSize: iconSize }} />
-            ) : (
-              <Refresh sx={{}} />
-            )}
+            {resetting ? <CircularProgress size={24} sx={{ color: 'lightgray', fontSize: iconSize }} /> : <Refresh />}
           </IconButton>
         </span>
       </Tooltip>

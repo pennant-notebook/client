@@ -135,7 +135,9 @@ const Notebook = ({ docID, resourceTitle }) => {
           clients={clients}
           handleDisconnect={handleDisconnect}
         />
+        {/* <Box sx={{ mr: -2, ml: -8 }}> */}
         <Cells cells={cellDataArr} setCells={setCellDataArr} />
+        {/* </Box> */}
       </Box>
     </NotebookContext.Provider>
   );

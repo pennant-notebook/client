@@ -2,7 +2,7 @@ import bigLogo from '../../assets/pennant-color.png';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Box, Typography, Button, Grid, IconButton, Stack } from '../../utils/MuiImports';
-import { createDoc, createUser } from '../../services/dynamoPost';
+import { createUser } from '../../services/dynamoPost';
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 
 const LandingPage = () => {

@@ -1,70 +1,34 @@
-import { Box, DragIndicator, Stack, useTheme } from '../../utils/MuiImports';
-import { Draggable } from 'react-beautiful-dnd';
+import { Box, Stack, Divider } from '../../utils/MuiImports';
 import MarkdownCell from '../Markdown/MarkdownCell';
 import CodeCell from '../Code/CodeCell';
-import AddCell from './AddCell';
 import { CellPosAvatar } from '../UI/StyledComponents';
-import { useState } from 'react';
 
-const CellRow = ({ index, cell, refreshCount, isDragging }) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const theme = useTheme().palette.mode;
+const CellRow = ({ cell, index }) => {
   const id = cell.get('id');
   const type = cell.get('type');
   const content = cell.get('content');
 
   return (
     <Box width='100%'>
-      <Draggable key={`${id}-${refreshCount}`} draggableId={id.toString()} index={index} isDragDisabled={isEditing}>
-        {provided => (
-          <Box ref={provided.innerRef} {...provided.draggableProps}>
-            <Stack
-              direction='row'
-              alignItems='center'
-              sx={{
-                my: '0px',
-                width: { xs: '80%', sm: '75%', xl: '70%' },
-                mx: 'auto'
-              }}>
-              <Box display='flex' alignItems='center' width='100%'>
-                <Box className='dragIndicator' {...provided.dragHandleProps}>
-                  <DragIndicator
-                    sx={{
-                      border: isEditing ? '' : '1px solid transparent',
-                      opacity: isEditing ? '0.75' : '0.5',
-                      borderRadius: '3px',
-                      mt: 0.5,
-                      mr: { sm: '0px', md: 0.8 },
-                      '&:hover': {
-                        border: isEditing ? '' : '1px solid gray',
-                        backgroundColor: isEditing ? '' : theme === 'dark' ? '#7288d7' : '#eaeaea',
-                        opacity: 1
-                      }
-                    }}
-                  />
-                </Box>
-                <Box
-                  alignItems='center'
-                  sx={{ flexGrow: 1, position: 'relative' }}
-                  onFocus={() => setIsEditing(true)}
-                  onBlur={() => setIsEditing(false)}>
-                  {type === 'markdown' && <MarkdownCell id={id} content={content} cell={cell} />}
-                  {type === 'code' && <CodeCell key={`${id}`} cellId={id} cell={cell} content={content} />}
-                  <CellPosAvatar pos={cell.get('pos') + 1} />
-                </Box>
-              </Box>
-            </Stack>
+      <Box>
+        <Stack
+          direction='row'
+          alignItems='center'
+          sx={{
+            // width: { xs: '80%', lg: '75%', xl: '70%' },
+            width: '75%',
+            mx: 'auto'
+          }}>
+          <Box display='flex' alignItems='center' width='100%' sx={{ ml: -2 }}>
+            <Divider flexItem orientation='vertical' sx={{ mr: 3, zIndex: 3 }}>
+              <CellPosAvatar index={index + 1} />
+            </Divider>
+            <Box alignItems='center' sx={{ flexGrow: 1, position: 'relative' }}>
+              {type === 'markdown' && <MarkdownCell id={id} content={content} cell={cell} />}
+              {type === 'code' && <CodeCell key={`${id}`} cellId={id} cell={cell} content={content} />}
+            </Box>
           </Box>
-        )}
-      </Draggable>
-      <Box
-        sx={{
-          opacity: isDragging ? 0 : 1,
-          my: '0px',
-          width: { xs: '80%', sm: '75%', xl: '70%' },
-          mx: 'auto'
-        }}>
-        <AddCell index={index} />
+        </Stack>
       </Box>
     </Box>
   );

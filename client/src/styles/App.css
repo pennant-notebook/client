@@ -3,7 +3,6 @@
 @import url('./Client.css');
 @import url('./CodeCell.css');
 @import url('./MarkdownCell.css');
-
 @import url('./LoadingSpinner.css');
 @import url('./buttons.css');
 
@@ -25,7 +24,6 @@ code {
 .navbar-actions.reset {
   width: 40px;
   height: 32.47px;
-  /* border: 1px solid red; */
   border-radius: 2px;
   opacity: 1;
   box-shadow: rgba(6, 24, 44, 0.65) 0px 1px 2px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
@@ -51,15 +49,6 @@ code {
 .navbar-actions.reset:disabled {
   color: lightgray;
   opacity: 0.3;
-}
-
-.cm-ySelectionInfo {
-  opacity: 1 !important;
-  transition-delay: 0s !important;
-}
-
-.cm-tooltip {
-  z-index: 12 !important;
 }
 
 .user-dashboard {
@@ -198,4 +187,21 @@ div.notebook-title p {
 .add-cell .MuiDivider-root:hover,
 .add-cell .divider {
   opacity: 0.5;
+}
+
+.draggable-container {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  height: 100%;
+}
+
+.draggable-container:hover {
+  background: rgb(242, 242, 242);
+}
+
+.draggable-container.dark:hover {
+  background: #202324;
 }

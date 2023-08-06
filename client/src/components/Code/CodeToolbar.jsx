@@ -1,3 +1,4 @@
+import useNotebookContext from '../../contexts/NotebookContext';
 import {
   CloseSharp,
   PlayCircle,
@@ -9,7 +10,8 @@ import {
   CircularProgress
 } from '../../utils/MuiImports';
 
-const CodeToolbar = ({ onClickRun, onDelete, id, processing }) => {
+const CodeToolbar = ({ onClickRun, id, processing }) => {
+  const { deleteCell } = useNotebookContext();
   return (
     <Box
       sx={{
@@ -17,7 +19,9 @@ const CodeToolbar = ({ onClickRun, onDelete, id, processing }) => {
         height: '40px',
         margin: 0,
         padding: 0,
-        zIndex: 0
+        zIndex: 0,
+        borderTopLeftRadius: '5px',
+        borderTopRightRadius: '5px'
       }}>
       <Stack
         direction='row'
@@ -38,7 +42,7 @@ const CodeToolbar = ({ onClickRun, onDelete, id, processing }) => {
             <IconButton
               className='toolbutton'
               disabled={processing}
-              onClick={() => onDelete(id)}
+              onClick={() => deleteCell(id)}
               sx={{ opacity: 0.5, '&:hover': { opacity: 1, backgroundColor: 'transparent' } }}>
               <CloseSharp size={24} />
             </IconButton>

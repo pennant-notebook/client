@@ -9,7 +9,6 @@ import '@blocknote/core/style.css';
 
 const MarkdownCell = ({ id, content, cell }) => {
   const { provider, awareness } = useProviderContext();
-  const { deleteCell } = useNotebookContext();
 
   const cellRef = useRef(0);
   const theme = useTheme().palette.mode;
@@ -31,10 +30,10 @@ const MarkdownCell = ({ id, content, cell }) => {
         flexGrow: 0,
         wordBreak: 'break-word',
         overflorWrap: 'break-word',
-        ml: 4.2
+        ml: 4
       }}>
       <Box className={`markdown-container ${theme}`}>
-        <MarkdownToolbar id={id} onDelete={deleteCell} cellTheme={theme} />
+        <MarkdownToolbar id={id} cellTheme={theme} />
         <Box id={`blockcell-${id}`}>
           <MarkdownEditor
             id={`markdown-editor-${id}`}

@@ -1,4 +1,4 @@
-import { Box, Badge, useTheme, Typography, styled, Button } from '../../utils/MuiImports';
+import { Box, Badge, useTheme, styled, Button, Avatar } from '../../utils/MuiImports';
 
 export const StyledButton = styled(Button)({
   position: 'relative',
@@ -20,106 +20,61 @@ export const StyledButton = styled(Button)({
   }
 });
 
-export const CellPosAvatar = ({ pos }) => {
-  const theme = useTheme().palette.mode;
+export const CellPosAvatar = ({ index }) => {
   return (
-    <Box
+    <Avatar
       sx={{
-        position: 'absolute',
-        top: -12.5,
-        right: -5,
-        zIndex: -1,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        overflow: 'visible',
-        opacity: theme === 'dark' ? 0.5 : 0.8
+        width: 18,
+        height: 18,
+        fontSize: '11px',
+        fontFamily: 'Fira Code',
+        color: '#b9b7b7',
+        backgroundColor: 'transparent',
+        opacity: 0.8,
+        border: '1px solid transparent',
+        p: index > 99 ? 1.2 : 1.1,
+        zIndex: 1
       }}>
-      <Box
-        sx={{
-          width: pos >= 100 ? '18px' : pos >= 10 ? '20px' : '22px',
-          height: '0px',
-          alignItems: 'center',
-          justifyContent: 'flex-end',
-          overflow: 'visible',
-          position: 'absolute'
-        }}>
-        <svg
-          height='100pt'
-          id='svg548'
-          width='100pt'
-          xmlns='http://www.w3.org/2000/svg'
-          style={{
-            filter: theme === 'dark' ? 'drop-shadow(3px 0px 0px #e0e0e0)' : 'drop-shadow(4px 0px 0px #e0e0e0)'
-          }}>
-          <path
-            d='M 53.7043 164.348 C 52.5855 164.348 425.159 165.467 425.159 165.467 L 479.983 269.519 L 425.159 378.046 L 52.5855 375.809 L 107.409 269.519 L 53.7043 164.348 z '
-            id='index-icon'
-            style={{
-              fill: theme === 'light' ? '#f5f5f5' : '#282a34',
-              fillRule: 'evenodd',
-              stroke: theme === 'light' ? '#282A34' : 'lightgray',
-              strokeOpacity: theme === 'light' ? 0.2 : 0.5,
-              strokeWidth: '7pt',
-              strokeLinejoin: 'miter',
-              strokeLinecap: 'butt',
-              fillOpacity: 1
-            }}
-            transform='scale(0.088) translate(-13.42607,-10.06958)'
-          />
-        </svg>
-        <Typography
-          sx={{
-            color: theme === 'light' ? 'black' : '#cecece',
-            fontFamily: 'Lato',
-            fontSize: pos >= 100 ? '11px' : '12px',
-            position: 'absolute',
-            right: pos >= 100 ? -16 : pos >= 10 ? -14 : -9,
-            top: 14
-          }}>
-          {pos}
-        </Typography>
-      </Box>
-    </Box>
+      {index}
+    </Avatar>
   );
 };
 
 const StyledBadge = ({ badgeContent, status }) => {
   const theme = useTheme().palette.mode;
-
   return (
-    <Box sx={{ ml: 1.5, mr: 2.6, mb: 0.5 }}>
-      <Badge
-        badgeContent={badgeContent}
-        className='badge'
+    <Box sx={{ ml: 1.5, mr: 2 }}>
+      <Box
         sx={{
-          '.MuiBadge-badge': {
-            borderRadius: '3px',
-            backgroundColor:
-              status === 'error'
-                ? 'crimson'
-                : status === 'critical'
-                ? 'yellow'
-                : theme === 'dark'
-                ? '#282c34'
-                : '#eff1f3',
-            color: theme === 'dark' ? '#fff' : '#000',
-            width: '20px',
-            minWidth: '18px',
-            height: '22px',
-            fontSize: '0.77rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            opacity: '1',
-            boxShadow:
-              theme === 'light'
-                ? `rgba(6, 24, 44, 0.4) 0px 0px 0px 1px, rgba(6, 24, 44, 0.65) 0px 2px 2px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset`
-                : `rgba(3, 102, 214, 0.3) 0px 0px 0px 2px;`
-          }
-        }}
-      />
+          borderRadius: '3px',
+          backgroundColor:
+            status === 'error'
+              ? 'crimson'
+              : status === 'critical'
+              ? 'yellow'
+              : theme === 'dark'
+              ? '#282c34'
+              : '#eff1f3',
+          color: theme === 'dark' ? '#fff' : '#3d414d',
+
+          width: badgeContent > 99 ? '24px' : '22px',
+          fontFamily: 'MonoLisa',
+          height: '22px',
+          fontSize: '0.75rem',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          ml: -2,
+          opacity: '1',
+          boxShadow:
+            theme === 'light'
+              ? `rgba(6, 24, 44, 0.4) 0px 0px 0px 1px, rgba(6, 24, 44, 0.65) 0px 2px 2px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset`
+              : `rgba(3, 102, 214, 0.3) 0px 0px 0px 2px;`
+        }}>
+        {badgeContent}
+      </Box>
     </Box>
   );
 };
+
 export default StyledBadge;

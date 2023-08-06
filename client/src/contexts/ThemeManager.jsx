@@ -21,7 +21,7 @@ function ThemeManager({ children, theme, toggleTheme, toggleCMTheme, editorTheme
     palette: {
       mode: 'light',
       background: {
-        default: '#FFF'
+        default: '#fff'
       }
     },
     custom: {

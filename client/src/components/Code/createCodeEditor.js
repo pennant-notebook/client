@@ -3,7 +3,7 @@ import { EditorView, basicSetup } from 'codemirror';
 import { yCollab } from 'y-codemirror.next';
 import { EditorState } from '@codemirror/state';
 import { defaultKeymap, indentMore, indentLess } from '@codemirror/commands';
-import { keymap, lineNumbers } from '@codemirror/view';
+import { keymap } from '@codemirror/view';
 import { autocompletion, acceptCompletion } from '@codemirror/autocomplete';
 import beautify from 'js-beautify';
 
@@ -21,7 +21,7 @@ function formatCode(view) {
   view.dispatch(transaction);
 }
 
-const createCodeEditor = (content, id, awareness, handleRunCode, editorTheme) => {
+const createCodeEditor = (content, id, awareness, handleRunCode, editorTheme, hasOutput) => {
   const customKeymap = keymap.of([
     { key: 'Alt-Enter', mac: 'Alt-Enter', run: handleRunCode, preventDefault: true },
     {
@@ -49,15 +49,17 @@ const createCodeEditor = (content, id, awareness, handleRunCode, editorTheme) =>
       EditorView.lineWrapping,
       EditorView.theme({
         '&, .cm-scroller, .cm-content, .cm-gutter': {
-          overflow: 'visible !important'
+          overflow: 'visible !important',
+          borderBottomRightRadius: hasOutput ? '0px' : '5px',
+          borderBottomLeftRadius: hasOutput ? '0px' : '5px'
         },
         '.cm-content, .cm-gutter': {
           marginTop: '8px',
           marginBottom: '8px',
           fontSize: '15px'
         },
-        '.cm-tooltip': {
-          zIndex: 1000
+        '.cm-tooltip, .cm-tooltip-autocomplete, .cm-tooltip-below': {
+          zIndex: '9999 !important'
         },
         '.cm-scroller': {
           minHeight: '50px'

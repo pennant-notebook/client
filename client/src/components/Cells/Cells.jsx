@@ -1,12 +1,13 @@
 import { useRef, useState } from 'react';
-import { Box } from '../../utils/MuiImports';
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { Box, useTheme } from '../../utils/MuiImports';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import AddCell from './AddCell';
 import useNotebookContext from '../../contexts/NotebookContext';
 import CellRow from './CellRow';
 
 const Cells = ({ cells, setCells }) => {
   const { repositionCell, refreshCount } = useNotebookContext();
+  const theme = useTheme().palette.mode;
 
   const [isDragging, setIsDragging] = useState(false);
   const cellRefs = useRef({});
@@ -41,34 +42,50 @@ const Cells = ({ cells, setCells }) => {
   return (
     <Box sx={{ py: 2, width: '100%', mx: 'auto' }}>
       <DragDropContext onDragStart={() => setIsDragging(true)} onDragEnd={onDragEnd}>
-        <Box
-          sx={{
-            opacity: isDragging ? 0 : 1,
-            my: '0px',
-            width: { xs: '80%', sm: '75%', xl: '70%' },
-            mx: 'auto'
-          }}>
-          <AddCell index={-1} noCells={cells.length < 1} />
-        </Box>
+        <AddCell index={-1} noCells={cells.length < 1} isDragging={isDragging} />
         <Box sx={{ width: '100%', mx: 'auto' }}>
           <Droppable droppableId='cells'>
             {provided => (
               <div ref={provided.innerRef} {...provided.droppableProps}>
                 {cells &&
                   cells.map((cell, index) => {
+                    const id = cell.get('id');
                     return (
-                      <CellRow
-                        key={cell.get('id')}
-                        cell={cell}
-                        index={index}
-                        isDragging={isDragging}
-                        refreshCount={refreshCount}
-                        reportRef={ref => {
-                          if (cell.get('type') === 'code') {
-                            cellRefs.current[cell.get('id')] = ref;
+                      <Draggable key={`${id}-${refreshCount}`} draggableId={id.toString()} index={index}>
+                        {(provided, snapshot) => {
+                          let transform = provided.draggableProps.style.transform;
+                          if (snapshot.isDragging && transform) {
+                            transform = transform.replace(/\(.+\,/, '(0,');
                           }
+                          const style = {
+                            ...provided.draggableProps.style,
+                            transform
+                          };
+                          return (
+                            <div ref={provided.innerRef} {...provided.draggableProps} style={style}>
+                              <Box sx={{ position: 'relative', display: 'flex' }}>
+                                <Box
+                                  {...provided.dragHandleProps}
+                                  className={`${'draggable-container'} ${theme} cell-drag-handle`}
+                                  sx={{ width: '25%' }}
+                                />
+                                <CellRow
+                                  cell={cell}
+                                  refreshCount={refreshCount}
+                                  index={index}
+                                  reportRef={ref => {
+                                    if (cell.get('type') === 'code') {
+                                      cellRefs.current[cell.get('id')] = ref;
+                                    }
+                                  }}
+                                />
+                              </Box>
+
+                              <AddCell index={index} isDragging={isDragging} />
+                            </div>
+                          );
                         }}
-                      />
+                      </Draggable>
                     );
                   })}
                 {provided.placeholder}

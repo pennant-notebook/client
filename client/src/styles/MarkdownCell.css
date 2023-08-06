@@ -1,15 +1,13 @@
 .markdown-container {
-  mask-image: radial-gradient(circle, black 100%, transparent 100%);
   width: 100%;
   border: 1px solid lightgray;
-  border-radius: 3px;
+  border-radius: 5px;
 }
 
 .markdown-container.dark {
-  mask-image: radial-gradient(circle, black 100%, transparent 100%);
   width: 100%;
-  border: 2px solid dimgray;
-  border-radius: 2px;
+  border: 1px solid dimgray;
+  border-radius: 5px;
 }
 
 .block-cell {
@@ -31,7 +29,7 @@ div[id*='tippy'] > div[class*='tippy-box'][data-placement='left'] {
 
 div[id*='blockcell'] > div > div[data-theme='dark'] {
   color: rgb(221, 215, 215) !important;
-  background-color: #3b4151 !important;
+  background-color: #282a34 !important;
 }
 
 div[data-theme='dark'].blocknote-editor code {
@@ -46,9 +44,18 @@ div[data-theme='light'].blocknote-editor code {
   border: 1px solid #eaeaec;
 }
 
+.ProseMirror {
+  padding: 8px 24px !important;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
 .blocknote-editor {
-  padding: 8px 24px;
-  border-radius: 0px;
+  padding: 8px 24px !important;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
 }
 
 .blocknote-editor code {
@@ -61,6 +68,8 @@ div[data-theme='light'].blocknote-editor code {
 
 .markdown-toolbar {
   height: 40px;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
   margin: 0;
   padding: 0;
   border-bottom: none;
@@ -76,5 +85,5 @@ div[data-theme='light'].blocknote-editor code {
 }
 
 .markdown-toolbar.dark {
-  background-color: #2d3042;
+  background-color: #282a34;
 }
