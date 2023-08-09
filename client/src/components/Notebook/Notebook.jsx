@@ -7,10 +7,11 @@ import useProviderContext from '../../contexts/ProviderContext';
 import { createCell, getUserObjects } from '../../utils/notebookHelpers';
 import { getClientFromLocalStorage, updateDisconnectedClient } from '../../utils/awarenessHelpers';
 import { useNavigate } from 'react-router';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 const Notebook = ({ docID, resourceTitle }) => {
   const { doc, provider, awareness, notebookMetadata } = useProviderContext();
-  const [refreshCount, incrementRefreshCount] = useReducer(count => count + 1, 0);
   const navigate = useNavigate();
   const theme = useTheme();
 
@@ -79,7 +80,6 @@ const Notebook = ({ docID, resourceTitle }) => {
     await deleteCell('delete');
     cellsArray.insert(newIndex, [clone]);
     updatePositions();
-    incrementRefreshCount();
   };
 
   const handleTitleChange = newTitle => {
@@ -121,9 +121,7 @@ const Notebook = ({ docID, resourceTitle }) => {
     title,
     handleTitleChange,
     allRunning,
-    setAllRunning,
-    refreshCount,
-    incrementRefreshCount
+    setAllRunning
   };
 
   return (
@@ -135,9 +133,9 @@ const Notebook = ({ docID, resourceTitle }) => {
           clients={clients}
           handleDisconnect={handleDisconnect}
         />
-        {/* <Box sx={{ mr: -2, ml: -8 }}> */}
-        <Cells cells={cellDataArr} setCells={setCellDataArr} />
-        {/* </Box> */}
+        <DndProvider backend={HTML5Backend}>
+          <Cells cells={cellDataArr} setCells={setCellDataArr} />
+        </DndProvider>
       </Box>
     </NotebookContext.Provider>
   );

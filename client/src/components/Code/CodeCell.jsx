@@ -1,14 +1,13 @@
 import { Box, Stack, Typography, useTheme } from '../../utils/MuiImports';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import useProviderContext from '../../contexts/ProviderContext';
-import useNotebookContext from '../../contexts/NotebookContext';
 import CodeToolbar from './CodeToolbar';
 import createCodeEditor from './createCodeEditor';
 import { handleDredd, updateMetadata } from '../../services/dreddExecutionService';
 import StyledBadge from '../UI/StyledComponents';
 import { useCMThemeContext } from '../../contexts/ThemeManager';
 
-const CodeCell = ({ cellId, cell, content, reportRef = () => {} }) => {
+const CodeCell = ({ cellId, cell, content }) => {
   const { editorTheme } = useCMThemeContext();
   const notebookTheme = useTheme().palette.mode;
   const { awareness, notebookMetadata, docID } = useProviderContext();
@@ -82,10 +81,6 @@ const CodeCell = ({ cellId, cell, content, reportRef = () => {} }) => {
       });
     });
   }, [outputMap, cellMetadata, processing]);
-
-  useEffect(() => {
-    reportRef(cellRef);
-  }, [reportRef]);
 
   return (
     <Box

@@ -3,7 +3,7 @@ import MarkdownCell from '../Markdown/MarkdownCell';
 import CodeCell from '../Code/CodeCell';
 import { CellPosAvatar } from '../UI/StyledComponents';
 
-const CellRow = ({ cell, index }) => {
+const CellRow = ({ cell, index, reportRef }) => {
   const id = cell.get('id');
   const type = cell.get('type');
   const content = cell.get('content');
@@ -15,7 +15,6 @@ const CellRow = ({ cell, index }) => {
           direction='row'
           alignItems='center'
           sx={{
-            // width: { xs: '80%', lg: '75%', xl: '70%' },
             width: '75%',
             mx: 'auto'
           }}>

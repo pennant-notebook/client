@@ -18,32 +18,32 @@
 
 ## API Endpoints
 
-**1. fetchUserFromDynamo**
+**1. fetchUser**
 
 - Endpoint: `GET /api/user/:username`
 - Description: Fetches a user from the `notebookusers` table.
 
-**2. createUserInDynamo**
+**2. createUser**
 
 - Endpoint: `POST /api/user/:username`
 - Description: Creates a new user in the `notebookusers` table.
 
-**3. fetchNotebooksFromDynamo**
+**3. fetchNotebooks**
 
 - Endpoint: `GET /api/user/:username/notebooks`
 - Description: Fetches all notebooks for a given user from the `notebooks` table.
 
-**4. fetchDocFromDynamo**
+**4. fetchDoc**
 
-- Endpoint: `GET /api/doc/:docID`
-- Description: Fetches a notebook with a given `docID` from the `notebooks` table.
+- Endpoint: `GET /api/doc/:docID/:username`
+- Description: Fetches a notebook with a given `docID` and `username` from the `notebooks` table.
 
-**5. createDocInDynamo**
+**5. createDoc**
 
 - Endpoint: `POST /api/doc/:username`
 - Description: Creates a new notebook for a given `username` in the `notebooks` table.
 
-**6. editDocTitleInDynamo**
+**6. editDocTitle**
 
 - Endpoint: `PUT /api/doc/:docID/:username`
 - Description: Edits the title for a notebook for a given `docID` in the `notebooks` table.
