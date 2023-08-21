@@ -2,7 +2,16 @@
 
 This repository contains the React application for the pennant-notebook project.
 
-## Getting Started
+## Overview
+
+- **[Yjs](https://github.com/yjs/yjs)**: CRDT framework that enables real-time collaboration and synchronization between different users.
+- **[y-indexeddb](https://github.com/yjs/y-indexeddb)**: Used for efficient caching and offline persistence.
+- **[CodeMirror 6](https://github.com/codemirror/dev)**: Provides a versatile code editing environment, customized with various keybindings.
+- **[react-dnd](https://github.com/react-dnd/react-dnd)**: Powers the drag-and-drop functionality for cells.
+- **Provider ([HocusPocus](https://github.com/ueberdosis/hocuspocus))**: Currently used as the provider for the architecture, but it is designed to be provider-agnostic, allowing for easy switching to any other provider.
+- **[BlockNote](https://github.com/TypeCellOS/BlockNote)**: Customized markdown editor including a newly added ImageBlock feature. Some features omitted for minimalism and performance.
+
+## Getting started
 
 ### Prerequisites
 
