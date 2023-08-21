@@ -1,0 +1,73 @@
+:root {
+  --svg-color: #dbd3d8; /* Light mode color */
+  --svg-color-dark: #282a34; /* Dark mode color */
+}
+
+.cm-ySelectionInfo {
+  opacity: 1 !important;
+  transition-delay: 0s !important;
+}
+
+.cm-tooltip,
+.cm-tooltip-autocomplete,
+.cm-tooltip-below {
+  z-index: 9999 !important;
+}
+
+.codecell-container {
+  /* mask-image: radial-gradient(circle, black 100%, transparent 100%); */
+  width: 100%;
+  border: 1px solid dimgray;
+  border-radius: 5px;
+  background-color: #3d414d;
+}
+
+.codecell-container.dark {
+  /* mask-image: radial-gradient(circle, black 100%, transparent 100%); */
+  width: 100%;
+  border-radius: 5px;
+  background-color: #3d414d;
+}
+
+.codecell-output {
+  padding: 0 4px;
+  opacity: 0.9;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.codecell-output p {
+  margin-left: 5px;
+  color: '#cfd1d8';
+  font-family: 'Fira Code', 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+  font-size: 14px;
+}
+
+.codecell-output.error {
+  background-color: crimson;
+}
+
+.codecell-output.critical {
+  background-color: yellow;
+}
+
+.codecell-output.critical p {
+  color: black;
+}
+
+.cm-focused {
+  outline: none !important;
+}
+
+span > .toolbutton {
+  color: lightgray;
+  margin: 0;
+  padding: 0;
+  box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 0px 0px inset;
+}
+
+span > .toolbutton:hover {
+  color: #fff;
+  opacity: 1;
+  background-color: transparent;
+}
