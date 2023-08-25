@@ -22,13 +22,6 @@ function formatCode(view) {
 }
 
 const createCodeEditor = (content, id, awareness, handleRunCode, editorTheme, hasOutput) => {
-  content.observe((event, transaction) => {
-    event.changes.delta.forEach(change => {
-      console.log('Change:', change);
-      // Log more details about the change here
-    });
-  });
-
   const customKeymap = keymap.of([
     { key: 'Alt-Enter', mac: 'Alt-Enter', run: handleRunCode, preventDefault: true },
     {
@@ -70,13 +63,24 @@ const createCodeEditor = (content, id, awareness, handleRunCode, editorTheme, ha
         },
         '.cm-scroller': {
           minHeight: '50px'
+        },
+        '.cm-ySelectionCaretDot': {
+          opacity: '0'
+        },
+        '.cm-ySelectionInfo': {
+          fontSize: '11.8px',
+          fontFamily:
+            'Inter,SF Pro Display,-apple-system,BlinkMacSystemFont,Open Sans,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif',
+          fontWeight: 600,
+          color: '#fff',
+          padding: '0.5px 2.5px',
+          borderRadius: '3px 3px 3px 0',
+          WebkitFontSmoothing: 'antialiased',
+          fontVariantLigatures: 'none',
+          fontFeatureSettings: '"liga" 0'
         }
       }),
       editorTheme.theme
-      // EditorState.transactionExtender.of(tr => {
-      //   console.log('Transaction:', tr);
-      //   return tr;
-      // })
     ]
   });
 

@@ -2,9 +2,8 @@ import { Box, Stack, Divider } from '../../utils/MuiImports';
 import MarkdownCell from '../Markdown/MarkdownCell';
 import CodeCell from '../Code/CodeCell';
 import { CellPosAvatar } from '../UI/StyledComponents';
-import { memo } from 'react';
 
-const CellRow = memo(({ cell, index }) => {
+const CellRow = ({ cell, index, reportRef }) => {
   const id = cell.get('id');
   const type = cell.get('type');
   const content = cell.get('content');
@@ -32,6 +31,6 @@ const CellRow = memo(({ cell, index }) => {
       </Box>
     </Box>
   );
-});
+};
 
 export default CellRow;
