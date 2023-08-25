@@ -58,6 +58,10 @@ div[data-theme='light'].blocknote-editor code {
   border-bottom-left-radius: 5px;
 }
 
+/* .blocknote-editor ._collaboration-cursor__label_4vj2p_85 {
+  color: #fff;
+} */
+
 .blocknote-editor code {
   font-family: 'Fira Code', 'Monaco', 'Mono Lisa', 'Monospace';
   font-size: 0.9rem;

@@ -23,7 +23,7 @@
     "@codemirror/view": "^6.0.0",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@hocuspocus/provider": "^2.2.1",
+    "@hocuspocus/provider": "^2.4.0",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.13.6",
     "@uiw/codemirror-theme-dracula": "^4.21.8",

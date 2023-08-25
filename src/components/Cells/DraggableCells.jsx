@@ -1,9 +1,9 @@
-import { memo, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { HoverTrackerContext } from './HoverTrackerContext';
 import './Draggable.css';
 
-const DraggableCells = memo(({ index, onDragEnd, children }) => {
+const DraggableCells = ({ index, onDragEnd, children }) => {
   const [{ isDragging }, drag] = useDrag({
     item: { type: 'CELL', index: index },
     type: 'CELL',
@@ -106,6 +106,6 @@ const DraggableCells = memo(({ index, onDragEnd, children }) => {
       </div>
     </HoverTrackerContext.Provider>
   );
-});
+};
 
 export default DraggableCells;

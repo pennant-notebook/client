@@ -1,11 +1,11 @@
-import { memo, useState } from 'react';
+import { useState } from 'react';
 import { Box } from '../../utils/MuiImports';
 import AddCell from './AddCell';
 import useNotebookContext from '../../contexts/NotebookContext';
 import CellRow from './CellRow';
 import DraggableCells from './DraggableCells';
 
-const Cells = memo(({ cells, setCells }) => {
+const Cells = ({ cells, setCells }) => {
   const { repositionCell } = useNotebookContext();
 
   const [isDragging, setIsDragging] = useState(false);
@@ -37,6 +37,7 @@ const Cells = memo(({ cells, setCells }) => {
         <div className='cellList'>
           <Box sx={{ position: 'relative', width: '100%' }}>
             <AddCell index={-1} noCells={cells.length < 1} isDragging={isDragging} />
+
             {cells &&
               cells.map((cell, i) => (
                 <div key={cell.get('id')}>
@@ -51,6 +52,6 @@ const Cells = memo(({ cells, setCells }) => {
       </Box>
     </Box>
   );
-});
+};
 
 export default Cells;

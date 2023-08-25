@@ -53,6 +53,22 @@ const Notebook = ({ docID, resourceTitle }) => {
     };
   }, [awareness]);
 
+  useEffect(() => {
+    const handleBeforeUnload = e => {
+      if (provider) {
+        updateDisconnectedClient(provider);
+      }
+      e.preventDefault();
+      e.returnValue = ''; // required for some browsers
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [provider]);
+
   const deleteCell = async id => {
     const cellIndex = cellsArray.toArray().findIndex(c => c.get('id') === id);
     if (cellIndex !== -1) cellsArray.delete(cellIndex);
