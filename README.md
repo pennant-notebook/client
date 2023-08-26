@@ -46,9 +46,71 @@ To start the development server, run:
 npm start
 ```
 
-### Contributing
+## Main Components 
+
+### App (`src/App.jsx`)
+
+- Main entry point for the application.
+- Manages themes and routing.
+- Includes routes for landing page, user dashboard, and individual notebooks.
+
+### Cells (`src/components/Cells/Cells.jsx`)
+
+- Responsible for rendering and managing notebook cells.
+- Supports drag-and-drop functionality for reordering cells using `react-dnd` & `react-dnd-html5-backend`.
+
+### Code Cell (`src/components/Code/CodeCell.jsx`)
+
+- Represents a code cell within the notebook.
+- Each code cell utilizes its own code editor (CodeMirror 6) instance.
+- Editor binding created using `y-codemirror.next`.
+- Handles code execution, output rendering, and toolbar actions.
+
+### Markdown Cell (`src/components/Markdown/MarkdownCell.jsx`)
+
+- Represents a markdown cell within the notebook.
+- Includes a markdown editor (BlockNote) and toolbar.
+- Editor binding created using `collab` plugin.
+
+### Notebook (`src/components/Notebook/Notebook.jsx`)
+
+- Main component for rendering and managing the notebook interface.
+- Manages cells, navigation, and collaboration features.
+
+## Services
+
+### Dredd Execution Service (`src/services/dreddExecutionService.js`)
+
+- Provides functions for interacting with the Dredd execution engine.
+- Handles code execution, status checking, context resetting, and formatting cells for execution.
+
+### DynamoDB Service (`src/services/dynamoFetch.js` and `dynamoPost.js`)
+
+- Contains functions that make API calls to fetch notebook and user metadata from DynamoDB.
+
+### Notebook Helpers (`src/utils/notebookHelpers.js`)
+
+- Utility functions for creating and managing notebook content.
+- Includes functions for creating cells (`Y.Map`) and managing user objects.
+
+## Contexts
+
+### Provider Context (`src/contexts/ProviderContext.js`)
+
+- Initializes the client-side Websocket-Provider (`HocuspocusProvider`) and the Yjs Document (`Y.Doc`).
+- Initializes an instance of `IndexeddbPersistence` and syncs it with the `Y.Doc` and provider.
+- Mini custom hook `useProvider` memoizes the provider using the `docID`
+
+### Notebook Context (`src/contexts/NotebookContext.js`)
+
+- Contains notebook metadata, provider, awareness, doc and the `docID` for a given notebook.
+- Contains various functions for adding, deleting, cloning, and repositioning cells.
+- Tracks global state of code cell exection to prevent conflicts when running all code cells.
+
+## Contributing
+
 Contributions are welcome! Feel free to open an issue or submit a pull request.
 
-### License
+## License
 MIT License
 
