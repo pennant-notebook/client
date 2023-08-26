@@ -5,7 +5,7 @@ import { IndexeddbPersistence } from 'y-indexeddb';
 
 export const initializeProvider = docID => {
   const provider = new HocuspocusProvider({
-    url: `wss://hp.mafishi.io/collab/${docID}`,
+    url: `${import.meta.env.VITE_WEBSOCKET_SERVER}/collab/${docID}`,
     name: docID,
     token: import.meta.env.VITE_HP_ACCESS_TOKEN
   });
