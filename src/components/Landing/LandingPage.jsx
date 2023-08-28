@@ -1,19 +1,17 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import buttonStyles from './buttons.module.css';
 import intro from './assets/intro.gif';
 import javascript from './assets/javascript.svg';
 import markdown from './assets/markdown.svg';
 import collab from './assets/collab.svg';
-import study from './assets/study.svg';
 import magnifyingGlass from './assets/magnifying-glass.svg';
-
 import Github from './assets/github.png';
 import styles from './LandingPage.module.css';
 import { Box } from '../../utils/MuiImports';
 import Navigation from './Navigation';
 
 const LandingPage = () => {
-  const navigate = useNavigate();
+  document.title = 'Pennant';
 
   return (
     <Box className={styles.main}>
