@@ -1,0 +1,46 @@
+.button {
+  border-radius: 10px;
+  padding: 20px 30px;
+  color: white;
+  font-weight: 600;
+  font-size: 18px;
+  text-decoration: none;
+}
+
+.buttonSmall {
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 14px;
+}
+
+.button:hover {
+  color: white;
+  background-color: #3e454b;
+  text-decoration: none;
+}
+
+.button.primary {
+  background-color: #cba9ef;
+}
+
+.button.primary:hover {
+  background-color: #a987ce;
+}
+
+.button.secondary {
+  background-color: #7288d7;
+}
+
+.button.secondary:hover {
+  background-color: #586ec0;
+}
+
+.button.inverted {
+  color: #676767;
+  background-color: transparent;
+  border: 1px solid #676767;
+}
+
+.button.inverted:hover {
+  background-color: #f3f3f3;
+}

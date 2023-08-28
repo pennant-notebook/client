@@ -1,0 +1,184 @@
+.wrapper {
+  display: flex;
+  max-width: 80%;
+  margin: auto;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+.logoContainer,
+.formContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.smallScreen {
+  max-height: 40vh;
+}
+
+.logo {
+  width: 200px;
+}
+
+.paper {
+  padding: 20px;
+  text-align: center;
+}
+
+.githubButton {
+  background-color: black;
+  color: white;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+.loggedInContainer {
+  background-color: black;
+  color: white;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  margin-bottom: 15px;
+}
+
+.githubButton:hover {
+  background-color: #3e454b;
+  color: white;
+}
+
+.googleButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  cursor: pointer;
+  background: white;
+  color: #444;
+  border-radius: 5px;
+  border: thin solid #888;
+  white-space: nowrap;
+}
+
+.googleButton:hover {
+  background: #eee;
+  color: #444;
+  border: thin solid #888;
+  white-space: nowrap;
+}
+
+span.buttonText {
+  display: inline-block;
+  vertical-align: middle;
+  padding-left: 42px;
+  padding-right: 42px;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.githubLogo {
+  margin-left: 3px;
+  width: 24px;
+}
+
+.googleLogo {
+  margin-left: 3px;
+  width: 24px;
+}
+
+.buttonText {
+  flex-grow: 1;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.button {
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  color: #3e454b;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  margin-top: 15px;
+}
+
+.dashboardButton {
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+  background: url('../../assets/dashboard-button.svg') no-repeat;
+  width: 100%;
+  height: 50px;
+}
+
+.dashboardButton:hover {
+  cursor: pointer;
+  background: url('../../assets/dashboard-hover.svg') no-repeat;
+  width: 100%;
+  height: 50px;
+}
+
+.buttonSmall {
+  border-radius: 6px;
+  padding: 8;
+  font-size: 14px;
+}
+
+.button.primary:hover {
+  background-color: #f3f3f3;
+}
+
+.button.secondary {
+  background-color: #7288d7;
+}
+
+.button.secondary:hover {
+  background-color: #586ec0;
+}
+
+.button.inverted {
+  color: #676767;
+  background-color: transparent;
+  border: 1px solid #676767;
+}
+
+.button.inverted:hover {
+  background-color: #f3f3f3;
+}
+
+.centerLogo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.rotate {
+  animation: rotation 1s infinite linear;
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}

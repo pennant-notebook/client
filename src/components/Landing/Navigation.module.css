@@ -1,0 +1,116 @@
+.logoContainer {
+  display: flex;
+  align-items: center;
+}
+
+.navContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  --vscode-sash-size: 4px;
+  --N800: #172b4d;
+  --N40: #dfe1e6;
+  text-decoration-skip-ink: auto;
+  --button-selected-color: var(--ds-text-selected, #0052cc);
+  --button-selected-border-color: var(--ds-border-selected, #0052cc);
+  -webkit-font-smoothing: antialiased;
+  font-size: inherit;
+  font-style: normal;
+  font-weight: 500;
+  text-align: center;
+  color: var(--ds-text-subtle, #344563);
+  cursor: pointer;
+  line-height: 2.28571em;
+  box-sizing: inherit;
+  transition: opacity 0.3s ease 0s;
+  opacity: 1;
+  margin: 0px 2px;
+  -webkit-box-flex: 1;
+  flex-grow: 1;
+  flex-shrink: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logo {
+  width: 62px;
+  align-self: center;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 400;
+  color: #596095;
+}
+
+.githubTitle {
+  font-size: 14px;
+  font-weight: 400;
+  margin-left: 10px;
+  color: #596095;
+}
+
+.separator {
+  height: 30px;
+  width: 1px;
+  background-color: #f3f3f3;
+  margin-left: 1.2em;
+  margin-right: 1em;
+}
+
+.githubContainer {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-top: 3px;
+}
+
+.githubContainer:hover .githubLogo,
+.githubContainer:hover .githubTitle {
+  opacity: 1;
+}
+
+.githubLogo {
+  margin-left: 2%;
+}
+
+.githubLogo,
+.githubTitle {
+  opacity: 0.5;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.authButtons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0.6;
+  margin-right: 10px;
+}
+
+.link {
+  color: #344563;
+  background-color: transparent;
+}
+
+.link:hover {
+  color: #344563;
+  background-color: transparent;
+  border-radius: 0px;
+}
+
+.link .authText {
+  font-size: 14px;
+  font-weight: 400;
+  margin-left: 5px;
+  color: #343857;
+}
+
+.link:hover {
+  color: #2b4869;
+}
+
+.link:hover.link:after {
+  background-color: #2b4869;
+}

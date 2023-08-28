@@ -1,0 +1,334 @@
+.page {
+  padding: 0 1em;
+  font-size: 18px;
+}
+
+.main {
+  background: linear-gradient(180deg, rgba(0, 255, 255, 0) 0%, rgba(0, 255, 255, 0) 400px, rgba(255, 255, 255, 1) 700px),
+    radial-gradient(circle at 15% 35%, #dbc6f2, rgba(255, 255, 255, 0) 25%),
+    radial-gradient(circle at 85% 20%, #7288d7, rgba(255, 255, 255, 0) 25%), white;
+  background-repeat: no-repeat;
+}
+
+* img {
+  -webkit-user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+.introduction {
+  display: flex;
+  align-items: center;
+  padding: 3em 0;
+  position: relative;
+  min-height: 80vh;
+}
+
+.introduction .github {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 2em 1.5em;
+}
+
+.introduction .logo {
+  margin-top: 1em;
+  margin-bottom: 2em;
+  width: 70px;
+}
+
+.introduction .buttons {
+  margin-top: 3em;
+  display: flex;
+  gap: 2em;
+}
+
+.introduction h1 {
+  color: #2b4869;
+  font-size: 2.9em;
+  line-height: 1.5em;
+  font-weight: bold;
+}
+
+.demo {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.code_block {
+  display: block;
+  text-align: center;
+  margin: 5em 0;
+}
+
+.code_block img {
+  box-shadow: rgb(0 0 0 / 25%) 0px 10px 30px -20px;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  width: 60%;
+}
+
+.perks {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  flex: 0 0 auto;
+  gap: 20px;
+  grid-auto-rows: min-content;
+  grid-template-columns: repeat(3, minmax(200px, 1fr));
+  grid-template-rows: repeat(2, min-content);
+  justify-content: center;
+}
+
+.perks .perk {
+  background: white;
+  flex: 0 0 auto;
+  place-self: start;
+  text-align: left;
+  padding: 40px;
+  box-shadow: rgb(0 0 0 / 25%) 0px 10px 30px -20px;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.perk h3 {
+  font-weight: 600;
+  margin: 0.5em 0;
+  font-size: 1.8em;
+}
+
+.perks .perk .icon {
+  display: flex;
+  height: 30px;
+  margin-bottom: 1.2em;
+}
+
+.subheadline,
+.perks .perk span {
+  color: rgb(91 94 118);
+  line-height: 1.9em;
+  font-weight: 500;
+}
+
+.perks .separator {
+  min-height: 100%;
+  width: 1px;
+  background-color: rgb(230, 230, 230);
+}
+
+.explore {
+  padding: 6em 0;
+  text-align: center;
+}
+
+.page h2 {
+  font-size: 1.8em;
+  font-weight: 600;
+  margin: 0 auto 1em auto;
+}
+
+.explore .text {
+  text-align: center;
+  width: 100%;
+  padding: 0 6em;
+  margin-bottom: 2em;
+}
+
+.explore .overview {
+  margin-top: 3em;
+  padding: 0 2em;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.social img {
+  height: 40px;
+  border-radius: 10px;
+}
+
+.explore .notebook {
+  padding: 0 2em;
+  flex: 1 1;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.section_separator {
+  margin: 0 auto;
+  height: 1px;
+  background-color: rgb(230, 230, 230);
+  width: 100px;
+}
+
+.build {
+  padding: 4em 0;
+  justify-content: center;
+}
+
+form {
+  margin: 0;
+  display: contents;
+}
+
+button {
+  cursor: pointer;
+}
+
+.build p {
+  margin-bottom: 2em;
+}
+
+.buttons {
+  width: 100%;
+  display: flex;
+  gap: 2em;
+  justify-content: center;
+}
+
+.buttons input {
+  border-radius: 10px;
+  font-size: 20px;
+  border: 1px solid #ccc;
+  padding: 1em 1em;
+}
+
+.build .link {
+  text-decoration: underline;
+  font-weight: 600;
+  color: #5f5f5f;
+}
+
+.footer {
+  text-align: left;
+  background-color: #f6f6f6;
+  position: relative;
+  padding: 1em 1em 0 1em;
+}
+
+.footer > div {
+  height: 100%;
+}
+
+.footer .links {
+  display: flex;
+  flex: 1 1;
+  width: 100%;
+  padding: 1em 0;
+}
+
+.footer .links ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footerButtons {
+  display: flex;
+  justify-content: space-evenly;
+  padding: 20px;
+}
+
+.footerButton {
+  display: flex;
+  align-items: center;
+  border-radius: 12px;
+  padding: 15px 25px;
+  background-color: #f3f3f3;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.footerButton:hover {
+  background-color: #e6e6e6;
+}
+
+.footerButton a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: black;
+}
+
+.footerIcon {
+  margin-right: 10px;
+  width: 24px;
+  height: 24px;
+}
+
+.links ul a {
+  color: #a4a4a4;
+}
+
+.links ul a:hover {
+  text-decoration: none;
+}
+
+.links ul a span {
+  text-decoration: underline;
+}
+
+.links ul a:before {
+  content: '› ';
+  display: inline;
+  text-decoration: none;
+}
+
+.footer .bottom {
+  font-size: 0.9em;
+  bottom: 0;
+  width: 100%;
+  color: #b8b8b8;
+  padding: 0 0 0.5em 0;
+}
+
+@media only screen and (max-width: 768px) {
+  .introduction {
+    padding-left: 1em;
+    padding-right: 1em;
+  }
+
+  .introduction h1 {
+    font-size: 1.6em;
+  }
+
+  .buttons {
+    flex-direction: column;
+    gap: 1em !important;
+  }
+
+  .code_block img {
+    width: 100%;
+  }
+
+  .perks {
+    grid-template-columns: repeat(1, minmax(200px, 1fr));
+  }
+
+  .explore {
+    padding: 2em 0 0 0;
+  }
+
+  .explore h2 {
+    margin-bottom: 0;
+  }
+
+  .explore .text {
+    padding: 1em;
+  }
+
+  .explore .overview {
+    flex-direction: column;
+    padding: 2em;
+    margin-top: 0;
+    justify-content: center;
+  }
+
+  .build {
+    padding: 3em 1em;
+  }
+}
