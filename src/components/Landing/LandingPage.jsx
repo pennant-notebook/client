@@ -1,114 +1,99 @@
-import bigLogo from '../../assets/pennant-color.png';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { TextField, Box, Typography, Button, Grid, IconButton, Stack } from '../../utils/MuiImports';
-import { createUser } from '../../services/dynamoPost';
-import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
+import { Link } from 'react-router-dom';
+import buttonStyles from './buttons.module.css';
+import intro from './assets/intro.gif';
+import javascript from './assets/javascript.svg';
+import markdown from './assets/markdown.svg';
+import collab from './assets/collab.svg';
+import magnifyingGlass from './assets/magnifying-glass.svg';
+import Github from './assets/github.png';
+import styles from './LandingPage.module.css';
+import { Box } from '../../utils/MuiImports';
+import Navigation from './Navigation';
 
 const LandingPage = () => {
-  const [username, setUsername] = useState('');
-  const [showTextField, setShowTextField] = useState(false);
-  const navigate = useNavigate();
   document.title = 'Pennant';
 
-  const handleEnter = async e => {
-    e.preventDefault();
-    try {
-      const data = await createUser(username);
-      navigate(`/@${data.username}`);
-    } catch (error) {
-      console.error('Error finding or creating user: ', error);
-    }
-  };
-
   return (
-    <Box
-      className='landing'
-      sx={{
-        textAlign: 'center',
-        height: '100vh',
-        backgroundColor: '#282c34',
-        paddingTop: '10%'
-      }}>
-      <img src={bigLogo} alt='logo' style={{ marginBottom: '3vh', width: '30%' }} />
-      <Typography variant='h2' sx={{ marginBottom: 4, color: '#fff', fontFamily: 'Fira Code' }}>
-        Welcome to Pennant
-      </Typography>
+    <Box className={styles.main}>
+      <Navigation />
+      <div className={`${styles.page} `}>
+        <section className={`${styles.introduction}`}>
+          <div className={`${styles.container}`}>
+            <Box sx={{ textAlign: 'center' }} className={styles.centered}>
+              <h1>Code, Note, Share: All in One Place</h1>
+              <p className={`${styles.subheadline} ${styles.fancyFont}`}>
+                Pennant is an open source computational notebook and live coding environment.
+              </p>
+            </Box>
+            <div className={`${styles.buttons} ${styles.animatedButtons}`}>
+              <Link
+                className={`${buttonStyles.button} ${buttonStyles.primary}`}
+                to={'/@trypennant/7c776af1-ebfe-4559-9a5d-b785e5070dab'}>
+                Try the Tutorial
+              </Link>
 
-      <Box
-        component='form'
-        sx={{
-          '& .MuiTextField-root': { width: '45ch' },
-          '& .MuiButton-root': { width: '45ch' }
-        }}
-        noValidate
-        autoComplete='off'>
-        <Stack spacing={2.5} justifyContent='center' alignItems='center'>
-          <Stack direction='row' spacing={2} sx={{ ml: showTextField ? 8 : 0 }}>
-            {showTextField ? (
-              <Stack direction='row' sx={{ alignItems: 'center' }}>
-                <TextField
-                  fullWidth
-                  variant='outlined'
-                  value={username}
-                  onChange={e => setUsername(e.target.value)}
-                  label='Enter workspace name'
-                  onKeyDown={e => {
-                    if (e.key === 'Enter') handleEnter(e);
-                  }}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': {
-                        borderColor: '#fff',
-                        borderWidth: '2px'
-                      },
-                      '&:hover fieldset': {
-                        borderColor: '#ddd',
-                        borderWidth: '2px'
-                      },
-                      '&.Mui-focused fieldset': {
-                        borderColor: '#ddd',
-                        borderWidth: '2px'
-                      }
-                    },
-                    '& .MuiInputBase-input': {
-                      color: '#fff',
-                      fontSize: '1.35rem'
-                    },
-                    '& .MuiInputLabel-root': {
-                      color: '#ddd',
-                      fontSize: '1.2rem'
-                    },
-                    '& .MuiInputLabel-root.Mui-focused': {
-                      color: '#ddd'
-                    },
-                    '& .MuiInputLabel-outlined.MuiInputLabel-shrink': {
-                      transform: 'translate(14px, -8px) scale(0.64)'
-                    }
-                  }}
-                />
-                <IconButton
-                  onClick={handleEnter}
-                  sx={{
-                    backgroundColor: '#ff9800',
-                    color: '#fff',
-                    ml: 2,
-                    '&:hover': { backgroundColor: '#ffad33' }
-                  }}>
-                  <ArrowRightAltIcon fontSize='large' />
-                </IconButton>
-              </Stack>
-            ) : (
-              <Button variant='contained' onClick={() => setShowTextField(true)} className='workspace-button'>
-                Join or Create Workspace
-              </Button>
-            )}
-          </Stack>
-          <Button variant='contained' onClick={() => navigate(`/@trypennant`)} className='explore-button'>
-            Explore Demo Notebook
-          </Button>
-        </Stack>
-      </Box>
+              <Link className={`${buttonStyles.button} ${buttonStyles.secondary}`} to='/@trypennant'>
+                View Demo Notebooks
+              </Link>
+            </div>
+            <div className={styles.code_block}>
+              <img src={intro} alt='Pennant Demo' />
+            </div>
+          </div>
+        </section>
+
+        <section className={styles.perksSection}>
+          <div className={styles.perks}>
+            <div className={styles.perk}>
+              <div className={styles.icon}>
+                <img src={javascript} alt='Javascript icon' />
+              </div>
+              <h3 style={{ color: '#000' }}>JavaScript</h3>
+              <span>
+                Blazing-fast code execution, with the freedom to run cells individually or the entire notebook.
+              </span>
+            </div>
+
+            <div className={styles.perk}>
+              <div className={styles.icon}>
+                <img src={markdown} alt='Markdown logo' />
+              </div>
+              <h3 style={{ color: '#000' }}>Markdown</h3>
+              <span>Instant, reactive Markdown editing for immediate output conversion.</span>
+            </div>
+
+            <div className={styles.perk}>
+              <div className={styles.icon}>
+                <img src={collab} alt='Globe icon' />
+              </div>
+              <h3 style={{ color: '#000' }}>Collaborate</h3>
+              <span>Real-time notebook sharing with conflict-free synchronization.</span>
+            </div>
+          </div>
+        </section>
+
+        <section className={`${styles.explore} ${styles.darkBg} ${styles.noPadding}`}>
+          <div className='container'>
+            <div className='row'>
+              <h2>Dive Deeper</h2>
+              <section className={styles.footerButtons}>
+                <div className={styles.footerButton}>
+                  <a href='https://pennant-notebook.github.io/' target='_blank' rel='noreferrer'>
+                    <img alt='Case Study' src={magnifyingGlass} className={styles.footerIcon} />
+                    <span>Read our case study</span>
+                  </a>
+                </div>
+                <div className={styles.footerButton}>
+                  <a href='https://github.com/pennant-notebook' target='_blank' rel='noreferrer'>
+                    <img alt='GitHub Repo' src={Github} className={styles.footerIcon} />
+                    <span>Explore our GitHub</span>
+                  </a>
+                </div>
+              </section>
+            </div>
+          </div>
+        </section>
+      </div>
     </Box>
   );
 };

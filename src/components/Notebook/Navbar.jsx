@@ -30,7 +30,9 @@ const Navbar = ({ codeCells, clients = [], isDashboard, handleDisconnect }) => {
     clientCount <= 1 ? 10 : clientCount === 2 ? 8 : clientCount === 3 ? 6 : clientCount >= 4 ? 0 : 10;
 
   return (
-    <AppBar position='sticky' sx={{ backgroundColor: currTheme === 'dark' ? '#1e202d' : '#1D465B' }}>
+    <AppBar
+      position='sticky'
+      sx={{ backgroundColor: currTheme === 'dark' ? '#1e202d' : '#1D465B', fontFamily: 'Lato' }}>
       <Toolbar
         sx={{
           width: '100%',
@@ -71,7 +73,13 @@ const Navbar = ({ codeCells, clients = [], isDashboard, handleDisconnect }) => {
         {isDashboard && (
           <IconRow
             onClick={toggleTheme}
-            icon={currTheme === 'dark' ? <Brightness7 sx={{ color: '#e0e0e0' }} /> : <Brightness4 />}
+            icon={
+              currTheme === 'dark' ? (
+                <Brightness7 sx={{ color: '#e0e0e0' }} />
+              ) : (
+                <Brightness4 sx={{ color: '#e0e0e0' }} />
+              )
+            }
           />
         )}
       </Toolbar>

@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Box } from './utils/MuiImports';
 import { ToastContainer } from 'react-toastify';
-import LandingPage from './components/Landing/LandingPage';
 import 'react-toastify/dist/ReactToastify.css';
 import UserDashboard from './components/Landing/UserDashboard';
 import NotebookRoute from './components/Landing/NotebookRoute';
@@ -9,6 +8,8 @@ import ThemeManager from './contexts/ThemeManager';
 import { useState } from 'react';
 import { codeMirrorThemes } from './contexts/ThemeManager';
 import { useMediaQuery } from '@mui/material';
+import LandingPage from './components/Landing/LandingPage';
+import Auth from './components/Auth/Auth';
 
 function App() {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
@@ -30,9 +31,12 @@ function App() {
         <ToastContainer />
         <BrowserRouter>
           <Routes>
-            <Route path='/' element={<LandingPage />} />
-            <Route path='/:username' element={<UserDashboard />} />
+            <Route path='/auth' element={<Auth />} />
+            <Route path='/auth/github' element={<Auth />} />
+            <Route path='/auth/google' element={<Auth />} />
             <Route path='/:username/:docID' element={<NotebookRoute />} />
+            <Route path='/:username' element={<UserDashboard />} />
+            <Route path='/' element={<LandingPage />} />
           </Routes>
         </BrowserRouter>
       </Box>

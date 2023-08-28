@@ -26,6 +26,7 @@
     "@hocuspocus/provider": "^2.4.0",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.13.6",
+    "@react-oauth/google": "^0.11.1",
     "@uiw/codemirror-theme-dracula": "^4.21.8",
     "@uiw/codemirror-theme-tokyo-night": "^4.21.8",
     "@uiw/codemirror-theme-vscode": "^4.21.8",

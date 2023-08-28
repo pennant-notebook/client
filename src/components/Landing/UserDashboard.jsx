@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { Box, TextField, Button, Grid, Typography, useTheme } from '../../utils/MuiImports';
 import LoadingSpinner from '../UI/LoadingSpinner';
@@ -33,17 +33,17 @@ export const UserDashboardContent = ({ username, notebooks, refetch }) => {
   return (
     <Box>
       <Navbar hideClients={true} isDashboard={true} />
-      <Box className={`user-dashboard ${theme.palette.mode}`}>
+      <Box className={`user-dashboard ${theme.palette.mode}`} sx={{ fontFamily: 'Lato' }}>
         <TextField
           autoComplete='off'
           value={searchTerm}
           onChange={handleSearchChange}
           label='Search Notebooks'
           variant='outlined'
-          sx={{ width: '50%' }}
+          sx={{ width: '50%', fontFamily: 'Lato' }}
         />
         <Box display='flex' justifyContent='center' alignItems='center' padding='10px 20px'>
-          <Button variant='contained' color='primary' onClick={handleCreateNotebook}>
+          <Button variant='contained' color='primary' onClick={handleCreateNotebook} sx={{ fontFamily: 'Lato' }}>
             New
           </Button>
         </Box>
@@ -51,7 +51,7 @@ export const UserDashboardContent = ({ username, notebooks, refetch }) => {
 
       {!filteredNotebooks || filteredNotebooks.length === 0 ? (
         <Box display='flex' justifyContent='center' alignItems='center' padding='20px 20px'>
-          <Typography variant='h5' sx={{ fontFamily: 'Lato', opacity: '0.8', fontStyle: 'italic' }}>
+          <Typography variant='h5' sx={{ fontFamily: 'Lato', opacity: '0.6', mt: '10px' }}>
             Nothing to see here yet...
           </Typography>
         </Box>
@@ -74,6 +74,20 @@ export const UserDashboard = () => {
   const { data, refetch, loading, error } = useQuery(['notebooks', username], () => fetchNotebooks(username), {
     refetchOnWindowFocus: false
   });
+
+  const navigate = useNavigate();
+  const authToken = localStorage.getItem('pennantAccessToken');
+  const usernameFromLocal = localStorage.getItem('pennant-username');
+
+  useEffect(() => {
+    if (username === '@trypennant') return;
+
+    if (!authToken || usernameFromLocal !== username.slice(1)) {
+      const errorMsg = authToken ? 'You are not authorized to view this page.' : 'Please login to view this page.';
+      navigate('/auth', { state: { errorMessage: errorMsg } });
+    }
+  }, [username]);
+
   if (loading) return <LoadingSpinner />;
   if (error) return 'Error!';
 
