@@ -73,7 +73,13 @@ const Navbar = ({ codeCells, clients = [], isDashboard, handleDisconnect }) => {
         {isDashboard && (
           <IconRow
             onClick={toggleTheme}
-            icon={currTheme === 'dark' ? <Brightness7 sx={{ color: '#e0e0e0' }} /> : <Brightness4 />}
+            icon={
+              currTheme === 'dark' ? (
+                <Brightness7 sx={{ color: '#e0e0e0' }} />
+              ) : (
+                <Brightness4 sx={{ color: '#e0e0e0' }} />
+              )
+            }
           />
         )}
       </Toolbar>

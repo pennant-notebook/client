@@ -1,24 +1,37 @@
-import { Button, TextField, Grid, Paper, Divider, Typography, useMediaQuery, Stack } from '../../utils/MuiImports';
+import {
+  Button,
+  TextField,
+  Grid,
+  Paper,
+  Divider,
+  Typography,
+  useMediaQuery,
+  Stack,
+  useTheme
+} from '../../utils/MuiImports';
 import PennantLogo from '../../assets/pennant-logo.png';
+import PennantLogoDark from '../../assets/pennant-logo-dark.png';
 import Pennant from '../../assets/logo.png';
 import LoggedInIcon from '../../assets/loggedIn.svg';
-
 import styles from './Auth.module.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import GitHubLogin from './GitHubLogin';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import axios from 'axios';
 
 const API_URL = process.env.NODE_ENV === 'production' ? '/auth' : 'http://localhost:3001/auth';
 
 const Auth = () => {
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState(localStorage.getItem('pennant-username') || '');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const theme = useTheme().palette.mode;
 
-  const [errorMessage, setErrorMessage] = useState('');
+  const location = useLocation();
+  const passedState = location.state || {};
+  const [errorMessage, setErrorMessage] = useState(passedState.errorMessage || '');
 
-  const [userData, setUserData] = useState(JSON.parse(localStorage.getItem('userData')) || {});
+  const [userData, setUserData] = useState(JSON.parse(localStorage.getItem('pennantAuthData')) || {});
   const [rerender, setRerender] = useState(false);
   const [showDashboardLoader, setShowDashboardLoader] = useState(false);
   const navigate = useNavigate();
@@ -27,6 +40,17 @@ const Auth = () => {
   const isSmallScreen = useMediaQuery('(max-width:600px)');
   const isLoggedIn = !!localStorage.getItem('pennantAccessToken');
   const toggleSignUp = () => setIsSignUp(!isSignUp);
+
+  useEffect(() => {
+    if (!!passedState.errorMessage) {
+      const timer = setTimeout(() => {
+        setErrorMessage('');
+        navigate('.', { state: {} });
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   const handleSignup = async () => {
     if (username.length < 5) {
@@ -64,7 +88,7 @@ const Auth = () => {
       const response = await axios.post(API_URL + '/signup', { username, password, provider: '' });
       setShowDashboardLoader(true);
       localStorage.setItem('pennantAccessToken', response.data.token);
-      localStorage.setItem('userData', JSON.stringify({ login: username }));
+      localStorage.setItem('pennantAuthData', JSON.stringify({ login: username }));
       setTimeout(() => {
         navigate(`/@${username}`);
       }, 1500);
@@ -77,7 +101,8 @@ const Auth = () => {
     try {
       const response = await axios.post(API_URL + '/signin', { username, password });
       localStorage.setItem('pennantAccessToken', response.data.token);
-      localStorage.setItem('username', username);
+      localStorage.setItem('pennantAuthData', JSON.stringify({ login: username }));
+      localStorage.setItem('pennant-username', username);
       setShowDashboardLoader(true);
       setTimeout(() => {
         navigate(`/@${username}`);
@@ -90,11 +115,14 @@ const Auth = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('pennantAccessToken');
+    localStorage.removeItem('pennantAuthData');
+    localStorage.removeItem('pennant-username');
     setUsername('');
     setRerender(!rerender);
   };
 
   const goToDashboard = () => {
+    console.log(userData.login);
     setShowDashboardLoader(true);
     setTimeout(() => {
       navigate(`/@${userData.login}`);
@@ -110,16 +138,27 @@ const Auth = () => {
       )}
       <Grid container className={styles.container} direction={{ xs: 'column', sm: 'row' }}>
         <Grid item xs={isSmallScreen ? 4 : 6} className={`${styles.logoContainer} `}>
-          {!showDashboardLoader && <img src={PennantLogo} alt='Pennant Logo' className={`${styles.logo}`} />}
+          {!showDashboardLoader && (
+            <img
+              src={theme === 'dark' ? PennantLogoDark : PennantLogo}
+              alt='Pennant Logo'
+              className={`${styles.logo}`}
+            />
+          )}
         </Grid>
         {!showDashboardLoader && (
           <Grid item xs={isSmallScreen ? 4 : 6} className={`${styles.formContainer}`}>
             <Paper elevation={3} className={styles.paper}>
               {isLoggedIn ? (
                 <Stack sx={{ minWidth: '242px' }}>
+                  {errorMessage && (
+                    <Typography color='error' sx={{ fontSize: '14px', mb: '10px' }}>
+                      {errorMessage}
+                    </Typography>
+                  )}
                   <div className={`${styles.loggedInContainer}`}>
                     <img
-                      style={{ borderRadius: '50%', width: '40px', height: '40px', marginRight: '10px' }}
+                      style={{ borderRadius: '50%', width: '32px', height: '32px', marginRight: '10px' }}
                       src={userData.avatar_url || LoggedInIcon}
                       alt="User's avatar"
                       onError={e => {
@@ -127,12 +166,24 @@ const Auth = () => {
                         e.target.src = LoggedInIcon;
                       }}
                     />
-                    <Typography className={styles.buttonText}>Logged in as {userData.login || username}</Typography>
+                    <Typography className={styles.buttonText} sx={{ fontSize: '0.9em' }}>
+                      Logged in as {userData.login || username}
+                    </Typography>
                   </div>
-                  <Button onClick={handleLogout} variant='contained' className={`${styles.button} ${styles.secondary}`}>
+                  <Button
+                    onClick={handleLogout}
+                    variant='contained'
+                    className={`${styles.button} ${styles.secondary}`}
+                    sx={{ textTransform: 'none', mb: '10px' }}>
                     Log out
                   </Button>
-                  <div onClick={goToDashboard} className={`${styles.dashboardButton}`} />
+                  <Button
+                    onClick={goToDashboard}
+                    variant='contained'
+                    className={`${styles.dashboardButton} ${styles.secondary}`}
+                    sx={{ textTransform: 'none', my: '10px' }}>
+                    Go to Dashboard
+                  </Button>
                 </Stack>
               ) : (
                 <>

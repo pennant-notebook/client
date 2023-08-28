@@ -38,7 +38,9 @@ const GitHubLogin = ({ setUserData }) => {
         }
       });
       const data = response.data;
-      localStorage.setItem('userData', JSON.stringify(data));
+      localStorage.setItem('pennantAuthData', JSON.stringify(data));
+      localStorage.setItem('pennant-username', data.login);
+
       setUserData(data);
 
       const checkUserResponse = await axios.post(`${API_URL}/checkUser`, {

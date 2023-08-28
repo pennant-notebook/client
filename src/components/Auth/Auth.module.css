@@ -118,21 +118,13 @@ span.buttonText {
 }
 
 .dashboardButton {
-  border: none;
-  display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-top: 20px;
-  background: url('../../assets/dashboard-button.svg') no-repeat;
   width: 100%;
-  height: 50px;
+  height: 40px;
 }
 
 .dashboardButton:hover {
   cursor: pointer;
-  background: url('../../assets/dashboard-hover.svg') no-repeat;
-  width: 100%;
-  height: 50px;
 }
 
 .buttonSmall {

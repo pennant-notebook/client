@@ -31,7 +31,8 @@ const Navigation = () => {
 
   const handleSignOut = () => {
     localStorage.removeItem('pennantAccessToken');
-    localStorage.removeItem('userData');
+    localStorage.removeItem('pennantAuthData');
+    localStorage.removeItem('pennant-username');
     navigate('/');
     setIsLoggedIn(false);
   };
@@ -65,7 +66,7 @@ const Navigation = () => {
             </IconButton>
             {showSideMenu && (
               <div className={styles.sideMenu}>
-                <button onClick={() => navigate(`/@${localStorage.getItem('username')}`)}>Dashboard</button>
+                <button onClick={() => navigate(`/@${localStorage.getItem('pennant-username')}`)}>Dashboard</button>
                 <button onClick={handleSignOut}>Logout</button>
               </div>
             )}
