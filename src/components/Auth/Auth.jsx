@@ -57,12 +57,16 @@ const Auth = () => {
           <Grid item xs={isSmallScreen ? 4 : 6} className={`${styles.formContainer}`}>
             <Paper elevation={3} className={styles.paper}>
               {isLoggedIn ? (
-                <Stack>
+                <Stack sx={{ minWidth: '242px' }}>
                   <div className={`${styles.loggedInContainer}`}>
                     <img
                       style={{ borderRadius: '50%', width: '40px', height: '40px', marginRight: '10px' }}
-                      src={userData.avatar_url}
+                      src={userData.avatar_url || './src/assets/github.svg'}
                       alt="User's avatar"
+                      onError={e => {
+                        e.target.onerror = null;
+                        e.target.src = './src/assets/github.svg';
+                      }}
                     />
                     <Typography className={styles.buttonText}>Logged in as {userData.login}</Typography>
                   </div>

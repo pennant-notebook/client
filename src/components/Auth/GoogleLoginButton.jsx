@@ -1,15 +1,30 @@
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
-import { fetchUser } from '../../services/dynamoFetch';
-import { createUser } from '../../services/dynamoPost';
 
 const API_URL = process.env.NODE_ENV === 'production' ? '/auth' : 'http://localhost:3001/auth';
 
 const GoogleLoginButton = () => {
   const onGoogleSuccess = async response => {
     const email = response.profileObj.email;
-    const user = await fetchUser(email);
-    if (!user) {
-      await createUser(email);
+    const username = email.substring(0, email.indexOf('@'));
+    const provider = 'google';
+
+    // Check if user exists
+    const userExists = await fetch(`${API_URL}/checkUser`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ username, provider })
+    }).then(res => res.json());
+
+    if (!userExists.exists) {
+      await fetch(`${API_URL}/signup`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, provider })
+      });
     }
   };
 

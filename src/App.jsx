@@ -8,7 +8,7 @@ import ThemeManager from './contexts/ThemeManager';
 import { useState } from 'react';
 import { codeMirrorThemes } from './contexts/ThemeManager';
 import { useMediaQuery } from '@mui/material';
-import { StartScreen } from './components/Landing/StartScreen';
+import LandingPage from './components/Landing/LandingPage';
 import Auth from './components/Auth/Auth';
 
 function App() {
@@ -36,7 +36,7 @@ function App() {
             <Route path='/auth/google' element={<Auth />} />
             <Route path='/:username/:docID' element={<NotebookRoute />} />
             <Route path='/:username' element={<UserDashboard />} />
-            <Route path='/' element={<StartScreen />} />
+            <Route path='/' element={<LandingPage />} />
           </Routes>
         </BrowserRouter>
       </Box>
