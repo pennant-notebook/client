@@ -16,17 +16,16 @@ const LandingPage = () => {
   return (
     <Box className={styles.main}>
       <Navigation />
-      <div className={styles.page + '  centered'}>
-        <section className={styles.introduction}>
-          <div className='container'>
-            <Box sx={{ textAlign: 'center' }}>
+      <div className={`${styles.page} `}>
+        <section className={`${styles.introduction}`}>
+          <div className={`${styles.container}`}>
+            <Box sx={{ textAlign: 'center' }} className={styles.centered}>
               <h1>Code, Note, Share: All in One Place</h1>
-              <p className={styles.subheadline}>
-                Pennant is an open source computational notebook that brings note-taking, code execution and real-time
-                collaboration to a single platform.
+              <p className={`${styles.subheadline} ${styles.fancyFont}`}>
+                Pennant is an open source computational notebook and live coding environment.
               </p>
             </Box>
-            <div className={styles.buttons}>
+            <div className={`${styles.buttons} ${styles.animatedButtons}`}>
               <Link
                 className={`${buttonStyles.button} ${buttonStyles.primary}`}
                 to={'/@trypennant/7c776af1-ebfe-4559-9a5d-b785e5070dab'}>
@@ -50,7 +49,9 @@ const LandingPage = () => {
                 <img src={javascript} alt='Javascript icon' />
               </div>
               <h3 style={{ color: '#000' }}>JavaScript</h3>
-              <span>Built-in support for JavaScript</span>
+              <span>
+                Blazing-fast code execution, with the freedom to run cells individually or the entire notebook.
+              </span>
             </div>
 
             <div className={styles.perk}>
@@ -58,7 +59,7 @@ const LandingPage = () => {
                 <img src={markdown} alt='Markdown logo' />
               </div>
               <h3 style={{ color: '#000' }}>Markdown</h3>
-              <span>Built-in support for Markdown</span>
+              <span>Instant, reactive Markdown editing for immediate output conversion.</span>
             </div>
 
             <div className={styles.perk}>
@@ -66,12 +67,12 @@ const LandingPage = () => {
                 <img src={collab} alt='Globe icon' />
               </div>
               <h3 style={{ color: '#000' }}>Collaborate</h3>
-              <span>Share notebooks and collaborate in real-time</span>
+              <span>Real-time notebook sharing with conflict-free synchronization.</span>
             </div>
           </div>
         </section>
 
-        <section className={styles.explore}>
+        <section className={`${styles.explore} ${styles.darkBg} ${styles.noPadding}`}>
           <div className='container'>
             <div className='row'>
               <h2>Dive Deeper</h2>

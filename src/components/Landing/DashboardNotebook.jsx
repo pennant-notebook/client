@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
-
 import { Card, Typography, useTheme, InputBase } from '../../utils/MuiImports';
 import { Edit, DeleteIcon, CheckIcon, CloseIcon, IconButton } from '../../utils/MuiImports';
 import { useMutation } from 'react-query';

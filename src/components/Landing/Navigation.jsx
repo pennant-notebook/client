@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { IconButton } from '../../utils/MuiImports';
 import PennantLogo from './assets/logo.png';
 import LoginSvg from './assets/login2.svg';
-import LogoutSvg from './assets/logout.svg';
 import styles from './Navigation.module.css';
 
 const Navigation = () => {
@@ -48,7 +47,12 @@ const Navigation = () => {
         <span className={styles.title}>pennant</span>
         <div className={styles.separator}></div>
         <div
-          className={styles.githubContainer}
+          className={`${styles.githubContainer}`}
+          onClick={() => window.open('https://pennant-notebook.github.io/', '_blank')}>
+          <span className={styles.githubTitle}>Case Study</span>
+        </div>
+        <div
+          className={`${styles.githubContainer}`}
           onClick={() => window.open('https://github.com/pennant-notebook', '_blank')}>
           <span className={styles.githubTitle}>GitHub</span>
         </div>
