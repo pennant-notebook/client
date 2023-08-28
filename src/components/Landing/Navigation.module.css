@@ -90,12 +90,12 @@
 }
 
 .link {
-  color: #344563;
+  color: #344563 !important;
   background-color: transparent;
 }
 
 .link:hover {
-  color: #344563;
+  color: #344563 !important;
   background-color: transparent;
   border-radius: 0px;
 }

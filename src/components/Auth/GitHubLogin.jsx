@@ -20,7 +20,7 @@ const GitHubLogin = ({ setUserData }) => {
         .then(response => {
           const { access_token } = response.data;
           if (access_token) {
-            localStorage.setItem('githubToken', access_token);
+            localStorage.setItem('pennantAccessToken', access_token);
             getUserData();
           }
         })
@@ -34,7 +34,7 @@ const GitHubLogin = ({ setUserData }) => {
     try {
       const response = await axios.get(`${API_URL}/getUserData`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('githubToken')}`
+          Authorization: `Bearer ${localStorage.getItem('pennantAccessToken')}`
         }
       });
       const data = response.data;

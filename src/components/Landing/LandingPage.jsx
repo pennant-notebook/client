@@ -5,6 +5,8 @@ import javascript from './assets/javascript.svg';
 import markdown from './assets/markdown.svg';
 import collab from './assets/collab.svg';
 import study from './assets/study.svg';
+import magnifyingGlass from './assets/magnifying-glass.svg';
+
 import Github from './assets/github.png';
 import styles from './LandingPage.module.css';
 import { Box } from '../../utils/MuiImports';
@@ -49,7 +51,7 @@ const LandingPage = () => {
               <div className={styles.icon}>
                 <img src={javascript} alt='Javascript icon' />
               </div>
-              <h3>JavaScript</h3>
+              <h3 style={{ color: '#000' }}>JavaScript</h3>
               <span>Built-in support for JavaScript</span>
             </div>
 
@@ -57,7 +59,7 @@ const LandingPage = () => {
               <div className={styles.icon}>
                 <img src={markdown} alt='Markdown logo' />
               </div>
-              <h3>Markdown</h3>
+              <h3 style={{ color: '#000' }}>Markdown</h3>
               <span>Built-in support for Markdown</span>
             </div>
 
@@ -65,7 +67,7 @@ const LandingPage = () => {
               <div className={styles.icon}>
                 <img src={collab} alt='Globe icon' />
               </div>
-              <h3>Collaborate</h3>
+              <h3 style={{ color: '#000' }}>Collaborate</h3>
               <span>Share notebooks and collaborate in real-time</span>
             </div>
           </div>
@@ -78,7 +80,7 @@ const LandingPage = () => {
               <section className={styles.footerButtons}>
                 <div className={styles.footerButton}>
                   <a href='https://pennant-notebook.github.io/' target='_blank' rel='noreferrer'>
-                    <img alt='Case Study' src={study} className={styles.footerIcon} />
+                    <img alt='Case Study' src={magnifyingGlass} className={styles.footerIcon} />
                     <span>Read our case study</span>
                   </a>
                 </div>
