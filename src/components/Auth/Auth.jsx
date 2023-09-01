@@ -89,10 +89,12 @@ const Auth = () => {
       setShowDashboardLoader(true);
       localStorage.setItem('pennantAccessToken', response.data.token);
       localStorage.setItem('pennantAuthData', JSON.stringify({ login: username }));
+      localStorage.setItem('pennant-username', username);
       setTimeout(() => {
         navigate(`/@${username}`);
       }, 1500);
     } catch (error) {
+      console.error('Could not sign up:', error);
       setErrorMessage('Could not sign up. Please try again.');
     }
   };
@@ -122,6 +124,10 @@ const Auth = () => {
   };
 
   const goToDashboard = () => {
+    if (!localStorage.getItem('pennantAccessToken')) {
+      setErrorMessage('You are not authorized to view this page.');
+      return;
+    }
     console.log(userData.login);
     setShowDashboardLoader(true);
     setTimeout(() => {

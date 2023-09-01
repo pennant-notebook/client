@@ -1,7 +1,6 @@
 import axios from 'axios';
-import styles from './Auth.module.css';
 import GithubLogo from '../../assets/github.svg';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const API_URL = process.env.NODE_ENV === 'production' ? '/auth' : 'http://localhost:3001/auth';
@@ -70,9 +69,9 @@ const GitHubLogin = ({ setUserData }) => {
   };
 
   return (
-    <div className={styles.githubButton} onClick={handleGithubLogin}>
-      <img src={GithubLogo} alt='GitHub Logo' className={styles.githubLogo} />
-      <span className={styles.buttonText}>Sign in with GitHub</span>
+    <div className='githubButton' onClick={handleGithubLogin}>
+      <img src={GithubLogo} alt='GitHub Logo' className='githubLogo' />
+      <span className='buttonText'>Sign in with GitHub</span>
     </div>
   );
 };
