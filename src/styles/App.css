@@ -101,35 +101,6 @@ div.notebook-title p {
   text-align: center;
 }
 
-.landing .workspace-button,
-.landing .explore-button {
-  font-family: 'Lato';
-  font-size: 1.5rem;
-  font-weight: normal;
-  padding: 10px 50px;
-  width: 50vw;
-  max-width: 400px;
-  color: #fff;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.landing .workspace-button {
-  background-color: #dbc6f2;
-}
-
-.landing .explore-button {
-  background-color: #7288d7;
-}
-
-.landing .workspace-button:hover {
-  background-color: #f4936f;
-}
-
-.landing .explore-button:hover {
-  background-color: #a9e4d6;
-}
-
 .add-cell {
   display: flex;
   align-items: center;
