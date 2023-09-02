@@ -1,0 +1,17 @@
+.userWidget {
+  margin-left: -8px;
+  border-radius: 30px;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 0px -4px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+}
+
+.userWidget:hover {
+  box-shadow: rgba(3, 102, 214, 0.3) 0px 0px 0px 3px;
+}
+
+.localWidget {
+  border-radius: 30px;
+}
+
+.localWidget:hover {
+  box-shadow: rgba(3, 102, 214, 0.3) 0px 0px 0px 2px;
+}

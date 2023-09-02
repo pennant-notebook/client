@@ -1,0 +1,45 @@
+:root {
+  --svg-color: #dbd3d8; /* Light mode color */
+  --svg-color-dark: #282a34; /* Dark mode color */
+}
+
+.codecellContainer {
+  /* mask-image: radial-gradient(circle, black 100%, transparent 100%); */
+  width: 100%;
+  border: 1px solid dimgray;
+  border-radius: 5px;
+  background-color: #3d414d;
+}
+
+.codecellContainer.dark {
+  /* mask-image: radial-gradient(circle, black 100%, transparent 100%); */
+  width: 100%;
+  border-radius: 5px;
+  background-color: #3d414d;
+}
+
+.codecellOutput {
+  padding: 0 4px;
+  opacity: 0.9;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.codecellOutput p {
+  margin-left: 5px;
+  color: '#cfd1d8';
+  font-family: 'Fira Code', 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+  font-size: 14px;
+}
+
+.codecellOutput.error {
+  background-color: crimson;
+}
+
+.codecellOutput.critical {
+  background-color: yellow;
+}
+
+.codecellOutput.critical p {
+  color: black;
+}

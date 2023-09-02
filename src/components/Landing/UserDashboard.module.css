@@ -1,0 +1,13 @@
+.userDashboard {
+  padding-top: 40px;
+  padding-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60px;
+  background-color: #f9f6ee;
+}
+
+.dark {
+  background-color: #2c3032;
+}

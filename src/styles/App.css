@@ -1,0 +1,39 @@
+body {
+  font-family: 'Lato', sans-serif;
+}
+
+code {
+  font-family: 'Fira Code', monospace;
+}
+
+.main-content {
+  padding-bottom: 60px;
+  align-items: center;
+  margin-inline: auto;
+}
+
+.notebook-title {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  min-width: 50%;
+}
+
+div.notebook-title p {
+  font-family: 'Lato', 'sans-serif';
+  text-align: center;
+}
+
+.ProseMirror {
+  padding: 8px 24px !important;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+div[id*='tippy'] > div[class*='tippy-box'][data-placement='left'] {
+  display: none !important;
+}
