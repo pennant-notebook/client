@@ -1,8 +1,9 @@
-import { YTypes } from '~/utils/notebookHelpers';
+import React from 'react';
+import { YText, YMap } from '~/utils/notebookHelpers';
 
-export type NotebookMetadataType = YTypes['Map'] & {
+export type NotebookMetadataType = YMap & {
   executionCount: number;
-  title: string | YTypes['Text'];
+  title: string | YText;
 };
 
 export interface NotebookContextType {

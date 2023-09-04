@@ -1,4 +1,5 @@
 import { ClientType } from '@/ClientTypes';
+import { NotebookType } from '@/NotebookTypes';
 import React, { useCallback, useEffect, useState } from 'react';
 import Avatar from 'react-avatar';
 import { useQuery } from 'react-query';
@@ -25,7 +26,6 @@ import IconRow from '../IconRow';
 import { StyledButton } from '../StyledComponents';
 import styles from './Clients.module.css';
 import ThemeSelector from './ThemeSelector';
-import { NotebookType } from '@/NotebookTypes';
 
 interface ClientDrawerProps {
   handleDisconnect: (destination: string) => void;

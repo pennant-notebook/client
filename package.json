@@ -6,10 +6,10 @@
   "scripts": {
     "start": "vite --host",
     "dev": "vite --port 3000",
-    "build": "vite build",
+    "build": "tsc && vite build",
     "dev:all": "concurrently \"npm run dev\" \"cd ../server && npm run dev\"",
     "build:ui": "npm run build && cp -r dist ../server",
-    "lint": "eslint src --ext js,jsx,ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -51,7 +51,6 @@
     "react-query": "^3.39.3",
     "react-router-dom": "^6.12.1",
     "react-toastify": "^9.1.3",
-    "typescript": "^5.2.2",
     "unique-names-generator": "^4.7.1",
     "uuid": "^9.0.0",
     "y-codemirror.next": "^0.3.2",
@@ -80,6 +79,7 @@
     "eslint-plugin-react-refresh": "^0.3.4",
     "postcss": "^8.4.24",
     "tailwindcss": "^3.3.2",
+    "typescript": "^5.2.2",
     "vite": "^4.3.9"
   }
 }

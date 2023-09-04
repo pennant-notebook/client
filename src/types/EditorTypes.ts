@@ -1,13 +1,13 @@
 import { Theme } from '@blocknote/react';
 import { Awareness } from 'y-protocols/awareness';
 import { CodeMirrorThemeType } from '~/contexts/ThemeManager';
-import { YTypes } from '~/utils/notebookHelpers';
+import { YText, YXmlFragment } from '~/utils/notebookHelpers';
 import { MarkdownCellType } from './CellTypes';
 import { ClientType } from './ClientTypes';
 import { HocuspocusProviderConfig } from './ProviderTypes';
 
 export interface CreateCodeEditorProps {
-  content: YTypes['Text'];
+  content: YText;
   id: string;
   awareness: Awareness;
   handleRunCode: () => void;
@@ -17,7 +17,7 @@ export interface CreateCodeEditorProps {
 
 export interface MarkdownEditorProps {
   cell: MarkdownCellType;
-  content: YTypes['XmlFragment'];
+  content: YXmlFragment;
   provider: HocuspocusProviderConfig;
   currentUser: ClientType | null;
   theme: Theme | "light" | "dark" | { light: Theme; dark: Theme; } | undefined;

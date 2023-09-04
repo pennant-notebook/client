@@ -3,15 +3,13 @@ import { v4 as uuidv4 } from 'uuid';
 import { uniqueNamesGenerator, animals } from 'unique-names-generator';
 import { UserState } from '@/ClientTypes';
 
-export type YTypes = {
-  Doc: InstanceType<typeof Y.Doc>;
-  Array: InstanceType<typeof Y.Array>;
-  Map: InstanceType<typeof Y.Map<any>>;
-  Text: InstanceType<typeof Y.Text>;
-  XmlElement: InstanceType<typeof Y.XmlElement>;
-  XmlFragment: InstanceType<typeof Y.XmlFragment>;
-  XmlText: InstanceType<typeof Y.XmlText>;
-};
+export type YDoc = Y.Doc;
+export type YArray = Y.Array<any>;
+export type YMap = Y.Map<any>;
+export type YText = Y.Text;
+export type YXmlElement = Y.XmlElement;
+export type YXmlFragment = Y.XmlFragment;
+export type YXmlText = Y.XmlText;
 
 export type YMapEvent<T> = Y.YMapEvent<T>;
 

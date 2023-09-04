@@ -1,11 +1,10 @@
-import { BlockNoteView, useBlockNote } from '@blocknote/react';
-import { defaultBlockSchema, BlockSchema } from '@blocknote/core';
-import styles from './MarkdownCell.module.css';
+import { MarkdownEditorProps } from '@/EditorTypes';
+import { BlockSchema, defaultBlockSchema } from '@blocknote/core';
+import { BlockNoteView, getDefaultReactSlashMenuItems, useBlockNote } from '@blocknote/react';
 import React from 'react';
-import { MarkdownEditorProps } from '~/utils/notebookHelpers';
-import { getDefaultReactSlashMenuItems } from '@blocknote/react';
-import { Image, insertImage } from './Image';
 import { getRandomColor } from '~/utils/awarenessHelpers';
+import { Image, insertImage } from './Image';
+import styles from './MarkdownCell.module.css';
 
 const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ cell, content, provider, currentUser, theme }) => {
   // Temporarily override console.log

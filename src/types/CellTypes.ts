@@ -1,22 +1,22 @@
-import { YTypes } from '~/utils/notebookHelpers';
+import { YMap, YText, YXmlFragment } from '~/utils/notebookHelpers';
 
-export type CodeCellType = YTypes['Map'] & {
+export type CodeCellType = YMap & {
   id: string;
   type: string;
-  content: YTypes['Text'];
-  outputMap: YTypes['Map'];
-  metaData: YTypes['Map'];
+  content: YText;
+  outputMap?: YMap;
+  metaData?: YMap;
 }
 
-export type MarkdownCellType = YTypes['Map'] & {
+export type MarkdownCellType = YMap & {
   id: string;
   type: string;
-  content: YTypes['XmlFragment'];
+  content: YXmlFragment;
 }
 
 export type CellType = CodeCellType | MarkdownCellType;
 
-export type CellMetadataType = YTypes['Map'] & {
+export type CellMetadataType = YMap & {
   isRunning: boolean;
   exeCount: number;
 };

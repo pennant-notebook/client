@@ -6,5 +6,5 @@ declare module '*.jpg';
 declare module '*.jpeg';
 declare module '*.gif';
 
-declare module '@blocknote/core/*';
-declare module '@blocknote/react/*';
+// declare module '@blocknote/core/*';
+// declare module '@blocknote/react/*';
