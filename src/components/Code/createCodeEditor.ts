@@ -1,12 +1,12 @@
+import { CreateCodeEditorProps } from '@/EditorTypes';
+import { acceptCompletion, autocompletion } from '@codemirror/autocomplete';
+import { defaultKeymap, indentLess, indentMore } from '@codemirror/commands';
 import { javascript } from '@codemirror/lang-javascript';
-import { EditorView, basicSetup } from 'codemirror';
-import { yCollab } from 'y-codemirror.next';
 import { EditorState } from '@codemirror/state';
-import { defaultKeymap, indentMore, indentLess } from '@codemirror/commands';
 import { keymap } from '@codemirror/view';
-import { autocompletion, acceptCompletion } from '@codemirror/autocomplete';
+import { EditorView, basicSetup } from 'codemirror';
 import beautify from 'js-beautify';
-import { CreateCodeEditorProps } from '~/utils/notebookHelpers';
+import { yCollab } from 'y-codemirror.next';
 
 function formatCode(view: EditorView) {
   const code = view.state.doc.toString();

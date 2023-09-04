@@ -1,16 +1,15 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Box } from './utils/MuiImports';
+import { Extension } from '@codemirror/state';
+import { useMediaQuery } from '@mui/material';
+import { useState } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import UserDashboard from './components/Landing/UserDashboard';
-import NotebookRoute from './components/Landing/NotebookRoute';
-import ThemeManager from './contexts/ThemeManager';
-import { useState } from 'react';
-import { codeMirrorThemes } from './contexts/ThemeManager';
-import { useMediaQuery } from '@mui/material';
-import LandingPage from './components/Landing/LandingPage';
 import Auth from './components/Auth/Auth';
-import { Extension } from '@codemirror/state';
+import LandingPage from './components/Landing/LandingPage';
+import NotebookRoute from './components/Landing/NotebookRoute';
+import UserDashboard from './components/Landing/UserDashboard';
+import ThemeManager, { codeMirrorThemes } from './contexts/ThemeManager';
+import { Box } from './utils/MuiImports';
 
 interface CodeMirrorThemeType {
   name: string;

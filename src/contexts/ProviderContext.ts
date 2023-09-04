@@ -1,8 +1,8 @@
-import { useMemo } from 'react';
+import { NotebookMetadataType } from '@/NotebookTypes';
+import { ProviderContextType } from '@/ProviderTypes';
 import { HocuspocusProvider } from '@hocuspocus/provider';
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useMemo } from 'react';
 import { IndexeddbPersistence } from 'y-indexeddb';
-import { NotebookMetadata, ProviderContextType } from '~/utils/notebookHelpers';
 
 export const initializeProvider = (docID: string) => {
   const provider = new HocuspocusProvider({
@@ -19,7 +19,7 @@ export const initializeProvider = (docID: string) => {
   persistence.on('synced', () => {
     console.log('🔮 Provider + IndexedDB Synced 🔮');
 
-    if ((provider.document.get('metaData') as NotebookMetadata).get('executionCount') === undefined) {
+    if ((provider.document.get('metaData') as NotebookMetadataType).get('executionCount') === undefined) {
       notebookMetadata.set('executionCount', 0);
     }
   });

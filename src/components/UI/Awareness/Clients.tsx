@@ -2,15 +2,10 @@ import Avatar from 'react-avatar';
 import { Box } from '../../../utils/MuiImports';
 import styles from './Clients.module.css';
 import React from 'react';
-
-interface Client {
-  id: number;
-  name?: string;
-  color?: string;
-}
+import { ClientType } from '@/ClientTypes';
 
 type ClientsProps = {
-  clients: Client[];
+  clients: ClientType[];
 };
 
 const Clients: React.FC<ClientsProps> = ({ clients }) => {

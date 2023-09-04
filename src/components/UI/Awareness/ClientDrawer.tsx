@@ -1,31 +1,35 @@
+import { ClientType } from '@/ClientTypes';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router';
-import { useQuery } from 'react-query';
 import Avatar from 'react-avatar';
-import { IconButton, Box, Typography, Stack, Drawer, useTheme, grey } from '../../../utils/MuiImports';
-import { Brightness4, Brightness7, Edit, Folder, FolderOpen, ArrowBack } from '../../../utils/MuiImports';
-import { getClientFromLocalStorage } from '../../../utils/awarenessHelpers';
-import { fetchNotebooks } from '../../../services/dynamoFetch';
-import IconRow from '../IconRow';
+import { useQuery } from 'react-query';
+import { useParams } from 'react-router';
 import useProviderContext from '../../../contexts/ProviderContext';
+import { fetchNotebooks } from '../../../services/dynamoFetch';
+import {
+  ArrowBack,
+  Box,
+  Brightness4,
+  Brightness7,
+  Drawer,
+  Edit,
+  Folder,
+  FolderOpen,
+  IconButton,
+  Stack,
+  Typography,
+  grey,
+  useTheme
+} from '../../../utils/MuiImports';
+import { getClientFromLocalStorage } from '../../../utils/awarenessHelpers';
+import IconRow from '../IconRow';
 import { StyledButton } from '../StyledComponents';
-import ThemeSelector from './ThemeSelector';
 import styles from './Clients.module.css';
-
-interface Client {
-  id?: number;
-  name?: string;
-  color?: string;
-}
+import ThemeSelector from './ThemeSelector';
+import { NotebookType } from '@/NotebookTypes';
 
 interface ClientDrawerProps {
   handleDisconnect: (destination: string) => void;
-  clients?: Client[];
-}
-
-interface NotebookType {
-  docID: string;
-  title?: string;
+  clients?: ClientType[];
 }
 
 const ClientDrawer: React.FC<ClientDrawerProps> = ({ handleDisconnect, clients = [] }) => {
@@ -61,7 +65,7 @@ const ClientDrawer: React.FC<ClientDrawerProps> = ({ handleDisconnect, clients =
     if (clients && clients.length > 0) {
       setAvatar(clients[0]);
     } else {
-      const storedClient: Client = getClientFromLocalStorage();
+      const storedClient: ClientType = getClientFromLocalStorage();
       setAvatar(storedClient);
     }
   }, [clients]);

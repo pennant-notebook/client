@@ -1,5 +1,6 @@
+import { CellMetadataType, CodeCellType } from '@/CellTypes';
+import { NotebookMetadataType } from '@/NotebookTypes';
 import axios, { AxiosResponse } from 'axios';
-import { CellMetadata, CodeCellType, NotebookMetadata } from '~/utils/notebookHelpers';
 
 const BASE_URL = import.meta.env.VITE_ENGINE_SERVER as string;
 
@@ -89,7 +90,7 @@ export const formatCellsForDredd = (codeCells: CodeCellType[]): DreddCell[] => {
   }));
 };
 
-export const updateMetadata = (cellMetadata: CellMetadata, notebookMetadata: NotebookMetadata): void => {
+export const updateMetadata = (cellMetadata: CellMetadataType, notebookMetadata: NotebookMetadataType): void => {
   const numNotebookExecutions = notebookMetadata.get('executionCount');
   cellMetadata.set('exeCount', numNotebookExecutions + 1);
   notebookMetadata.set('executionCount', numNotebookExecutions + 1);
@@ -101,7 +102,7 @@ export const handleDredd = async (docID: string, cellId: string, editorContent: 
   return response[0];
 };
 
-export const handleResetContext = async (docID: string, notebookMetadata: NotebookMetadata, codeCells: CodeCellType[]): Promise<void> => {
+export const handleResetContext = async (docID: string, notebookMetadata: NotebookMetadataType, codeCells: CodeCellType[]): Promise<void> => {
   console.log('💫 Resetting execution context');
   await resetContext(docID);
   notebookMetadata.set('executionCount', 0);
@@ -114,7 +115,7 @@ export const handleResetContext = async (docID: string, notebookMetadata: Notebo
   });
 };
 
-export const handleRunAllCode = async (docID: string, codeCells: CodeCellType[], notebookMetadata: NotebookMetadata): Promise<void> => {
+export const handleRunAllCode = async (docID: string, codeCells: CodeCellType[], notebookMetadata: NotebookMetadataType): Promise<void> => {
   console.log('🥁 Running All Code');
   await handleResetContext(docID, notebookMetadata, codeCells);
 

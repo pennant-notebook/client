@@ -1,19 +1,25 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "jsx": "react-jsx",
-    "moduleResolution": "node",
-    "strict": true,
-    "esModuleInterop": true,
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
     "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
     "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "moduleResolution": "node",    
+    "resolveJsonModule": true,
+    "noEmit": true,
     "outDir": "./dist",
-    "baseUrl": "./",
+    "jsx": "react-jsx",
+    "baseUrl": ".",
     "paths": {
+      "@/*": ["src/types/*"],
       "~/*": ["src/*"],
-      "@/*": ["types/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "types/**/*.d.ts"]
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "types/**/*.d.ts", "types/ProviderTypes.ts"]
 }

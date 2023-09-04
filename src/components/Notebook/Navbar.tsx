@@ -1,24 +1,24 @@
+import { CodeCellType } from '@/CellTypes';
 import React from 'react';
+import { useNavigate, useParams } from 'react-router';
 import logo from '../../assets/pennant-color.png';
 import {
   AppBar,
-  Toolbar,
-  IconButton,
   Box,
-  Typography,
-  Stack,
-  useTheme,
-  Brightness7,
   Brightness4,
-  Tooltip
+  Brightness7,
+  IconButton,
+  Stack,
+  Toolbar,
+  Tooltip,
+  Typography,
+  useTheme
 } from '../../utils/MuiImports';
-import { useNavigate, useParams } from 'react-router';
-import DocTitle from './DocTitle';
-import Clients from '../UI/Awareness/Clients';
-import DreddButtons from './DreddButtons';
 import ClientDrawer from '../UI/Awareness/ClientDrawer';
+import Clients from '../UI/Awareness/Clients';
 import IconRow from '../UI/IconRow';
-import { CodeCellType } from '~/utils/notebookHelpers';
+import DocTitle from './DocTitle';
+import DreddButtons from './DreddButtons';
 
 interface NavbarProps {
   codeCells?: CodeCellType[];

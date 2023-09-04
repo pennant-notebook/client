@@ -6,9 +6,10 @@ import createCodeEditor from './createCodeEditor';
 import { handleDredd, updateMetadata } from '../../services/dreddExecutionService';
 import StyledBadge from '../UI/StyledComponents';
 import { useCMThemeContext } from '../../contexts/ThemeManager';
-import { CodeCellProps, YMapEvent } from '~/utils/notebookHelpers';
+import { YMapEvent } from '~/utils/notebookHelpers';
 import { EditorView } from 'codemirror';
 import styles from './CodeCell.module.css';
+import { CodeCellProps } from '@/CellPropsTypes';
 
 const CodeCell: React.FC<CodeCellProps> = ({ cellId, cell, content }) => {
   const notebookTheme = useTheme().palette.mode;

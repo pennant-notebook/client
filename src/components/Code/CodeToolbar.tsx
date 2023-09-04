@@ -1,14 +1,14 @@
 import React from 'react';
 import useNotebookContext from '../../contexts/NotebookContext';
 import {
-  CloseSharp,
-  PlayCircle,
   Box,
+  CircularProgress,
+  CloseSharp,
+  IconButton,
+  PlayCircle,
   Stack,
   Tooltip,
-  IconButton,
-  Typography,
-  CircularProgress
+  Typography
 } from '../../utils/MuiImports';
 import styles from './CodeToolbar.module.css';
 

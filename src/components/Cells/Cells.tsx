@@ -1,15 +1,13 @@
+import { CellType } from '@/CellTypes';
 import { useState } from 'react';
+import useNotebookContext from '../../contexts/NotebookContext';
 import { Box } from '../../utils/MuiImports';
 import AddCell from './AddCell';
-import useNotebookContext from '../../contexts/NotebookContext';
 import CellRow from './CellRow';
 import DraggableCells from './DraggableCells';
-import { CodeCellType, MarkdownCellType } from '~/utils/notebookHelpers';
-
-type CellType = CodeCellType | MarkdownCellType;
 
 interface CellsProps {
-  cells: CodeCellType[];
+  cells: CellType[];
   setCells: React.Dispatch<React.SetStateAction<CellType[]>>;
 }
 

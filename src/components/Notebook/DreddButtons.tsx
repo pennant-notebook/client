@@ -1,18 +1,19 @@
+import { CodeCellType } from '@/CellTypes';
+import { ProviderContextType } from '@/ProviderTypes';
 import React, { useState } from 'react';
 import { useParams } from 'react-router';
-import { Stack, Refresh, CircularProgress, Tooltip, IconButton } from '../../utils/MuiImports';
-import useProviderContext from '../../contexts/ProviderContext';
-import { handleResetContext, handleRunAllCode } from '../../services/dreddExecutionService';
 import { toast } from 'react-toastify';
 import PlayAllIcon from '../../assets/allplay.png';
+import useProviderContext from '../../contexts/ProviderContext';
+import { handleResetContext, handleRunAllCode } from '../../services/dreddExecutionService';
+import { CircularProgress, IconButton, Refresh, Stack, Tooltip } from '../../utils/MuiImports';
 import styles from './DreddButtons.module.css';
-import { CodeCellType, ProviderContextType } from '~/utils/notebookHelpers';
 
 interface DreddButtonsProps {
-  codeCells: CodeCellType[];
+  codeCells: CodeCellType[] | undefined;
 }
 
-const DreddButtons: React.FC<DreddButtonsProps> = ({ codeCells }) => {
+const DreddButtons: React.FC<DreddButtonsProps> = ({ codeCells = [] }) => {
   const { notebookMetadata } = useProviderContext() as ProviderContextType;
   const { docID } = useParams();
   const [resetting, setResetting] = useState(false);

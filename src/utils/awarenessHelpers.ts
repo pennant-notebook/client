@@ -1,12 +1,7 @@
+import { UserState } from '@/ClientTypes';
+import { HocuspocusProviderConfig } from '@/ProviderTypes';
 import { removeAwarenessStates } from 'y-protocols/awareness';
-import { HocuspocusProviderConfig, generateRandomName, getUserObjects, randomColor } from './notebookHelpers';
-
-export interface UserState {
-  user: {
-    name: string;
-    color: string;
-  } | null;
-}
+import { generateRandomName, getUserObjects, randomColor } from './notebookHelpers';
 
 const colors = ['#958DF1', '#F98181', '#FBBC88', '#FAF594', '#70CFF8', '#94FADB', '#B9F18D'];
 

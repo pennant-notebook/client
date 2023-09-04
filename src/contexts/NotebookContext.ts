@@ -1,5 +1,5 @@
+import { NotebookContextType } from '@/NotebookTypes';
 import { createContext, useContext } from 'react';
-import { NotebookContextType } from '~/utils/notebookHelpers';
 
 export const NotebookContext = createContext<NotebookContextType | null>(null);
 

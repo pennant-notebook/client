@@ -1,31 +1,22 @@
+import { CodeCellType, MarkdownCellType } from '@/CellTypes';
+import { ClientType } from '@/ClientTypes';
+import { NotebookContextType } from '@/NotebookTypes';
+import { ProviderContextType } from '@/ProviderTypes';
 import React, { useEffect, useState } from 'react';
-import { Box, useTheme } from '../../utils/MuiImports';
-import Cells from '../Cells/Cells';
-import Navbar from './Navbar';
-import { NotebookContext } from '../../contexts/NotebookContext';
-import useProviderContext from '../../contexts/ProviderContext';
-import {
-  createCell,
-  getUserObjects,
-  ProviderContextType,
-  NotebookContextType,
-  CodeCellType,
-  MarkdownCellType
-} from '../../utils/notebookHelpers';
-import { getClientFromLocalStorage, updateDisconnectedClient } from '../../utils/awarenessHelpers';
-import { useNavigate } from 'react-router';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { useNavigate } from 'react-router';
+import { NotebookContext } from '../../contexts/NotebookContext';
+import useProviderContext from '../../contexts/ProviderContext';
+import { Box, useTheme } from '../../utils/MuiImports';
+import { getClientFromLocalStorage, updateDisconnectedClient } from '../../utils/awarenessHelpers';
+import { createCell, getUserObjects } from '../../utils/notebookHelpers';
+import Cells from '../Cells/Cells';
+import Navbar from './Navbar';
 
 interface NotebookProps {
   docID: string;
   resourceTitle?: string;
-}
-
-interface Client {
-  id: number;
-  name?: string;
-  color?: string;
 }
 
 const Notebook: React.FC<NotebookProps> = ({ docID, resourceTitle }) => {
@@ -36,7 +27,7 @@ const Notebook: React.FC<NotebookProps> = ({ docID, resourceTitle }) => {
   const cellsArray = doc.getArray('cells');
   const [cellDataArr, setCellDataArr] = useState(cellsArray.toArray());
   const [allRunning, setAllRunning] = useState(false);
-  const [clients, setClients] = useState<Client[]>([]);
+  const [clients, setClients] = useState<ClientType[]>([]);
   const [title, setTitle] = useState<string>(resourceTitle || docID);
   document.title = resourceTitle || 'Untitled Notebook';
 
