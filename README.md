@@ -99,18 +99,12 @@ npm start
 
 - Initializes the client-side Websocket-Provider (`HocuspocusProvider`) and the Yjs Document (`Y.Doc`).
 - Initializes an instance of `IndexeddbPersistence` and syncs it with the `Y.Doc` and provider.
-- Mini custom hook `useProvider` memoizes the provider using the `docID`
 
 ### Notebook Context (`src/contexts/NotebookContext.js`)
 
 - Contains notebook metadata, provider, awareness, doc and the `docID` for a given notebook.
 - Contains various functions for adding, deleting, cloning, and repositioning cells.
-- Tracks global state of code cell exection to prevent conflicts when running all code cells.
 
 ## Contributing
 
 Contributions are welcome! Feel free to open an issue or submit a pull request.
-
-## License
-MIT License
-
