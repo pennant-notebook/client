@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, MouseEvent, FocusEvent, KeyboardEvent } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { Card, Typography, useTheme, InputBase } from '../../utils/MuiImports';
 import { Edit, DeleteIcon, CheckIcon, CloseIcon, IconButton } from '../../utils/MuiImports';
@@ -15,7 +15,7 @@ interface DashboardNotebookProps {
   isNewNotebook?: boolean;
 }
 
-const DashboardNotebook: React.FC<DashboardNotebookProps> = ({ docID, title, index, refetch, isNewNotebook }) => {
+const DashboardNotebook = ({ docID, title, index, refetch, isNewNotebook }: DashboardNotebookProps) => {
   const { username } = useParams<{ username: string }>();
   const [isEditing, setIsEditing] = useState(isNewNotebook);
   const [newTitle, setNewTitle] = useState('');
@@ -40,7 +40,7 @@ const DashboardNotebook: React.FC<DashboardNotebookProps> = ({ docID, title, ind
     }
   });
 
-  const handleSaveClick = (e: React.MouseEvent<HTMLElement>) => {
+  const handleSaveClick = (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     if (username) {
       editMutation.mutate({ docID, title: newTitle, username: username });
@@ -48,16 +48,14 @@ const DashboardNotebook: React.FC<DashboardNotebookProps> = ({ docID, title, ind
     setIsEditing(false);
   };
 
-  const handleCancelClick = (
-    e: React.MouseEvent<HTMLElement> | React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleCancelClick = (e: MouseEvent<HTMLElement> | FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     e.stopPropagation();
     setTimeout(() => {
       setIsEditing(false);
     }, 100);
   };
 
-  const handleDeleteClick = (e: React.MouseEvent<HTMLElement>) => {
+  const handleDeleteClick = (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
 
     if (window.confirm('Are you sure you want to delete this notebook?') && username) {
@@ -72,16 +70,16 @@ const DashboardNotebook: React.FC<DashboardNotebookProps> = ({ docID, title, ind
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
+  const handleKeyDown = (e: KeyboardEvent<HTMLElement>) => {
     if (e.key === 'Enter') {
-      handleSaveClick(e as unknown as React.MouseEvent<HTMLElement>);
+      handleSaveClick(e as unknown as MouseEvent<HTMLElement>);
     }
     if (e.key === 'Escape') {
-      handleCancelClick(e as unknown as React.MouseEvent<HTMLElement>);
+      handleCancelClick(e as unknown as MouseEvent<HTMLElement>);
     }
   };
 
-  const handleEditClick = (e: React.MouseEvent<HTMLElement>) => {
+  const handleEditClick = (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     setNewTitle(title || '');
     setIsEditing(true);

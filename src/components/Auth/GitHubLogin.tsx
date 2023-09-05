@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import GithubLogo from '../../assets/github.svg';
 import styles from './Auth.module.css';
 
@@ -9,7 +9,7 @@ interface GitHubLoginProps {
   setUserData: (data: any) => void;
 }
 
-const GitHubLogin: React.FC<GitHubLoginProps> = ({ setUserData }) => {
+const GitHubLogin = ({ setUserData }: GitHubLoginProps) => {
   const githubClientId = import.meta.env.VITE_GITHUB_CLIENT_ID;
 
   useEffect(() => {

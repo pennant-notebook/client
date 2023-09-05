@@ -1,5 +1,4 @@
 import { CodeCellType, MarkdownCellType } from '@/CellTypes';
-import React from 'react';
 import { Box, Divider, Stack } from '../../utils/MuiImports';
 import CodeCell from '../Code/CodeCell';
 import MarkdownCell from '../Markdown/MarkdownCell';
@@ -10,7 +9,7 @@ interface CellRowProps {
   index: number;
 }
 
-const CellRow: React.FC<CellRowProps> = ({ cell, index }) => {
+const CellRow = ({ cell, index }: CellRowProps) => {
   const id = cell.get('id');
   const type = cell.get('type');
 

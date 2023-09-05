@@ -1,14 +1,13 @@
 import Avatar from 'react-avatar';
 import { Box } from '../../../utils/MuiImports';
 import styles from './Clients.module.css';
-import React from 'react';
 import { ClientType } from '@/ClientTypes';
 
 type ClientsProps = {
   clients: ClientType[];
 };
 
-const Clients: React.FC<ClientsProps> = ({ clients }) => {
+const Clients = ({ clients }: ClientsProps) => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'row-reverse', alignItems: 'center', maxWidth: '120px' }}>
       {clients.length > 3 && (

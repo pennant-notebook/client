@@ -1,42 +1,34 @@
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { useGoogleOneTapLogin, googleLogout } from '@react-oauth/google';
 
-const API_URL = process.env.NODE_ENV === 'production' ? '/auth' : 'http://localhost:3001/auth';
-
-const GoogleLoginButton = () => {
-  const onGoogleSuccess = async response => {
-    const email = response.profileObj.email;
-    const username = email.substring(0, email.indexOf('@'));
-    const provider = 'google';
-
-    // Check if user exists
-    const userExists = await fetch(`${API_URL}/checkUser`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ username, provider })
-    }).then(res => res.json());
-
-    if (!userExists.exists) {
-      await fetch(`${API_URL}/signup`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ username, provider })
-      });
+const GoogleSignInButton = ({ loginHandler }: { loginHandler?: () => void }) => {
+  // One Tap login hook
+  useGoogleOneTapLogin({
+    onSuccess: credentialResponse => {
+      console.log('Successfully logged in:', credentialResponse);
+      loginHandler && loginHandler();
+      // You can set a toast or any other UI feedback here
+    },
+    onError: () => {
+      console.log('Login Failed');
+      // You can set a toast or any other UI feedback here
     }
-  };
+  });
 
-  const onGoogleFailure = response => {
-    console.log(response);
+  // Logout function
+  const logout = () => {
+    googleLogout();
+    // You can set a toast or any other UI feedback here
   };
 
   return (
-    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-      <GoogleLogin onSuccess={onGoogleSuccess} onFailure={onGoogleFailure} />
-    </GoogleOAuthProvider>
+    <div className='flex gap-4 flex-wrap justify-center'>
+      {/* The button for One Tap will automatically appear */}
+      {/* You can add a logout button here if needed */}
+      <button className='btn btn-neutral' onClick={logout}>
+        Logout
+      </button>
+    </div>
   );
 };
 
-export default GoogleLoginButton;
+export default GoogleSignInButton;

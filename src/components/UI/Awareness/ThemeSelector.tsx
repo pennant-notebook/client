@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, MouseEvent } from 'react';
 import { Box, Menu, MenuItem, BrushIcon } from '../../../utils/MuiImports';
 import IconRow from '../IconRow';
 import { CodeMirrorThemeContextType, useCMThemeContext } from '../../../contexts/ThemeManager';
@@ -9,7 +9,7 @@ interface CodeMirrorThemeType {
   theme: Extension;
 }
 
-const ThemeSelector: React.FC = () => {
+const ThemeSelector = () => {
   const contextValue: CodeMirrorThemeContextType | null = useCMThemeContext();
 
   if (!contextValue) {
@@ -17,7 +17,7 @@ const ThemeSelector: React.FC = () => {
   }
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const handleThemeClick = (event: React.MouseEvent<HTMLElement>) => {
+  const handleThemeClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 

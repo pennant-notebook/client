@@ -2,7 +2,7 @@ import { MarkdownCellProps } from '@/CellPropsTypes';
 import { UserState } from '@/ClientTypes';
 import { ProviderContextType } from '@/ProviderTypes';
 import '@blocknote/core/style.css';
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import useProviderContext from '../../contexts/ProviderContext';
 import { Box, useTheme } from '../../utils/MuiImports';
 import { getUserObjects } from '../../utils/notebookHelpers';
@@ -10,7 +10,7 @@ import styles from './MarkdownCell.module.css';
 import MarkdownEditor from './MarkdownEditor';
 import MarkdownToolbar from './MarkdownToolbar';
 
-const MarkdownCell: React.FC<MarkdownCellProps> = ({ id, cell }) => {
+const MarkdownCell = ({ id, cell }: MarkdownCellProps) => {
   const { provider, awareness } = useProviderContext() as ProviderContextType;
 
   const cellRef = useRef(0);

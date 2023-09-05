@@ -1,6 +1,6 @@
 import { CodeCellType } from '@/CellTypes';
 import { ProviderContextType } from '@/ProviderTypes';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import PlayAllIcon from '../../assets/allplay.png';
@@ -13,7 +13,7 @@ interface DreddButtonsProps {
   codeCells: CodeCellType[] | undefined;
 }
 
-const DreddButtons: React.FC<DreddButtonsProps> = ({ codeCells = [] }) => {
+const DreddButtons = ({ codeCells = [] }: DreddButtonsProps) => {
   const { notebookMetadata } = useProviderContext() as ProviderContextType;
   const { docID } = useParams();
   const [resetting, setResetting] = useState(false);

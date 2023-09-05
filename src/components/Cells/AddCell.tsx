@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, MouseEvent } from 'react';
 import { Divider, Tooltip, Menu, MenuItem, Box, Button, useTheme } from '../../utils/MuiImports';
 import useNotebookContext from '../../contexts/NotebookContext';
 import AddBoxIcon from '@mui/icons-material/AddBox';
@@ -15,13 +15,13 @@ interface AnchorPosition {
   mouseY: number;
 }
 
-const AddCell: React.FC<AddCellProps> = ({ index, noCells, isDragging }) => {
+const AddCell = ({ index, noCells, isDragging }: AddCellProps) => {
   const { addCellAtIndex } = useNotebookContext();
   const [anchorEl, setAnchorEl] = useState<AnchorPosition | null>(null);
   const [hover, setHover] = useState(false);
   const theme = useTheme().palette.mode;
 
-  const handleAddCell = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleAddCell = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
     setAnchorEl({

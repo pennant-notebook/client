@@ -1,4 +1,3 @@
-import React from 'react';
 import { CloseSharp, Box, Stack, Tooltip, IconButton, Typography } from '../../utils/MuiImports';
 import useNotebookContext from '../../contexts/NotebookContext';
 import styles from './MarkdownCell.module.css';
@@ -8,7 +7,7 @@ interface MarkdownToolbarProps {
   cellTheme: string;
 }
 
-const MarkdownToolbar: React.FC<MarkdownToolbarProps> = ({ id, cellTheme }) => {
+const MarkdownToolbar = ({ id, cellTheme }: MarkdownToolbarProps) => {
   const { deleteCell } = useNotebookContext();
 
   const buttonColor = cellTheme === 'dark' ? '#e1e1ea' : '#2c3032';

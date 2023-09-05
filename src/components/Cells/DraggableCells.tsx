@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState, ReactNode } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { HoverTrackerContext } from './HoverTrackerContext';
 import styles from './Draggable.module.css';
@@ -12,10 +12,10 @@ interface DragItem {
 interface DraggableCellsProps {
   index: number;
   onDragEnd: (sourceIndex: number, destinationIndex: number) => void;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-const DraggableCells: React.FC<DraggableCellsProps> = ({ index, onDragEnd, children }) => {
+const DraggableCells = ({ index, onDragEnd, children }: DraggableCellsProps) => {
   const [{ isDragging }, drag] = useDrag({
     item: { type: 'CELL', index: index },
     type: 'CELL',

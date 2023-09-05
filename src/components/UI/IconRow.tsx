@@ -1,13 +1,13 @@
-import React from 'react';
+import { MouseEvent } from 'react';
 import { IconButton, Typography, Stack } from '../../utils/MuiImports';
 
 interface IconRowProps {
   icon: JSX.Element;
   text?: string;
-  onClick?: (event: React.MouseEvent<HTMLElement>) => void;
+  onClick?: (event: MouseEvent<HTMLElement>) => void;
 }
 
-const IconRow: React.FC<IconRowProps> = ({ icon, text, onClick }) => {
+const IconRow = ({ icon, text, onClick }: IconRowProps) => {
   return (
     <IconButton
       onClick={onClick}

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Box, useTheme, styled, Button, Avatar } from '../../utils/MuiImports';
 
 export const StyledButton = styled(Button)({
@@ -25,7 +24,7 @@ interface CellPosAvatarProps {
   index: number;
 }
 
-export const CellPosAvatar: React.FC<CellPosAvatarProps> = ({ index }) => {
+export const CellPosAvatar = ({ index }: CellPosAvatarProps) => {
   return (
     <Avatar
       sx={{
@@ -50,7 +49,7 @@ interface StyledBadgeProps {
   status: string | undefined;
 }
 
-const StyledBadge: React.FC<StyledBadgeProps> = ({ badgeContent, status }) => {
+const StyledBadge = ({ badgeContent, status }: StyledBadgeProps) => {
   const theme = useTheme().palette.mode;
   return (
     <Box sx={{ ml: 1.5, mr: 2 }}>

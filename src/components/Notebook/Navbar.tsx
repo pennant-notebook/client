@@ -1,5 +1,4 @@
 import { CodeCellType } from '@/CellTypes';
-import React from 'react';
 import { useNavigate, useParams } from 'react-router';
 import logo from '../../assets/pennant-color.png';
 import {
@@ -26,7 +25,7 @@ interface NavbarProps {
   isDashboard?: boolean;
   handleDisconnect?: (destination: string) => void;
 }
-const Navbar: React.FC<NavbarProps> = ({ codeCells, clients = [], isDashboard, handleDisconnect }) => {
+const Navbar = ({ codeCells, clients = [], isDashboard, handleDisconnect }: NavbarProps) => {
   const { username, docID } = useParams();
   const navigate = useNavigate();
   const {
