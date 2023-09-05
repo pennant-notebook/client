@@ -8,6 +8,7 @@ import { createDoc } from '../../services/dynamoPost';
 import { fetchNotebooks } from '../../services/dynamoFetch';
 import DashboardNotebook from './DashboardNotebook';
 import styles from './UserDashboard.module.css';
+import { toast } from 'react-toastify';
 
 interface Notebook {
   docID: string;
@@ -107,7 +108,8 @@ export const UserDashboard = () => {
     if (username === '@trypennant') return;
     if (!authToken || usernameFromLocal !== username.slice(1)) {
       const errorMsg = authToken ? 'You are not authorized to view this page.' : 'Please login to view this page.';
-      navigate('/auth', { state: { errorMessage: errorMsg } });
+      toast.error(errorMsg);
+      navigate('/auth');
     }
   }, [username]);
 

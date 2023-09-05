@@ -1,24 +1,27 @@
 import { useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import { IconButton } from '../../utils/MuiImports';
 import PennantLogo from './assets/logo.png';
 import LoginSvg from './assets/login2.svg';
 import styles from './Navigation.module.css';
+import { authState } from '../Auth/authState';
 
 const Navigation = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [auth, setAuth] = useRecoilState(authState);
   const [showSideMenu, setShowSideMenu] = useState(false);
-  const navigate = useNavigate();
 
-  const handleSignIn = () => {
-    navigate('/auth');
-    setIsLoggedIn(true);
-  };
+  const navigate = useNavigate();
 
   useEffect(() => {
     const checkLoginStatus = () => {
       const pennantAccessToken = localStorage.getItem('pennantAccessToken');
-      setIsLoggedIn(!!pennantAccessToken);
+      const username = localStorage.getItem('pennant-username');
+      setAuth({
+        isLoggedIn: !!pennantAccessToken,
+        userData: { login: username || '' },
+        provider: null
+      });
     };
 
     checkLoginStatus();
@@ -33,8 +36,13 @@ const Navigation = () => {
     localStorage.removeItem('pennantAccessToken');
     localStorage.removeItem('pennantAuthData');
     localStorage.removeItem('pennant-username');
+    setAuth({ isLoggedIn: false, userData: null, provider: null });
     navigate('/');
-    setIsLoggedIn(false);
+  };
+
+  const handleSignIn = () => {
+    navigate('/auth');
+    setAuth({ isLoggedIn: true, userData: auth.userData, provider: auth.provider });
   };
 
   const toggleSideMenu = () => {
@@ -59,7 +67,7 @@ const Navigation = () => {
         </div>
       </div>
       <div className={styles.authButtons}>
-        {isLoggedIn ? (
+        {auth.isLoggedIn ? (
           <>
             <IconButton className={styles.link} onClick={toggleSideMenu}>
               ☰
