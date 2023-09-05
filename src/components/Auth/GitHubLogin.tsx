@@ -2,14 +2,13 @@ import axios from 'axios';
 import { useEffect } from 'react';
 import GithubLogo from '../../assets/github.svg';
 import styles from './Auth.module.css';
+import { useSetRecoilState } from 'recoil';
+import { authState } from './authState';
 
 const API_URL = process.env.NODE_ENV === 'production' ? '/auth' : 'http://localhost:3001/auth';
 
-interface GitHubLoginProps {
-  setUserData: (data: any) => void;
-}
-
-const GitHubLogin = ({ setUserData }: GitHubLoginProps) => {
+const GitHubLogin = () => {
+  const setAuth = useSetRecoilState(authState);
   const githubClientId = import.meta.env.VITE_GITHUB_CLIENT_ID;
 
   useEffect(() => {
@@ -43,7 +42,11 @@ const GitHubLogin = ({ setUserData }: GitHubLoginProps) => {
       localStorage.setItem('pennantAuthData', JSON.stringify(data));
       localStorage.setItem('pennant-username', data.login);
 
-      setUserData(data);
+      setAuth({
+        isLoggedIn: true,
+        userData: data,
+        provider: 'github'
+      });
 
       const checkUserResponse = await axios.post(`${API_URL}/checkUser`, {
         username: data.login,
