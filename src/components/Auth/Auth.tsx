@@ -33,10 +33,6 @@ const Auth = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const theme = useTheme().palette.mode;
-
-  // const storedData = localStorage.getItem('pennantAuthData');
-  // const [userData, setUserData] = useState(storedData ? JSON.parse(storedData) : {});
-
   const [rerender, setRerender] = useState(false);
   const [showDashboardLoader, setShowDashboardLoader] = useState(false);
   const navigate = useNavigate();
@@ -47,15 +43,9 @@ const Auth = () => {
   const toggleSignUp = () => setIsSignUp(!isSignUp);
 
   const goToDashboard = () => {
-    if (!localStorage.getItem('pennantAccessToken')) {
-      toast.error('Invalid username or password.');
-      return;
-    }
     setShowDashboardLoader(true);
-
-    setTimeout(() => {
-      navigate(`/@${username}`);
-    }, 1500);
+    const user = localStorage.getItem('pennant-username');
+    setTimeout(() => navigate(`/@${user}`), 1500);
   };
 
   const handleSignup = async () => {
@@ -87,7 +77,8 @@ const Auth = () => {
         provider: 'username'
       });
 
-      goToDashboard();
+      setShowDashboardLoader(true);
+      setTimeout(() => navigate(`/@${username}`), 1500);
     } catch (error) {
       console.error('Could not sign up:', error);
       toast.error('Could not sign up. Please try again.');
@@ -113,7 +104,8 @@ const Auth = () => {
         userData: { login: username },
         provider: 'username'
       });
-      goToDashboard();
+      setShowDashboardLoader(true);
+      setTimeout(() => navigate(`/@${username}`), 1500);
     } catch (error) {
       console.error(error);
       toast.error('Invalid username or password.');
@@ -167,7 +159,7 @@ const Auth = () => {
                       }}
                     />
                     <Typography className={styles.buttonText} sx={{ fontSize: '0.9em' }}>
-                      Logged in as {auth.userData?.login || username}
+                      Logged in as {auth.userData?.login || localStorage.getItem('pennant-username')}
                     </Typography>
                   </div>
                   <Button
@@ -189,7 +181,7 @@ const Auth = () => {
                 <>
                   <h2>{isSignUp ? 'Sign up' : 'Log in'}</h2>
                   <GitHubLogin />
-                  <GoogleOAuthProvider clientId={import.meta.env.GOOGLE_CLIENT_ID}>
+                  <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
                     <GoogleSignInButton />
                   </GoogleOAuthProvider>
                   <Divider variant='middle' style={{ margin: '15px 0' }}>

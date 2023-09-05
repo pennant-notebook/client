@@ -1,57 +1,61 @@
-import { useGoogleLogin, googleLogout } from '@react-oauth/google';
-import { toast } from 'react-toastify';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { authState } from './authState';
-import jwtDecode from 'jwt-decode';
+import { toast } from 'react-toastify';
+import axios from 'axios';
+import { useGoogleLogin } from '@react-oauth/google';
+
+const API_URL = process.env.NODE_ENV === 'production' ? '/auth' : 'http://localhost:3001/auth';
 
 const GoogleSignInButton = ({ loginHandler }: { loginHandler?: () => void }) => {
-  const [auth, setAuth] = useRecoilState(authState);
+  const setAuth = useSetRecoilState(authState);
 
-  const login = useGoogleLogin({
-    onSuccess: codeResponse => {
-      const idToken = codeResponse.access_token;
-      const decodedToken = jwtDecode(idToken) as { [key: string]: any };
-      console.log('Successfully logged in:', codeResponse);
+  const googleLogin = useGoogleLogin({
+    onSuccess: async tokenResponse => {
+      const { access_token } = tokenResponse;
 
-      localStorage.setItem('pennantAccessToken', idToken);
-      localStorage.setItem('pennantAuthData', JSON.stringify({ login: decodedToken.name }));
-      localStorage.setItem('pennant-username', decodedToken.name);
+      try {
+        const userInfo = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: `Bearer ${access_token}` }
+        });
 
-      setAuth({
-        isLoggedIn: true,
-        userData: auth.userData,
-        provider: 'google'
-      });
-      loginHandler && loginHandler();
-      toast.success('Successfully logged in with Google');
+        const formattedName = userInfo.data.name.replace(' ', '.');
+
+        const checkUserResponse = await axios.post(`${API_URL}/checkUser`, {
+          username: formattedName,
+          provider: 'google'
+        });
+
+        if (!checkUserResponse.data.exists) {
+          await axios.post(`${API_URL}/signup`, {
+            username: formattedName,
+            provider: 'google'
+          });
+        } else {
+          console.log('user exists');
+        }
+
+        localStorage.setItem('pennantAccessToken', access_token);
+        localStorage.setItem('pennantAuthData', JSON.stringify({ login: formattedName }));
+        localStorage.setItem('pennant-username', formattedName);
+
+        setAuth({
+          isLoggedIn: true,
+          userData: { login: formattedName },
+          provider: 'google'
+        });
+
+        toast.success('Successfully logged in with Google');
+        loginHandler && loginHandler();
+      } catch (error) {
+        toast.error('Failed to fetch user info');
+      }
     },
     onError: () => {
       toast.error('Login Failed');
     }
   });
 
-  const logout = () => {
-    googleLogout();
-    setAuth({
-      isLoggedIn: false,
-      userData: null,
-      provider: null
-    });
-    toast.success('Successfully logged out');
-  };
-
-  return (
-    <div className='flex gap-4 flex-wrap justify-center'>
-      <button className='btn btn-primary' onClick={() => login()}>
-        Login
-      </button>
-      {auth.isLoggedIn && (
-        <button className='btn btn-neutral' onClick={logout}>
-          Logout
-        </button>
-      )}
-    </div>
-  );
+  return <button onClick={() => googleLogin()}>Login with Google</button>;
 };
 
 export default GoogleSignInButton;
