@@ -1,6 +1,6 @@
-# Pennant-Client
+# Pennant (client)
 
-This repository contains the React application for the pennant-notebook project.
+pennant-notebook's client, rewritten in TypeScript for improved maintainability.
 
 ## Overview
 
