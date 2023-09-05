@@ -1,4 +1,3 @@
-import { Theme } from '@blocknote/react';
 import { Awareness } from 'y-protocols/awareness';
 import { CodeMirrorThemeType } from '~/contexts/ThemeManager';
 import { YText, YXmlFragment } from '~/utils/notebookHelpers';
@@ -20,5 +19,5 @@ export interface MarkdownEditorProps {
   content: YXmlFragment;
   provider: HocuspocusProviderConfig;
   currentUser: ClientType | null;
-  theme: Theme | "light" | "dark" | { light: Theme; dark: Theme; } | undefined;
+  theme: string | undefined;
 }

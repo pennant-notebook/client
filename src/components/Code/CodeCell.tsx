@@ -11,7 +11,8 @@ import { EditorView } from 'codemirror';
 import styles from './CodeCell.module.css';
 import { CodeCellProps } from '@/CellPropsTypes';
 
-const CodeCell: React.FC<CodeCellProps> = ({ cellId, cell, content }) => {
+const CodeCell: React.FC<CodeCellProps> = ({ cellId, cell }) => {
+  const content = cell.get('content');
   const notebookTheme = useTheme().palette.mode;
   const { editorTheme } = useCMThemeContext()!;
   const { awareness, notebookMetadata, docID } = useProviderContext()!;

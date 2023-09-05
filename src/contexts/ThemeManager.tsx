@@ -1,5 +1,5 @@
 import { createContext, useContext, ReactNode } from 'react';
-import { createTheme, useMediaQuery, ThemeProvider } from '../utils/MuiImports';
+import { createTheme, ThemeProvider } from '../utils/MuiImports';
 import CssBaseline from '@mui/material/CssBaseline';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { tokyoNight } from '@uiw/codemirror-theme-tokyo-night';

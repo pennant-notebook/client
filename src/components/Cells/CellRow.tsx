@@ -1,5 +1,4 @@
 import { CodeCellType, MarkdownCellType } from '@/CellTypes';
-import { CodeCellContent, MarkdownCellContent } from '@/ContentTypes';
 import React from 'react';
 import { Box, Divider, Stack } from '../../utils/MuiImports';
 import CodeCell from '../Code/CodeCell';
@@ -12,9 +11,8 @@ interface CellRowProps {
 }
 
 const CellRow: React.FC<CellRowProps> = ({ cell, index }) => {
-  const id = cell.id;
-  const type = cell.type;
-  const content = cell.content;
+  const id = cell.get('id');
+  const type = cell.get('type');
 
   return (
     <Box width='100%'>
@@ -31,12 +29,8 @@ const CellRow: React.FC<CellRowProps> = ({ cell, index }) => {
               <CellPosAvatar index={index + 1} />
             </Divider>
             <Box alignItems='center' sx={{ flexGrow: 1, position: 'relative' }}>
-              {type === 'markdown' && (
-                <MarkdownCell id={id} cell={cell as MarkdownCellType} content={content as MarkdownCellContent} />
-              )}
-              {type === 'code' && (
-                <CodeCell key={id} cellId={id} cell={cell as CodeCellType} content={content as CodeCellContent} />
-              )}
+              {type === 'markdown' && <MarkdownCell id={id} cell={cell as MarkdownCellType} />}
+              {type === 'code' && <CodeCell key={id} cellId={id} cell={cell as CodeCellType} />}
             </Box>
           </Box>
         </Stack>

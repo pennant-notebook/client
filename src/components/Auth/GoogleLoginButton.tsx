@@ -33,9 +33,7 @@ const GoogleLoginButton = () => {
   };
 
   return (
-    <GoogleOAuthProvider
-      clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
-      redirectUri={import.meta.env.VITE_GOOGLE_REDIRECT_URI}>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
       <GoogleLogin onSuccess={onGoogleSuccess} onFailure={onGoogleFailure} />
     </GoogleOAuthProvider>
   );

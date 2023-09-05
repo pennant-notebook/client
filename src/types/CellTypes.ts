@@ -4,8 +4,8 @@ export type CodeCellType = YMap & {
   id: string;
   type: string;
   content: YText;
-  outputMap?: YMap;
-  metaData?: YMap;
+  outputMap: YMap;
+  metaData: YMap;
 }
 
 export type MarkdownCellType = YMap & {

@@ -1,6 +1,6 @@
 import { MarkdownEditorProps } from '@/EditorTypes';
 import { BlockSchema, defaultBlockSchema } from '@blocknote/core';
-import { BlockNoteView, getDefaultReactSlashMenuItems, useBlockNote } from '@blocknote/react';
+import { BlockNoteView, useBlockNote, defaultReactSlashMenuItems } from '@blocknote/react';
 import React from 'react';
 import { getRandomColor } from '~/utils/awarenessHelpers';
 import { Image, insertImage } from './Image';
@@ -18,38 +18,34 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ cell, content, provider
     image: Image
   } satisfies BlockSchema;
 
-  const editor = useBlockNote(
-    {
-      blockSchema: customSchema,
-      slashMenuItems: [...getDefaultReactSlashMenuItems(), insertImage],
-      domAttributes: {
-        editor: {
-          class: [styles['blocknote-editor'], theme].join(' ')
-        }
-      },
-      collaboration: {
-        provider,
-        fragment: content,
-        user: {
-          name: currentUser?.name || 'Anonymous User',
-          color: currentUser?.color || getRandomColor()
-        }
-      },
-
-      onEditorReady: () => {
-        const paragraph = document.querySelector(`#blockcell-${id} div div p`);
-        if (paragraph?.textContent && paragraph.textContent.trim() === '') {
-          paragraph.textContent = '';
-        }
+  const editor = useBlockNote({
+    theme: theme === 'dark' ? 'dark' : 'light',
+    blockSchema: customSchema,
+    slashCommands: [...defaultReactSlashMenuItems, insertImage],
+    editorDOMAttributes: {
+      class: [styles['blocknote-editor'], theme].join(' ')
+    },
+    collaboration: {
+      provider,
+      fragment: content,
+      user: {
+        name: currentUser?.name || 'Anonymous User',
+        color: currentUser?.color || getRandomColor()
       }
     },
-    [theme]
-  );
+
+    onEditorReady: () => {
+      const paragraph = document.querySelector(`#blockcell-${id} div div p`);
+      if (paragraph?.textContent && paragraph.textContent.trim() === '') {
+        paragraph.textContent = '';
+      }
+    }
+  });
 
   // Restore console.log
   setTimeout(() => (console.log = consoleLog), 0);
 
-  return <BlockNoteView editor={editor} theme={theme} />;
+  return <BlockNoteView editor={editor} />;
 };
 
 export default MarkdownEditor;

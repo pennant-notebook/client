@@ -1,11 +1,11 @@
-import { useParams } from 'react-router-dom';
-import { ProviderContext, useProvider } from '../../contexts/ProviderContext';
-import LoadingSpinner from '../UI/LoadingSpinner';
-import Notebook from '../Notebook/Notebook';
-import ErrorBoundary from '../../ErrorBoundary';
-import { fetchDoc } from '../../services/dynamoFetch';
+import { ProviderContextType } from '@/ProviderTypes';
 import { useQuery } from 'react-query';
-import { ProviderContextType } from '~/utils/notebookHelpers';
+import { useParams } from 'react-router-dom';
+import ErrorBoundary from '../../ErrorBoundary';
+import { ProviderContext, useProvider } from '../../contexts/ProviderContext';
+import { fetchDoc } from '../../services/dynamoFetch';
+import Notebook from '../Notebook/Notebook';
+import LoadingSpinner from '../UI/LoadingSpinner';
 
 const NotebookRoute = () => {
   const { username, docID } = useParams();

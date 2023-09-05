@@ -10,7 +10,7 @@ import styles from './MarkdownCell.module.css';
 import MarkdownEditor from './MarkdownEditor';
 import MarkdownToolbar from './MarkdownToolbar';
 
-const MarkdownCell: React.FC<MarkdownCellProps> = ({ id, content, cell }) => {
+const MarkdownCell: React.FC<MarkdownCellProps> = ({ id, cell }) => {
   const { provider, awareness } = useProviderContext() as ProviderContextType;
 
   const cellRef = useRef(0);
@@ -38,7 +38,13 @@ const MarkdownCell: React.FC<MarkdownCellProps> = ({ id, content, cell }) => {
       <Box className={`${styles['markdown-container']} ${theme}`}>
         <MarkdownToolbar id={id} cellTheme={theme} />
         <Box id={`blockcell-${id}`}>
-          <MarkdownEditor cell={cell} content={content} provider={provider} currentUser={currentUser} theme={theme} />
+          <MarkdownEditor
+            cell={cell}
+            content={cell.get('content')}
+            provider={provider}
+            currentUser={currentUser}
+            theme={theme}
+          />
         </Box>
       </Box>
     </Box>

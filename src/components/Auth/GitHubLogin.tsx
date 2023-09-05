@@ -1,14 +1,16 @@
 import axios from 'axios';
+import React, { useEffect } from 'react';
 import GithubLogo from '../../assets/github.svg';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import styles from './Auth.module.css';
 
 const API_URL = process.env.NODE_ENV === 'production' ? '/auth' : 'http://localhost:3001/auth';
 
-const GitHubLogin = ({ setUserData }) => {
+interface GitHubLoginProps {
+  setUserData: (data: any) => void;
+}
+
+const GitHubLogin: React.FC<GitHubLoginProps> = ({ setUserData }) => {
   const githubClientId = import.meta.env.VITE_GITHUB_CLIENT_ID;
-  const navigate = useNavigate();
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);

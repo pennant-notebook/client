@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Badge, useTheme, styled, Button, Avatar } from '../../utils/MuiImports';
+import { Box, useTheme, styled, Button, Avatar } from '../../utils/MuiImports';
 
 export const StyledButton = styled(Button)({
   position: 'relative',

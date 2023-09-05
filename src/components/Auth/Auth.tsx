@@ -31,7 +31,9 @@ const Auth = () => {
   const passedState = location.state || {};
   const [errorMessage, setErrorMessage] = useState(passedState.errorMessage || '');
 
-  const [userData, setUserData] = useState(JSON.parse(localStorage.getItem('pennantAuthData')) || {});
+  const storedData = localStorage.getItem('pennantAuthData');
+  const [userData, setUserData] = useState(storedData ? JSON.parse(storedData) : {});
+
   const [rerender, setRerender] = useState(false);
   const [showDashboardLoader, setShowDashboardLoader] = useState(false);
   const navigate = useNavigate();
@@ -68,7 +70,6 @@ const Auth = () => {
     }
 
     if (password !== confirmPassword) {
-      tv;
       setErrorMessage('Passwords do not match.');
       return;
     }
@@ -168,8 +169,9 @@ const Auth = () => {
                       src={userData.avatar_url || LoggedInIcon}
                       alt="User's avatar"
                       onError={e => {
-                        e.target.onerror = null;
-                        e.target.src = LoggedInIcon;
+                        const imgElement = e.target as HTMLImageElement;
+                        imgElement.onerror = null;
+                        imgElement.src = LoggedInIcon;
                       }}
                     />
                     <Typography className={styles.buttonText} sx={{ fontSize: '0.9em' }}>
