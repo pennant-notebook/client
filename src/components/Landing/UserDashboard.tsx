@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import React, { useState, useEffect, ChangeEvent } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { Box, TextField, Button, Grid, Typography, useTheme } from '../../utils/MuiImports';
 import LoadingSpinner from '../UI/LoadingSpinner';
@@ -20,7 +20,7 @@ interface UserDashboardContentProps {
   refetch: () => void;
 }
 
-export const UserDashboardContent: React.FC<UserDashboardContentProps> = ({ username, notebooks, refetch }) => {
+export const UserDashboardContent = ({ username, notebooks, refetch }: UserDashboardContentProps) => {
   document.title = 'Board | ' + username;
   const [searchTerm, setSearchTerm] = useState<string>('');
 

@@ -1,5 +1,5 @@
 import { CellType } from '@/CellTypes';
-import { useState } from 'react';
+import { useState, SetStateAction, Dispatch } from 'react';
 import useNotebookContext from '../../contexts/NotebookContext';
 import { Box } from '../../utils/MuiImports';
 import AddCell from './AddCell';
@@ -8,10 +8,10 @@ import DraggableCells from './DraggableCells';
 
 interface CellsProps {
   cells: CellType[];
-  setCells: React.Dispatch<React.SetStateAction<CellType[]>>;
+  setCells: Dispatch<SetStateAction<CellType[]>>;
 }
 
-const Cells: React.FC<CellsProps> = ({ cells, setCells }) => {
+const Cells = ({ cells, setCells }: CellsProps) => {
   const { repositionCell } = useNotebookContext();
 
   const [isDragging, setIsDragging] = useState(false);

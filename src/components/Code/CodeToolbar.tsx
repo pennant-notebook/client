@@ -1,4 +1,3 @@
-import React from 'react';
 import useNotebookContext from '../../contexts/NotebookContext';
 import {
   Box,
@@ -18,7 +17,7 @@ interface CodeToolbarProps {
   processing: boolean;
 }
 
-const CodeToolbar: React.FC<CodeToolbarProps> = ({ onClickRun, id, processing }) => {
+const CodeToolbar = ({ onClickRun, id, processing }: CodeToolbarProps) => {
   const { deleteCell } = useNotebookContext();
   return (
     <Box

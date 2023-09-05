@@ -1,5 +1,5 @@
 import { Box, Stack, Typography, useTheme } from '../../utils/MuiImports';
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import useProviderContext from '../../contexts/ProviderContext';
 import CodeToolbar from './CodeToolbar';
 import createCodeEditor from './createCodeEditor';
@@ -11,7 +11,7 @@ import { EditorView } from 'codemirror';
 import styles from './CodeCell.module.css';
 import { CodeCellProps } from '@/CellPropsTypes';
 
-const CodeCell: React.FC<CodeCellProps> = ({ cellId, cell }) => {
+const CodeCell = ({ cellId, cell }: CodeCellProps) => {
   const content = cell.get('content');
   const notebookTheme = useTheme().palette.mode;
   const { editorTheme } = useCMThemeContext()!;

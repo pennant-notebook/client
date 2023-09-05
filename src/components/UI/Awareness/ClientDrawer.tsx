@@ -1,6 +1,6 @@
 import { ClientType } from '@/ClientTypes';
 import { NotebookType } from '@/NotebookTypes';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Avatar from 'react-avatar';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router';
@@ -32,7 +32,7 @@ interface ClientDrawerProps {
   clients?: ClientType[];
 }
 
-const ClientDrawer: React.FC<ClientDrawerProps> = ({ handleDisconnect, clients = [] }) => {
+const ClientDrawer = ({ handleDisconnect, clients = [] }: ClientDrawerProps) => {
   const [open, setOpen] = useState(false);
   const [showNotebooks, setShowNotebooks] = useState(false);
   const { username } = useParams();

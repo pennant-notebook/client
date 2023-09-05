@@ -1,4 +1,4 @@
-import React from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { YText, YMap } from '~/utils/notebookHelpers';
 
 export type NotebookMetadataType = YMap & {
@@ -13,7 +13,7 @@ export interface NotebookContextType {
   title: string;
   handleTitleChange: (newTitle: string) => void;
   allRunning: boolean;
-  setAllRunning: React.Dispatch<React.SetStateAction<boolean>>;
+  setAllRunning: Dispatch<SetStateAction<boolean>>;
 }
 
 export interface NotebookType {

@@ -2,7 +2,7 @@ import { CodeCellType, MarkdownCellType } from '@/CellTypes';
 import { ClientType } from '@/ClientTypes';
 import { NotebookContextType } from '@/NotebookTypes';
 import { ProviderContextType } from '@/ProviderTypes';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useNavigate } from 'react-router';
@@ -19,7 +19,7 @@ interface NotebookProps {
   resourceTitle?: string;
 }
 
-const Notebook: React.FC<NotebookProps> = ({ docID, resourceTitle }) => {
+const Notebook = ({ docID, resourceTitle }: NotebookProps) => {
   const { doc, provider, awareness, notebookMetadata }: ProviderContextType = useProviderContext()!;
   const navigate = useNavigate();
   const theme = useTheme();
