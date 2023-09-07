@@ -1,13 +1,15 @@
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { authState } from './authState';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { useGoogleLogin } from '@react-oauth/google';
+import GoogleLogo from '../../assets/google.svg';
+import styles from './Auth.module.css';
 
 const API_URL = process.env.NODE_ENV === 'production' ? '/auth' : 'http://localhost:3001/auth';
 
 const GoogleSignInButton = ({ loginHandler }: { loginHandler?: () => void }) => {
-  const setAuth = useSetRecoilState(authState);
+  const [auth, setAuth] = useRecoilState(authState);
 
   const googleLogin = useGoogleLogin({
     onSuccess: async tokenResponse => {
@@ -35,12 +37,15 @@ const GoogleSignInButton = ({ loginHandler }: { loginHandler?: () => void }) => 
         }
 
         localStorage.setItem('pennantAccessToken', access_token);
-        localStorage.setItem('pennantAuthData', JSON.stringify({ login: formattedName }));
+        localStorage.setItem(
+          'pennantAuthData',
+          JSON.stringify({ login: formattedName, avatar: userInfo.data.picture, name: userInfo.data.name })
+        );
         localStorage.setItem('pennant-username', formattedName);
 
         setAuth({
           isLoggedIn: true,
-          userData: { login: formattedName },
+          userData: { login: formattedName, avatar: userInfo.data.picture, name: userInfo.data.name },
           provider: 'google'
         });
 
@@ -55,7 +60,25 @@ const GoogleSignInButton = ({ loginHandler }: { loginHandler?: () => void }) => 
     }
   });
 
-  return <button onClick={() => googleLogin()}>Login with Google</button>;
+  const handleGoogleLogin = () => {
+    googleLogin();
+  };
+
+  return (
+    <div className={styles.googleButton} onClick={!auth.isLoggedIn ? handleGoogleLogin : undefined}>
+      {!auth.isLoggedIn ? (
+        <>
+          <img src={GoogleLogo} alt='Google Logo' className={styles.googleLogo} />
+          <span className={styles.buttonText}>Sign in with Google</span>
+        </>
+      ) : (
+        <>
+          <img src={auth.userData?.avatar} alt='User Avatar' className={styles.userAvatar} />
+          <span className={styles.userName}>Logged in as: {auth.userData?.name}</span>
+        </>
+      )}
+    </div>
+  );
 };
 
 export default GoogleSignInButton;

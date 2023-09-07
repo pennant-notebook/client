@@ -150,7 +150,7 @@ const Auth = () => {
                   <div className={`${styles.loggedInContainer}`}>
                     <img
                       style={{ borderRadius: '50%', width: '32px', height: '32px', marginRight: '10px' }}
-                      src={auth.userData?.avatar_url || LoggedInIcon}
+                      src={auth.userData?.avatar_url || auth.userData?.avatar || LoggedInIcon}
                       alt="User's avatar"
                       onError={e => {
                         const imgElement = e.target as HTMLImageElement;

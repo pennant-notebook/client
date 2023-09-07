@@ -3,6 +3,8 @@ import { atom } from 'recoil';
 interface User {
   login: string;
   avatar_url?: string;
+  avatar?: string;
+  name?: string;
 }
 
 export const authState = atom<{
