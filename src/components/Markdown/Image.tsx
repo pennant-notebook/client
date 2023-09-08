@@ -42,7 +42,7 @@ const imagePropSchema = {
   }
 } satisfies PropSchema;
 
-const ImageComponent = (props: {
+interface ImageComponentProps {
   block: SpecificBlock<
     BlockSchema & {
       image: BlockSpec<'image', typeof imagePropSchema>;
@@ -54,15 +54,17 @@ const ImageComponent = (props: {
       image: BlockSpec<'image', typeof imagePropSchema>;
     }
   >;
-}) => {
+}
+
+const ImageComponent = ({ block, editor }: ImageComponentProps) => {
   const [hovered, setHovered] = useState(false);
   const [resizeHandle, setResizeHandle] = useState<'left' | 'right' | null>(null);
 
   const [initialWidth, setInitialWidth] = useState(0);
   const [initialClientX, setInitialClientX] = useState(0);
 
-  const [editorWidth, setEditorWidth] = useState(props.editor.domElement.firstElementChild!.clientWidth);
-  const [width, setWidth] = useState(() => parseFloat(props.block.props.width));
+  const [editorWidth, setEditorWidth] = useState(editor.domElement.firstElementChild!.clientWidth);
+  const [width, setWidth] = useState(() => parseFloat(block.props.width));
 
   const updateWidth = useMemo(
     () => (newWidth: number) => {
@@ -81,7 +83,7 @@ const ImageComponent = (props: {
   useEffect(() => {
     const mouseUpHandler = () => {
       setResizeHandle(null);
-      props.editor.updateBlock(props.block, {
+      editor.updateBlock(block, {
         type: 'image',
         props: {
           width: width.toString()
@@ -92,7 +94,7 @@ const ImageComponent = (props: {
     const mouseMoveHandler = (e: MouseEvent) => {
       if (!resizeHandle) return;
 
-      if (textAlignmentToAlignItems(props.block.props.textAlignment) === 'center') {
+      if (textAlignmentToAlignItems(block.props.textAlignment) === 'center') {
         if (resizeHandle === 'left') {
           updateWidth(initialWidth + (initialClientX - e.clientX) * 2);
         } else {
@@ -108,7 +110,7 @@ const ImageComponent = (props: {
     };
 
     const resizeHandler = () => {
-      setEditorWidth(props.editor.domElement.firstElementChild!.clientWidth);
+      setEditorWidth(editor.domElement.firstElementChild!.clientWidth);
     };
 
     window.addEventListener('mouseup', mouseUpHandler);
@@ -123,10 +125,10 @@ const ImageComponent = (props: {
   }, [
     initialClientX,
     initialWidth,
-    props.block,
-    props.block.props.textAlignment,
-    props.editor,
-    props.editor.domElement.firstElementChild,
+    block,
+    block.props.textAlignment,
+    editor,
+    editor.domElement.firstElementChild,
     resizeHandle,
     updateWidth,
     width
@@ -138,11 +140,11 @@ const ImageComponent = (props: {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        alignItems: textAlignmentToAlignItems(props.block.props.textAlignment),
+        alignItems: textAlignmentToAlignItems(block.props.textAlignment),
         width: '100%'
       }}>
       {/*Wrapper element for the image and resize handles*/}
-      {props.block.props.src && (
+      {block.props.src && (
         <div
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
@@ -154,11 +156,11 @@ const ImageComponent = (props: {
             width: 'fit-content'
           }}>
           <img
-            src={props.block.props.src}
+            src={block.props.src}
             alt={'placeholder'}
             contentEditable={false}
             style={{
-              display: props.block.props.replacing === 'true' ? 'none' : 'block',
+              display: block.props.replacing === 'true' ? 'none' : 'block',
               width: `${width * editorWidth}px`
             }}
           />
@@ -172,7 +174,7 @@ const ImageComponent = (props: {
             }}
             style={{
               ...resizeHandleStyles,
-              display: props.block.props.replacing === 'false' && (hovered || resizeHandle) ? 'block' : 'none',
+              display: block.props.replacing === 'false' && (hovered || resizeHandle) ? 'block' : 'none',
               left: '4px'
             }}
           />
@@ -186,7 +188,7 @@ const ImageComponent = (props: {
             }}
             style={{
               ...resizeHandleStyles,
-              display: props.block.props.replacing === 'false' && (hovered || resizeHandle) ? 'block' : 'none',
+              display: block.props.replacing === 'false' && (hovered || resizeHandle) ? 'block' : 'none',
               right: '4px'
             }}
           />
@@ -230,23 +232,16 @@ export const ImageBlock = createReactBlockSpec({
   )
 });
 
-export const Image = createReactBlockSpec<
-  'image',
-  typeof imagePropSchema,
-  false,
-  BlockSchema & {
-    image: BlockSpec<'image', typeof imagePropSchema>;
-  }
->({
+export const Image = createReactBlockSpec({
   type: 'image',
   propSchema: imagePropSchema,
   containsInlineContent: false,
   render: props => <ImageComponent {...props} />
 });
 
-export const insertImage = new ReactSlashMenuItem(
-  'Insert Image',
-  editor => {
+export const insertImage = {
+  name: 'Insert Image',
+  execute: editor => {
     const src = prompt('Enter image URL');
     editor.insertBlocks(
       [
@@ -261,8 +256,8 @@ export const insertImage = new ReactSlashMenuItem(
       'after'
     );
   },
-  ['image', 'img', 'picture', 'media'],
-  'Media',
-  <ImageIcon />,
-  'Insert an image'
-);
+  aliases: ['image', 'img', 'picture', 'media'],
+  group: 'Media',
+  icon: <ImageIcon />,
+  hint: 'Insert an image'
+} satisfies ReactSlashMenuItem<BlockSchema & { image: typeof Image }>;

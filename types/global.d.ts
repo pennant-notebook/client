@@ -8,3 +8,4 @@ declare module '*.gif';
 
 
 declare module 'y-codemirror.next';
+

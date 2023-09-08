@@ -2,7 +2,6 @@ import { useState, MouseEvent } from 'react';
 import { Divider, Tooltip, Menu, MenuItem, Box, Button, useTheme } from '../../utils/MuiImports';
 import useNotebookContext from '../../contexts/NotebookContext';
 import AddBoxIcon from '@mui/icons-material/AddBox';
-import styles from './AddCell.module.css';
 
 interface AddCellProps {
   index: number;
@@ -52,21 +51,26 @@ const AddCell = ({ index, noCells, isDragging }: AddCellProps) => {
         width: '75%',
         mx: 'auto'
       }}>
-      <Box className={`${styles['add-cell']} ${theme}`} sx={{ ml: -2.4 }}>
-        <Tooltip title='Add Cell' enterDelay={1000} enterNextDelay={1000} arrow>
-          <Button
-            sx={{ opacity: noCells ? 1 : 0.05, width: '100%' }}
-            onClick={handleAddCell}
-            onMouseEnter={() => setHover(true)}
-            onMouseLeave={() => setHover(false)}>
-            <AddBoxIcon className={`${styles['add-icon']} ${hover ? styles.hover : ''}`} />
-            <Box
-              sx={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}
-              className={`${styles.divider} ${hover ? styles.hover : ''}`}>
-              <Divider />
-            </Box>
-          </Button>
-        </Tooltip>
+      <Box className={`add-cell ${theme}`} sx={{ ml: -2.4 }}>
+        <div onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} style={{ width: '100%' }}>
+          <Tooltip title='Add Cell' enterDelay={1000} enterNextDelay={1000} arrow>
+            {noCells ? (
+              <Button sx={{ opacity: 0.5, '&:hover': { opacity: 0.75 }, width: '100%' }} onClick={handleAddCell}>
+                <AddBoxIcon className={`add-icon ${hover ? 'hovered' : ''}`} />
+                <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', opacity: 0.5 }}>
+                  <Divider />
+                </Box>
+              </Button>
+            ) : (
+              <Button sx={{ opacity: 0.05, '&:hover': { opacity: 0.75 }, width: '100%' }} onClick={handleAddCell}>
+                <AddBoxIcon className={`add-icon ${hover ? 'hovered' : ''}`} />
+                <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', opacity: hover ? 0.5 : 0.05 }}>
+                  <Divider />
+                </Box>
+              </Button>
+            )}
+          </Tooltip>
+        </div>
 
         <Menu
           keepMounted

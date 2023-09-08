@@ -107,11 +107,11 @@ export const UserDashboard = () => {
 
   if (!username) return null;
   const authUsername = auth.userData?.login;
-  console.log(username, authUsername);
+  console.log(usernameFromLocal, authUsername, username.slice(1));
 
   useEffect(() => {
     if (username === '@trypennant') return;
-    if (!authToken || usernameFromLocal !== authUsername) {
+    if (!authToken || usernameFromLocal !== username.slice(1)) {
       const errorMsg = authToken ? 'You are not authorized to view this page.' : 'Please login to view this page.';
       toast.error(errorMsg);
       navigate('/auth');

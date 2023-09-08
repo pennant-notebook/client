@@ -37,3 +37,53 @@ div.notebook-title p {
 div[id*='tippy'] > div[class*='tippy-box'][data-placement='left'] {
   display: none !important;
 }
+
+.add-cell {
+  display: flex;
+  align-items: center;
+  margin: 4px 0;
+  padding-inline: 0.15rem;
+}
+
+.add-cell .MuiButton-root {
+  width: 100%;
+  color: gray;
+  background-color: transparent;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.add-cell .MuiButton-root.hovered {
+  opacity: 0.8;
+  background-color: #fbfcfc;
+}
+
+.add-cell.dark .MuiButton-root.hovered {
+  opacity: 0.8;
+  background-color: #121518;
+}
+
+.add-cell.dark .MuiButton-root {
+  opacity: 0.1;
+}
+
+.add-cell.dark .add-icon {
+  color: #fff;
+}
+
+.add-icon {
+  color: gray;
+  transition: opacity 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.add-icon.hovered {
+  opacity: 1;
+  color: #37667e;
+}
+
+.add-cell .MuiDivider-root {
+  width: 100%;
+  opacity: 1;
+  background-color: #808080;
+  border-color: #808080;
+  transition: opacity 0.2s ease-in-out;
+}

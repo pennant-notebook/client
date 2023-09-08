@@ -38,13 +38,7 @@ const MarkdownCell = ({ id, cell }: MarkdownCellProps) => {
       <Box className={`${styles['markdown-container']} ${theme}`}>
         <MarkdownToolbar id={id} cellTheme={theme} />
         <Box id={`blockcell-${id}`}>
-          <MarkdownEditor
-            cell={cell}
-            content={cell.get('content')}
-            provider={provider}
-            currentUser={currentUser}
-            theme={theme}
-          />
+          <MarkdownEditor content={cell.get('content')} provider={provider} currentUser={currentUser} theme={theme} />
         </Box>
       </Box>
     </Box>

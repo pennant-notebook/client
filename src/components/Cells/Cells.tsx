@@ -5,6 +5,7 @@ import { Box } from '../../utils/MuiImports';
 import AddCell from './AddCell';
 import CellRow from './CellRow';
 import DraggableCells from './DraggableCells';
+import '../../styles/App.css';
 
 interface CellsProps {
   cells: CellType[];

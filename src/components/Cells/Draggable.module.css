@@ -7,11 +7,11 @@
   background: rgba(0, 0, 0, 0.5);
 }
 
-.dropruler.top {
+.droprulerTop {
   top: -11px;
 }
 
-.dropruler.bottom {
+.droprulerBottom {
   bottom: -10px;
 }
 
@@ -56,7 +56,7 @@
   }
 }
 
-.cellList-item {
+.cellListItem {
   margin: 0;
   padding: 0;
   display: block;
@@ -65,7 +65,7 @@
   position: relative;
 }
 
-.cellList-item {
+.cellListItem {
   position: relative;
 }
 

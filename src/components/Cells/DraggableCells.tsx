@@ -1,8 +1,8 @@
 import { useRef, useState, ReactNode } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { HoverTrackerContext } from './HoverTrackerContext';
-import styles from './Draggable.module.css';
 import { DragSourceMonitor, DropTargetMonitor } from 'react-dnd';
+import styles from './Draggable.module.css';
 
 interface DragItem {
   type: string;
@@ -87,7 +87,6 @@ const DraggableCells = ({ index, onDragEnd, children }: DraggableCellsProps) => 
     })
   });
 
-  const opacity = isDragging ? 1 : 1;
   drag(dragSourceRef, {});
   drop(ref);
 
@@ -102,19 +101,19 @@ const DraggableCells = ({ index, onDragEnd, children }: DraggableCellsProps) => 
         }
       }}>
       <div
-        className={`${styles['cellList-item']} ${childHovering || hovering ? 'hover' : ''}`}
+        className={`${styles.cellListItem} ${childHovering || hovering ? styles.hovered : ''}`}
         ref={ref}
-        style={{ opacity }}
+        style={{ opacity: 1 }}
         onMouseOver={() => {
           setHovering(true);
         }}
         onMouseLeave={() => {
           setHovering(false);
         }}>
-        {dndHovered && dndHoverPos === 'top' && <div className={styles['dropruler.top']} />}
-        <div className={styles['shoulder']} draggable='true' ref={dragSourceRef}></div>
+        {dndHovered && dndHoverPos === 'top' && <div className={`${styles.dropruler} ${styles.droprulerTop}`} />}
+        <div className={styles.shoulder} draggable='true' ref={dragSourceRef}></div>
         {children}
-        {dndHovered && dndHoverPos === 'bottom' && <div className={styles['dropruler.bottom']} />}
+        {dndHovered && dndHoverPos === 'bottom' && <div className={`${styles.dropruler} ${styles.droprulerBottom}`} />}
       </div>
     </HoverTrackerContext.Provider>
   );
