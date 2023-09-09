@@ -103,7 +103,7 @@ const DraggableCells = ({ index, onDragEnd, children }: DraggableCellsProps) => 
       <div
         className={`${styles.cellListItem} ${childHovering || hovering ? styles.hovered : ''}`}
         ref={ref}
-        style={{ opacity: 1 }}
+        style={{ opacity: isDragging ? 0.5 : 1 }}
         onMouseOver={() => {
           setHovering(true);
         }}

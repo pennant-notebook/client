@@ -5,7 +5,14 @@
 
 .main {
   background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  justify-content: center;
+  text-align: center;
   font-family: 'Lato';
+}
+
+.container {
+  margin: 0 auto;
+  justify-content: center;
 }
 
 .gradientBg {
@@ -267,7 +274,7 @@ button {
 }
 
 .centered {
-  width: 80%;
+  width: 100%;
   margin: 0 auto;
   justify-content: center;
   align-items: center;
