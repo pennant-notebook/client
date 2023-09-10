@@ -44,10 +44,9 @@ const Cells = ({ cells, setCells }: CellsProps) => {
         <div className='cellList'>
           <Box sx={{ position: 'relative', width: '100%' }}>
             <AddCell index={-1} noCells={cells.length < 1} isDragging={isDragging} />
-
             {cells &&
               cells.map((cell, i) => (
-                <div key={cell.get('id')}>
+                <div key={cell.get('id')} className='cell'>
                   <DraggableCells index={i} onDragEnd={onDragEnd}>
                     <CellRow cell={cell} index={i} />
                   </DraggableCells>

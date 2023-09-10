@@ -1,4 +1,3 @@
-import { CodeCellType, MarkdownCellType } from '@/CellTypes';
 import { ClientType } from '@/ClientTypes';
 import { NotebookContextType } from '@/NotebookTypes';
 import { ProviderContextType } from '@/ProviderTypes';
@@ -10,7 +9,7 @@ import { NotebookContext } from '../../contexts/NotebookContext';
 import useProviderContext from '../../contexts/ProviderContext';
 import { Box, useTheme } from '../../utils/MuiImports';
 import { getClientFromLocalStorage, updateDisconnectedClient } from '../../utils/awarenessHelpers';
-import { createCell, getUserObjects } from '../../utils/notebookHelpers';
+import { YMap, createCell, getUserObjects } from '../../utils/notebookHelpers';
 import Cells from '../Cells/Cells';
 import Navbar from './Navbar';
 
@@ -78,7 +77,7 @@ const Notebook = ({ docID, resourceTitle }: NotebookProps) => {
   }, [provider]);
 
   const deleteCell = async (id: string) => {
-    const cellIndex = cellsArray.toArray().findIndex((c: CodeCellType | MarkdownCellType) => c.get('id') === id);
+    const cellIndex = cellsArray.toArray().findIndex((c: YMap) => c.get('id') === id);
     if (cellIndex !== -1) cellsArray.delete(cellIndex);
     updatePositions();
   };
@@ -95,10 +94,10 @@ const Notebook = ({ docID, resourceTitle }: NotebookProps) => {
   };
 
   const updatePositions = () => {
-    cellsArray.toArray().forEach((c: CodeCellType | MarkdownCellType, i: number) => c.set('pos', i));
+    cellsArray.toArray().forEach((c: YMap, i: number) => c.set('pos', i));
   };
 
-  const repositionCell = async (cell: CodeCellType | MarkdownCellType, newIndex: number) => {
+  const repositionCell = async (cell: YMap, newIndex: number) => {
     const clone = cell.clone();
     cell.set('id', 'delete');
     await deleteCell('delete');
@@ -136,7 +135,7 @@ const Notebook = ({ docID, resourceTitle }: NotebookProps) => {
     navigate(destination);
   };
 
-  const codeCellsForDredd = cellDataArr.filter((c: CodeCellType | MarkdownCellType) => c.get('type') === 'code');
+  const codeCellsForDredd = cellDataArr.filter((c: YMap) => c.get('type') === 'code');
 
   const contextValue: NotebookContextType = {
     addCellAtIndex,

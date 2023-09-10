@@ -102,7 +102,7 @@ const CodeCell = ({ cellId, cell }: CodeCellProps) => {
         <StyledBadge badgeContent={processing ? '*' : cellExeCount || ' '} status={status} />
         <Box className={`${styles.codecellContainer} ${notebookTheme}`}>
           <CodeToolbar onClickRun={handleRunCode} id={cellId} processing={processing} />
-          <Box id={`editor-${cellId}`}></Box>
+          <Box id={`editor-${cellId}`} data-testid={`editor-${cellId}`}></Box>
           <Box className={`${styles.codecellOutput} ${styles[status]}`} sx={{ py: output ? '4px' : 0 }}>
             {processing ? (
               <Typography sx={{ ml: '5px', color: '#cfd1d8' }}>Processing...</Typography>

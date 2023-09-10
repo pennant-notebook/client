@@ -1,4 +1,3 @@
-import { CodeCellType } from '@/CellTypes';
 import { useNavigate, useParams } from 'react-router';
 import logo from '../../assets/pennant-color.png';
 import {
@@ -18,9 +17,10 @@ import Clients from '../UI/Awareness/Clients';
 import IconRow from '../UI/IconRow';
 import DocTitle from './DocTitle';
 import DreddButtons from './DreddButtons';
+import { YMap } from '~/utils/notebookHelpers';
 
 interface NavbarProps {
-  codeCells?: CodeCellType[];
+  codeCells?: YMap[];
   clients?: any[];
   isDashboard?: boolean;
   handleDisconnect?: (destination: string) => void;

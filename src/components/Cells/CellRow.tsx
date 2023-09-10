@@ -1,11 +1,11 @@
-import { CodeCellType, MarkdownCellType } from '@/CellTypes';
 import { Box, Divider, Stack } from '../../utils/MuiImports';
 import CodeCell from '../Code/CodeCell';
 import MarkdownCell from '../Markdown/MarkdownCell';
 import { CellPosAvatar } from '../UI/StyledComponents';
+import { YMap } from '~/utils/notebookHelpers';
 
 interface CellRowProps {
-  cell: MarkdownCellType | CodeCellType;
+  cell: YMap;
   index: number;
 }
 
@@ -28,8 +28,8 @@ const CellRow = ({ cell, index }: CellRowProps) => {
               <CellPosAvatar index={index + 1} />
             </Divider>
             <Box alignItems='center' sx={{ flexGrow: 1, position: 'relative' }}>
-              {type === 'markdown' && <MarkdownCell id={id} cell={cell as MarkdownCellType} />}
-              {type === 'code' && <CodeCell key={id} cellId={id} cell={cell as CodeCellType} />}
+              {type === 'markdown' && <MarkdownCell id={id} cell={cell} />}
+              {type === 'code' && <CodeCell key={id} cellId={id} cell={cell} />}
             </Box>
           </Box>
         </Stack>

@@ -1,10 +1,11 @@
 import { Dispatch, SetStateAction } from 'react';
-import { YText, YMap } from '~/utils/notebookHelpers';
+import { YMap } from '~/utils/notebookHelpers';
 
-export type NotebookMetadataType = YMap & {
-  executionCount: number;
-  title: string | YText;
-};
+export type NotebookMetadataType = YMap;
+// & {
+//   executionCount: number;
+//   title: string | YText;
+// };
 
 export interface NotebookContextType {
   addCellAtIndex: (idx: number, type: string) => void;

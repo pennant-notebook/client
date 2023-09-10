@@ -6,9 +6,9 @@ import '@testing-library/jest-dom';
 
 import Auth from '~/components/Auth/Auth';
 import { validateForm } from '~/utils/authHelpers';
+import { useNavigate } from '~/__mocks__/react-router';
 
 const axiosPostMock = ImportMock.mockFunction(axios, 'post');
-import { useNavigate } from '../../__mocks__/react-router'; // Adjust the path based on your project structure
 import Sinon from 'sinon';
 
 test('Auth Component', () => {

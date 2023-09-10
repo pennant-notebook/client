@@ -1,11 +1,11 @@
-import { CodeCellType, MarkdownCellType } from './CellTypes';
+import { YMap } from '~/utils/notebookHelpers';
 
 export interface CodeCellProps {
   cellId: string;
-  cell: CodeCellType;
+  cell: YMap;
 }
 
 export interface MarkdownCellProps {
   id: string;
-  cell: MarkdownCellType;
+  cell: YMap;
 }
