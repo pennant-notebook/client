@@ -6,15 +6,16 @@
   "scripts": {
     "start": "vite --host",
     "dev": "vite --port 3000",
-    "build": "vite build",
+    "build": "tsc && vite build",
     "dev:all": "concurrently \"npm run dev\" \"cd ../server && npm run dev\"",
     "build:ui": "npm run build && cp -r dist ../server",
-    "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "test": "vitest"
   },
   "dependencies": {
-    "@blocknote/core": "^0.8.2",
-    "@blocknote/react": "^0.8.2",
+    "@blocknote/core": "^0.9.2",
+    "@blocknote/react": "^0.9.2",
     "@codemirror/autocomplete": "^6.9.0",
     "@codemirror/commands": "^6.2.4",
     "@codemirror/lang-javascript": "^6.0.0",
@@ -33,6 +34,7 @@
     "axios": "^1.4.0",
     "codemirror": "^6.0.0",
     "js-beautify": "^1.14.9",
+    "jwt-decode": "^3.1.2",
     "react": "^18.2.0",
     "react-avatar": "^5.0.3",
     "react-dnd": "^16.0.1",
@@ -41,6 +43,8 @@
     "react-query": "^3.39.3",
     "react-router-dom": "^6.12.1",
     "react-toastify": "^9.1.3",
+    "recoil": "^0.7.7",
+    "sinon": "^15.2.0",
     "unique-names-generator": "^4.7.1",
     "uuid": "^9.0.0",
     "y-codemirror.next": "^0.3.2",
@@ -49,8 +53,17 @@
     "yjs": "^13.5.44"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.1.3",
+    "@testing-library/react": "^14.0.0",
+    "@types/js-beautify": "^1.14.0",
+    "@types/node": "^20.5.8",
     "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",
+    "@types/react-router-dom": "^5.3.3",
+    "@types/sinon": "^10.0.16",
+    "@types/uuid": "^9.0.3",
+    "@typescript-eslint/eslint-plugin": "^6.5.0",
+    "@typescript-eslint/parser": "^6.5.0",
     "@vitejs/plugin-react": "^4.0.0",
     "autoprefixer": "^10.4.14",
     "babel-plugin-import": "^1.13.6",
@@ -58,8 +71,13 @@
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.3.4",
+    "jsdom": "^22.1.0",
     "postcss": "^8.4.24",
     "tailwindcss": "^3.3.2",
-    "vite": "^4.3.9"
+    "ts-mock-imports": "^1.3.8",
+    "typescript": "^5.2.2",
+    "uvu": "^0.5.6",
+    "vite": "^4.4.9",
+    "vitest": "^0.34.4"
   }
 }
