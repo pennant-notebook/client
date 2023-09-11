@@ -2,8 +2,6 @@
 
 This repository contains the React application for the pennant-notebook project.
 
-(rewritten in TypeScript for improved maintainability.)
-
 ## Overview
 
 - **[Yjs](https://github.com/yjs/yjs)**: CRDT framework that enables real-time collaboration and synchronization between different users.
@@ -14,6 +12,7 @@ This repository contains the React application for the pennant-notebook project.
 - **[y-protocols](https://github.com/yjs/y-protocols)**: Used to manipulate specific aspects of the awareness protocol.
 - **[react-dnd](https://github.com/react-dnd/react-dnd)**: Powers the drag-and-drop functionality for cells.
 - **[BlockNote](https://github.com/TypeCellOS/BlockNote)**: Markdown editor customized with an added ImageBlock; some features omitted for a minimal and performant design.
+- **[Recoil](https://github.com/facebookexperimental/Recoil)**: Manages Auth0 and regular authentication states for the app.
 
 ## Getting started
 
