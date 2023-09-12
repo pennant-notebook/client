@@ -57,25 +57,25 @@ npm start
 - Manages themes and routing.
 - Includes routes for landing page, user dashboard, and individual notebooks.
 
-### Cells (`src/components/Cells/Cells.tsx`)
+### Cells (`src/components/Cells`)
 
 - Responsible for rendering and managing notebook cells.
 - Supports drag-and-drop functionality for reordering cells using `react-dnd` & `react-dnd-html5-backend`.
 
-### Code Cell (`src/components/Code/CodeCell.tsx`)
+### Code Cell (`src/components/Code`)
 
 - Represents a code cell within the notebook.
 - Each code cell utilizes its own code editor (CodeMirror 6) instance.
 - Editor binding created using `y-codemirror.next`.
 - Handles code execution, output rendering, and toolbar actions.
 
-### Markdown Cell (`src/components/Markdown/MarkdownCell.tsx`)
+### Markdown Cell (`src/components/Markdown`)
 
 - Represents a markdown cell within the notebook.
 - Includes a markdown editor (BlockNote) and toolbar.
 - Editor binding created using `collab` plugin.
 
-### Notebook (`src/components/Notebook/Notebook.tsx`)
+### Notebook (`src/components/Notebook`)
 
 - Main component for rendering and managing the notebook interface.
 - Manages cells, navigation, and collaboration features.
@@ -91,10 +91,19 @@ npm start
 
 - Contains functions that make API calls to fetch notebook and user metadata from DynamoDB.
 
+## Helpers & Utils
+
 ### Notebook Helpers (`src/utils/notebookHelpers.ts`)
 
 - Utility functions for creating and managing notebook content.
-- Includes functions for creating cells (`Y.Map`) and managing user objects.
+- Includes functions for creating cells (`Y.Map`) and typings for various Yjs Data Types.
+- Includes functions for creating content for cells (`Y.Text` for code, `Y.XmlFragment` for markdown)
+- The only file where "yjs" is imported.
+
+### Awareness Helpers (`src/utils/awarenessHelpers.ts`)
+
+- Utility functions for creating and managing client objects and awareness states.
+- Includes functions for creating users (`Y.Map`) and managing user objects.
 
 ## Contexts
 
@@ -105,7 +114,7 @@ npm start
 
 ### Notebook Context (`src/contexts/NotebookContext.ts`)
 
-- Contains notebook metadata, provider, awareness, doc and the `docID` for a given notebook.
+- Contains notebook metadata, provider, awareness, and the y.doc for a given notebook.
 - Contains various functions for adding, deleting, cloning, and repositioning cells.
 
 ## Contributing
