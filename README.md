@@ -1,6 +1,12 @@
-# Pennant (client)
 
-This repository contains the React application for the pennant-notebook project.
+<p align="center">
+  <img src="https://pennant-notebook.github.io/images/logo/logo-name-horizontal-purple.png" alt="Pennant Notebook Logo" width="300"/>
+</p>
+
+<p align="center">
+ Welcome to Pennant! An open source live coding environment supporting Markdown and JavaScript.
+</p>
+
 
 ## Overview
 
@@ -18,14 +24,11 @@ This repository contains the React application for the pennant-notebook project.
 
 ### Prerequisites
 
-You will need to create a `.env` file in the client folder with the following environment variables:
+Ensure you have a `.env` file set up in your project root. You can use the `.env.example` file in the repository as a template. Copy it and rename to `.env`, then fill in the necessary environment variables.
 
-```env
-VITE_WEBSOCKET_SERVER=<websocket server url, see provider repo for more details>
-VITE_HP_ACCESS_TOKEN=<token for the hocuspocus provider, see provider repo -> pocus directory for more details>
-VITE_ENGINE_SERVER=<code execution engine url, see code-engine repo for more details>
-VITE_API_URL=<dynamodb api url, see server repo for more details>
-```
+- `VITE_WEBSOCKET_SERVER`: Websocket-Provider server url (see pennant-provider repo for more details)
+- `VITE_HP_ACCESS_TOKEN`: Provided when initializing the HocuspocusProvider (see pennant-provider/pocus repo for more details)
+- `VITE_ENGINE_SERVER`: Code execution engine url (see pennant-engine repo for more details)
 
 ### Installation
 
