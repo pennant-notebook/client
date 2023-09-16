@@ -1,13 +1,20 @@
 
 <p align="center">
-  <img src="https://pennant-notebook.github.io/images/logo/logo-name-horizontal-purple.png" alt="Pennant Notebook Logo" width="300"/>
+  <a href="https://trypennant.com">
+    <img src="https://pennant-notebook.github.io/images/logo/logo-name-horizontal-purple.png" alt="Pennant Notebook Logo" width="300"/>
+  </a>
 </p>
 <p align="center">
  Welcome to Pennant! An Open-source Real-Time Collaborative Computational Notebook supporting Markdown and JavaScript.
 </p>
 <br />
 <p align="center">
-  <a href="https://pennant-notebook.github.io/">
+  <img src="https://pennant-notebook.github.io/images/11-opening-notebook-gif.gif" alt="Pennant Notebook Demo" width="500" />
+</p>
+<br />
+<br />
+<p align="center">
+  <a href="https://pennant-notebook.github.io/" target="_blank">
     <img src="public/read-our-case-study.png" alt="Read Our Case Study" width="200" />
   </a>
 </p>
