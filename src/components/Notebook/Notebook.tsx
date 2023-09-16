@@ -65,8 +65,8 @@ const Notebook = ({ docID, resourceTitle }: NotebookProps) => {
       if (provider) {
         updateDisconnectedClient(provider);
       }
-      e.preventDefault();
-      e.returnValue = '';
+      // e.preventDefault();
+      // e.returnValue = '';
     };
 
     window.addEventListener('beforeunload', handleBeforeUnload);
