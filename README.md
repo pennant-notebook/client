@@ -2,11 +2,15 @@
 <p align="center">
   <img src="https://pennant-notebook.github.io/images/logo/logo-name-horizontal-purple.png" alt="Pennant Notebook Logo" width="300"/>
 </p>
-
 <p align="center">
- Welcome to Pennant! An open source live coding environment supporting Markdown and JavaScript.
+ Welcome to Pennant! An Open-source Real-Time Collaborative Computational Notebook supporting Markdown and JavaScript.
 </p>
-
+<br />
+<p align="center">
+  <a href="https://pennant-notebook.github.io/">
+    <img src="public/read-our-case-study.png" alt="Read Our Case Study" width="200" />
+  </a>
+</p>
 
 ## Overview
 
