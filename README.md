@@ -1,4 +1,3 @@
-
 <p align="center">
   <a href="https://trypennant.com">
     <img src="https://pennant-notebook.github.io/images/logo/logo-name-horizontal-purple.png" alt="Pennant Notebook Logo" width="300"/>

@@ -39,7 +39,9 @@ const Auth = () => {
 
   const [isSignUp, setIsSignUp] = useState(false);
   const isSmallScreen = useMediaQuery('(max-width:600px)');
+
   const isLoggedIn = !!localStorage.getItem('pennantAccessToken');
+
   const toggleSignUp = () => setIsSignUp(!isSignUp);
 
   const goToDashboard = () => {
