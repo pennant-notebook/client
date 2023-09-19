@@ -66,14 +66,14 @@ const GoogleSignInButton = ({ loginHandler }: { loginHandler?: () => void }) => 
 
   return (
     <div className={styles.googleButton} onClick={!auth.isLoggedIn ? handleGoogleLogin : undefined}>
-      {!auth.isLoggedIn ? (
+      {!auth.isLoggedIn || !localStorage.getItem('pennantAccessToken') ? (
         <>
           <img src={GoogleLogo} alt='Google Logo' className={styles.googleLogo} />
           <span className={styles.buttonText}>Sign in with Google</span>
         </>
       ) : (
         <>
-          <img src={auth.userData?.avatar} alt='User Avatar' className={styles.userAvatar} />
+          <img src={auth.userData?.avatar || GoogleLogo} alt='User Avatar' className={styles.userAvatar} />
           <span className={styles.userName}>Logged in as: {auth.userData?.name}</span>
         </>
       )}
