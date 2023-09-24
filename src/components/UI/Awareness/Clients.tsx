@@ -1,5 +1,5 @@
 import Avatar from 'react-avatar';
-import { Box } from '../../../utils/MuiImports';
+import { Box } from '~/utils/MuiImports';
 import styles from './Clients.module.css';
 import { ClientType } from '@/ClientTypes';
 

@@ -2,8 +2,8 @@ import { ProviderContextType } from '@/ProviderTypes';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import ErrorBoundary from '../../ErrorBoundary';
-import { ProviderContext, useProvider } from '../../contexts/ProviderContext';
-import { fetchDoc } from '../../services/dynamoFetch';
+import { ProviderContext, useProvider } from '~/contexts/ProviderContext';
+import { fetchDoc } from '~/services/dynamoFetch';
 import Notebook from '../Notebook/Notebook';
 import LoadingSpinner from '../UI/LoadingSpinner';
 

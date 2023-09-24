@@ -3,7 +3,7 @@ import { authState } from './authState';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { useGoogleLogin } from '@react-oauth/google';
-import GoogleLogo from '../../assets/google.svg';
+import GoogleLogo from '~/assets/google.svg';
 import styles from './Auth.module.css';
 
 const API_URL = process.env.NODE_ENV === 'production' ? '/auth' : 'http://localhost:3001/auth';

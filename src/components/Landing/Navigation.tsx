@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
-import { IconButton } from '../../utils/MuiImports';
+import { IconButton } from '~/utils/MuiImports';
 import PennantLogo from './assets/logo.png';
 import LoginSvg from './assets/login2.svg';
 import styles from './Navigation.module.css';

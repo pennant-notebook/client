@@ -7,6 +7,10 @@ import { keymap } from '@codemirror/view';
 import { EditorView, basicSetup } from 'codemirror';
 import beautify from 'js-beautify';
 import { yCollab } from 'y-codemirror.next';
+import { StreamLanguage } from '@codemirror/language';
+import { go } from '@codemirror/legacy-modes/mode/go';
+export const goMode = StreamLanguage.define(go);
+
 
 function formatCode(view: EditorView) {
   const code = view.state.doc.toString();
@@ -23,7 +27,7 @@ function formatCode(view: EditorView) {
 }
 
 const createCodeEditor = (props: CreateCodeEditorProps) => {
-  const { content, id, awareness, handleRunCode, editorTheme, hasOutput } = props;
+  const { content, id, awareness, handleRunCode, editorTheme, hasOutput, language } = props;
 
   const customKeymap = keymap.of([
     {
@@ -51,7 +55,7 @@ const createCodeEditor = (props: CreateCodeEditorProps) => {
     extensions: [
       basicSetup,
       customKeymap,
-      javascript(),
+      language === 'javascript' ? javascript() : goMode,
       autocompletion(),
       yCollab(content, awareness),
       EditorView.lineWrapping,
@@ -95,6 +99,7 @@ const createCodeEditor = (props: CreateCodeEditorProps) => {
       }),
       editorTheme.theme
     ]
+
   });
 
   let view = new EditorView({

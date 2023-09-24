@@ -2,10 +2,10 @@ import { ProviderContextType } from '@/ProviderTypes';
 import { useState } from 'react';
 import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import PlayAllIcon from '../../assets/allplay.png';
-import useProviderContext from '../../contexts/ProviderContext';
-import { handleResetContext, handleRunAllCode } from '../../services/dreddExecutionService';
-import { CircularProgress, IconButton, Refresh, Stack, Tooltip } from '../../utils/MuiImports';
+import PlayAllIcon from '~/assets/allplay.png';
+import useProviderContext from '~/contexts/ProviderContext';
+import { handleResetContext, handleRunAllCode } from '~/services/dreddExecutionService';
+import { CircularProgress, IconButton, Refresh, Stack, Tooltip } from '~/utils/MuiImports';
 import styles from './DreddButtons.module.css';
 import { YMap } from '~/utils/notebookHelpers';
 

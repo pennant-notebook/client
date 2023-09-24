@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect } from 'react';
-import GithubLogo from '../../assets/github.svg';
+import GithubLogo from '~/assets/github.svg';
 import styles from './Auth.module.css';
 import { useSetRecoilState } from 'recoil';
 import { authState } from './authState';

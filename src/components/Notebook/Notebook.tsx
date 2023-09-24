@@ -5,11 +5,11 @@ import { useEffect, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useNavigate } from 'react-router';
-import { NotebookContext } from '../../contexts/NotebookContext';
-import useProviderContext from '../../contexts/ProviderContext';
-import { Box, useTheme } from '../../utils/MuiImports';
-import { getClientFromLocalStorage, updateDisconnectedClient } from '../../utils/awarenessHelpers';
-import { YMap, createCell, getUserObjects } from '../../utils/notebookHelpers';
+import { NotebookContext } from '~/contexts/NotebookContext';
+import useProviderContext from '~/contexts/ProviderContext';
+import { Box, useTheme } from '~/utils/MuiImports';
+import { getClientFromLocalStorage, updateDisconnectedClient } from '~/utils/awarenessHelpers';
+import { YMap, createCell, getUserObjects } from '~/utils/notebookHelpers';
 import Cells from '../Cells/Cells';
 import Navbar from './Navbar';
 

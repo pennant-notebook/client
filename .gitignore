@@ -24,3 +24,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# testing
+test-results/
+playwright-report/
+release
+/test-results/
+/playwright-report/
+/playwright/.cache/

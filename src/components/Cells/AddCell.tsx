@@ -1,6 +1,6 @@
 import { useState, MouseEvent } from 'react';
-import { Divider, Tooltip, Menu, MenuItem, Box, Button, useTheme } from '../../utils/MuiImports';
-import useNotebookContext from '../../contexts/NotebookContext';
+import { Divider, Tooltip, Menu, MenuItem, Box, Button, useTheme } from '~/utils/MuiImports';
+import useNotebookContext from '~/contexts/NotebookContext';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 
 interface AddCellProps {

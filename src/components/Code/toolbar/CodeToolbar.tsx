@@ -1,26 +1,31 @@
-import useNotebookContext from '../../contexts/NotebookContext';
+import useNotebookContext from '~/contexts/NotebookContext';
 import {
   Box,
   CircularProgress,
   CloseSharp,
   IconButton,
   PlayCircle,
+  MenuItem,
   Stack,
-  Tooltip,
-  Typography
-} from '../../utils/MuiImports';
+  Tooltip
+} from '~/utils/MuiImports';
 import styles from './CodeToolbar.module.css';
+import LanguageSelector from './LanguageSelector';
 
 interface CodeToolbarProps {
   onClickRun: () => void;
   id: string;
   processing: boolean;
+  language: string;
+  setLanguage: (language: string) => void;
 }
 
-const CodeToolbar = ({ onClickRun, id, processing }: CodeToolbarProps) => {
+const CodeToolbar = ({ onClickRun, id, processing, language, setLanguage }: CodeToolbarProps) => {
   const { deleteCell } = useNotebookContext();
+
   return (
     <Box
+      data-test='codeToolbarContainer'
       sx={{
         backgroundColor: '#282A35',
         height: '40px',
@@ -31,22 +36,38 @@ const CodeToolbar = ({ onClickRun, id, processing }: CodeToolbarProps) => {
         borderTopRightRadius: '5px'
       }}>
       <Stack
+        data-test='toolbarStack'
         direction='row'
         sx={{ justifyContent: 'end', position: 'relative', alignItems: 'center', mr: 1, p: 1 }}
         spacing={2}>
-        <Typography variant='overline' sx={{ color: 'lightgray', position: 'absolute', left: '12px' }}>
-          JavaScript
-        </Typography>
+        <LanguageSelector
+          data-test='languageSelector'
+          select
+          value={language}
+          onChange={e => setLanguage(e.target.value)}
+          variant='standard'>
+          <MenuItem data-test='languageOption-js' value='javascript'>
+            JavaScript
+          </MenuItem>
+          <MenuItem data-test='languageOption-go' value='golang'>
+            Golang
+          </MenuItem>
+        </LanguageSelector>
         <Tooltip title='Run code' enterDelay={1000} enterNextDelay={1000}>
           <span>
-            <IconButton className={styles.toolbutton} disabled={processing} onClick={onClickRun}>
-              {processing ? <CircularProgress size={24} /> : <PlayCircle />}
+            <IconButton
+              data-test='runCodeButton'
+              className={styles.toolbutton}
+              disabled={processing}
+              onClick={onClickRun}>
+              {processing ? <CircularProgress data-test='loadingIndicator' size={24} /> : <PlayCircle />}
             </IconButton>
           </span>
         </Tooltip>
         <Tooltip title='Remove cell' enterDelay={1000} enterNextDelay={1000}>
           <span>
             <IconButton
+              data-test='removeCellButton'
               className={styles.toolbutton}
               disabled={processing}
               onClick={() => deleteCell(id)}
