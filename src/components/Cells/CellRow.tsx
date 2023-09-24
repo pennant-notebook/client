@@ -1,6 +1,6 @@
-import { Box, Divider, Stack } from '../../utils/MuiImports';
-import CodeCell from '../Code/CodeCell';
-import MarkdownCell from '../Markdown/MarkdownCell';
+import { Box, Divider, Stack } from '~/utils/MuiImports';
+import CodeCell from '../Code/cell/CodeCell';
+import MarkdownCell from '../Markdown/cell/MarkdownCell';
 import { CellPosAvatar } from '../UI/StyledComponents';
 import { YMap } from '~/utils/notebookHelpers';
 

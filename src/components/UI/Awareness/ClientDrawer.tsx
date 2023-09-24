@@ -4,8 +4,8 @@ import { useCallback, useEffect, useState } from 'react';
 import Avatar from 'react-avatar';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router';
-import useProviderContext from '../../../contexts/ProviderContext';
-import { fetchNotebooks } from '../../../services/dynamoFetch';
+import useProviderContext from '~/contexts/ProviderContext';
+import { fetchNotebooks } from '~/services/dynamoFetch';
 import {
   ArrowBack,
   Box,
@@ -20,8 +20,8 @@ import {
   Typography,
   grey,
   useTheme
-} from '../../../utils/MuiImports';
-import { getClientFromLocalStorage } from '../../../utils/awarenessHelpers';
+} from '~/utils/MuiImports';
+import { getClientFromLocalStorage } from '~/utils/awarenessHelpers';
 import IconRow from '../IconRow';
 import { StyledButton } from '../StyledComponents';
 import styles from './Clients.module.css';

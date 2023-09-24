@@ -1,11 +1,11 @@
-import { Box, Stack, Typography, useTheme } from '../../utils/MuiImports';
+import { Box, Stack, Typography, useTheme } from '~/utils/MuiImports';
 import { useEffect, useRef, useState, useCallback } from 'react';
-import useProviderContext from '../../contexts/ProviderContext';
-import CodeToolbar from './CodeToolbar';
+import useProviderContext from '~/contexts/ProviderContext';
+import CodeToolbar from '../toolbar/CodeToolbar';
 import createCodeEditor from './createCodeEditor';
-import { handleDredd, updateMetadata } from '../../services/dreddExecutionService';
-import StyledBadge from '../UI/StyledComponents';
-import { useCMThemeContext } from '../../contexts/ThemeManager';
+import { handleDredd, updateMetadata } from '~/services/dreddExecutionService';
+import StyledBadge from '../../UI/StyledComponents';
+import { useCMThemeContext } from '~/contexts/ThemeManager';
 import { YMapEvent } from '~/utils/notebookHelpers';
 import { EditorView } from 'codemirror';
 import styles from './CodeCell.module.css';
@@ -25,6 +25,8 @@ const CodeCell = ({ cellId, cell }: CodeCellProps) => {
   const [output, setOutput] = useState(outputMap.get('stdout'));
   const [status, setStatus] = useState(outputMap.get('status'));
   const [processing, setProcessing] = useState(cellRunning);
+  const [language, setLanguage] = useState('javascript');
+
   const editorRef = useRef<EditorView | null>(null);
   const cellRef = useRef(null);
 
@@ -56,7 +58,15 @@ const CodeCell = ({ cellId, cell }: CodeCellProps) => {
     const editorContainer = document.querySelector(`#editor-${cellId}`);
     if (!editorRef.current) {
       const hasOutput = cell.get('outputMap').get('stdout');
-      editorRef.current = createCodeEditor({ content, id: cellId, awareness, handleRunCode, editorTheme, hasOutput });
+      editorRef.current = createCodeEditor({
+        content,
+        id: cellId,
+        awareness,
+        handleRunCode,
+        editorTheme,
+        hasOutput,
+        language
+      });
       if (editorContainer) {
         editorContainer.appendChild(editorRef.current.dom);
       }
@@ -71,7 +81,7 @@ const CodeCell = ({ cellId, cell }: CodeCellProps) => {
         editorRef.current = null;
       }
     };
-  }, [content, editorTheme]);
+  }, [content, editorTheme, language]);
 
   useEffect(() => {
     cell.get('outputMap').observe(() => {
@@ -92,24 +102,37 @@ const CodeCell = ({ cellId, cell }: CodeCellProps) => {
 
   return (
     <Box
+      data-test='codeCell'
       ref={cellRef}
       sx={{
         display: 'flex',
         alignItems: 'center',
         width: '100%'
       }}>
-      <Stack direction='row' sx={{ width: '100%', alignItems: 'center' }}>
-        <StyledBadge badgeContent={processing ? '*' : cellExeCount || ' '} status={status} />
-        <Box className={`${styles.codecellContainer} ${notebookTheme}`}>
-          <CodeToolbar onClickRun={handleRunCode} id={cellId} processing={processing} />
-          <Box id={`editor-${cellId}`} data-testid={`editor-${cellId}`}></Box>
-          <Box className={`${styles.codecellOutput} ${styles[status]}`} sx={{ py: output ? '4px' : 0 }}>
+      <Stack direction='row' sx={{ width: '100%', alignItems: 'center' }} data-test='codeCell-stack'>
+        <StyledBadge badgeContent={processing ? '*' : cellExeCount || ' '} status={status} data-test='codeCell-badge' />
+        <Box data-test='codeToolbar' className={`${styles.codecellContainer} ${notebookTheme}`}>
+          <CodeToolbar
+            onClickRun={handleRunCode}
+            id={cellId}
+            processing={processing}
+            language={language}
+            setLanguage={setLanguage}
+            data-test='codeToolbar-component'
+          />
+          <Box id={`editor-${cellId}`} data-test='codeEditor' data-testid={`editor-${cellId}`}></Box>
+          <Box
+            className={`${styles.codecellOutput} ${styles[status]}`}
+            sx={{ py: output ? '4px' : 0 }}
+            data-test='codeCell-outputBox'>
             {processing ? (
-              <Typography sx={{ ml: '5px', color: '#cfd1d8' }}>Processing...</Typography>
+              <Typography data-test='processing' sx={{ ml: '5px', color: '#cfd1d8' }}>
+                Processing...
+              </Typography>
             ) : (
               output &&
               output?.split('\n').map((stdout: string, idx: number) => (
-                <Typography key={idx} sx={{ ml: '5px', color: '#cfd1d8' }}>
+                <Typography key={idx} sx={{ ml: '5px', color: '#cfd1d8' }} data-test={`output`}>
                   {stdout}
                 </Typography>
               ))

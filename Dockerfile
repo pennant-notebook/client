@@ -1,44 +1,14 @@
-# syntax = docker/dockerfile:1
+# Use the official Playwright base image
+FROM mcr.microsoft.com/playwright
 
-# Adjust NODE_VERSION as desired
-ARG NODE_VERSION=17.20.0
-FROM node:${NODE_VERSION}-slim as base
+WORKDIR /usr/src/app
 
-LABEL fly_launch_runtime="NodeJS"
+COPY package*.json ./
 
-# NodeJS app lives here
-WORKDIR /app
+RUN npm install
 
-# Set production environment
-ENV NODE_ENV=production
+COPY . .
 
+EXPOSE 3000
 
-# Throw-away build stage to reduce size of final image
-FROM base as build
-
-# Install packages needed to build node modules
-RUN apt-get update -qq && \
-  apt-get install -y python-is-python3 pkg-config build-essential 
-
-# Install node modules
-COPY --link package.json package-lock.json .
-RUN npm install --production=false
-
-# Copy application code
-COPY --link . .
-
-# Build application
-RUN npm run build
-
-# Remove development dependencies
-RUN npm prune --production
-
-
-# Final stage for app image
-FROM base
-
-# Copy built application
-COPY --from=build /app /app
-
-# Start the server by default, this can be overwritten at runtime
-CMD [ "npm", "run", "start" ]
+CMD ["npm", "start"]

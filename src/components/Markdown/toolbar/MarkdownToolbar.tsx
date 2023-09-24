@@ -1,6 +1,6 @@
-import { CloseSharp, Box, Stack, Tooltip, IconButton, Typography } from '../../utils/MuiImports';
-import useNotebookContext from '../../contexts/NotebookContext';
-import styles from './MarkdownCell.module.css';
+import { CloseSharp, Box, Stack, Tooltip, IconButton, Typography } from '~/utils/MuiImports';
+import useNotebookContext from '~/contexts/NotebookContext';
+import styles from './MarkdownToolbar.module.css';
 
 interface MarkdownToolbarProps {
   id: string;

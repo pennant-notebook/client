@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router';
-import logo from '../../assets/pennant-color.png';
+import logo from '~/assets/pennant-color.png';
 import {
   AppBar,
   Box,
@@ -11,7 +11,7 @@ import {
   Tooltip,
   Typography,
   useTheme
-} from '../../utils/MuiImports';
+} from '~/utils/MuiImports';
 import ClientDrawer from '../UI/Awareness/ClientDrawer';
 import Clients from '../UI/Awareness/Clients';
 import IconRow from '../UI/IconRow';

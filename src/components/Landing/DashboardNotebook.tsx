@@ -1,9 +1,9 @@
 import { useState, useEffect, MouseEvent, FocusEvent, KeyboardEvent } from 'react';
 import { useNavigate, useParams } from 'react-router';
-import { Card, Typography, useTheme, InputBase } from '../../utils/MuiImports';
-import { Edit, DeleteIcon, CheckIcon, CloseIcon, IconButton } from '../../utils/MuiImports';
+import { Card, Typography, useTheme, InputBase } from '~/utils/MuiImports';
+import { Edit, DeleteIcon, CheckIcon, CloseIcon, IconButton } from '~/utils/MuiImports';
 import { useMutation } from 'react-query';
-import { deleteDoc, editDocTitle } from '../../services/dynamoPost';
+import { deleteDoc, editDocTitle } from '~/services/dynamoPost';
 import { toast } from 'react-toastify';
 import styles from './DashboardNotebook.module.css';
 

@@ -8,10 +8,10 @@ import {
   Button,
   Box,
   Typography
-} from '../../utils/MuiImports';
+} from '~/utils/MuiImports';
 import { useParams } from 'react-router-dom';
-import { fetchDoc } from '../../services/dynamoFetch';
-import { editDocTitle } from '../../services/dynamoPost';
+import { fetchDoc } from '~/services/dynamoFetch';
+import { editDocTitle } from '~/services/dynamoPost';
 
 import { useMutation, useQuery } from 'react-query';
 

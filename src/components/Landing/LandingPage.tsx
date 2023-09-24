@@ -7,7 +7,7 @@ import collab from './assets/collab.svg';
 import magnifyingGlass from './assets/magnifying-glass.svg';
 import Github from './assets/github-white.png';
 import styles from './LandingPage.module.css';
-import { Box } from '../../utils/MuiImports';
+import { Box } from '~/utils/MuiImports';
 import Navigation from './Navigation';
 
 const LandingPage = () => {

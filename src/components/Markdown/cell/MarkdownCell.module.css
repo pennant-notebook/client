@@ -48,21 +48,3 @@ div[data-theme='light'].blocknote-editor code {
   padding-inline: 4px;
   padding-block: 1px;
 }
-
-.markdown-toolbar {
-  height: 40px;
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
-  margin: 0;
-  padding: 0;
-  border-bottom: none;
-  z-index: 0;
-}
-
-.markdown-toolbar.light {
-  background-color: #f5f5f5;
-}
-
-.markdown-toolbar.dark {
-  background-color: #282a34;
-}

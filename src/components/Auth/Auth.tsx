@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import { useRecoilState } from 'recoil';
 import { validateForm } from '~/utils/authHelpers';
-import LoggedInIcon from '../../assets/loggedIn.svg';
-import Pennant from '../../assets/logo.png';
-import PennantLogoDark from '../../assets/pennant-logo-dark.png';
-import PennantLogo from '../../assets/pennant-logo.png';
+import LoggedInIcon from '~/assets/loggedIn.svg';
+import Pennant from '~/assets/logo.png';
+import PennantLogoDark from '~/assets/pennant-logo-dark.png';
+import PennantLogo from '~/assets/pennant-logo.png';
 import {
   Button,
   Divider,
@@ -18,7 +18,7 @@ import {
   Typography,
   useMediaQuery,
   useTheme
-} from '../../utils/MuiImports';
+} from '~/utils/MuiImports';
 import styles from './Auth.module.css';
 import GitHubLogin from './GitHubLogin';
 import GoogleSignInButton from './GoogleSignInButton';

@@ -1,5 +1,5 @@
 import { MouseEvent } from 'react';
-import { IconButton, Typography, Stack } from '../../utils/MuiImports';
+import { IconButton, Typography, Stack } from '~/utils/MuiImports';
 
 interface IconRowProps {
   icon: JSX.Element;

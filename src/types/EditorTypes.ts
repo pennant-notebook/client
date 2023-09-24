@@ -12,6 +12,7 @@ export interface CreateCodeEditorProps {
   handleRunCode: () => void;
   editorTheme: CodeMirrorThemeType;
   hasOutput: boolean;
+  language: string;
 }
 
 export interface MarkdownEditorProps {
