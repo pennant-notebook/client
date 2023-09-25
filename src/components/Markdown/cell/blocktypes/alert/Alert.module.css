@@ -1,0 +1,38 @@
+/* Alert.module.css */
+
+.alert {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  border-radius: 4px;
+  height: 48px;
+  padding: 4px;
+}
+
+.alert-icon-wrapper {
+  border-radius: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 12px;
+  margin-right: 12px;
+  height: 18px;
+  width: 18px;
+  user-select: none;
+  cursor: pointer;
+}
+
+.inlineContent {
+  flex-grow: 1;
+}
+
+.menu-dropdown {
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.menu-dropdown::-webkit-scrollbar {
+  width: 0;
+}

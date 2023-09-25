@@ -53,6 +53,12 @@ export { default as Visibility } from '@mui/icons-material/Visibility';
 export { default as VisibilityOff } from '@mui/icons-material/VisibilityOff';
 export { default as TableChartIcon } from '@mui/icons-material/TableChart';
 export { default as PlaylistPlayIcon } from '@mui/icons-material/PlaylistPlay';
+export { default as ErrorOutlineIcon } from '@mui/icons-material/ErrorOutline';
+// BlockNote Alert Icons
+export { default as ErrorIcon } from '@mui/icons-material/Error';
+export { default as CancelIcon } from '@mui/icons-material/Cancel';
+export { default as InfoIcon } from '@mui/icons-material/Info';
+export { default as CheckCircle } from '@mui/icons-material/CheckCircle';
 
 // Styles
 export { default as useTheme } from '@mui/material/styles/useTheme';
