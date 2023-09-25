@@ -49,8 +49,8 @@ const CodeToolbar = ({ onClickRun, id, processing, language, setLanguage }: Code
           <MenuItem data-test='languageOption-js' value='javascript'>
             JavaScript
           </MenuItem>
-          <MenuItem data-test='languageOption-go' value='golang'>
-            Golang
+          <MenuItem data-test='languageOption-python' value='python'>
+            Python
           </MenuItem>
         </LanguageSelector>
         <Tooltip title='Run code' enterDelay={1000} enterNextDelay={1000}>

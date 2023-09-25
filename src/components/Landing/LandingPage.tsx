@@ -8,7 +8,7 @@ import magnifyingGlass from './assets/magnifying-glass.svg';
 import Github from './assets/github-white.png';
 import styles from './LandingPage.module.css';
 import { Box } from '~/utils/MuiImports';
-import Navigation from './Navigation';
+import Navigation from './navigation/Navigation';
 
 const LandingPage = () => {
   document.title = 'Pennant';

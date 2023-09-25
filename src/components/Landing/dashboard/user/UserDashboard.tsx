@@ -2,11 +2,11 @@ import { useQuery } from 'react-query';
 import { useState, useEffect, ChangeEvent } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { Box, TextField, Button, Grid, Typography, useTheme } from '~/utils/MuiImports';
-import LoadingSpinner from '../UI/LoadingSpinner';
-import Navbar from '../Notebook/Navbar';
+import LoadingSpinner from '~/components/UI/LoadingSpinner';
+import Navbar from '~/components/Notebook/Navbar';
 import { createDoc } from '~/services/dynamoPost';
 import { fetchNotebooks } from '~/services/dynamoFetch';
-import DashboardNotebook from './DashboardNotebook';
+import DashboardNotebook from '../notebook/DashboardNotebook';
 import styles from './UserDashboard.module.css';
 import { toast } from 'react-toastify';
 

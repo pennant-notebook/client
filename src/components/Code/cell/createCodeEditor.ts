@@ -7,9 +7,7 @@ import { keymap } from '@codemirror/view';
 import { EditorView, basicSetup } from 'codemirror';
 import beautify from 'js-beautify';
 import { yCollab } from 'y-codemirror.next';
-import { StreamLanguage } from '@codemirror/language';
-import { go } from '@codemirror/legacy-modes/mode/go';
-export const goMode = StreamLanguage.define(go);
+import { python } from '@codemirror/lang-python';
 
 
 function formatCode(view: EditorView) {
@@ -55,7 +53,7 @@ const createCodeEditor = (props: CreateCodeEditorProps) => {
     extensions: [
       basicSetup,
       customKeymap,
-      language === 'javascript' ? javascript() : goMode,
+      language === 'javascript' ? javascript() : python(),
       autocompletion(),
       yCollab(content, awareness),
       EditorView.lineWrapping,

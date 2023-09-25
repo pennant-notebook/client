@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Auth from './components/Auth/Auth';
 import LandingPage from './components/Landing/LandingPage';
 import NotebookRoute from './components/Landing/NotebookRoute';
-import UserDashboard from './components/Landing/UserDashboard';
+import UserDashboard from './components/Landing/dashboard/user/UserDashboard';
 import ThemeManager, { codeMirrorThemes } from './contexts/ThemeManager';
 import { Box } from './utils/MuiImports';
 

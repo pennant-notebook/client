@@ -1,10 +1,10 @@
-import { URL_CODE_CELL as URL } from '../utils/const';
-import { test, expect } from '../setup/setupScriptComponent';
+import { URL_CODE_CELL as URL } from '../../utils/const';
+import { test, expect } from '../../setup/setupScriptComponent';
 
 import {
   CODE_TOOLBAR_CONTAINER_SELECTOR,
   LANGUAGE_SELECTOR,
-} from '../utils/const';
+} from '../../utils/const';
 
 test.describe('CodeToolbar Component', () => {
   test.beforeEach(async ({ page }) => {
