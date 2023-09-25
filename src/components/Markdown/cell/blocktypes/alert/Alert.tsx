@@ -38,12 +38,15 @@ export const Alert = (props: {
   return (
     <div
       className={styles.alert}
+      data-test='alertContainer'
+      data-type={type}
       style={{
         backgroundColor: alertTypes[type].backgroundColor[props.theme]
       }}>
       <Menu zIndex={99999}>
         <Menu.Target>
           <div
+            data-test='alertIconWrapper'
             className={styles['alert-icon-wrapper']}
             style={{
               backgroundColor: alertTypes[type].color
@@ -52,7 +55,7 @@ export const Alert = (props: {
             <Icon className={'alert-icon'} style={{ color: alertTypes[type].backgroundColor[props.theme] }} />
           </div>
         </Menu.Target>
-        <Menu.Dropdown className={styles['menu-dropdown']}>
+        <Menu.Dropdown className={styles['menu-dropdown']} data-test='menuDropdown'>
           <Menu.Label>Alert Type</Menu.Label>
           <Menu.Divider />
           {Object.entries(alertTypes).map(([key, value]) => {
@@ -61,6 +64,9 @@ export const Alert = (props: {
             return (
               <Menu.Item
                 key={key}
+                className={`menu-item`}
+                data-test='menuItem'
+                data-type={key}
                 icon={<ItemIcon color={key as keyof typeof alertTypes} />}
                 onClick={() => handleTypeChange(key as keyof typeof alertTypes)}>
                 {key.slice(0, 1).toUpperCase() + key.slice(1)}
@@ -69,7 +75,7 @@ export const Alert = (props: {
           })}
         </Menu.Dropdown>
       </Menu>
-      <InlineContent className={styles.inlineContent} />
+      <InlineContent className={styles.inlineContent} data-test='inlineContent' />
     </div>
   );
 };

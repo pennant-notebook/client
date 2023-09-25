@@ -28,6 +28,7 @@ const MarkdownCell = ({ id, cell }: MarkdownCellProps) => {
   return (
     <Box
       ref={cellRef}
+      data-id='markdown-cell-box'
       sx={{
         alignItems: 'center',
         flexGrow: 0,
@@ -35,10 +36,16 @@ const MarkdownCell = ({ id, cell }: MarkdownCellProps) => {
         overflorWrap: 'break-word',
         ml: 4
       }}>
-      <Box className={`${styles['markdown-container']} ${theme}`}>
-        <MarkdownToolbar id={id} cellTheme={theme} />
-        <Box id={`blockcell-${id}`}>
-          <MarkdownEditor content={cell.get('content')} provider={provider} currentUser={currentUser} theme={theme} />
+      <Box className={`${styles['markdown-container']} ${theme}`} data-id='markdown-container'>
+        <MarkdownToolbar id={id} cellTheme={theme} data-id='markdown-toolbar' />
+        <Box id={`blockcell-${id}`} data-id='markdown-editor-box'>
+          <MarkdownEditor
+            content={cell.get('content')}
+            provider={provider}
+            currentUser={currentUser}
+            theme={theme}
+            data-id='markdown-editor'
+          />
         </Box>
       </Box>
     </Box>

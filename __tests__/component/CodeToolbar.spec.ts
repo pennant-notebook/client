@@ -1,9 +1,9 @@
+import { URL_CODE_CELL as URL } from '../utils/const';
 import { test, expect } from '../setup/setupScriptComponent';
+
 import {
-  URL_CODE_CELL as URL,
   CODE_TOOLBAR_CONTAINER_SELECTOR,
   LANGUAGE_SELECTOR,
-  LANGUAGE_OPTION_JS_SELECTOR
 } from '../utils/const';
 
 test.describe('CodeToolbar Component', () => {
@@ -19,7 +19,7 @@ test.describe('CodeToolbar Component', () => {
   test('should have language selector with default value as JavaScript', async ({ page }) => {
     const languageSelector = await page.waitForSelector(LANGUAGE_SELECTOR);
     expect(languageSelector).toBeTruthy();
-    const selectedLanguage = await page.$eval(LANGUAGE_SELECTOR, (el: HTMLSelectElement) => el.value);
-    expect(selectedLanguage).toBe(LANGUAGE_OPTION_JS_SELECTOR);
+    const selectedLanguage = await page.$eval(`${LANGUAGE_SELECTOR} input`, (el: HTMLSelectElement) => el.value);
+    expect(selectedLanguage).toBe('javascript');
   });
 });

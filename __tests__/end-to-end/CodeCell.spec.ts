@@ -1,6 +1,6 @@
+import { URL_CODE_CELL as URL } from '../utils/const';
 import { test, expect, Page } from '../setup/setupScript'
 import {
-  URL_CODE_CELL as URL,
   CODE_CELL_SELECTOR,
   CODE_TOOLBAR_SELECTOR,
   CODE_CELL_EDITOR_SELECTOR,
@@ -47,7 +47,5 @@ test.describe('CodeCell Component', () => {
     const outputText = await output.innerText();
     expect(outputText).toContain('testing cell');
   });
-
-
 
 });
