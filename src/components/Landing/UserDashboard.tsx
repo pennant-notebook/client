@@ -9,8 +9,6 @@ import { fetchNotebooks } from '~/services/dynamoFetch';
 import DashboardNotebook from './DashboardNotebook';
 import styles from './UserDashboard.module.css';
 import { toast } from 'react-toastify';
-import { useRecoilValue } from 'recoil';
-import { authState } from '../Auth/authState';
 
 interface Notebook {
   docID: string;
@@ -101,13 +99,10 @@ export const UserDashboard = () => {
   });
 
   const navigate = useNavigate();
-  const auth = useRecoilValue(authState);
   const usernameFromLocal = localStorage.getItem('pennant-username');
   const authToken = localStorage.getItem('pennantAccessToken');
 
   if (!username) return null;
-  const authUsername = auth.userData?.login;
-  console.log(usernameFromLocal, authUsername, username.slice(1));
 
   useEffect(() => {
     if (username === '@trypennant') return;

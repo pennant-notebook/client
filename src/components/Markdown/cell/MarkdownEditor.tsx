@@ -2,21 +2,24 @@ import { MarkdownEditorProps } from '@/EditorTypes';
 import { defaultBlockSchema } from '@blocknote/core';
 import { BlockNoteView, useBlockNote } from '@blocknote/react';
 import { getRandomColor } from '~/utils/awarenessHelpers';
-import { Image, insertImage } from './Image';
+import { Image, insertImage } from './blocktypes/Image';
 import styles from './MarkdownCell.module.css';
+import { insertAlert } from './blocktypes/alert/Alert';
+import { createAlertBlock } from './blocktypes/alert/helpers';
 
 const MarkdownEditor = ({ content, provider, currentUser, theme }: MarkdownEditorProps) => {
-  // Temporarily override console.log
+  /* Temporarily override console.log */
   const consoleLog = console.log;
   console.log = () => {};
-  // ********************************
+  /* -------------------------------- */
 
   const customSchema = {
     ...defaultBlockSchema,
-    image: Image
+    image: Image,
+    alert: createAlertBlock('light')
   };
 
-  const slashMenuItems = [insertImage];
+  const slashMenuItems = [insertAlert, insertImage];
 
   const editor = useBlockNote({
     blockSchema: customSchema,
@@ -34,16 +37,9 @@ const MarkdownEditor = ({ content, provider, currentUser, theme }: MarkdownEdito
         color: currentUser?.color || getRandomColor()
       }
     }
-
-    // onEditorReady: () => {
-    //   const paragraph = document.querySelector(`#blockcell-${id} div div p`);
-    //   if (paragraph?.textContent && paragraph.textContent.trim() === '') {
-    //     paragraph.textContent = '';
-    //   }
-    // }
   });
 
-  // Restore console.log
+  /* Restore console.log */
   setTimeout(() => (console.log = consoleLog), 0);
 
   return <BlockNoteView editor={editor} theme={theme} />;
