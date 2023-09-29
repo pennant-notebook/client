@@ -5,9 +5,9 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Auth from './components/Auth/Auth';
-import LandingPage from './components/Landing/LandingPage';
+import HomePage from './components/Landing/home/HomePage';
 import NotebookRoute from './components/Landing/NotebookRoute';
-import UserDashboard from './components/Landing/UserDashboard';
+import UserDashboard from './components/Dashboard/user/UserDashboard';
 import ThemeManager, { codeMirrorThemes } from './contexts/ThemeManager';
 import { Box } from './utils/MuiImports';
 
@@ -41,7 +41,7 @@ function App() {
             <Route path='/auth/google' element={<Auth />} />
             <Route path='/:username/:docID' element={<NotebookRoute />} />
             <Route path='/:username' element={<UserDashboard />} />
-            <Route path='/' element={<LandingPage />} />
+            <Route path='/' element={<HomePage />} />
           </Routes>
         </BrowserRouter>
       </Box>

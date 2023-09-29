@@ -1,5 +1,5 @@
 import { useRecoilState } from 'recoil';
-import { authState } from './authState';
+import { authState } from '~/appState';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { useGoogleLogin } from '@react-oauth/google';

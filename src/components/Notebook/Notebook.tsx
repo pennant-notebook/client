@@ -1,5 +1,5 @@
 import { ClientType } from '@/ClientTypes';
-import { NotebookContextType } from '@/NotebookTypes';
+import { NotebookContextType, NotebookType } from '@/NotebookTypes';
 import { ProviderContextType } from '@/ProviderTypes';
 import { useEffect, useState } from 'react';
 import { DndProvider } from 'react-dnd';
@@ -16,12 +16,14 @@ import Navbar from './Navbar';
 interface NotebookProps {
   docID: string;
   resourceTitle?: string;
+  notebook: NotebookType;
 }
 
-const Notebook = ({ docID, resourceTitle }: NotebookProps) => {
+const Notebook = ({ docID, resourceTitle, notebook }: NotebookProps) => {
   const { doc, provider, awareness, notebookMetadata }: ProviderContextType = useProviderContext()!;
   const navigate = useNavigate();
   const theme = useTheme();
+  // notebookMetadata.set('language', notebook.language);
 
   const cellsArray = doc.getArray('cells');
   const [cellDataArr, setCellDataArr] = useState(cellsArray.toArray());
@@ -29,6 +31,10 @@ const Notebook = ({ docID, resourceTitle }: NotebookProps) => {
   const [clients, setClients] = useState<ClientType[]>([]);
   const [title, setTitle] = useState<string>(resourceTitle || docID);
   document.title = resourceTitle || 'Untitled Notebook';
+
+  useEffect(() => {
+    notebookMetadata.set('language', notebook.language);
+  }, []);
 
   useEffect(() => {
     const cells = doc.getArray('cells');
@@ -83,7 +89,9 @@ const Notebook = ({ docID, resourceTitle }: NotebookProps) => {
   };
 
   const addCellAtIndex = async (idx: number, type: string) => {
-    const cell = createCell(type);
+    const lang = notebookMetadata.get('language') || notebook.language;
+    console.log({ lang });
+    const cell = createCell(type, lang);
     cell.set('theme', theme.palette.mode);
     if (idx >= cellsArray.length) {
       cellsArray.push([cell]);

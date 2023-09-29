@@ -20,4 +20,5 @@ export interface NotebookContextType {
 export interface NotebookType {
   docID: string;
   title?: string;
+  language?: string;
 } 

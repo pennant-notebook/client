@@ -12,8 +12,8 @@ import {
   Typography,
   useTheme
 } from '~/utils/MuiImports';
-import ClientDrawer from '../UI/Awareness/ClientDrawer';
-import Clients from '../UI/Awareness/Clients';
+import ClientDrawer from '../UI/awareness/ClientDrawer';
+import Clients from '../UI/awareness/Clients';
 import IconRow from '../UI/IconRow';
 import DocTitle from './DocTitle';
 import DreddButtons from './DreddButtons';

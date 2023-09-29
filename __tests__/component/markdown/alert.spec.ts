@@ -1,7 +1,7 @@
 import {
   test,
   expect
-} from '../setup/setupScriptComponent'
+} from '../../setup/setupScriptComponent'
 import {
   ALERT_BLOCK_SELECTOR,
   ALERT_ICON_WRAPPER_SELECTOR,
@@ -11,7 +11,7 @@ import {
   SLASH_MENU_SELECTOR,
   SLASH_MENU_ALERT_SELECTOR,
   URL_ALERT_BLOCK as URL,
-} from '../utils/const'
+} from '../../utils/const'
 
 test.describe('Alert Block Tests', () => {
   test.beforeEach(async ({ page }) => {
