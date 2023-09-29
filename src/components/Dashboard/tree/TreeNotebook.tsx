@@ -8,6 +8,8 @@ import { editDocTitle, deleteDoc } from '~/services/dynamoPost';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
+import ListIconJs from './listjs.png';
+import ListIconPy from './listpy.png';
 
 interface TreeNotebookProps {
   notebook: NotebookType;
@@ -105,7 +107,6 @@ const TreeNotebook = ({ index, notebook, username, refetch }: TreeNotebookProps)
     <Box>
       {isEditing ? (
         <StyledTreeItem
-          key={notebook.docID}
           nodeId={notebook.docID}
           label={
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -133,6 +134,14 @@ const TreeNotebook = ({ index, notebook, username, refetch }: TreeNotebookProps)
         />
       ) : (
         <StyledTreeItem
+          icon={
+            <img
+              src={notebook.language === 'javascript' ? ListIconJs : ListIconPy}
+              alt='List Icon'
+              width={16}
+              height={20}
+            />
+          }
           nodeId={notebook.docID}
           label={
             <Box

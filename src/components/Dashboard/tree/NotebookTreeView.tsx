@@ -1,14 +1,14 @@
 import { NotebookType } from '@/NotebookTypes';
 import { TreeView } from '@mui/x-tree-view/TreeView';
 import { Add, Box, Typography, IconButton, Tooltip } from '~/utils/MuiImports';
-import { CloseSquare, MinusSquare, PlusSquare, StyledTreeItem } from '~/components/UI/StyledTreeComponents';
+import { MinusSquare, PlusSquare, StyledTreeItem } from '~/components/UI/StyledTreeComponents';
 import { useState } from 'react';
 import TreeNotebook from './TreeNotebook';
 import { createDoc } from '~/services/dynamoPost';
 import IconJS from '~/components/Landing/assets/javascript.svg';
-import IconPY from '~/assets/python.svg';
+import IconPY from './IconPY.png';
+
 import { useNavigate } from 'react-router';
-// import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
 
 interface NotebookTreeViewProps {
   username: string;
@@ -42,14 +42,13 @@ export default function NotebookTreeView({ username, notebooks = [], refetch }: 
         }}
         defaultCollapseIcon={<MinusSquare />}
         defaultExpandIcon={<PlusSquare />}
-        defaultEndIcon={<CloseSquare />}
         sx={{ overflowX: 'hidden', overflowY: 'hidden' }}>
         <StyledTreeItem
           nodeId='js'
           label={
             <div style={{ display: 'flex', alignItems: 'center', height: '40px' }}>
               <img src={IconJS} alt='JS Icon' width={24} style={{ marginRight: '6px' }} />
-              <span>JavaScript</span>
+              <span style={{ fontFamily: 'Inter' }}>JavaScript</span>
               <Tooltip title='Create New JavaScript Notebook' enterDelay={1000} enterNextDelay={1000}>
                 <IconButton sx={{ ml: 'auto', borderRadius: '5px' }} onClick={() => handleCreateNotebook('javascript')}>
                   <Add />
@@ -66,7 +65,7 @@ export default function NotebookTreeView({ username, notebooks = [], refetch }: 
           label={
             <div style={{ display: 'flex', alignItems: 'center', height: '40px' }}>
               <img src={IconPY} alt='PY Icon' width={24} style={{ marginRight: '6px' }} />
-              <span>Python</span>
+              <span style={{ fontFamily: 'Inter' }}>Python</span>
               <Tooltip title='Create New Python Notebook' enterDelay={1000} enterNextDelay={1000}>
                 <IconButton sx={{ ml: 'auto', borderRadius: '5px' }} onClick={() => handleCreateNotebook('python')}>
                   <Add />
