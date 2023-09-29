@@ -257,7 +257,7 @@ export const insertImage = {
     );
   },
   aliases: ['image', 'img', 'picture', 'media'],
-  group: 'Media',
+  group: 'Custom',
   icon: <ImageIcon />,
   hint: 'Insert an image'
 } satisfies ReactSlashMenuItem<BlockSchema & { image: typeof Image }>;

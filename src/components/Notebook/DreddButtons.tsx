@@ -4,7 +4,7 @@ import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import PlayAllIcon from '~/assets/allplay.png';
 import useProviderContext from '~/contexts/ProviderContext';
-import { handleResetContext, handleRunAllCode } from '~/services/dreddExecutionService';
+import { handleResetContext, handleRunAllCode } from '~/services/codeExecution/dredd';
 import { CircularProgress, IconButton, Refresh, Stack, Tooltip } from '~/utils/MuiImports';
 import styles from './DreddButtons.module.css';
 import { YMap } from '~/utils/notebookHelpers';
@@ -19,8 +19,10 @@ const DreddButtons = ({ codeCells = [] }: DreddButtonsProps) => {
   const [resetting, setResetting] = useState(false);
   const [running, setRunning] = useState(false);
 
+  const jsCells = codeCells.filter(c => c.get('language') !== 'python');
+
   const handleRunAll = async () => {
-    const orderedCells = codeCells.sort((a, b) => a.get('pos') - b.get('pos'));
+    const orderedCells = jsCells.sort((a, b) => a.get('pos') - b.get('pos'));
 
     try {
       setRunning(true);
@@ -38,29 +40,29 @@ const DreddButtons = ({ codeCells = [] }: DreddButtonsProps) => {
   const handleReset = async () => {
     try {
       setResetting(true);
-      codeCells.forEach(c => {
+      jsCells.forEach(c => {
         c.get('metaData').set('isRunning', true);
         c.get('outputMap').set('status', '');
       });
       if (!docID) return;
 
-      await handleResetContext(docID, notebookMetadata, codeCells);
+      await handleResetContext(docID, notebookMetadata, jsCells);
 
       toast.success('Context successfully reset');
     } catch (error) {
       console.error(error);
     } finally {
-      codeCells.forEach(c => c.get('metaData').set('isRunning', false));
+      jsCells.forEach(c => c.get('metaData').set('isRunning', false));
       setResetting(false);
     }
   };
 
   const isDisabledRun = () => {
-    return running || resetting || codeCells.length < 1;
+    return running || resetting || jsCells.length < 1;
   };
 
   const isDisabledReset = () => {
-    return running || resetting || codeCells.length < 1;
+    return running || resetting || jsCells.length < 1;
   };
 
   const iconSize = '24px';

@@ -12,9 +12,9 @@ async function createUser(username: string): Promise<any> {
   }
 }
 
-async function createDoc(username: string): Promise<any> {
+async function createDoc(username: string, language: string): Promise<any> {
   try {
-    const response: AxiosResponse<any> = await axios.post(`${URL}/doc/${username.slice(1)}`);
+    const response: AxiosResponse<any> = await axios.post(`${URL}/doc/${username.slice(1)}`, { language });
     return response.data;
   } catch (error) {
     console.error('Error creating notebook in DynamoDB:', error);

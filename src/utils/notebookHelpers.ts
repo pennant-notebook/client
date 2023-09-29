@@ -24,16 +24,19 @@ export const createContent = (type: string) => {
   return xmlFragment;
 };
 
-export const createCell = (type: string) => {
+export const createCell = (type: string, lang: string) => {
   const cell = new Y.Map();
   cell.set('id', uuidv4());
   cell.set('type', type);
   cell.set('content', createContent(type));
   if (type === 'code') {
     cell.set('outputMap', new Y.Map());
+    cell.set('language', lang)
     const metadata = cell.set('metaData', new Y.Map());
     metadata.set('isRunning', false);
     metadata.set('exeCount', 0);
+  } else {
+    cell.set('language', lang)
   }
   return cell;
 };

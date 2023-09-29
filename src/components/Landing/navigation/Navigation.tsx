@@ -5,7 +5,7 @@ import { IconButton } from '~/utils/MuiImports';
 import PennantLogo from '../assets/logo.png';
 import LoginSvg from '../assets/login2.svg';
 import styles from './Navigation.module.css';
-import { authState } from '~/components/Auth/authState';
+import { authState } from '~/appState';
 
 const Navigation = () => {
   const [auth, setAuth] = useRecoilState(authState);

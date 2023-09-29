@@ -5,7 +5,7 @@ import ErrorBoundary from '../../ErrorBoundary';
 import { ProviderContext, useProvider } from '~/contexts/ProviderContext';
 import { fetchDoc } from '~/services/dynamoFetch';
 import Notebook from '../Notebook/Notebook';
-import LoadingSpinner from '../UI/LoadingSpinner';
+import LoadingSpinner from '~/components/UI/loading/LoadingSpinner';
 
 const NotebookRoute = () => {
   const { username, docID } = useParams();
@@ -27,7 +27,9 @@ const NotebookRoute = () => {
 
   return (
     <ProviderContext.Provider value={contextValue as ProviderContextType}>
-      <ErrorBoundary>{docID && <Notebook docID={docID} resourceTitle={notebook.title} />}</ErrorBoundary>
+      <ErrorBoundary>
+        {docID && <Notebook docID={docID} resourceTitle={notebook.title} notebook={notebook} />}
+      </ErrorBoundary>
     </ProviderContext.Provider>
   );
 };

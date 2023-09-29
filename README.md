@@ -95,7 +95,7 @@ npm start
 
 ## Services
 
-### Dredd Execution Service (`src/services/dreddExecutionService.ts`)
+### JavaScript "Dredd" Execution Service (`src/services/codeExecution/dredd.ts`)
 
 - Provides functions for interacting with the Dredd execution engine.
 - Handles code execution, status checking, context resetting, and formatting cells for execution.

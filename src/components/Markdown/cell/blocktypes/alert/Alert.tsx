@@ -60,7 +60,6 @@ export const Alert = (props: {
           <Menu.Divider />
           {Object.entries(alertTypes).map(([key, value]) => {
             const ItemIcon = value.icon;
-
             return (
               <Menu.Item
                 key={key}
@@ -102,7 +101,7 @@ export const insertAlert = {
     }
   },
   aliases: ['alert', 'notification', 'emphasize', 'warning', 'error', 'info', 'success'],
-  group: 'Other',
+  group: 'Custom',
   icon: <ErrorOutlineIcon />,
   hint: 'Used to emphasize text'
 } satisfies ReactSlashMenuItem<DefaultBlockSchema & { alert: BlockSpec<'alert', typeof alertPropSchema> }>;

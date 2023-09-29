@@ -3,13 +3,14 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import useProviderContext from '~/contexts/ProviderContext';
 import CodeToolbar from '../toolbar/CodeToolbar';
 import createCodeEditor from './createCodeEditor';
-import { handleDredd, updateMetadata } from '~/services/dreddExecutionService';
+import { handleDredd, updateMetadata } from '~/services/codeExecution/dredd';
 import StyledBadge from '../../UI/StyledComponents';
 import { useCMThemeContext } from '~/contexts/ThemeManager';
 import { YMapEvent } from '~/utils/notebookHelpers';
 import { EditorView } from 'codemirror';
 import styles from './CodeCell.module.css';
 import { CodeCellProps } from '@/CellPropsTypes';
+import { handleSnake } from '~/services/codeExecution/snake';
 
 const CodeCell = ({ cellId, cell }: CodeCellProps) => {
   const content = cell.get('content');
@@ -25,21 +26,27 @@ const CodeCell = ({ cellId, cell }: CodeCellProps) => {
   const [output, setOutput] = useState(outputMap.get('stdout'));
   const [status, setStatus] = useState(outputMap.get('status'));
   const [processing, setProcessing] = useState(cellRunning);
-  const [language, setLanguage] = useState('javascript');
 
   const editorRef = useRef<EditorView | null>(null);
   const cellRef = useRef(null);
+  const language = notebookMetadata.get('language') || cell.get('language');
 
   const handleRunCode = useCallback(async () => {
     try {
       cellMetadata.set('isRunning', true);
-      const response = await handleDredd(docID, cellId, cell.get('content').toString());
+      let response;
+      if (language === 'python') {
+        response = await handleSnake(docID, cellId, cell.get('content').toString());
+      } else {
+        response = await handleDredd(docID, cellId, cell.get('content').toString());
+      }
+      console.log('Received response:', response, language); // Debug log
       const outputMap = cell.get('outputMap');
       outputMap.set('stdout', response.output);
       outputMap.set('status', response.type);
       return true;
     } catch (error: any) {
-      console.error(error.message);
+      console.error('Error during code execution:', error.message); // Debug log
       if (error.message === 'critical error') {
         outputMap.set('status', 'critical');
         outputMap.set(
@@ -81,7 +88,7 @@ const CodeCell = ({ cellId, cell }: CodeCellProps) => {
         editorRef.current = null;
       }
     };
-  }, [content, editorTheme, language]);
+  }, [content, editorTheme]);
 
   useEffect(() => {
     cell.get('outputMap').observe(() => {
@@ -117,7 +124,6 @@ const CodeCell = ({ cellId, cell }: CodeCellProps) => {
             id={cellId}
             processing={processing}
             language={language}
-            setLanguage={setLanguage}
             data-test='codeToolbar-component'
           />
           <Box id={`editor-${cellId}`} data-test='codeEditor' data-testid={`editor-${cellId}`}></Box>

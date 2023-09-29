@@ -22,7 +22,7 @@ import {
 import styles from './Auth.module.css';
 import GitHubLogin from './GitHubLogin';
 import GoogleSignInButton from './GoogleSignInButton';
-import { authState } from './authState';
+import { authState } from '~/appState';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const API_URL = process.env.NODE_ENV === 'production' ? '/auth' : 'http://localhost:3001/auth';

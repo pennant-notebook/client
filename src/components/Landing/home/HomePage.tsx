@@ -1,16 +1,16 @@
 import { Link } from 'react-router-dom';
 import buttonStyles from './buttons.module.css';
-import intro from './assets/intro.gif';
-import javascript from './assets/javascript.svg';
-import markdown from './assets/markdown.svg';
-import collab from './assets/collab.svg';
-import magnifyingGlass from './assets/magnifying-glass.svg';
-import Github from './assets/github-white.png';
-import styles from './LandingPage.module.css';
+import intro from '../assets/intro.gif';
+import javascript from '../assets/javascript.svg';
+import markdown from '../assets/markdown.svg';
+import collab from '../assets/collab.svg';
+import magnifyingGlass from '../assets/magnifying-glass.svg';
+import Github from '../assets/github-white.png';
+import styles from './HomePage.module.css';
 import { Box } from '~/utils/MuiImports';
-import Navigation from './navigation/Navigation';
+import Navigation from '../navigation/Navigation';
 
-const LandingPage = () => {
+const HomePage = () => {
   document.title = 'Pennant';
 
   return (
@@ -98,4 +98,4 @@ const LandingPage = () => {
   );
 };
 
-export default LandingPage;
+export default HomePage;

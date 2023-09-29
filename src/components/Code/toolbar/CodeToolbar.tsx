@@ -5,22 +5,20 @@ import {
   CloseSharp,
   IconButton,
   PlayCircle,
-  MenuItem,
+  Typography,
   Stack,
   Tooltip
 } from '~/utils/MuiImports';
 import styles from './CodeToolbar.module.css';
-import LanguageSelector from './LanguageSelector';
 
 interface CodeToolbarProps {
   onClickRun: () => void;
   id: string;
   processing: boolean;
   language: string;
-  setLanguage: (language: string) => void;
 }
 
-const CodeToolbar = ({ onClickRun, id, processing, language, setLanguage }: CodeToolbarProps) => {
+const CodeToolbar = ({ onClickRun, id, processing, language }: CodeToolbarProps) => {
   const { deleteCell } = useNotebookContext();
 
   return (
@@ -40,19 +38,9 @@ const CodeToolbar = ({ onClickRun, id, processing, language, setLanguage }: Code
         direction='row'
         sx={{ justifyContent: 'end', position: 'relative', alignItems: 'center', mr: 1, p: 1 }}
         spacing={2}>
-        <LanguageSelector
-          data-test='languageSelector'
-          select
-          value={language}
-          onChange={e => setLanguage(e.target.value)}
-          variant='standard'>
-          <MenuItem data-test='languageOption-js' value='javascript'>
-            JavaScript
-          </MenuItem>
-          <MenuItem data-test='languageOption-python' value='python'>
-            Python
-          </MenuItem>
-        </LanguageSelector>
+        <Typography variant='overline' sx={{ color: 'lightgray', position: 'absolute', left: '12px' }}>
+          {language}
+        </Typography>
         <Tooltip title='Run code' enterDelay={1000} enterNextDelay={1000}>
           <span>
             <IconButton

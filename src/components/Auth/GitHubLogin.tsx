@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import GithubLogo from '~/assets/github.svg';
 import styles from './Auth.module.css';
 import { useSetRecoilState } from 'recoil';
-import { authState } from './authState';
+import { authState } from '~/appState';
 
 const API_URL = process.env.NODE_ENV === 'production' ? '/auth' : 'http://localhost:3001/auth';
 
