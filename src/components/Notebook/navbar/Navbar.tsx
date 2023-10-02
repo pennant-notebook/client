@@ -21,9 +21,10 @@ import { useNavbarContext } from '~/contexts/NavbarContext';
 
 interface NavbarProps {
   selectedDoc?: string;
+  language?: string;
 }
 
-const Navbar = ({ selectedDoc }: NavbarProps) => {
+const Navbar = ({ selectedDoc, language }: NavbarProps) => {
   const { username, docID: paramsDoc } = useParams();
   const { codeCells, clients, handleDisconnect } = useNavbarContext();
 
@@ -39,8 +40,12 @@ const Navbar = ({ selectedDoc }: NavbarProps) => {
   const paddingClient =
     clientCount <= 1 ? 10 : clientCount === 2 ? 8 : clientCount === 3 ? 6 : clientCount >= 4 ? 0 : 10;
 
+  let pyColor = '#234659';
+  if (language === 'python') {
+    pyColor = '#000';
+  }
   return (
-    <AppBar position='sticky' sx={{ backgroundColor: currTheme === 'dark' ? '#1e202d' : '#1D465B' }}>
+    <AppBar position='sticky' sx={{ backgroundColor: currTheme === 'dark' ? '#1e202d' : pyColor }}>
       <Toolbar
         sx={{
           width: '100%',
@@ -51,13 +56,13 @@ const Navbar = ({ selectedDoc }: NavbarProps) => {
             sx={{
               alignItems: 'center'
             }}>
-            <Tooltip title={docID ? '⬅ Dashboard' : '⬅ Home'} arrow>
+            <Tooltip title={paramsDoc ? '⬅ Dashboard' : '⬅ Home'} arrow>
               <IconButton
                 edge='start'
                 color='inherit'
                 aria-label='logo'
                 onClick={() => {
-                  if (docID) {
+                  if (paramsDoc) {
                     if (handleDisconnect) {
                       handleDisconnect(`/${username}`);
                     }

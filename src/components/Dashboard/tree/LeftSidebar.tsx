@@ -10,18 +10,10 @@ interface LeftSidebarProps {
   notebooks?: NotebookType[];
   refetch: () => void;
   setSelectedDocId: (docId: string) => void;
-  isNotebookRendered?: boolean;
 }
 
-export default function LeftSidebar({
-  username,
-  notebooks,
-  refetch,
-  setSelectedDocId,
-  isNotebookRendered
-}: LeftSidebarProps) {
+export default function LeftSidebar({ username, notebooks, refetch, setSelectedDocId }: LeftSidebarProps) {
   const [isExpanded, setIsExpanded] = useState(true);
-  const [floatingMode, setFloatingMode] = useState(false);
   const [showChevron, setShowChevron] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const theme = useTheme().palette.mode;
@@ -30,21 +22,15 @@ export default function LeftSidebar({
     if (timerRef.current) {
       clearTimeout(timerRef.current);
     }
-    if (floatingMode) {
-      setIsExpanded(true);
-      setFloatingMode(false);
-    } else {
-      setIsExpanded(false);
-      setFloatingMode(true);
-    }
+    setIsExpanded(!isExpanded);
   };
 
   const handleMouseEnter = () => {
     setShowChevron(true);
-    if (floatingMode) {
+    if (!isExpanded) {
       timerRef.current = setTimeout(() => {
         setIsExpanded(true);
-      }, 1000);
+      }, 1500);
     }
   };
 
@@ -53,22 +39,38 @@ export default function LeftSidebar({
     if (timerRef.current) {
       clearTimeout(timerRef.current);
     }
-    if (floatingMode) {
-      setIsExpanded(false);
-    }
   };
 
   useEffect(() => {
-    setFloatingMode(false);
     setIsExpanded(true);
     return () => {
       clearTimeout(timerRef.current!);
     };
   }, []);
 
+  const handleOverlayClick = () => {
+    if (isExpanded) {
+      setIsExpanded(false);
+    }
+  };
+
   const sidebarWidth = 250;
   return (
     <div style={{ position: 'relative', zIndex: 5 }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+      <Box
+        onClick={handleOverlayClick}
+        sx={{
+          position: 'fixed',
+          top: 0,
+          left: sidebarWidth,
+          width: `calc(100% - ${sidebarWidth}px)`,
+          height: '100vh',
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          zIndex: 4,
+          transition: 'opacity 0.35s cubic-bezier(0.2, 0, 0, 1)',
+          opacity: isExpanded ? 1 : 0,
+          pointerEvents: isExpanded ? 'auto' : 'none'
+        }}></Box>
       <div
         style={{
           height: '100vh',
@@ -112,8 +114,8 @@ export default function LeftSidebar({
       <Box
         sx={{
           position: 'fixed',
-          top: 10,
-          left: isExpanded ? sidebarWidth - 15 : 15,
+          top: 0,
+          left: isExpanded ? sidebarWidth - 35 : 15,
           opacity: showChevron ? 1 : 0,
           transition: 'all 0.1s ease-in-out',
           pt: 2,
@@ -139,7 +141,7 @@ export default function LeftSidebar({
           <IconButton
             sx={{ width: 24, height: 24, color: '#000', '&:hover': { color: '#fff' } }}
             onClick={handleExpandCollapse}>
-            {floatingMode ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+            {!isExpanded ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
         </Box>
       </Box>

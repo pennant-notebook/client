@@ -15,10 +15,9 @@ interface NotebookProps {
   docID: string;
   resourceTitle?: string;
   notebook: NotebookType;
-  isDashboard: boolean;
 }
 
-const Notebook = ({ docID, resourceTitle, notebook, isDashboard }: NotebookProps) => {
+const Notebook = ({ docID, resourceTitle, notebook }: NotebookProps) => {
   const { doc, provider, awareness, notebookMetadata }: ProviderContextType = useProviderContext()!;
   const { setCodeCells, setClients } = useNavbarContext(); // Use the hook
 

@@ -51,7 +51,7 @@ const DashboardWrapper = () => {
     }
   }, [username]);
 
-  const contextValue = useProvider(selectedDocId || '') as ProviderContextType;
+  const contextValue = useProvider(selectedDocId || 'demo') as ProviderContextType;
 
   if (loading) return <LoadingSpinner />;
   if (errorFetchingNotebooks) return 'Error!';
@@ -61,19 +61,20 @@ const DashboardWrapper = () => {
     updateDisconnectedClient(contextValue.provider);
   };
 
+  const lang = contextValue.notebookMetadata.get('language');
+
   return (
     <ProviderContext.Provider value={contextValue}>
       <NavbarProvider provider={contextValue.provider || null} docID={selectedDocId || ''}>
-        <Navbar selectedDoc={selectedDocId || ''} />
+        <Navbar selectedDoc={selectedDocId || ''} language={lang} />
         <LeftSidebar
           username={username}
           notebooks={notebooks}
           refetch={refetch}
           setSelectedDocId={handleSelectedDocId}
-          isNotebookRendered={!!selectedDocId}
         />
         {selectedDocId && notebook && !isLoading && !error && (
-          <Notebook docID={selectedDocId} resourceTitle={notebook.title} notebook={notebook} isDashboard={true} />
+          <Notebook docID={selectedDocId} resourceTitle={notebook.title} notebook={notebook} />
         )}
       </NavbarProvider>
     </ProviderContext.Provider>

@@ -4,8 +4,10 @@ import { useParams } from 'react-router-dom';
 import ErrorBoundary from '../../ErrorBoundary';
 import { ProviderContext, useProvider } from '~/contexts/ProviderContext';
 import { fetchDoc } from '~/services/dynamoFetch';
-import Notebook from '../Notebook/Notebook';
+import Notebook from './Notebook';
 import LoadingSpinner from '~/components/UI/loading/LoadingSpinner';
+import { NavbarProvider } from '~/contexts/NavbarContext';
+import Navbar from './navbar/Navbar';
 
 const NotebookRoute = () => {
   const { username, docID } = useParams();
@@ -20,15 +22,20 @@ const NotebookRoute = () => {
     return fetchDoc(docID, username);
   });
 
-  const contextValue = useProvider(docID!);
+  const contextValue = useProvider(docID || 'demo') as ProviderContextType;
 
   if (isLoading || !notebook) return <LoadingSpinner />;
   if (error) return 'Error!';
 
+  const lang = contextValue.notebookMetadata.get('language');
+
   return (
     <ProviderContext.Provider value={contextValue as ProviderContextType}>
       <ErrorBoundary>
-        {docID && <Notebook docID={docID} resourceTitle={notebook.title} notebook={notebook} />}
+        <NavbarProvider provider={contextValue.provider || null} docID={docID || ''}>
+          <Navbar language={lang} />
+          {docID && <Notebook docID={docID} resourceTitle={notebook.title} notebook={notebook} />}
+        </NavbarProvider>
       </ErrorBoundary>
     </ProviderContext.Provider>
   );

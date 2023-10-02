@@ -44,7 +44,15 @@ export const NavbarProvider = ({ children, provider, docID }: NavbarProviderProp
     navigate(destination);
   };
 
-  const contextValue = { codeCells, setCodeCells, handleDisconnect, clients, setClients, selectedDoc, setSelectedDoc };
+  const contextValue = {
+    codeCells,
+    setCodeCells,
+    handleDisconnect,
+    clients,
+    setClients,
+    selectedDoc,
+    setSelectedDoc
+  };
 
   return <NavbarContext.Provider value={contextValue}>{children}</NavbarContext.Provider>;
 };
