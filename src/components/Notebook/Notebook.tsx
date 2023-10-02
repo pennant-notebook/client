@@ -1,17 +1,15 @@
-import { ClientType } from '@/ClientTypes';
 import { NotebookContextType, NotebookType } from '@/NotebookTypes';
 import { ProviderContextType } from '@/ProviderTypes';
 import { useEffect, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { useNavigate } from 'react-router';
 import { NotebookContext } from '~/contexts/NotebookContext';
 import useProviderContext from '~/contexts/ProviderContext';
 import { Box, useTheme } from '~/utils/MuiImports';
 import { getClientFromLocalStorage, updateDisconnectedClient } from '~/utils/awarenessHelpers';
 import { YMap, createCell, getUserObjects } from '~/utils/notebookHelpers';
 import Cells from '../Cells/Cells';
-import Navbar from './navbar/Navbar';
+import { useNavbarContext } from '~/contexts/NavbarContext';
 
 interface NotebookProps {
   docID: string;
@@ -22,13 +20,13 @@ interface NotebookProps {
 
 const Notebook = ({ docID, resourceTitle, notebook, isDashboard }: NotebookProps) => {
   const { doc, provider, awareness, notebookMetadata }: ProviderContextType = useProviderContext()!;
-  const navigate = useNavigate();
+  const { setCodeCells, setClients } = useNavbarContext(); // Use the hook
+
   const theme = useTheme();
 
   const cellsArray = doc.getArray('cells');
   const [cellDataArr, setCellDataArr] = useState(cellsArray.toArray());
   const [allRunning, setAllRunning] = useState(false);
-  const [clients, setClients] = useState<ClientType[]>([]);
   const [title, setTitle] = useState<string>(resourceTitle || docID);
   document.title = resourceTitle || 'Untitled Notebook';
 
@@ -135,15 +133,10 @@ const Notebook = ({ docID, resourceTitle, notebook, isDashboard }: NotebookProps
     };
   }, [title]);
 
-  const handleDisconnect = (destination: string) => {
-    if (docID) {
-      const currentClients = updateDisconnectedClient(provider);
-      setClients(currentClients || []);
-    }
-    navigate(destination);
-  };
-
-  const codeCellsForDredd = cellDataArr.filter((c: YMap) => c.get('type') === 'code');
+  useEffect(() => {
+    const codeCellsForDredd = cellDataArr.filter((c: YMap) => c.get('type') === 'code');
+    setCodeCells(codeCellsForDredd);
+  }, [cellDataArr]);
 
   const contextValue: NotebookContextType = {
     addCellAtIndex,
@@ -158,13 +151,6 @@ const Notebook = ({ docID, resourceTitle, notebook, isDashboard }: NotebookProps
   return (
     <NotebookContext.Provider value={contextValue}>
       <Box className='main-content'>
-        <Navbar
-          codeCells={codeCellsForDredd}
-          clients={clients}
-          handleDisconnect={handleDisconnect}
-          isDashboard={isDashboard}
-          selectedDoc={isDashboard ? docID : ''}
-        />
         <DndProvider backend={HTML5Backend}>
           <Cells cells={cellDataArr} setCells={setCellDataArr} />
         </DndProvider>

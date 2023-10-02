@@ -17,17 +17,15 @@ import Clients from '~/components/UI/awareness/Clients';
 import IconRow from '~/components/UI/IconRow';
 import DocTitle from './DocTitle';
 import DreddButtons from './actions/DreddButtons';
-import { YMap } from '~/utils/notebookHelpers';
+import { useNavbarContext } from '~/contexts/NavbarContext';
 
 interface NavbarProps {
-  codeCells?: YMap[];
-  clients?: any[];
-  isDashboard?: boolean;
   selectedDoc?: string;
-  handleDisconnect?: (destination: string) => void;
 }
-const Navbar = ({ codeCells, clients = [], isDashboard, handleDisconnect, selectedDoc }: NavbarProps) => {
+
+const Navbar = ({ selectedDoc }: NavbarProps) => {
   const { username, docID: paramsDoc } = useParams();
+  const { codeCells, clients, handleDisconnect } = useNavbarContext();
 
   const docID = selectedDoc || paramsDoc;
 
@@ -89,7 +87,7 @@ const Navbar = ({ codeCells, clients = [], isDashboard, handleDisconnect, select
           {!docID && (
             <Typography sx={{ fontFamily: 'Lato', opacity: '0.5', pr: 2, fontWeight: 'bold' }}>{username}</Typography>
           )}
-          {isDashboard && (
+          {!docID && (
             <IconRow
               onClick={toggleTheme}
               icon={

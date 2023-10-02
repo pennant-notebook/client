@@ -96,8 +96,7 @@ export default function LeftSidebar({
             sx={{
               width: sidebarWidth,
               position: 'relative',
-              pt: 2,
-              marginTop: isNotebookRendered ? '70px' : '0'
+              pt: 2
             }}>
             {isExpanded && (
               <NotebookTreeView

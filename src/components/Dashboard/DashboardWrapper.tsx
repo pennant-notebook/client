@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 import Navbar from '../Notebook/navbar/Navbar';
 import LoadingSpinner from '../UI/loading/LoadingSpinner';
 import { updateDisconnectedClient } from '~/utils/awarenessHelpers';
+import { NavbarProvider } from '~/contexts/NavbarContext';
 
 const DashboardWrapper = () => {
   const { username } = useParams();
@@ -62,17 +63,19 @@ const DashboardWrapper = () => {
 
   return (
     <ProviderContext.Provider value={contextValue}>
-      {!selectedDocId && <Navbar isDashboard={true} />}
-      <LeftSidebar
-        username={username}
-        notebooks={notebooks}
-        refetch={refetch}
-        setSelectedDocId={handleSelectedDocId}
-        isNotebookRendered={!!selectedDocId}
-      />
-      {selectedDocId && notebook && !isLoading && !error && (
-        <Notebook docID={selectedDocId} resourceTitle={notebook.title} notebook={notebook} isDashboard={true} />
-      )}
+      <NavbarProvider provider={contextValue.provider || null} docID={selectedDocId || ''}>
+        <Navbar selectedDoc={selectedDocId || ''} />
+        <LeftSidebar
+          username={username}
+          notebooks={notebooks}
+          refetch={refetch}
+          setSelectedDocId={handleSelectedDocId}
+          isNotebookRendered={!!selectedDocId}
+        />
+        {selectedDocId && notebook && !isLoading && !error && (
+          <Notebook docID={selectedDocId} resourceTitle={notebook.title} notebook={notebook} isDashboard={true} />
+        )}
+      </NavbarProvider>
     </ProviderContext.Provider>
   );
 };
