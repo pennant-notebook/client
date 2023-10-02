@@ -16,20 +16,25 @@ import ClientDrawer from '~/components/UI/awareness/ClientDrawer';
 import Clients from '~/components/UI/awareness/Clients';
 import IconRow from '~/components/UI/IconRow';
 import DocTitle from './DocTitle';
-import DreddButtons from './DreddButtons';
+import DreddButtons from './actions/DreddButtons';
 import { YMap } from '~/utils/notebookHelpers';
 
 interface NavbarProps {
   codeCells?: YMap[];
   clients?: any[];
   isDashboard?: boolean;
+  selectedDoc?: string;
   handleDisconnect?: (destination: string) => void;
 }
-const Navbar = ({ codeCells, clients = [], isDashboard, handleDisconnect }: NavbarProps) => {
-  const { username, docID } = useParams();
+const Navbar = ({ codeCells, clients = [], isDashboard, handleDisconnect, selectedDoc }: NavbarProps) => {
+  const { username, docID: paramsDoc } = useParams();
+
+  const docID = selectedDoc || paramsDoc;
+
   const navigate = useNavigate();
+  const currTheme = useTheme().palette.mode;
   const {
-    custom: { currTheme, toggleTheme }
+    custom: { toggleTheme }
   } = useTheme();
 
   const clientCount = clients.length;
@@ -37,9 +42,7 @@ const Navbar = ({ codeCells, clients = [], isDashboard, handleDisconnect }: Navb
     clientCount <= 1 ? 10 : clientCount === 2 ? 8 : clientCount === 3 ? 6 : clientCount >= 4 ? 0 : 10;
 
   return (
-    <AppBar
-      position='sticky'
-      sx={{ backgroundColor: currTheme === 'dark' ? '#1e202d' : '#1D465B', fontFamily: 'Lato' }}>
+    <AppBar position='sticky' sx={{ backgroundColor: currTheme === 'dark' ? '#1e202d' : '#1D465B' }}>
       <Toolbar
         sx={{
           width: '100%',
@@ -73,30 +76,32 @@ const Navbar = ({ codeCells, clients = [], isDashboard, handleDisconnect }: Navb
             {docID && <Clients clients={clients} />}
           </Box>
         </Box>
-
         <Box sx={{ display: 'flex', justifyContent: 'center', flexGrow: 1 }}>
-          {docID ? <DocTitle /> : <Typography sx={{ opacity: 0.5, fontSize: '20px' }}></Typography>}
+          {docID ? <DocTitle selectedDoc={docID} /> : <Typography sx={{ opacity: 0.5, fontSize: '20px' }}></Typography>}
         </Box>
-
         <Stack direction='row' spacing={{ xs: 0, sm: 1, md: 2 }} alignItems='center'>
           {docID && <DreddButtons codeCells={codeCells} />}
 
           {docID && handleDisconnect && <ClientDrawer handleDisconnect={handleDisconnect} clients={clients} />}
         </Stack>
 
-        {!docID && <Typography sx={{ fontFamily: 'Lato', opacity: '0.5', pr: 2 }}>{username}</Typography>}
-        {isDashboard && (
-          <IconRow
-            onClick={toggleTheme}
-            icon={
-              currTheme === 'dark' ? (
-                <Brightness7 sx={{ color: '#e0e0e0' }} />
-              ) : (
-                <Brightness4 sx={{ color: '#e0e0e0' }} />
-              )
-            }
-          />
-        )}
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          {!docID && (
+            <Typography sx={{ fontFamily: 'Lato', opacity: '0.5', pr: 2, fontWeight: 'bold' }}>{username}</Typography>
+          )}
+          {isDashboard && (
+            <IconRow
+              onClick={toggleTheme}
+              icon={
+                currTheme === 'dark' ? (
+                  <Brightness7 sx={{ color: '#e0e0e0', width: '20px' }} />
+                ) : (
+                  <Brightness4 sx={{ color: 'lightgray', width: '20px' }} />
+                )
+              }
+            />
+          )}
+        </Box>
       </Toolbar>
     </AppBar>
   );

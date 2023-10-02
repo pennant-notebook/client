@@ -34,13 +34,13 @@ const CodeCell = ({ cellId, cell }: CodeCellProps) => {
     try {
       cellMetadata.set('isRunning', true);
       const response = await handleDredd(language, docID, cellId, cell.get('content').toString());
-      console.log('Received response:', response, language); // Debug log
+      // console.log('Received response:', response, language); // Debug log
       const outputMap = cell.get('outputMap');
       outputMap.set('stdout', response.output);
       outputMap.set('status', response.type);
       return true;
     } catch (error: any) {
-      console.error('Error during code execution:', error.message); // Debug log
+      // console.error('Error during code execution:', error.message); // Debug log
       if (error.message === 'critical error') {
         outputMap.set('status', 'critical');
         outputMap.set(

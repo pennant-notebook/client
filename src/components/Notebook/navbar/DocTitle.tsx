@@ -20,8 +20,14 @@ interface NotebookType {
   title?: string;
 }
 
-const DocTitle = () => {
-  const { username, docID } = useParams();
+interface DocTitleProps {
+  selectedDoc?: string;
+}
+
+const DocTitle = ({ selectedDoc }: DocTitleProps) => {
+  const { username, docID: paramsDoc } = useParams();
+
+  const docID = paramsDoc || selectedDoc;
 
   const { data: notebook, refetch } = useQuery<NotebookType>([docID, username], () =>
     fetchDoc(docID as string, username as string)

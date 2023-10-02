@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Box, Divider, IconButton } from '@mui/material';
+import { Box, Divider, IconButton, useTheme } from '~/utils/MuiImports';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import NotebookTreeView from './NotebookTreeView';
@@ -9,13 +9,22 @@ interface LeftSidebarProps {
   username: string;
   notebooks?: NotebookType[];
   refetch: () => void;
+  setSelectedDocId: (docId: string) => void;
+  isNotebookRendered?: boolean;
 }
 
-export default function LeftSidebar({ username, notebooks, refetch }: LeftSidebarProps) {
+export default function LeftSidebar({
+  username,
+  notebooks,
+  refetch,
+  setSelectedDocId,
+  isNotebookRendered
+}: LeftSidebarProps) {
   const [isExpanded, setIsExpanded] = useState(true);
   const [floatingMode, setFloatingMode] = useState(false);
   const [showChevron, setShowChevron] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const theme = useTheme().palette.mode;
 
   const handleExpandCollapse = () => {
     if (timerRef.current) {
@@ -57,46 +66,59 @@ export default function LeftSidebar({ username, notebooks, refetch }: LeftSideba
     };
   }, []);
 
+  const sidebarWidth = 250;
   return (
-    <div style={{ position: 'relative' }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+    <div style={{ position: 'relative', zIndex: 5 }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <div
         style={{
           height: '100vh',
-          width: 250,
-          transform: isExpanded ? 'translateX(0)' : 'translateX(-200px)',
+          overflow: 'hidden',
+          width: sidebarWidth,
+          transform: isExpanded ? 'translateX(0)' : `translateX(-${sidebarWidth - 30}px)`,
           transition: 'transform 0.35s cubic-bezier(0.2, 0, 0, 1)',
-          position: 'absolute'
+          position: 'fixed',
+          backgroundColor: theme === 'dark' ? '#1e202d' : '#fff'
         }}>
         <Divider
           orientation='vertical'
           sx={{
-            position: 'absolute',
+            position: 'fixed',
             height: '100vh',
-            left: 250
+            left: sidebarWidth
           }}
         />
         <Box
           style={{
             height: '100vh',
-            width: 250
+            width: sidebarWidth
           }}>
           <Box
             sx={{
-              width: 250,
+              width: sidebarWidth,
               position: 'relative',
-              pt: 2
+              pt: 2,
+              marginTop: isNotebookRendered ? '70px' : '0'
             }}>
-            {isExpanded && <NotebookTreeView username={username} notebooks={notebooks} refetch={refetch} />}
+            {isExpanded && (
+              <NotebookTreeView
+                username={username}
+                notebooks={notebooks}
+                refetch={refetch}
+                setSelectedDocId={setSelectedDocId}
+              />
+            )}
           </Box>
         </Box>
       </div>
       <Box
         sx={{
-          position: 'absolute',
+          position: 'fixed',
           top: 10,
-          left: isExpanded ? 235 : 35,
+          left: isExpanded ? sidebarWidth - 15 : 15,
           opacity: showChevron ? 1 : 0,
-          transition: 'all 0.1s ease-in-out'
+          transition: 'all 0.1s ease-in-out',
+          pt: 2,
+          marginTop: '70px'
         }}>
         <Box
           sx={{

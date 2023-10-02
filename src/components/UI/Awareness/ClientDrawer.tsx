@@ -42,8 +42,10 @@ const ClientDrawer = ({ handleDisconnect, clients = [] }: ClientDrawerProps) => 
   const provider = providerContext ? providerContext.provider : null;
 
   const {
-    custom: { currTheme, toggleTheme }
+    custom: { toggleTheme }
   } = useTheme();
+
+  const currTheme = useTheme().palette.mode;
 
   const handleEditNameClick = useCallback(() => {
     let newName = window.prompt('Enter a new name:');

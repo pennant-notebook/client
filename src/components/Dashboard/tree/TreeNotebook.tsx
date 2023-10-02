@@ -8,17 +8,18 @@ import { editDocTitle, deleteDoc } from '~/services/dynamoPost';
 import { useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
-import ListIconJs from './listjs.png';
-import ListIconPy from './listpy.png';
+import ListIconJs from './assets/listjs.svg';
+import ListIconPy from './assets/listpy.svg';
 
 interface TreeNotebookProps {
   notebook: NotebookType;
   username: string;
   index: number;
   refetch: () => void;
+  setSelectedDocId: (docID: string) => void;
 }
 
-const TreeNotebook = ({ index, notebook, username, refetch }: TreeNotebookProps) => {
+const TreeNotebook = ({ index, notebook, username, refetch, setSelectedDocId }: TreeNotebookProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(notebook.title || '');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -103,6 +104,9 @@ const TreeNotebook = ({ index, notebook, username, refetch }: TreeNotebookProps)
   };
 
   const iconSize = '16px';
+  const iconPyWidth = '20px';
+  const iconPyHeight = '20px';
+  const treeFont = 'Lato';
 
   return (
     <Box>
@@ -113,7 +117,7 @@ const TreeNotebook = ({ index, notebook, username, refetch }: TreeNotebookProps)
           <InputBase
             ref={inputRef}
             sx={{
-              fontFamily: 'Inter',
+              fontFamily: treeFont,
               color: theme === 'light' ? '#2c3032' : '#fff',
               fontSize: '0.85rem',
               flexGrow: 1
@@ -133,12 +137,13 @@ const TreeNotebook = ({ index, notebook, username, refetch }: TreeNotebookProps)
         </div>
       ) : (
         <StyledTreeItem
+          onClick={() => setSelectedDocId(notebook.docID)}
           icon={
             <img
               src={notebook.language === 'javascript' ? ListIconJs : ListIconPy}
               alt='List Icon'
-              width={16}
-              height={20}
+              width={iconPyWidth}
+              height={iconPyHeight}
             />
           }
           nodeId={notebook.docID}
@@ -153,14 +158,14 @@ const TreeNotebook = ({ index, notebook, username, refetch }: TreeNotebookProps)
               }}>
               <Typography
                 sx={{
-                  fontFamily: 'Inter',
+                  fontFamily: treeFont,
                   color: theme === 'light' ? '#2c3032' : '#fff',
                   fontSize: '0.85rem',
                   flexGrow: 1
                 }}>
                 {notebook.title || `Untitled-${index}`}
               </Typography>
-              <IconButton onClick={e => handleClick(e)}>
+              <IconButton onClick={e => handleClick(e)} sx={{ width: '28px', height: '28px' }}>
                 <MoreVertIcon />
               </IconButton>
               <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>

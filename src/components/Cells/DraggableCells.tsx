@@ -3,6 +3,7 @@ import { useDrag, useDrop } from 'react-dnd';
 import { HoverTrackerContext } from './HoverTrackerContext';
 import { DragSourceMonitor, DropTargetMonitor } from 'react-dnd';
 import styles from './Draggable.module.css';
+import { useTheme } from '~/utils/MuiImports';
 
 interface DragItem {
   type: string;
@@ -27,6 +28,7 @@ const DraggableCells = ({ index, onDragEnd, children }: DraggableCellsProps) => 
   const ref = useRef<HTMLDivElement>(null);
   const dragSourceRef = useRef(null);
   const [dndHoverPos, setDndHoverPos] = useState('top');
+  const theme = useTheme().palette.mode;
 
   function calcDrag(item: DragItem, monitor: DragSourceMonitor | DropTargetMonitor) {
     if (!ref.current) {
@@ -111,7 +113,7 @@ const DraggableCells = ({ index, onDragEnd, children }: DraggableCellsProps) => 
           setHovering(false);
         }}>
         {dndHovered && dndHoverPos === 'top' && <div className={`${styles.dropruler} ${styles.droprulerTop}`} />}
-        <div className={styles.shoulder} draggable='true' ref={dragSourceRef}></div>
+        <div className={`${styles.shoulder} ${styles[theme]}`} draggable='true' ref={dragSourceRef}></div>
         {children}
         {dndHovered && dndHoverPos === 'bottom' && <div className={`${styles.dropruler} ${styles.droprulerBottom}`} />}
       </div>

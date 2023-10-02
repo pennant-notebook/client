@@ -11,19 +11,19 @@ import { Box, useTheme } from '~/utils/MuiImports';
 import { getClientFromLocalStorage, updateDisconnectedClient } from '~/utils/awarenessHelpers';
 import { YMap, createCell, getUserObjects } from '~/utils/notebookHelpers';
 import Cells from '../Cells/Cells';
-import Navbar from './Navbar';
+import Navbar from './navbar/Navbar';
 
 interface NotebookProps {
   docID: string;
   resourceTitle?: string;
   notebook: NotebookType;
+  isDashboard: boolean;
 }
 
-const Notebook = ({ docID, resourceTitle, notebook }: NotebookProps) => {
+const Notebook = ({ docID, resourceTitle, notebook, isDashboard }: NotebookProps) => {
   const { doc, provider, awareness, notebookMetadata }: ProviderContextType = useProviderContext()!;
   const navigate = useNavigate();
   const theme = useTheme();
-  // notebookMetadata.set('language', notebook.language);
 
   const cellsArray = doc.getArray('cells');
   const [cellDataArr, setCellDataArr] = useState(cellsArray.toArray());
@@ -158,7 +158,13 @@ const Notebook = ({ docID, resourceTitle, notebook }: NotebookProps) => {
   return (
     <NotebookContext.Provider value={contextValue}>
       <Box className='main-content'>
-        <Navbar codeCells={codeCellsForDredd} clients={clients} handleDisconnect={handleDisconnect} />
+        <Navbar
+          codeCells={codeCellsForDredd}
+          clients={clients}
+          handleDisconnect={handleDisconnect}
+          isDashboard={isDashboard}
+          selectedDoc={isDashboard ? docID : ''}
+        />
         <DndProvider backend={HTML5Backend}>
           <Cells cells={cellDataArr} setCells={setCellDataArr} />
         </DndProvider>
