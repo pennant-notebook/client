@@ -12,9 +12,9 @@ import {
   Typography,
   useTheme
 } from '~/utils/MuiImports';
-import ClientDrawer from '../UI/awareness/ClientDrawer';
-import Clients from '../UI/awareness/Clients';
-import IconRow from '../UI/IconRow';
+import ClientDrawer from '~/components/UI/awareness/ClientDrawer';
+import Clients from '~/components/UI/awareness/Clients';
+import IconRow from '~/components/UI/IconRow';
 import DocTitle from './DocTitle';
 import DreddButtons from './DreddButtons';
 import { YMap } from '~/utils/notebookHelpers';

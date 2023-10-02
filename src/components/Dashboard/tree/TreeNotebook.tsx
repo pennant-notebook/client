@@ -5,7 +5,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { NotebookType } from '@/NotebookTypes';
 import { useMutation } from 'react-query';
 import { editDocTitle, deleteDoc } from '~/services/dynamoPost';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
 import ListIconJs from './listjs.png';
@@ -24,6 +24,7 @@ const TreeNotebook = ({ index, notebook, username, refetch }: TreeNotebookProps)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const navigate = useNavigate();
   const theme = useTheme().palette.mode;
+  const inputRef = useRef<HTMLElement | null>(null);
 
   const handleClickToNavigate = () => {
     if (isEditing) return;
@@ -48,10 +49,12 @@ const TreeNotebook = ({ index, notebook, username, refetch }: TreeNotebookProps)
   };
 
   const handleRenameClick = (e: React.MouseEvent<HTMLElement>) => {
-    e.stopPropagation();
     setAnchorEl(null);
     setNewTitle(notebook.title || '');
     setIsEditing(true);
+    setTimeout(() => {
+      inputRef.current && inputRef.current.focus();
+    }, 0);
   };
 
   const handleDeleteClick = (e: React.MouseEvent<HTMLElement>) => {
@@ -77,12 +80,12 @@ const TreeNotebook = ({ index, notebook, username, refetch }: TreeNotebookProps)
   };
 
   const handleCancelClick = (
-    e: React.MouseEvent<HTMLElement> | React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.MouseEvent<HTMLElement> | React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLDivElement>
   ) => {
     e.stopPropagation();
     setTimeout(() => {
       setIsEditing(false);
-    }, 100);
+    }, 50);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLElement | HTMLTextAreaElement>) => {
@@ -91,9 +94,7 @@ const TreeNotebook = ({ index, notebook, username, refetch }: TreeNotebookProps)
       handleSaveClick(e);
     }
     if (e.key === 'Escape') {
-      setTimeout(() => {
-        setIsEditing(false);
-      }, 100);
+      setIsEditing(false);
     }
   };
 
@@ -106,32 +107,30 @@ const TreeNotebook = ({ index, notebook, username, refetch }: TreeNotebookProps)
   return (
     <Box>
       {isEditing ? (
-        <StyledTreeItem
-          nodeId={notebook.docID}
-          label={
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <InputBase
-                sx={{
-                  fontFamily: 'Inter',
-                  color: theme === 'light' ? '#2c3032' : '#fff',
-                  fontSize: '0.85rem',
-                  flexGrow: 1
-                }}
-                value={newTitle}
-                onChange={e => setNewTitle(e.target.value)}
-                onBlur={handleCancelClick}
-                onKeyDown={handleKeyDown}
-                autoFocus
-              />
-              <IconButton onClick={handleSaveClick} sx={{ color: 'green' }}>
-                <CheckIcon sx={{ fontSize: iconSize }} />
-              </IconButton>
-              <IconButton onClick={handleCancelClick} sx={{ color: 'red' }}>
-                <CloseIcon sx={{ fontSize: iconSize }} />
-              </IconButton>
-            </Box>
-          }
-        />
+        <div
+          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginLeft: 10 }}
+          onBlur={handleCancelClick}>
+          <InputBase
+            ref={inputRef}
+            sx={{
+              fontFamily: 'Inter',
+              color: theme === 'light' ? '#2c3032' : '#fff',
+              fontSize: '0.85rem',
+              flexGrow: 1
+            }}
+            value={newTitle}
+            onChange={e => setNewTitle(e.target.value)}
+            // onBlur={handleCancelClick}
+            onKeyDown={handleKeyDown}
+            autoFocus
+          />
+          <IconButton onClick={handleSaveClick} sx={{ color: 'green' }}>
+            <CheckIcon sx={{ fontSize: iconSize }} />
+          </IconButton>
+          <IconButton onClick={handleCancelClick} sx={{ color: 'red' }}>
+            <CloseIcon sx={{ fontSize: iconSize }} />
+          </IconButton>
+        </div>
       ) : (
         <StyledTreeItem
           icon={
@@ -165,7 +164,7 @@ const TreeNotebook = ({ index, notebook, username, refetch }: TreeNotebookProps)
                 <MoreVertIcon />
               </IconButton>
               <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-                <MenuItem onClick={handleClickToNavigate}>Edit</MenuItem>
+                <MenuItem onClick={handleClickToNavigate}>Open</MenuItem>
                 <MenuItem onClick={handleDeleteClick}>Delete</MenuItem>
                 <MenuItem onClick={handleRenameClick}>Rename</MenuItem>
               </Menu>
