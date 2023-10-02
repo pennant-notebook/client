@@ -60,7 +60,7 @@ export default function NotebookTreeView({
   const AZIcon = theme === 'dark' ? AzIconWhite : AzIcon;
 
   return (
-    <Box sx={{ minHeight: 270, flexGrow: 1, maxWidth: 250 }}>
+    <Box sx={{ minHeight: 270, flexGrow: 1, maxWidth: 268 }}>
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, ml: 1, color: 'gray' }}>
         <Typography variant='h6' sx={{ fontFamily: treeFont, ml: 1 }}>
           Workspace

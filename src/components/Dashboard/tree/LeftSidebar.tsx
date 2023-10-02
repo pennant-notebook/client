@@ -54,9 +54,15 @@ export default function LeftSidebar({ username, notebooks, refetch, setSelectedD
     }
   };
 
-  const sidebarWidth = 250;
+  const sidebarWidth = 270;
   return (
-    <div style={{ position: 'relative', zIndex: 5 }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+    <div
+      style={{
+        position: 'relative',
+        zIndex: 5
+      }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}>
       <Box
         onClick={handleOverlayClick}
         sx={{
@@ -79,7 +85,8 @@ export default function LeftSidebar({ username, notebooks, refetch, setSelectedD
           transform: isExpanded ? 'translateX(0)' : `translateX(-${sidebarWidth - 30}px)`,
           transition: 'transform 0.35s cubic-bezier(0.2, 0, 0, 1)',
           position: 'fixed',
-          backgroundColor: theme === 'dark' ? '#1e202d' : '#fff'
+          backgroundColor: theme === 'dark' ? '#1e202d' : '#fff',
+          boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)'
         }}>
         <Divider
           orientation='vertical'

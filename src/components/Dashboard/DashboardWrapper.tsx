@@ -12,6 +12,7 @@ import Navbar from '../Notebook/navbar/Navbar';
 import LoadingSpinner from '../UI/loading/LoadingSpinner';
 import { updateDisconnectedClient } from '~/utils/awarenessHelpers';
 import { NavbarProvider } from '~/contexts/NavbarContext';
+import { Box } from '~/utils/MuiImports';
 
 const DashboardWrapper = () => {
   const { username } = useParams();
@@ -66,16 +67,18 @@ const DashboardWrapper = () => {
   return (
     <ProviderContext.Provider value={contextValue}>
       <NavbarProvider provider={contextValue.provider || null} docID={selectedDocId || ''}>
-        <Navbar selectedDoc={selectedDocId || ''} language={lang} />
-        <LeftSidebar
-          username={username}
-          notebooks={notebooks}
-          refetch={refetch}
-          setSelectedDocId={handleSelectedDocId}
-        />
-        {selectedDocId && notebook && !isLoading && !error && (
-          <Notebook docID={selectedDocId} resourceTitle={notebook.title} notebook={notebook} />
-        )}
+        <Box>
+          <Navbar selectedDoc={selectedDocId || ''} language={lang} />
+          <LeftSidebar
+            username={username}
+            notebooks={notebooks}
+            refetch={refetch}
+            setSelectedDocId={handleSelectedDocId}
+          />
+          {selectedDocId && notebook && !isLoading && !error && (
+            <Notebook docID={selectedDocId} resourceTitle={notebook.title} notebook={notebook} />
+          )}
+        </Box>
       </NavbarProvider>
     </ProviderContext.Provider>
   );
