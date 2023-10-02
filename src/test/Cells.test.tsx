@@ -19,7 +19,7 @@ const notebookContextValues = {
 
 test('it renders the correct number of cells', () => {
   const cell1 = createCell('code', 'javascript');
-  const cell2 = createCell('markdown');
+  const cell2 = createCell('markdown', 'markdown');
   const mockCells = [cell1, cell2];
 
   const { container } = render(

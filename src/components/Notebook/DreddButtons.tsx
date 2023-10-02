@@ -19,10 +19,8 @@ const DreddButtons = ({ codeCells = [] }: DreddButtonsProps) => {
   const [resetting, setResetting] = useState(false);
   const [running, setRunning] = useState(false);
 
-  const jsCells = codeCells.filter(c => c.get('language') !== 'python');
-
   const handleRunAll = async () => {
-    const orderedCells = jsCells.sort((a, b) => a.get('pos') - b.get('pos'));
+    const orderedCells = codeCells.sort((a, b) => a.get('pos') - b.get('pos'));
 
     try {
       setRunning(true);
@@ -40,29 +38,29 @@ const DreddButtons = ({ codeCells = [] }: DreddButtonsProps) => {
   const handleReset = async () => {
     try {
       setResetting(true);
-      jsCells.forEach(c => {
+      codeCells.forEach(c => {
         c.get('metaData').set('isRunning', true);
         c.get('outputMap').set('status', '');
       });
       if (!docID) return;
 
-      await handleResetContext(docID, notebookMetadata, jsCells);
+      await handleResetContext(docID, notebookMetadata, codeCells);
 
       toast.success('Context successfully reset');
     } catch (error) {
       console.error(error);
     } finally {
-      jsCells.forEach(c => c.get('metaData').set('isRunning', false));
+      codeCells.forEach(c => c.get('metaData').set('isRunning', false));
       setResetting(false);
     }
   };
 
   const isDisabledRun = () => {
-    return running || resetting || jsCells.length < 1;
+    return running || resetting || codeCells.length < 1;
   };
 
   const isDisabledReset = () => {
-    return running || resetting || jsCells.length < 1;
+    return running || resetting || codeCells.length < 1;
   };
 
   const iconSize = '24px';
