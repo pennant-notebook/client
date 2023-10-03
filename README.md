@@ -147,7 +147,7 @@ Please note that the content provided in the sections below serves as our prelim
 
 ## Contexts
 
-### Navbar Context (`src/contexts/ProviderContext.ts`)
+### Navbar Context (`src/contexts/NavbarContext.ts`)
 - Centralizes control over navigation-related state and interactions.
 - Manages state for the selected notebook, its code cells, and connected clients.
 - Includes a function for graceful client disconnection during navigation.
