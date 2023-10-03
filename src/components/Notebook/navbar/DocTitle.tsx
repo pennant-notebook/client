@@ -1,19 +1,21 @@
 import { useEffect, useState } from 'react';
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  TextField,
-  DialogActions,
-  Button,
-  Box,
-  Typography
-} from '~/utils/MuiImports';
 import { useParams } from 'react-router-dom';
 import { fetchDoc } from '~/services/dynamoFetch';
 import { editDocTitle } from '~/services/dynamoPost';
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  Typography
+} from '~/utils/MuiImports';
 
 import { useMutation, useQuery } from 'react-query';
+import JsExtIcon from '~/assets/app/js-file.png';
+import PyExtIcon from '~/assets/app/python.png';
 
 interface NotebookType {
   docID: string;
@@ -22,9 +24,10 @@ interface NotebookType {
 
 interface DocTitleProps {
   selectedDoc?: string;
+  language?: string;
 }
 
-const DocTitle = ({ selectedDoc }: DocTitleProps) => {
+const DocTitle = ({ selectedDoc, language }: DocTitleProps) => {
   const { username, docID: paramsDoc } = useParams();
 
   const docID = paramsDoc || selectedDoc;
@@ -61,8 +64,17 @@ const DocTitle = ({ selectedDoc }: DocTitleProps) => {
   }, [notebook]);
 
   return (
-    <Box className='notebook-title'>
-      <Box onClick={() => setOpen(true)}>
+    <Box className='notebook-title' sx={{ mr: '2px' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center' }} onClick={() => setOpen(true)}>
+        <Box sx={{ display: 'flex', opacity: 0.7 }}>
+          {language === 'python' ? (
+            <img src={PyExtIcon} width='18' height='18' style={{ marginRight: '10px' }} />
+          ) : language === 'javascript' ? (
+            <img src={JsExtIcon} width='18' height='18' style={{ marginRight: '10px' }} />
+          ) : (
+            <></>
+          )}
+        </Box>
         <Typography
           sx={{
             maxWidth: { xs: '150px', sm: '200px', md: '400px' },

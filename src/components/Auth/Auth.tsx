@@ -5,9 +5,9 @@ import { toast } from 'react-toastify';
 import { useRecoilState } from 'recoil';
 import { validateForm } from '~/utils/authHelpers';
 import LoggedInIcon from '~/assets/loggedIn.svg';
-import Pennant from '~/assets/logo.png';
-import PennantLogoDark from '~/assets/pennant-logo-dark.png';
-import PennantLogo from '~/assets/pennant-logo.png';
+import Pennant from '~/assets/logo/logo.png';
+import PennantLogoDark from '~/assets/logo/pennant-logo-dark.png';
+import PennantLogo from '~/assets/logo/pennant-logo.png';
 import {
   Button,
   Divider,

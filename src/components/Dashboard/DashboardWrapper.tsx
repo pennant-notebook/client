@@ -17,6 +17,7 @@ import { Box } from '~/utils/MuiImports';
 const DashboardWrapper = () => {
   const { username } = useParams();
   const [selectedDocId, setSelectedDocId] = useState<string | null>(null);
+  const [isExpanded, setIsExpanded] = useState(true);
   const navigate = useNavigate();
   const usernameFromLocal = localStorage.getItem('pennant-username');
   const authToken = localStorage.getItem('pennantAccessToken');
@@ -68,12 +69,19 @@ const DashboardWrapper = () => {
     <ProviderContext.Provider value={contextValue}>
       <NavbarProvider provider={contextValue.provider || null} docID={selectedDocId || ''}>
         <Box>
-          <Navbar selectedDoc={selectedDocId || ''} language={lang} />
+          <Navbar
+            selectedDoc={selectedDocId || ''}
+            language={lang}
+            isExpanded={isExpanded}
+            setIsExpanded={setIsExpanded}
+          />
           <LeftSidebar
             username={username}
             notebooks={notebooks}
             refetch={refetch}
             setSelectedDocId={handleSelectedDocId}
+            isExpanded={isExpanded}
+            setIsExpanded={setIsExpanded}
           />
           {selectedDocId && notebook && !isLoading && !error && (
             <Notebook docID={selectedDocId} resourceTitle={notebook.title} notebook={notebook} />

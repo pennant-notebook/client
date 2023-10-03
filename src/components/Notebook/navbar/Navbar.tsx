@@ -1,5 +1,5 @@
-import { useNavigate, useParams } from 'react-router';
-import logo from '~/assets/pennant-color.png';
+import { useParams } from 'react-router';
+import logo from '~/assets/logo/pennant-color.png';
 import {
   AppBar,
   Box,
@@ -22,15 +22,17 @@ import { useNavbarContext } from '~/contexts/NavbarContext';
 interface NavbarProps {
   selectedDoc?: string;
   language?: string;
+  isExpanded?: boolean;
+  setIsExpanded?: (isExpanded: boolean) => void;
 }
 
-const Navbar = ({ selectedDoc, language }: NavbarProps) => {
+const Navbar = ({ selectedDoc, language, isExpanded, setIsExpanded }: NavbarProps) => {
   const { username, docID: paramsDoc } = useParams();
   const { codeCells, clients, handleDisconnect } = useNavbarContext();
 
   const docID = selectedDoc || paramsDoc;
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const currTheme = useTheme().palette.mode;
   const {
     custom: { toggleTheme }
@@ -56,7 +58,7 @@ const Navbar = ({ selectedDoc, language }: NavbarProps) => {
             sx={{
               alignItems: 'center'
             }}>
-            <Tooltip title={paramsDoc ? '⬅ Dashboard' : '⬅ Home'} arrow>
+            <Tooltip title={paramsDoc ? '⬅ Dashboard' : 'Toggle Sidebar'} enterDelay={2000} enterNextDelay={5000} arrow>
               <IconButton
                 edge='start'
                 color='inherit'
@@ -67,7 +69,10 @@ const Navbar = ({ selectedDoc, language }: NavbarProps) => {
                       handleDisconnect(`/${username}`);
                     }
                   } else {
-                    navigate(`/`);
+                    if (setIsExpanded) {
+                      setIsExpanded(!isExpanded);
+                    }
+                    // navigate(`/`);
                   }
                 }}
                 sx={{ py: 1, borderRadius: '2px' }}>
@@ -75,12 +80,17 @@ const Navbar = ({ selectedDoc, language }: NavbarProps) => {
               </IconButton>
             </Tooltip>
           </Box>
+
           <Box id='CLIENTS' sx={{ ml: 4, pr: paddingClient }}>
             {docID && <Clients clients={clients} />}
           </Box>
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'center', flexGrow: 1 }}>
-          {docID ? <DocTitle selectedDoc={docID} /> : <Typography sx={{ opacity: 0.5, fontSize: '20px' }}></Typography>}
+          {docID ? (
+            <DocTitle selectedDoc={docID} language={language} />
+          ) : (
+            <Typography sx={{ opacity: 0.5, fontSize: '20px' }}></Typography>
+          )}
         </Box>
         <Stack direction='row' spacing={{ xs: 0, sm: 1, md: 2 }} alignItems='center'>
           {docID && <DreddButtons codeCells={codeCells} />}

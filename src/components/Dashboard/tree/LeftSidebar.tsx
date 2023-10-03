@@ -10,10 +10,18 @@ interface LeftSidebarProps {
   notebooks?: NotebookType[];
   refetch: () => void;
   setSelectedDocId: (docId: string) => void;
+  isExpanded: boolean;
+  setIsExpanded: (isExpanded: boolean) => void;
 }
 
-export default function LeftSidebar({ username, notebooks, refetch, setSelectedDocId }: LeftSidebarProps) {
-  const [isExpanded, setIsExpanded] = useState(true);
+export default function LeftSidebar({
+  username,
+  notebooks,
+  refetch,
+  setSelectedDocId,
+  isExpanded,
+  setIsExpanded
+}: LeftSidebarProps) {
   const [showChevron, setShowChevron] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const theme = useTheme().palette.mode;
@@ -86,7 +94,9 @@ export default function LeftSidebar({ username, notebooks, refetch, setSelectedD
           transition: 'transform 0.35s cubic-bezier(0.2, 0, 0, 1)',
           position: 'fixed',
           backgroundColor: theme === 'dark' ? '#1e202d' : '#fff',
-          boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)'
+          // boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+          boxShadow:
+            'rgba(55, 55, 26, 0.1) 0px 1px 0px, rgba(55, 55, 26, 0.1) 0px 8px 24px, rgba(55, 55, 26, 0.1) 0px 16px 48px'
         }}>
         <Divider
           orientation='vertical'
