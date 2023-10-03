@@ -7,6 +7,11 @@ interface User {
   avatar?: string;
   name?: string;
 }
+export const refreshState = atom({
+  key: 'refreshState',
+  default: false,
+});
+
 
 export const authState = atom<{
   isLoggedIn: boolean;

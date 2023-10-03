@@ -113,7 +113,6 @@ export default function NotebookTreeView({
               index={idx}
               notebook={notebook}
               username={username}
-              refetch={refetch}
               setSelectedDocId={setSelectedDocId}
             />
           ))}
@@ -139,7 +138,6 @@ export default function NotebookTreeView({
               index={idx}
               notebook={notebook}
               username={username}
-              refetch={refetch}
               setSelectedDocId={setSelectedDocId}
             />
           ))}

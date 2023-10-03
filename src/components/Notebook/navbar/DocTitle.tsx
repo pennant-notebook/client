@@ -16,7 +16,7 @@ import {
 import { useMutation, useQuery } from 'react-query';
 import JsExtIcon from '~/assets/app/js-file.png';
 import PyExtIcon from '~/assets/app/python.png';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { notebookTitleStateFamily } from '~/appState';
 
 interface NotebookType {
@@ -31,20 +31,19 @@ interface DocTitleProps {
 
 const DocTitle = ({ selectedDoc, language }: DocTitleProps) => {
   const { username, docID: paramsDoc } = useParams();
-  const setTitle = useSetRecoilState(notebookTitleStateFamily(selectedDoc || ''));
+  const [open, setOpen] = useState(false);
 
   const docID = paramsDoc || selectedDoc;
-
   const { data: notebook, refetch } = useQuery<NotebookType>([docID, username], () =>
     fetchDoc(docID as string, username as string)
   );
 
-  const [open, setOpen] = useState(false);
-
   const [tempTitle, setTempTitle] = useState(notebook?.title || '');
+  const [title, setTitle] = useRecoilState(notebookTitleStateFamily(notebook?.title || selectedDoc || ''));
 
   const editMutation = useMutation(editDocTitle, {
     onSuccess: () => {
+      setTitle(tempTitle);
       refetch();
     }
   });
@@ -53,8 +52,6 @@ const DocTitle = ({ selectedDoc, language }: DocTitleProps) => {
     try {
       if (notebook && username) {
         editMutation.mutate({ docID: notebook.docID, title: tempTitle, username });
-        setTitle(tempTitle);
-        refetch();
       }
       setOpen(false);
     } catch (error) {
@@ -93,7 +90,7 @@ const DocTitle = ({ selectedDoc, language }: DocTitleProps) => {
             ? 'untitled'
             : notebook && notebook.title
             ? notebook.title
-            : 'untitled'}
+            : title}
         </Typography>
       </Box>
       <Dialog

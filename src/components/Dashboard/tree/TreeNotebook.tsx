@@ -3,32 +3,40 @@ import { CheckIcon, CloseIcon, IconButton } from '~/utils/MuiImports';
 import { StyledTreeItem } from '~/components/UI/StyledTreeComponents';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { NotebookType } from '@/NotebookTypes';
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { editDocTitle, deleteDoc } from '~/services/dynamoPost';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
 import ListIconJs from './assets/listjs.svg';
 import ListIconPy from './assets/listpy.svg';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { notebookTitleStateFamily } from '~/appState';
+import { fetchDoc } from '~/services/dynamoFetch';
 
 interface TreeNotebookProps {
   notebook: NotebookType;
   username: string;
   index: number;
-  refetch: () => void;
   setSelectedDocId: (docID: string) => void;
 }
 
-const TreeNotebook = ({ index, notebook, username, refetch, setSelectedDocId }: TreeNotebookProps) => {
+const TreeNotebook = ({ index, notebook, username, setSelectedDocId }: TreeNotebookProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(notebook.title || '');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const navigate = useNavigate();
   const theme = useTheme().palette.mode;
   const inputRef = useRef<HTMLElement | null>(null);
-  const setTitle = useSetRecoilState(notebookTitleStateFamily(notebook.docID));
+  const [title, setTitle] = useRecoilState(notebookTitleStateFamily(notebook.docID));
+
+  const { data: fetchedNotebook, refetch } = useQuery<NotebookType>([notebook.docID, username], () =>
+    fetchDoc(notebook.docID as string, username as string)
+  );
+
+  useEffect(() => {
+    setTitle(fetchedNotebook?.title || notebook.title || `Untitled-${index}`);
+  }, [notebook]);
 
   const handleClickToNavigate = () => {
     if (isEditing) return;
@@ -43,9 +51,8 @@ const TreeNotebook = ({ index, notebook, username, refetch, setSelectedDocId }: 
 
   const editMutation = useMutation(editDocTitle, {
     onSuccess: () => {
-      refetch();
-      console.log(newTitle);
       setTitle(newTitle);
+      refetch();
     }
   });
   console.log();
@@ -78,6 +85,7 @@ const TreeNotebook = ({ index, notebook, username, refetch, setSelectedDocId }: 
   };
 
   const handleSaveClick = (e: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>) => {
+    console.log('handleSaveClick called', e.type);
     e.stopPropagation();
     if (username) {
       editMutation.mutate({ docID: notebook.docID, title: newTitle, username: username });
@@ -88,6 +96,8 @@ const TreeNotebook = ({ index, notebook, username, refetch, setSelectedDocId }: 
   const handleCancelClick = (
     e: React.MouseEvent<HTMLElement> | React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLDivElement>
   ) => {
+    const target = e.relatedTarget as HTMLElement;
+    if (target && target.id === 'save-button') return;
     e.stopPropagation();
     setTimeout(() => {
       setIsEditing(false);
@@ -129,11 +139,11 @@ const TreeNotebook = ({ index, notebook, username, refetch, setSelectedDocId }: 
             }}
             value={newTitle}
             onChange={e => setNewTitle(e.target.value)}
-            // onBlur={handleCancelClick}
+            onBlur={handleCancelClick}
             onKeyDown={handleKeyDown}
             autoFocus
           />
-          <IconButton onClick={handleSaveClick} sx={{ color: 'green' }}>
+          <IconButton id='save-button' onClick={handleSaveClick} sx={{ color: 'green' }}>
             <CheckIcon sx={{ fontSize: iconSize }} />
           </IconButton>
           <IconButton onClick={handleCancelClick} sx={{ color: 'red' }}>
@@ -168,7 +178,7 @@ const TreeNotebook = ({ index, notebook, username, refetch, setSelectedDocId }: 
                   fontSize: '0.85rem',
                   flexGrow: 1
                 }}>
-                {notebook.title || `Untitled-${index}`}
+                {title || `Untitled-${index}`}
               </Typography>
               <IconButton onClick={e => handleClick(e)} sx={{ width: '28px', height: '28px' }}>
                 <MoreVertIcon />
