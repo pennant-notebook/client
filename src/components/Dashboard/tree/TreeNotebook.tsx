@@ -55,13 +55,14 @@ const TreeNotebook = ({ index, notebook, username, setSelectedDocId }: TreeNoteb
       refetch();
     }
   });
-  console.log();
+
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     setAnchorEl(e.currentTarget);
   };
 
   const handleRenameClick = (e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
     setAnchorEl(null);
     setNewTitle(notebook.title || '');
     setIsEditing(true);
