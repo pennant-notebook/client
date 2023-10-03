@@ -1,6 +1,3 @@
-import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
-import { TransitionProps } from '@mui/material/transitions';
-
 // Regular components
 export { default as AppBar } from '@mui/material/AppBar';
 export { default as Avatar } from '@mui/material/Avatar';
@@ -31,12 +28,10 @@ export { default as Toolbar } from '@mui/material/Toolbar';
 export { default as Tooltip } from '@mui/material/Tooltip';
 export { default as Typography } from '@mui/material/Typography';
 export { default as Paper } from '@mui/material/Paper';
-
+export { default as SvgIcon } from '@mui/material/SvgIcon';
 
 export { default as CssBaseline } from '@mui/material/CssBaseline'; // new
 export { default as Collapse } from '@mui/material/Collapse'; // new
-export { SvgIcon, SvgIconProps }; // new
-export { TransitionProps };  //new
 // Icons
 export { default as Add } from '@mui/icons-material/Add';
 export { default as AddBoxIcon } from '@mui/icons-material/AddBox'; // new
@@ -84,5 +79,4 @@ export { default as useTheme } from '@mui/material/styles/useTheme';
 export { default as ThemeProvider } from '@mui/material/styles/ThemeProvider';
 
 export { alpha } from '@mui/material/styles'; // new
-export { default as Theme } from '@mui/material/styles'; // new
 export { default as useMediaQuery } from '@mui/material/useMediaQuery'; // new

@@ -26,6 +26,8 @@ import IconRow from '../IconRow';
 import { StyledButton } from '../StyledComponents';
 import styles from './Clients.module.css';
 import ThemeSelector from './ThemeSelector';
+import { useSetRecoilState } from 'recoil';
+import { selectedDocIdState } from '~/appState';
 
 interface ClientDrawerProps {
   handleDisconnect: (destination: string) => void;
@@ -40,6 +42,7 @@ const ClientDrawer = ({ handleDisconnect, clients = [] }: ClientDrawerProps) => 
   const { data: notebooks } = useQuery(['notebooks', username], () => username && fetchNotebooks(username));
   const providerContext = useProviderContext();
   const provider = providerContext ? providerContext.provider : null;
+  const setSelectedDocId = useSetRecoilState(selectedDocIdState);
 
   const {
     custom: { toggleTheme }
@@ -74,6 +77,7 @@ const ClientDrawer = ({ handleDisconnect, clients = [] }: ClientDrawerProps) => 
 
   const handleClickToGoBack = () => {
     if (!docID) {
+      setSelectedDocId(null);
       handleDisconnect('/');
     } else {
       handleDisconnect(`/${username}`);

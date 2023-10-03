@@ -1,7 +1,9 @@
-import { Collapse, SvgIcon, SvgIconProps, alpha, styled, TransitionProps } from '~/utils/MuiImports';
+import { Collapse, SvgIcon, alpha, styled } from '~/utils/MuiImports';
 import { TreeItem, TreeItemProps, treeItemClasses } from '@mui/x-tree-view/TreeItem';
 import { animated, useSpring } from '@react-spring/web';
 import { forwardRef } from 'react';
+import { SvgIconProps } from '@mui/material';
+import { TransitionProps } from '@mui/material/transitions';
 
 export function MinusSquare(props: SvgIconProps) {
   return (

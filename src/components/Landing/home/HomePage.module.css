@@ -141,13 +141,11 @@
 
 .fadeInOut {
   opacity: 1;
-  font-style: italic !important;
-  transition: opacity 1s ease-in-out !important;
+  transition: opacity 1s ease-in-out;
 }
 
 .fadeOut {
   opacity: 0;
-  font-style: italic;
 }
 
 .subheadline,
