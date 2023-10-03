@@ -13,15 +13,16 @@ import ListIconPy from './assets/listpy.svg';
 import { useRecoilState } from 'recoil';
 import { notebookTitleStateFamily } from '~/appState';
 import { fetchDoc } from '~/services/dynamoFetch';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
 
 interface TreeNotebookProps {
   notebook: NotebookType;
   username: string;
   index: number;
-  setSelectedDocId: (docID: string) => void;
+  handleSelectedDocId: (docID: string) => void;
 }
 
-const TreeNotebook = ({ index, notebook, username, setSelectedDocId }: TreeNotebookProps) => {
+const TreeNotebook = ({ index, notebook, username, handleSelectedDocId }: TreeNotebookProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(notebook.title || '');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -86,7 +87,6 @@ const TreeNotebook = ({ index, notebook, username, setSelectedDocId }: TreeNoteb
   };
 
   const handleSaveClick = (e: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>) => {
-    console.log('handleSaveClick called', e.type);
     e.stopPropagation();
     if (username) {
       editMutation.mutate({ docID: notebook.docID, title: newTitle, username: username });
@@ -117,6 +117,19 @@ const TreeNotebook = ({ index, notebook, username, setSelectedDocId }: TreeNoteb
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleCopyClick = (e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    const notebookURL = `https://trypennant.com/${username}/${notebook.docID}`;
+    navigator.clipboard
+      .writeText(notebookURL)
+      .then(() => {
+        toast.success('Notebook URL copied to clipboard');
+      })
+      .catch(err => {
+        toast.error('Failed to copy URL: ' + err);
+      });
   };
 
   const iconSize = '16px';
@@ -153,7 +166,7 @@ const TreeNotebook = ({ index, notebook, username, setSelectedDocId }: TreeNoteb
         </div>
       ) : (
         <StyledTreeItem
-          onClick={() => setSelectedDocId(notebook.docID)}
+          onClick={() => handleSelectedDocId(notebook.docID)}
           icon={
             <img
               src={notebook.language === 'javascript' ? ListIconJs : ListIconPy}
@@ -188,6 +201,10 @@ const TreeNotebook = ({ index, notebook, username, setSelectedDocId }: TreeNoteb
                 <MenuItem onClick={handleClickToNavigate}>Open</MenuItem>
                 <MenuItem onClick={handleDeleteClick}>Delete</MenuItem>
                 <MenuItem onClick={handleRenameClick}>Rename</MenuItem>
+                <MenuItem onClick={handleCopyClick}>
+                  <FileCopyIcon fontSize='small' style={{ marginRight: '8px' }} />
+                  Copy Notebook URL
+                </MenuItem>{' '}
               </Menu>
             </Box>
           }

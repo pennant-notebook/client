@@ -4,13 +4,14 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import NotebookTreeView from './NotebookTreeView';
 import { NotebookType } from '@/NotebookTypes';
+import { useRecoilValue } from 'recoil';
+import { selectedDocIdState } from '~/appState';
 
 interface LeftSidebarProps {
   username: string;
   notebooks?: NotebookType[];
   refetch: () => void;
-  selectedDocId?: string;
-  setSelectedDocId: (docId: string) => void;
+  handleSelectedDocId: (docId: string) => void;
   isExpanded: boolean;
   setIsExpanded: (isExpanded: boolean) => void;
 }
@@ -19,11 +20,11 @@ export default function LeftSidebar({
   username,
   notebooks,
   refetch,
-  selectedDocId,
-  setSelectedDocId,
+  handleSelectedDocId,
   isExpanded,
   setIsExpanded
 }: LeftSidebarProps) {
+  const selectedDocId = useRecoilValue(selectedDocIdState);
   const [showChevron, setShowChevron] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const theme = useTheme().palette.mode;
@@ -130,7 +131,7 @@ export default function LeftSidebar({
                 username={username}
                 notebooks={notebooks}
                 refetch={refetch}
-                setSelectedDocId={setSelectedDocId}
+                handleSelectedDocId={handleSelectedDocId}
               />
             )}
           </Box>

@@ -14,14 +14,14 @@ interface NotebookTreeViewProps {
   username: string;
   notebooks?: NotebookType[];
   refetch: () => void;
-  setSelectedDocId: (docId: string) => void;
+  handleSelectedDocId: (docId: string) => void;
 }
 
 export default function NotebookTreeView({
   username,
   notebooks = [],
   refetch,
-  setSelectedDocId
+  handleSelectedDocId
 }: NotebookTreeViewProps) {
   const [expanded, setExpanded] = useState<string[]>(['js', 'py']);
   const [globalSortOrder, setGlobalSortOrder] = useState<'asc' | 'desc'>('asc');
@@ -48,10 +48,8 @@ export default function NotebookTreeView({
   const handleCreateNotebook = async (language: string) => {
     const newNotebook = await createDoc(username, language);
     const docID = newNotebook.docID;
-    setSelectedDocId(docID);
+    handleSelectedDocId(docID);
     refetch();
-
-    // navigate(`/${username}/${docID}`);
   };
 
   const treeFont = 'Lato';
@@ -113,7 +111,7 @@ export default function NotebookTreeView({
               index={idx}
               notebook={notebook}
               username={username}
-              setSelectedDocId={setSelectedDocId}
+              handleSelectedDocId={handleSelectedDocId}
             />
           ))}
         </StyledTreeItem>
@@ -138,7 +136,7 @@ export default function NotebookTreeView({
               index={idx}
               notebook={notebook}
               username={username}
-              setSelectedDocId={setSelectedDocId}
+              handleSelectedDocId={handleSelectedDocId}
             />
           ))}
         </StyledTreeItem>

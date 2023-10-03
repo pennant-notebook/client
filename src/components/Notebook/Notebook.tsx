@@ -86,7 +86,6 @@ const Notebook = ({ docID, resourceTitle, notebook }: NotebookProps) => {
 
   const addCellAtIndex = async (idx: number, type: string) => {
     const lang = notebookMetadata.get('language') || notebook.language;
-    console.log({ lang });
     const cell = createCell(type, lang);
     cell.set('theme', theme.palette.mode);
     if (idx >= cellsArray.length) {

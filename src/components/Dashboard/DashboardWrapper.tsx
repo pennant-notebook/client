@@ -13,10 +13,13 @@ import LoadingSpinner from '../UI/loading/LoadingSpinner';
 import { updateDisconnectedClient } from '~/utils/awarenessHelpers';
 import { NavbarProvider } from '~/contexts/NavbarContext';
 import { Box } from '~/utils/MuiImports';
+import { useRecoilState } from 'recoil';
+import { selectedDocIdState } from '~/appState';
 
 const DashboardWrapper = () => {
   const { username } = useParams();
-  const [selectedDocId, setSelectedDocId] = useState<string | null>(null);
+  const [isLoadingSelectedNotebook, setIsLoadingSelectedNotebook] = useState(false);
+  const [selectedDocId, setSelectedDocId] = useRecoilState(selectedDocIdState);
   const [isExpanded, setIsExpanded] = useState(true);
   const navigate = useNavigate();
   const usernameFromLocal = localStorage.getItem('pennant-username');
@@ -58,9 +61,11 @@ const DashboardWrapper = () => {
   if (loading) return <LoadingSpinner />;
   if (errorFetchingNotebooks) return 'Error!';
 
-  const handleSelectedDocId = (docId: string) => {
+  const handleSelectedDocId = async (docId: string) => {
+    setIsLoadingSelectedNotebook(true);
     setSelectedDocId(docId);
-    updateDisconnectedClient(contextValue.provider);
+    await updateDisconnectedClient(contextValue.provider);
+    setIsLoadingSelectedNotebook(false);
   };
 
   const lang = contextValue.notebookMetadata.get('language');
@@ -74,12 +79,11 @@ const DashboardWrapper = () => {
             username={username}
             notebooks={notebooks}
             refetch={refetch}
-            selectedDocId={selectedDocId!}
-            setSelectedDocId={handleSelectedDocId}
+            handleSelectedDocId={handleSelectedDocId}
             isExpanded={isExpanded}
             setIsExpanded={setIsExpanded}
           />
-          {selectedDocId && notebook && !isLoading && !error && (
+          {!isLoadingSelectedNotebook && selectedDocId && notebook && !isLoading && !error && (
             <Notebook docID={selectedDocId} resourceTitle={notebook.title} notebook={notebook} />
           )}
         </Box>

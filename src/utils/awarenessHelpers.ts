@@ -5,7 +5,7 @@ import { generateRandomName, getUserObjects, randomColor } from './notebookHelpe
 
 const colors = ['#958DF1', '#F98181', '#FBBC88', '#FAF594', '#70CFF8', '#94FADB', '#B9F18D'];
 
-export const updateDisconnectedClient = (provider: HocuspocusProviderConfig) => {
+export const updateDisconnectedClient = async (provider: HocuspocusProviderConfig) => {
   if (provider) {
     const clientId = provider.document.clientID;
     const clientIdsToRemove = [clientId];

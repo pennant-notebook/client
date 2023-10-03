@@ -35,7 +35,7 @@ interface ClientDrawerProps {
 const ClientDrawer = ({ handleDisconnect, clients = [] }: ClientDrawerProps) => {
   const [open, setOpen] = useState(false);
   const [showNotebooks, setShowNotebooks] = useState(false);
-  const { username } = useParams();
+  const { username, docID } = useParams();
   const [avatar, setAvatar] = useState(clients[0]);
   const { data: notebooks } = useQuery(['notebooks', username], () => username && fetchNotebooks(username));
   const providerContext = useProviderContext();
@@ -71,6 +71,14 @@ const ClientDrawer = ({ handleDisconnect, clients = [] }: ClientDrawerProps) => 
       setAvatar(storedClient);
     }
   }, [clients]);
+
+  const handleClickToGoBack = () => {
+    if (!docID) {
+      handleDisconnect('/');
+    } else {
+      handleDisconnect(`/${username}`);
+    }
+  };
 
   return (
     <Box sx={{ alignItems: 'center' }}>
@@ -129,7 +137,7 @@ const ClientDrawer = ({ handleDisconnect, clients = [] }: ClientDrawerProps) => 
                       </Typography>
                     </StyledButton>
                   ))}
-                <IconRow onClick={() => handleDisconnect(`/${username}`)} text='Dashboard' icon={<ArrowBack />} />
+                <IconRow onClick={handleClickToGoBack} text={!docID ? 'Home' : 'Workspace'} icon={<ArrowBack />} />
               </Box>
             </Box>
           </Stack>
