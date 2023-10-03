@@ -139,6 +139,17 @@
   margin-bottom: 1.2em;
 }
 
+.fadeInOut {
+  opacity: 1;
+  font-style: italic !important;
+  transition: opacity 1s ease-in-out !important;
+}
+
+.fadeOut {
+  opacity: 0;
+  font-style: italic;
+}
+
 .subheadline,
 .perks .perk span {
   color: rgb(91 94 118);
