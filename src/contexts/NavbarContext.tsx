@@ -36,9 +36,9 @@ export const NavbarProvider = ({ children, provider, docID }: NavbarProviderProp
   const [selectedDoc, setSelectedDoc] = useState<string>('');
   const navigate = useNavigate();
 
-  const handleDisconnect = (destination: string) => {
+  const handleDisconnect = async (destination: string) => {
     if (docID && provider) {
-      const currentClients = updateDisconnectedClient(provider);
+      const currentClients = await updateDisconnectedClient(provider);
       setClients(currentClients || []);
     }
     navigate(destination);

@@ -1,7 +1,6 @@
 import { Box, Typography, Menu, MenuItem, InputBase, useTheme } from '~/utils/MuiImports';
-import { CheckIcon, CloseIcon, IconButton } from '~/utils/MuiImports';
+import { CheckIcon, CloseIcon, IconButton, MoreVertIcon, FileCopyIcon } from '~/utils/MuiImports';
 import { StyledTreeItem } from '~/components/UI/StyledTreeComponents';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { NotebookType } from '@/NotebookTypes';
 import { useMutation, useQuery } from 'react-query';
 import { editDocTitle, deleteDoc } from '~/services/dynamoPost';
@@ -13,7 +12,6 @@ import ListIconPy from './assets/listpy.svg';
 import { useRecoilState } from 'recoil';
 import { notebookTitleStateFamily } from '~/appState';
 import { fetchDoc } from '~/services/dynamoFetch';
-import FileCopyIcon from '@mui/icons-material/FileCopy';
 
 interface TreeNotebookProps {
   notebook: NotebookType;

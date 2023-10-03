@@ -1,7 +1,4 @@
-import Collapse from '@mui/material/Collapse';
-import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
-import { alpha, styled } from '@mui/material/styles';
-import { TransitionProps } from '@mui/material/transitions';
+import { Collapse, SvgIcon, SvgIconProps, alpha, styled, TransitionProps } from '~/utils/MuiImports';
 import { TreeItem, TreeItemProps, treeItemClasses } from '@mui/x-tree-view/TreeItem';
 import { animated, useSpring } from '@react-spring/web';
 import { forwardRef } from 'react';

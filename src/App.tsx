@@ -1,5 +1,5 @@
 import { Extension } from '@codemirror/state';
-import { useMediaQuery } from '@mui/material';
+import { useMediaQuery } from '~/utils/MuiImports';
 import { useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';

@@ -1,6 +1,5 @@
 import { createContext, useContext, ReactNode } from 'react';
-import { createTheme, ThemeProvider } from '../utils/MuiImports';
-import CssBaseline from '@mui/material/CssBaseline';
+import { createTheme, ThemeProvider, CssBaseline } from '../utils/MuiImports';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { tokyoNight } from '@uiw/codemirror-theme-tokyo-night';
 import { vscodeDark } from '@uiw/codemirror-theme-vscode';

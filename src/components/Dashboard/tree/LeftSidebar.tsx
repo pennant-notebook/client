@@ -1,7 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Box, Divider, IconButton, useTheme } from '~/utils/MuiImports';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { Box, Divider, IconButton, useTheme, ChevronLeftIcon, ChevronRightIcon } from '~/utils/MuiImports';
 import NotebookTreeView from './NotebookTreeView';
 import { NotebookType } from '@/NotebookTypes';
 import { useRecoilValue } from 'recoil';
