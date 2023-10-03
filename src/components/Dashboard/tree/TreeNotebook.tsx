@@ -10,6 +10,8 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
 import ListIconJs from './assets/listjs.svg';
 import ListIconPy from './assets/listpy.svg';
+import { useSetRecoilState } from 'recoil';
+import { notebookTitleStateFamily } from '~/appState';
 
 interface TreeNotebookProps {
   notebook: NotebookType;
@@ -26,6 +28,7 @@ const TreeNotebook = ({ index, notebook, username, refetch, setSelectedDocId }: 
   const navigate = useNavigate();
   const theme = useTheme().palette.mode;
   const inputRef = useRef<HTMLElement | null>(null);
+  const setTitle = useSetRecoilState(notebookTitleStateFamily(notebook.docID));
 
   const handleClickToNavigate = () => {
     if (isEditing) return;
@@ -41,9 +44,11 @@ const TreeNotebook = ({ index, notebook, username, refetch, setSelectedDocId }: 
   const editMutation = useMutation(editDocTitle, {
     onSuccess: () => {
       refetch();
+      console.log(newTitle);
+      setTitle(newTitle);
     }
   });
-
+  console.log();
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     setAnchorEl(e.currentTarget);

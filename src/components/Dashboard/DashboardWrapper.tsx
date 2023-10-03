@@ -69,16 +69,12 @@ const DashboardWrapper = () => {
     <ProviderContext.Provider value={contextValue}>
       <NavbarProvider provider={contextValue.provider || null} docID={selectedDocId || ''}>
         <Box>
-          <Navbar
-            selectedDoc={selectedDocId || ''}
-            language={lang}
-            isExpanded={isExpanded}
-            setIsExpanded={setIsExpanded}
-          />
+          <Navbar selectedDoc={selectedDocId!} language={lang} isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
           <LeftSidebar
             username={username}
             notebooks={notebooks}
             refetch={refetch}
+            selectedDocId={selectedDocId!}
             setSelectedDocId={handleSelectedDocId}
             isExpanded={isExpanded}
             setIsExpanded={setIsExpanded}

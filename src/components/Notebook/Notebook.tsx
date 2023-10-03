@@ -19,14 +19,13 @@ interface NotebookProps {
 
 const Notebook = ({ docID, resourceTitle, notebook }: NotebookProps) => {
   const { doc, provider, awareness, notebookMetadata }: ProviderContextType = useProviderContext()!;
-  const { setCodeCells, setClients } = useNavbarContext(); // Use the hook
+  const { setCodeCells, setClients } = useNavbarContext();
 
   const theme = useTheme();
 
   const cellsArray = doc.getArray('cells');
   const [cellDataArr, setCellDataArr] = useState(cellsArray.toArray());
   const [allRunning, setAllRunning] = useState(false);
-  const [title, setTitle] = useState<string>(resourceTitle || docID);
   document.title = resourceTitle || 'Untitled Notebook';
 
   useEffect(() => {
@@ -110,27 +109,22 @@ const Notebook = ({ docID, resourceTitle, notebook }: NotebookProps) => {
     updatePositions();
   };
 
-  const handleTitleChange = (newTitle: string) => {
-    notebookMetadata.set('title', newTitle);
-    setTitle(newTitle);
-  };
+  // useEffect(() => {
+  //   const titleObserver = () => {
+  //     const docTitle = notebookMetadata.get('title');
+  //     const displayTitle = docTitle ? docTitle.toString() : 'Untitled';
+  //     setTitle(displayTitle);
+  //     document.title = displayTitle;
+  //   };
 
-  useEffect(() => {
-    const titleObserver = () => {
-      const docTitle = notebookMetadata.get('title');
-      const displayTitle = docTitle ? docTitle.toString() : 'Untitled';
-      setTitle(displayTitle);
-      document.title = displayTitle;
-    };
+  //   if (notebookMetadata) {
+  //     notebookMetadata.observe(titleObserver);
+  //   }
 
-    if (notebookMetadata) {
-      notebookMetadata.observe(titleObserver);
-    }
-
-    return () => {
-      notebookMetadata.unobserve(titleObserver);
-    };
-  }, [title]);
+  //   return () => {
+  //     notebookMetadata.unobserve(titleObserver);
+  //   };
+  // }, [title]);
 
   useEffect(() => {
     const codeCellsForDredd = cellDataArr.filter((c: YMap) => c.get('type') === 'code');
@@ -141,8 +135,6 @@ const Notebook = ({ docID, resourceTitle, notebook }: NotebookProps) => {
     addCellAtIndex,
     repositionCell,
     deleteCell,
-    title,
-    handleTitleChange,
     allRunning,
     setAllRunning
   };

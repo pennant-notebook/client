@@ -1,5 +1,5 @@
 import { NotebookType } from '@/NotebookTypes';
-import { atom } from 'recoil';
+import { atom, atomFamily } from 'recoil';
 
 interface User {
   login: string;
@@ -19,6 +19,11 @@ export const authState = atom<{
     userData: null,
     provider: null,
   },
+});
+
+export const notebookTitleStateFamily = atomFamily<string, string>({
+  key: 'notebookTitleStateFamily',
+  default: 'Untitled',
 });
 
 export const notebooksState = atom<NotebookType[]>({

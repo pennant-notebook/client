@@ -9,6 +9,7 @@ interface LeftSidebarProps {
   username: string;
   notebooks?: NotebookType[];
   refetch: () => void;
+  selectedDocId?: string;
   setSelectedDocId: (docId: string) => void;
   isExpanded: boolean;
   setIsExpanded: (isExpanded: boolean) => void;
@@ -18,6 +19,7 @@ export default function LeftSidebar({
   username,
   notebooks,
   refetch,
+  selectedDocId,
   setSelectedDocId,
   isExpanded,
   setIsExpanded
@@ -49,6 +51,12 @@ export default function LeftSidebar({
     }
   };
 
+  const handleOverlayClick = () => {
+    if (isExpanded) {
+      setIsExpanded(false);
+    }
+  };
+
   useEffect(() => {
     setIsExpanded(true);
     return () => {
@@ -56,11 +64,11 @@ export default function LeftSidebar({
     };
   }, []);
 
-  const handleOverlayClick = () => {
-    if (isExpanded) {
+  useEffect(() => {
+    if (selectedDocId) {
       setIsExpanded(false);
     }
-  };
+  }, [selectedDocId]);
 
   const sidebarWidth = 270;
   return (

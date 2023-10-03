@@ -16,6 +16,8 @@ import {
 import { useMutation, useQuery } from 'react-query';
 import JsExtIcon from '~/assets/app/js-file.png';
 import PyExtIcon from '~/assets/app/python.png';
+import { useSetRecoilState } from 'recoil';
+import { notebookTitleStateFamily } from '~/appState';
 
 interface NotebookType {
   docID: string;
@@ -29,6 +31,7 @@ interface DocTitleProps {
 
 const DocTitle = ({ selectedDoc, language }: DocTitleProps) => {
   const { username, docID: paramsDoc } = useParams();
+  const setTitle = useSetRecoilState(notebookTitleStateFamily(selectedDoc || ''));
 
   const docID = paramsDoc || selectedDoc;
 
@@ -50,6 +53,8 @@ const DocTitle = ({ selectedDoc, language }: DocTitleProps) => {
     try {
       if (notebook && username) {
         editMutation.mutate({ docID: notebook.docID, title: tempTitle, username });
+        setTitle(tempTitle);
+        refetch();
       }
       setOpen(false);
     } catch (error) {

@@ -7,11 +7,8 @@ import TreeNotebook from './TreeNotebook';
 import { createDoc } from '~/services/dynamoPost';
 import IconPY from './assets/pyfolder.png';
 import IconJS from './assets/jsfolder.png';
-
 import AzIconWhite from './assets/az-white.png';
 import AzIcon from './assets/az.png';
-
-import { useNavigate } from 'react-router';
 
 interface NotebookTreeViewProps {
   username: string;
@@ -29,7 +26,6 @@ export default function NotebookTreeView({
   const [expanded, setExpanded] = useState<string[]>(['js', 'py']);
   const [globalSortOrder, setGlobalSortOrder] = useState<'asc' | 'desc'>('asc');
   const theme = useTheme().palette.mode;
-  const navigate = useNavigate();
 
   const jsNotebooks = notebooks.filter(nb => nb.language === 'javascript');
   const pyNotebooks = notebooks.filter(nb => nb.language === 'python');
@@ -52,7 +48,10 @@ export default function NotebookTreeView({
   const handleCreateNotebook = async (language: string) => {
     const newNotebook = await createDoc(username, language);
     const docID = newNotebook.docID;
-    navigate(`/${username}/${docID}`);
+    setSelectedDocId(docID);
+    refetch();
+
+    // navigate(`/${username}/${docID}`);
   };
 
   const treeFont = 'Lato';

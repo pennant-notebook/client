@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import { useRecoilState } from 'recoil';
 import { validateForm } from '~/utils/authHelpers';
-import LoggedInIcon from '~/assets/loggedIn.svg';
+import LoggedInIcon from '~/assets/auth/loggedIn.svg';
 import Pennant from '~/assets/logo/logo.png';
 import PennantLogoDark from '~/assets/logo/pennant-logo-dark.png';
 import PennantLogo from '~/assets/logo/pennant-logo.png';
