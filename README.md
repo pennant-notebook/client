@@ -147,6 +147,11 @@ Please note that the content provided in the sections below serves as our prelim
 
 ## Contexts
 
+### Navbar Context (`src/contexts/ProviderContext.ts`)
+- Centralizes control over navigation-related state and interactions.
+- Manages state for the selected notebook, its code cells, and connected clients.
+- Includes a function for graceful client disconnection during navigation.
+ 
 ### Provider Context (`src/contexts/ProviderContext.ts`)
 
 - Initializes the client-side Websocket-Provider (`HocuspocusProvider`) and the Yjs Document (`Y.Doc`).
@@ -160,8 +165,8 @@ Please note that the content provided in the sections below serves as our prelim
 ---
 
 ## Upcoming Features
-
-- Support for additional programming languages: Golang and Python.
+- Support for Python is in Beta: try it out [here](https://pennnant.mafishi.io)
+- Support for additional programming languages: Golang, Ruby
 
 ## Contributing
 
