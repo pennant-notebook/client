@@ -165,7 +165,7 @@ Please note that the content provided in the sections below serves as our prelim
 ---
 
 ## Upcoming Features
-- Support for Python is in Beta: try it out [here](https://pennant.mafishi.io)
+- Support for Python is in Beta: try it out [here](https://pennant.mafishi.io/@trypennant/a0a23784-79f7-49b0-b9ea-85f1780f0f5a)
 - Support for additional programming languages: Golang, Ruby
 
 ## Contributing
