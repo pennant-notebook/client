@@ -10,7 +10,6 @@ import { YMapEvent } from '~/utils/notebookHelpers';
 import { EditorView } from 'codemirror';
 import styles from './CodeCell.module.css';
 import { CodeCellProps } from '@/CellPropsTypes';
-import { handleSnake } from '~/services/codeExecution/snake';
 
 const CodeCell = ({ cellId, cell }: CodeCellProps) => {
   const content = cell.get('content');
@@ -34,19 +33,14 @@ const CodeCell = ({ cellId, cell }: CodeCellProps) => {
   const handleRunCode = useCallback(async () => {
     try {
       cellMetadata.set('isRunning', true);
-      let response;
-      if (language === 'python') {
-        response = await handleSnake(docID, cellId, cell.get('content').toString());
-      } else {
-        response = await handleDredd(docID, cellId, cell.get('content').toString());
-      }
-      console.log('Received response:', response, language); // Debug log
+      const response = await handleDredd(language, docID, cellId, cell.get('content').toString());
+      // console.log('Received response:', response, language); // Debug log
       const outputMap = cell.get('outputMap');
       outputMap.set('stdout', response.output);
       outputMap.set('status', response.type);
       return true;
     } catch (error: any) {
-      console.error('Error during code execution:', error.message); // Debug log
+      // console.error('Error during code execution:', error.message); // Debug log
       if (error.message === 'critical error') {
         outputMap.set('status', 'critical');
         outputMap.set(

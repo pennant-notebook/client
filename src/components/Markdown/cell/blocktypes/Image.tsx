@@ -1,5 +1,5 @@
 import { BlockNoteEditor, BlockSchema, BlockSpec, PropSchema, SpecificBlock, defaultProps } from '@blocknote/core';
-import ImageIcon from '@mui/icons-material/Image';
+import { ImageIcon } from '~/utils/MuiImports';
 
 import { CSSProperties, useEffect, useMemo, useState } from 'react';
 

@@ -28,6 +28,7 @@
 - **[y-protocols](https://github.com/yjs/y-protocols)**: Used to manipulate specific aspects of the awareness protocol.
 - **[react-dnd](https://github.com/react-dnd/react-dnd)**: Powers the drag-and-drop functionality for cells.
 - **[BlockNote](https://github.com/TypeCellOS/BlockNote)**: Markdown editor with customizations for a minimal design.
+- **[BlockNote](https://github.com/TypeCellOS/BlockNote)**: Markdown editor with customizations for a minimal design.
 - **[Recoil](https://github.com/facebookexperimental/Recoil)**: Manages Auth0 and regular authentication states for the app.
 
 ## Getting started
@@ -61,6 +62,33 @@ To start the development server, run:
 ```bash
 npm start
 ```
+
+## Testing
+
+- This project implements both end-to-end (E2E) and component tests using [Playwright](https://playwright.dev/).
+- All tests, along with their related setup and utility files, are located in the `__tests__` directory, organized into subdirectories for easy navigation and maintenance.
+
+### Running Tests
+
+To run the E2E tests, use the following command:
+
+```bash
+npm run test:e2e
+```
+
+To run the component tests, use the following command:
+
+```bash
+npm run test:ct
+```
+
+---
+
+## Preliminary Documentation
+
+Please note that the content provided in the sections below serves as our preliminary documentation. Our comprehensive main documentation is currently a work in progress and will be available soon.
+
+---
 
 ## Testing
 
@@ -148,10 +176,11 @@ Please note that the content provided in the sections below serves as our prelim
 ## Contexts
 
 ### Navbar Context (`src/contexts/NavbarContext.ts`)
+
 - Centralizes control over navigation-related state and interactions.
 - Manages state for the selected notebook, its code cells, and connected clients.
 - Includes a function for graceful client disconnection during navigation.
- 
+
 ### Provider Context (`src/contexts/ProviderContext.ts`)
 
 - Initializes the client-side Websocket-Provider (`HocuspocusProvider`) and the Yjs Document (`Y.Doc`).
@@ -165,6 +194,7 @@ Please note that the content provided in the sections below serves as our prelim
 ---
 
 ## Upcoming Features
+
 - Support for Python is in Beta: try it out [here](https://pennant.mafishi.io/@trypennant/a0a23784-79f7-49b0-b9ea-85f1780f0f5a)
 - Support for additional programming languages: Golang, Ruby
 

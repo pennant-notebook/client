@@ -26,6 +26,8 @@ import IconRow from '../IconRow';
 import { StyledButton } from '../StyledComponents';
 import styles from './Clients.module.css';
 import ThemeSelector from './ThemeSelector';
+import { useSetRecoilState } from 'recoil';
+import { selectedDocIdState } from '~/appState';
 
 interface ClientDrawerProps {
   handleDisconnect: (destination: string) => void;
@@ -35,15 +37,18 @@ interface ClientDrawerProps {
 const ClientDrawer = ({ handleDisconnect, clients = [] }: ClientDrawerProps) => {
   const [open, setOpen] = useState(false);
   const [showNotebooks, setShowNotebooks] = useState(false);
-  const { username } = useParams();
+  const { username, docID } = useParams();
   const [avatar, setAvatar] = useState(clients[0]);
   const { data: notebooks } = useQuery(['notebooks', username], () => username && fetchNotebooks(username));
   const providerContext = useProviderContext();
   const provider = providerContext ? providerContext.provider : null;
+  const setSelectedDocId = useSetRecoilState(selectedDocIdState);
 
   const {
-    custom: { currTheme, toggleTheme }
+    custom: { toggleTheme }
   } = useTheme();
+
+  const currTheme = useTheme().palette.mode;
 
   const handleEditNameClick = useCallback(() => {
     let newName = window.prompt('Enter a new name:');
@@ -69,6 +74,15 @@ const ClientDrawer = ({ handleDisconnect, clients = [] }: ClientDrawerProps) => 
       setAvatar(storedClient);
     }
   }, [clients]);
+
+  const handleClickToGoBack = () => {
+    if (!docID) {
+      setSelectedDocId(null);
+      handleDisconnect('/');
+    } else {
+      handleDisconnect(`/${username}`);
+    }
+  };
 
   return (
     <Box sx={{ alignItems: 'center' }}>
@@ -127,7 +141,7 @@ const ClientDrawer = ({ handleDisconnect, clients = [] }: ClientDrawerProps) => 
                       </Typography>
                     </StyledButton>
                   ))}
-                <IconRow onClick={() => handleDisconnect(`/${username}`)} text='Dashboard' icon={<ArrowBack />} />
+                <IconRow onClick={handleClickToGoBack} text={!docID ? 'Home' : 'Workspace'} icon={<ArrowBack />} />
               </Box>
             </Box>
           </Stack>

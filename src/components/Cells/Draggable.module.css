@@ -1,3 +1,8 @@
+:root {
+  --shoulder-bg-light: rgba(0, 0, 0, 0.05);
+  --shoulder-bg-dark: rgba(206, 200, 200, 0.05);
+}
+
 .dropruler {
   position: absolute;
   left: 12%;
@@ -88,5 +93,10 @@
 
 .shoulder:hover {
   background: rgba(0, 0, 0, 0.05);
+  background-clip: padding-box;
+}
+
+.dark:hover {
+  background: rgba(206, 200, 200, 0.05);
   background-clip: padding-box;
 }

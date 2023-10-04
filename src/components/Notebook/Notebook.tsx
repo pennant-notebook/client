@@ -1,17 +1,15 @@
-import { ClientType } from '@/ClientTypes';
 import { NotebookContextType, NotebookType } from '@/NotebookTypes';
 import { ProviderContextType } from '@/ProviderTypes';
 import { useEffect, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { useNavigate } from 'react-router';
 import { NotebookContext } from '~/contexts/NotebookContext';
 import useProviderContext from '~/contexts/ProviderContext';
 import { Box, useTheme } from '~/utils/MuiImports';
 import { getClientFromLocalStorage, updateDisconnectedClient } from '~/utils/awarenessHelpers';
 import { YMap, createCell, getUserObjects } from '~/utils/notebookHelpers';
 import Cells from '../Cells/Cells';
-import Navbar from './Navbar';
+import { useNavbarContext } from '~/contexts/NavbarContext';
 
 interface NotebookProps {
   docID: string;
@@ -21,15 +19,13 @@ interface NotebookProps {
 
 const Notebook = ({ docID, resourceTitle, notebook }: NotebookProps) => {
   const { doc, provider, awareness, notebookMetadata }: ProviderContextType = useProviderContext()!;
-  const navigate = useNavigate();
+  const { setCodeCells, setClients } = useNavbarContext();
+
   const theme = useTheme();
-  // notebookMetadata.set('language', notebook.language);
 
   const cellsArray = doc.getArray('cells');
   const [cellDataArr, setCellDataArr] = useState(cellsArray.toArray());
   const [allRunning, setAllRunning] = useState(false);
-  const [clients, setClients] = useState<ClientType[]>([]);
-  const [title, setTitle] = useState<string>(resourceTitle || docID);
   document.title = resourceTitle || 'Untitled Notebook';
 
   useEffect(() => {
@@ -90,7 +86,6 @@ const Notebook = ({ docID, resourceTitle, notebook }: NotebookProps) => {
 
   const addCellAtIndex = async (idx: number, type: string) => {
     const lang = notebookMetadata.get('language') || notebook.language;
-    console.log({ lang });
     const cell = createCell(type, lang);
     cell.set('theme', theme.palette.mode);
     if (idx >= cellsArray.length) {
@@ -113,44 +108,32 @@ const Notebook = ({ docID, resourceTitle, notebook }: NotebookProps) => {
     updatePositions();
   };
 
-  const handleTitleChange = (newTitle: string) => {
-    notebookMetadata.set('title', newTitle);
-    setTitle(newTitle);
-  };
+  // useEffect(() => {
+  //   const titleObserver = () => {
+  //     const docTitle = notebookMetadata.get('title');
+  //     const displayTitle = docTitle ? docTitle.toString() : 'Untitled';
+  //     setTitle(displayTitle);
+  //     document.title = displayTitle;
+  //   };
+
+  //   if (notebookMetadata) {
+  //     notebookMetadata.observe(titleObserver);
+  //   }
+
+  //   return () => {
+  //     notebookMetadata.unobserve(titleObserver);
+  //   };
+  // }, [title]);
 
   useEffect(() => {
-    const titleObserver = () => {
-      const docTitle = notebookMetadata.get('title');
-      const displayTitle = docTitle ? docTitle.toString() : 'Untitled';
-      setTitle(displayTitle);
-      document.title = displayTitle;
-    };
-
-    if (notebookMetadata) {
-      notebookMetadata.observe(titleObserver);
-    }
-
-    return () => {
-      notebookMetadata.unobserve(titleObserver);
-    };
-  }, [title]);
-
-  const handleDisconnect = (destination: string) => {
-    if (docID) {
-      const currentClients = updateDisconnectedClient(provider);
-      setClients(currentClients || []);
-    }
-    navigate(destination);
-  };
-
-  const codeCellsForDredd = cellDataArr.filter((c: YMap) => c.get('type') === 'code');
+    const codeCellsForDredd = cellDataArr.filter((c: YMap) => c.get('type') === 'code');
+    setCodeCells(codeCellsForDredd);
+  }, [cellDataArr]);
 
   const contextValue: NotebookContextType = {
     addCellAtIndex,
     repositionCell,
     deleteCell,
-    title,
-    handleTitleChange,
     allRunning,
     setAllRunning
   };
@@ -158,7 +141,6 @@ const Notebook = ({ docID, resourceTitle, notebook }: NotebookProps) => {
   return (
     <NotebookContext.Provider value={contextValue}>
       <Box className='main-content'>
-        <Navbar codeCells={codeCellsForDredd} clients={clients} handleDisconnect={handleDisconnect} />
         <DndProvider backend={HTML5Backend}>
           <Cells cells={cellDataArr} setCells={setCellDataArr} />
         </DndProvider>

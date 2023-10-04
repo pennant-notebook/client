@@ -1,5 +1,6 @@
 import { NotebookType } from '@/NotebookTypes';
-import { atom } from 'recoil';
+import { HocuspocusProviderConfig } from '@/ProviderTypes';
+import { atom, atomFamily } from 'recoil';
 
 interface User {
   login: string;
@@ -7,6 +8,10 @@ interface User {
   avatar?: string;
   name?: string;
 }
+export const refreshState = atom({
+  key: 'refreshState',
+  default: false,
+});
 
 export const authState = atom<{
   isLoggedIn: boolean;
@@ -19,6 +24,21 @@ export const authState = atom<{
     userData: null,
     provider: null,
   },
+});
+
+export const providerState = atom<HocuspocusProviderConfig | null>({
+  key: 'providerState',
+  default: null,
+});
+
+export const selectedDocIdState = atom<string | null>({
+  key: 'selectedDocId',
+  default: null,
+});
+
+export const notebookTitleStateFamily = atomFamily<string, string>({
+  key: 'notebookTitleStateFamily',
+  default: 'Untitled',
 });
 
 export const notebooksState = atom<NotebookType[]>({

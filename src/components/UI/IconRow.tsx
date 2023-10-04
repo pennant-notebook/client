@@ -16,7 +16,8 @@ const IconRow = ({ icon, text, onClick }: IconRowProps) => {
         py: text ? 2 : 1,
         width: text ? '100%' : 'auto',
         display: 'flex',
-        justifyContent: 'flex-start'
+        justifyContent: 'flex-start',
+        alignItems: 'center'
       }}>
       <Stack direction='row' spacing={1} alignItems='center'>
         {icon}

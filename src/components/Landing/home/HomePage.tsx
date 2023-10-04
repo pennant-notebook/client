@@ -1,7 +1,9 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import buttonStyles from './buttons.module.css';
 import intro from '../assets/intro.gif';
 import javascript from '../assets/javascript.svg';
+import python from '~/assets/app/python.svg';
 import markdown from '../assets/markdown.svg';
 import collab from '../assets/collab.svg';
 import magnifyingGlass from '../assets/magnifying-glass.svg';
@@ -12,6 +14,20 @@ import Navigation from '../navigation/Navigation';
 
 const HomePage = () => {
   document.title = 'Pennant';
+  const [showPython, setShowPython] = useState(false);
+  const [transitioning, setTransitioning] = useState(false);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTransitioning(true);
+      setTimeout(() => {
+        setShowPython(prevShowPython => !prevShowPython);
+        setTransitioning(false);
+      }, 1000);
+    }, 5000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <Box className={styles.main}>
@@ -44,16 +60,22 @@ const HomePage = () => {
 
         <section className={styles.perksSection}>
           <div className={styles.perks}>
-            <div className={styles.perk}>
+            <div
+              className={styles.perk}
+              style={{
+                opacity: transitioning ? 0 : 1,
+                transition: 'opacity 1s ease-in-out'
+              }}>
               <div className={styles.icon}>
-                <img src={javascript} alt='Javascript icon' />
+                <img src={showPython ? python : javascript} alt={showPython ? 'Python icon' : 'Javascript icon'} />
               </div>
-              <h3 style={{ color: '#000' }}>JavaScript</h3>
+              <h3 style={{ color: '#000' }}>{showPython ? 'Python' : 'JavaScript'}</h3>
               <span>
-                Blazing-fast code execution, with the freedom to run cells individually or the entire notebook.
+                {showPython
+                  ? 'Now supporting Python notebooks and code execution.'
+                  : 'Blazing-fast code execution, with the freedom to run cells individually or the entire notebook.'}
               </span>
             </div>
-
             <div className={styles.perk}>
               <div className={styles.icon}>
                 <img src={markdown} alt='Markdown logo' />

@@ -1,27 +1,41 @@
 import { Box, Typography, Menu, MenuItem, InputBase, useTheme } from '~/utils/MuiImports';
-import { CheckIcon, CloseIcon, IconButton } from '~/utils/MuiImports';
+import { CheckIcon, CloseIcon, IconButton, MoreVertIcon, FileCopyIcon } from '~/utils/MuiImports';
 import { StyledTreeItem } from '~/components/UI/StyledTreeComponents';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { NotebookType } from '@/NotebookTypes';
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { editDocTitle, deleteDoc } from '~/services/dynamoPost';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
+import ListIconJs from './assets/listjs.svg';
+import ListIconPy from './assets/listpy.svg';
+import { useRecoilState } from 'recoil';
+import { notebookTitleStateFamily } from '~/appState';
+import { fetchDoc } from '~/services/dynamoFetch';
 
 interface TreeNotebookProps {
   notebook: NotebookType;
   username: string;
   index: number;
-  refetch: () => void;
+  handleSelectedDocId: (docID: string) => void;
 }
 
-const TreeNotebook = ({ index, notebook, username, refetch }: TreeNotebookProps) => {
+const TreeNotebook = ({ index, notebook, username, handleSelectedDocId }: TreeNotebookProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(notebook.title || '');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const navigate = useNavigate();
   const theme = useTheme().palette.mode;
+  const inputRef = useRef<HTMLElement | null>(null);
+  const [title, setTitle] = useRecoilState(notebookTitleStateFamily(notebook.docID));
+
+  const { data: fetchedNotebook, refetch } = useQuery<NotebookType>([notebook.docID, username], () =>
+    fetchDoc(notebook.docID as string, username as string)
+  );
+
+  useEffect(() => {
+    setTitle(fetchedNotebook?.title || notebook.title || `Untitled-${index}`);
+  }, [notebook]);
 
   const handleClickToNavigate = () => {
     if (isEditing) return;
@@ -36,6 +50,7 @@ const TreeNotebook = ({ index, notebook, username, refetch }: TreeNotebookProps)
 
   const editMutation = useMutation(editDocTitle, {
     onSuccess: () => {
+      setTitle(newTitle);
       refetch();
     }
   });
@@ -50,6 +65,9 @@ const TreeNotebook = ({ index, notebook, username, refetch }: TreeNotebookProps)
     setAnchorEl(null);
     setNewTitle(notebook.title || '');
     setIsEditing(true);
+    setTimeout(() => {
+      inputRef.current && inputRef.current.focus();
+    }, 0);
   };
 
   const handleDeleteClick = (e: React.MouseEvent<HTMLElement>) => {
@@ -75,12 +93,14 @@ const TreeNotebook = ({ index, notebook, username, refetch }: TreeNotebookProps)
   };
 
   const handleCancelClick = (
-    e: React.MouseEvent<HTMLElement> | React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.MouseEvent<HTMLElement> | React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLDivElement>
   ) => {
+    const target = e.relatedTarget as HTMLElement;
+    if (target && target.id === 'save-button') return;
     e.stopPropagation();
     setTimeout(() => {
       setIsEditing(false);
-    }, 100);
+    }, 50);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLElement | HTMLTextAreaElement>) => {
@@ -89,9 +109,7 @@ const TreeNotebook = ({ index, notebook, username, refetch }: TreeNotebookProps)
       handleSaveClick(e);
     }
     if (e.key === 'Escape') {
-      setTimeout(() => {
-        setIsEditing(false);
-      }, 100);
+      setIsEditing(false);
     }
   };
 
@@ -99,40 +117,62 @@ const TreeNotebook = ({ index, notebook, username, refetch }: TreeNotebookProps)
     setAnchorEl(null);
   };
 
+  const handleCopyClick = (e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    const notebookURL = `https://trypennant.com/${username}/${notebook.docID}`;
+    navigator.clipboard
+      .writeText(notebookURL)
+      .then(() => {
+        toast.success('Notebook URL copied to clipboard');
+      })
+      .catch(err => {
+        toast.error('Failed to copy URL: ' + err);
+      });
+  };
+
   const iconSize = '16px';
+  const iconPyWidth = '20px';
+  const iconPyHeight = '20px';
+  const treeFont = 'Lato';
 
   return (
     <Box>
       {isEditing ? (
-        <StyledTreeItem
-          key={notebook.docID}
-          nodeId={notebook.docID}
-          label={
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <InputBase
-                sx={{
-                  fontFamily: 'Inter',
-                  color: theme === 'light' ? '#2c3032' : '#fff',
-                  fontSize: '0.85rem',
-                  flexGrow: 1
-                }}
-                value={newTitle}
-                onChange={e => setNewTitle(e.target.value)}
-                onBlur={handleCancelClick}
-                onKeyDown={handleKeyDown}
-                autoFocus
-              />
-              <IconButton onClick={handleSaveClick} sx={{ color: 'green' }}>
-                <CheckIcon sx={{ fontSize: iconSize }} />
-              </IconButton>
-              <IconButton onClick={handleCancelClick} sx={{ color: 'red' }}>
-                <CloseIcon sx={{ fontSize: iconSize }} />
-              </IconButton>
-            </Box>
-          }
-        />
+        <div
+          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginLeft: 10 }}
+          onBlur={handleCancelClick}>
+          <InputBase
+            ref={inputRef}
+            sx={{
+              fontFamily: treeFont,
+              color: theme === 'light' ? '#2c3032' : '#fff',
+              fontSize: '0.85rem',
+              flexGrow: 1
+            }}
+            value={newTitle}
+            onChange={e => setNewTitle(e.target.value)}
+            onBlur={handleCancelClick}
+            onKeyDown={handleKeyDown}
+            autoFocus
+          />
+          <IconButton id='save-button' onClick={handleSaveClick} sx={{ color: 'green' }}>
+            <CheckIcon sx={{ fontSize: iconSize }} />
+          </IconButton>
+          <IconButton onClick={handleCancelClick} sx={{ color: 'red' }}>
+            <CloseIcon sx={{ fontSize: iconSize }} />
+          </IconButton>
+        </div>
       ) : (
         <StyledTreeItem
+          onClick={() => handleSelectedDocId(notebook.docID)}
+          icon={
+            <img
+              src={notebook.language === 'javascript' ? ListIconJs : ListIconPy}
+              alt='List Icon'
+              width={iconPyWidth}
+              height={iconPyHeight}
+            />
+          }
           nodeId={notebook.docID}
           label={
             <Box
@@ -145,20 +185,24 @@ const TreeNotebook = ({ index, notebook, username, refetch }: TreeNotebookProps)
               }}>
               <Typography
                 sx={{
-                  fontFamily: 'Inter',
+                  fontFamily: treeFont,
                   color: theme === 'light' ? '#2c3032' : '#fff',
                   fontSize: '0.85rem',
                   flexGrow: 1
                 }}>
-                {notebook.title || `Untitled-${index}`}
+                {title || `Untitled-${index}`}
               </Typography>
-              <IconButton onClick={e => handleClick(e)}>
+              <IconButton onClick={e => handleClick(e)} sx={{ width: '28px', height: '28px' }}>
                 <MoreVertIcon />
               </IconButton>
               <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-                <MenuItem onClick={handleClickToNavigate}>Edit</MenuItem>
+                <MenuItem onClick={handleClickToNavigate}>Open</MenuItem>
                 <MenuItem onClick={handleDeleteClick}>Delete</MenuItem>
                 <MenuItem onClick={handleRenameClick}>Rename</MenuItem>
+                <MenuItem onClick={handleCopyClick}>
+                  <FileCopyIcon fontSize='small' style={{ marginRight: '8px' }} />
+                  Copy Notebook URL
+                </MenuItem>{' '}
               </Menu>
             </Box>
           }

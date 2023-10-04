@@ -2,12 +2,14 @@ import { ProviderContextType } from '@/ProviderTypes';
 import { useState } from 'react';
 import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import PlayAllIcon from '~/assets/allplay.png';
+import PlayAllIcon from '~/assets/app/allplay.png';
 import useProviderContext from '~/contexts/ProviderContext';
 import { handleResetContext, handleRunAllCode } from '~/services/codeExecution/dredd';
 import { CircularProgress, IconButton, Refresh, Stack, Tooltip } from '~/utils/MuiImports';
 import styles from './DreddButtons.module.css';
 import { YMap } from '~/utils/notebookHelpers';
+import { useRecoilValue } from 'recoil';
+import { selectedDocIdState } from '~/appState';
 
 interface DreddButtonsProps {
   codeCells: YMap[] | undefined;
@@ -15,14 +17,14 @@ interface DreddButtonsProps {
 
 const DreddButtons = ({ codeCells = [] }: DreddButtonsProps) => {
   const { notebookMetadata } = useProviderContext() as ProviderContextType;
-  const { docID } = useParams();
+  const { docID: paramsDoc } = useParams();
+  const selectedDocId = useRecoilValue(selectedDocIdState);
+  const docID = paramsDoc || selectedDocId;
   const [resetting, setResetting] = useState(false);
   const [running, setRunning] = useState(false);
 
-  const jsCells = codeCells.filter(c => c.get('language') !== 'python');
-
   const handleRunAll = async () => {
-    const orderedCells = jsCells.sort((a, b) => a.get('pos') - b.get('pos'));
+    const orderedCells = codeCells.sort((a, b) => a.get('pos') - b.get('pos'));
 
     try {
       setRunning(true);
@@ -40,29 +42,29 @@ const DreddButtons = ({ codeCells = [] }: DreddButtonsProps) => {
   const handleReset = async () => {
     try {
       setResetting(true);
-      jsCells.forEach(c => {
+      codeCells.forEach(c => {
         c.get('metaData').set('isRunning', true);
         c.get('outputMap').set('status', '');
       });
       if (!docID) return;
 
-      await handleResetContext(docID, notebookMetadata, jsCells);
+      await handleResetContext(docID, notebookMetadata, codeCells);
 
       toast.success('Context successfully reset');
     } catch (error) {
       console.error(error);
     } finally {
-      jsCells.forEach(c => c.get('metaData').set('isRunning', false));
+      codeCells.forEach(c => c.get('metaData').set('isRunning', false));
       setResetting(false);
     }
   };
 
   const isDisabledRun = () => {
-    return running || resetting || jsCells.length < 1;
+    return running || resetting || codeCells.length < 1;
   };
 
   const isDisabledReset = () => {
-    return running || resetting || jsCells.length < 1;
+    return running || resetting || codeCells.length < 1;
   };
 
   const iconSize = '24px';

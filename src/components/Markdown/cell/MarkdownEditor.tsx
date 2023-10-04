@@ -8,11 +8,6 @@ import { insertAlert } from './blocktypes/alert/Alert';
 import { createAlertBlock } from './blocktypes/alert/helpers';
 
 const MarkdownEditor = ({ content, provider, currentUser, theme }: MarkdownEditorProps) => {
-  /* Temporarily override console.log */
-  const consoleLog = console.log;
-  console.log = () => {};
-  /* -------------------------------- */
-
   const customSchema = {
     ...defaultBlockSchema,
     image: Image,
@@ -36,11 +31,18 @@ const MarkdownEditor = ({ content, provider, currentUser, theme }: MarkdownEdito
         name: currentUser?.name || 'Anonymous User',
         color: currentUser?.color || getRandomColor()
       }
+    },
+    onEditorReady(editor) {
+      const paragraphElements = document.querySelectorAll(
+        '._blockContent_7sok8_22[data-content-type="paragraph"] p._inlineContent_7sok8_240'
+      );
+      paragraphElements.forEach(paragraphElement => {
+        if (paragraphElement.textContent === ' ') {
+          paragraphElement.textContent = '';
+        }
+      });
     }
   });
-
-  /* Restore console.log */
-  setTimeout(() => (console.log = consoleLog), 0);
 
   return <BlockNoteView editor={editor} theme={theme} />;
 };

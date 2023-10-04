@@ -11,8 +11,6 @@ export interface NotebookContextType {
   addCellAtIndex: (idx: number, type: string) => void;
   repositionCell: (cell: any, newIndex: number) => void;
   deleteCell: (id: string) => void;
-  title: string;
-  handleTitleChange: (newTitle: string) => void;
   allRunning: boolean;
   setAllRunning: Dispatch<SetStateAction<boolean>>;
 }

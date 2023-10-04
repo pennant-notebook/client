@@ -1,13 +1,13 @@
 import { Extension } from '@codemirror/state';
-import { useMediaQuery } from '@mui/material';
+import { useMediaQuery } from '~/utils/MuiImports';
 import { useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Auth from './components/Auth/Auth';
+import DashboardWrapper from './components/Dashboard/DashboardWrapper';
 import HomePage from './components/Landing/home/HomePage';
-import NotebookRoute from './components/Landing/NotebookRoute';
-import UserDashboard from './components/Dashboard/user/UserDashboard';
+import NotebookRoute from './components/Notebook/NotebookRoute';
 import ThemeManager, { codeMirrorThemes } from './contexts/ThemeManager';
 import { Box } from './utils/MuiImports';
 
@@ -40,7 +40,7 @@ function App() {
             <Route path='/auth/github' element={<Auth />} />
             <Route path='/auth/google' element={<Auth />} />
             <Route path='/:username/:docID' element={<NotebookRoute />} />
-            <Route path='/:username' element={<UserDashboard />} />
+            <Route path='/:username' element={<DashboardWrapper />} />
             <Route path='/' element={<HomePage />} />
           </Routes>
         </BrowserRouter>
