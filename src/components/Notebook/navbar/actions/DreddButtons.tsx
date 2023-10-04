@@ -8,6 +8,8 @@ import { handleResetContext, handleRunAllCode } from '~/services/codeExecution/d
 import { CircularProgress, IconButton, Refresh, Stack, Tooltip } from '~/utils/MuiImports';
 import styles from './DreddButtons.module.css';
 import { YMap } from '~/utils/notebookHelpers';
+import { useRecoilValue } from 'recoil';
+import { selectedDocIdState } from '~/appState';
 
 interface DreddButtonsProps {
   codeCells: YMap[] | undefined;
@@ -15,7 +17,9 @@ interface DreddButtonsProps {
 
 const DreddButtons = ({ codeCells = [] }: DreddButtonsProps) => {
   const { notebookMetadata } = useProviderContext() as ProviderContextType;
-  const { docID } = useParams();
+  const { docID: paramsDoc } = useParams();
+  const selectedDocId = useRecoilValue(selectedDocIdState);
+  const docID = paramsDoc || selectedDocId;
   const [resetting, setResetting] = useState(false);
   const [running, setRunning] = useState(false);
 
