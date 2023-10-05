@@ -1,6 +1,6 @@
 import { useRef, useState, ReactNode } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
-import { HoverTrackerContext } from './HoverTrackerContext';
+import { HoverTrackerContext } from '../HoverTrackerContext';
 import { DragSourceMonitor, DropTargetMonitor } from 'react-dnd';
 import styles from './Draggable.module.css';
 import { useTheme } from '~/utils/MuiImports';
