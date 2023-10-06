@@ -55,6 +55,7 @@ export { default as FileCopyIcon } from '@mui/icons-material/FileCopy';
 export { default as ImageIcon } from '@mui/icons-material/Image';
 export { default as MenuIcon } from '@mui/icons-material/Menu';
 export { default as MoreVertIcon } from '@mui/icons-material/MoreVert';
+export { default as OpenInNewIcon } from '@mui/icons-material/OpenInNew';
 export { default as PlayCircle } from '@mui/icons-material/PlayCircle';
 export { default as PlayCircleOutlineTwoTone } from '@mui/icons-material/PlayCircleOutlineTwoTone';
 export { default as PlaylistPlayIcon } from '@mui/icons-material/PlaylistPlay';

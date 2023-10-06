@@ -102,6 +102,7 @@ const ClientDrawer = ({ handleDisconnect, clients = [] }: ClientDrawerProps) => 
     localStorage.removeItem('pennant-username');
     setAuth({ isLoggedIn: false, userData: null, provider: null });
     if (!docID) {
+      setSelectedDocId(null);
       handleDisconnect('/');
     }
   };

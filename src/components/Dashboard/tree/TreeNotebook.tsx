@@ -1,12 +1,20 @@
 import { Box, Typography, Menu, MenuItem, InputBase } from '~/utils/MuiImports';
-import { CheckIcon, CloseIcon, IconButton, MoreVertIcon, FileCopyIcon } from '~/utils/MuiImports';
+import {
+  CheckIcon,
+  CloseIcon,
+  IconButton,
+  MoreVertIcon,
+  FileCopyIcon,
+  OpenInNewIcon,
+  Edit,
+  DeleteIcon
+} from '~/utils/MuiImports';
 import { StyledTreeItem } from '~/components/UI/StyledTreeComponents';
 import { NotebookType } from '@/NotebookTypes';
 import { useMutation, useQuery } from 'react-query';
 import { editDocTitle, deleteDoc } from '~/services/dynamoPost';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router';
 import ListIconJs from './assets/listjs.svg';
 import ListIconPy from './assets/listpy.svg';
 import { useRecoilState } from 'recoil';
@@ -26,7 +34,6 @@ const TreeNotebook = ({ index, notebook, username, handleSelectedDocId }: TreeNo
   const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(notebook.title || '');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const navigate = useNavigate();
   const inputRef = useRef<HTMLElement | null>(null);
   const [title, setTitle] = useRecoilState(notebookTitleStateFamily(notebook.docID));
   const [selectedDocId, setSelectedDocId] = useRecoilState(selectedDocIdState);
@@ -41,7 +48,8 @@ const TreeNotebook = ({ index, notebook, username, handleSelectedDocId }: TreeNo
 
   const handleClickToNavigate = () => {
     if (isEditing) return;
-    navigate(`/${username}/${notebook.docID}`);
+    const url = `/${username}/${notebook.docID}`;
+    window.open(url, '_blank');
   };
 
   const deleteMutation = useMutation(deleteDoc, {
@@ -161,7 +169,8 @@ const TreeNotebook = ({ index, notebook, username, handleSelectedDocId }: TreeNo
         </div>
       ) : (
         <StyledTreeItem
-          onClick={() => handleSelectedDocId(notebook.docID)}
+          disabled={selectedDocId === notebook.docID}
+          onClick={() => (selectedDocId === notebook.docID ? null : handleSelectedDocId(notebook.docID))}
           icon={
             <img
               src={notebook.language === 'javascript' ? ListIconJs : ListIconPy}
@@ -178,18 +187,21 @@ const TreeNotebook = ({ index, notebook, username, handleSelectedDocId }: TreeNo
                 <MoreVertIcon />
               </IconButton>
               <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-                <MenuItem onClick={handleClickToNavigate} className={styles.menuItem}>
-                  Open
+                <MenuItem onClick={handleClickToNavigate}>
+                  <OpenInNewIcon fontSize='small' style={{ marginRight: '8px' }} />
+                  <Typography sx={{ fontFamily: 'Lato', fontSize: '15px' }}>Open in New Tab</Typography>
                 </MenuItem>
-                <MenuItem onClick={handleDeleteClick} className={styles.menuItem}>
-                  Delete
+                <MenuItem onClick={handleDeleteClick}>
+                  <DeleteIcon fontSize='small' style={{ marginRight: '8px' }} />
+                  <Typography sx={{ fontFamily: 'Lato', fontSize: '15px' }}>Delete Notebook</Typography>
                 </MenuItem>
-                <MenuItem onClick={handleRenameClick} className={styles.menuItem}>
-                  Rename
+                <MenuItem onClick={handleRenameClick}>
+                  <Edit fontSize='small' style={{ marginRight: '8px' }} />
+                  <Typography sx={{ fontFamily: 'Lato', fontSize: '15px' }}>Rename Notebook</Typography>
                 </MenuItem>
-                <MenuItem onClick={handleCopyClick} className={styles.menuItem}>
+                <MenuItem onClick={handleCopyClick}>
                   <FileCopyIcon fontSize='small' className={styles.fileCopyIcon} />
-                  Copy Notebook URL
+                  <Typography sx={{ fontFamily: 'Lato', fontSize: '15px' }}>Copy Notebook URL</Typography>
                 </MenuItem>
               </Menu>
             </Box>
