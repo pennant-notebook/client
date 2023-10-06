@@ -3,8 +3,8 @@ import { defaultBlockSchema } from '@blocknote/core';
 import { BlockNoteView, ReactSlashMenuItem, getDefaultReactSlashMenuItems, useBlockNote } from '@blocknote/react';
 import { getRandomColor } from '~/utils/awarenessHelpers';
 import styles from './MarkdownCell.module.css';
-import { insertAlert } from './blocktypes/alert/Alert';
-import { createAlertBlock } from './blocktypes/alert/helpers';
+import { insertAlert } from './alert/Alert';
+import { createAlertBlock } from './alert/helpers';
 
 const MarkdownEditor = ({ content, provider, currentUser, theme }: MarkdownEditorProps) => {
   const customSchema = {
