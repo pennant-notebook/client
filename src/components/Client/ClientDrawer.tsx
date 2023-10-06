@@ -70,7 +70,8 @@ const ClientDrawer = ({ handleDisconnect, clients = [] }: ClientDrawerProps) => 
 
   const handleClickToGoBack = () => {
     if (auth.isLoggedIn) {
-      navigate(`/@${auth.userData?.login}`);
+      setSelectedDocId(null);
+      handleDisconnect(`/@${auth.userData?.login}`);
     } else {
       setSelectedDocId(null);
       handleDisconnect('/');
