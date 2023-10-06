@@ -8,19 +8,12 @@ interface LeftSidebarProps {
   username: string;
   refetch: () => void;
   handleSelectedDocId: (docId: string) => void;
-  isExpanded: boolean;
-  setIsExpanded: (isExpanded: boolean) => void;
 }
 
-export default function LeftSidebar({
-  username,
-  refetch,
-  handleSelectedDocId,
-  isExpanded,
-  setIsExpanded
-}: LeftSidebarProps) {
+export default function LeftSidebar({ username, refetch, handleSelectedDocId }: LeftSidebarProps) {
   const notebooks = useRecoilValue(notebooksState);
   const selectedDocId = useRecoilValue(selectedDocIdState);
+  const [isExpanded, setIsExpanded] = useState(true);
   const [showChevron, setShowChevron] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const theme = useTheme().palette.mode;

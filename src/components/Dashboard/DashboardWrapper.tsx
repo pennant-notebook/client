@@ -20,7 +20,6 @@ const DashboardWrapper = () => {
   const { username } = useParams();
   const [isLoadingSelectedNotebook, setIsLoadingSelectedNotebook] = useState(false);
   const [selectedDocId, setSelectedDocId] = useRecoilState(selectedDocIdState);
-  const [isExpanded, setIsExpanded] = useState(true);
   const navigate = useNavigate();
   const usernameFromLocal = localStorage.getItem('pennant-username');
   const authToken = localStorage.getItem('pennantAccessToken');
@@ -78,14 +77,8 @@ const DashboardWrapper = () => {
     <ProviderContext.Provider value={contextValue}>
       <NavbarProvider provider={contextValue.provider || null} docID={selectedDocId || ''}>
         <Box>
-          <Navbar selectedDoc={selectedDocId!} isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
-          <LeftSidebar
-            username={username}
-            refetch={refetch}
-            handleSelectedDocId={handleSelectedDocId}
-            isExpanded={isExpanded}
-            setIsExpanded={setIsExpanded}
-          />
+          <Navbar selectedDoc={selectedDocId!} />
+          <LeftSidebar username={username} refetch={refetch} handleSelectedDocId={handleSelectedDocId} />
           {!isLoadingSelectedNotebook && selectedDocId && notebook && !isLoading && !error && (
             <Notebook docID={selectedDocId} resourceTitle={notebook.title} notebook={notebook} />
           )}

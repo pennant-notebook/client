@@ -12,8 +12,8 @@ import {
   Typography,
   useTheme
 } from '~/utils/MuiImports';
-import ClientDrawer from '~/components/UI/awareness/ClientDrawer';
-import Clients from '~/components/UI/awareness/Clients';
+import ClientDrawer from '~/components/Client/ClientDrawer';
+import Clients from '~/components/Client/Clients';
 import IconRow from '~/components/UI/IconRow';
 import DocTitle from './DocTitle';
 import DreddButtons from './actions/DreddButtons';
@@ -23,11 +23,9 @@ import { notebookLanguageState, selectedDocIdState } from '~/appState';
 
 interface NavbarProps {
   selectedDoc?: string;
-  isExpanded?: boolean;
-  setIsExpanded?: (isExpanded: boolean) => void;
 }
 
-const Navbar = ({ selectedDoc, isExpanded, setIsExpanded }: NavbarProps) => {
+const Navbar = ({ selectedDoc }: NavbarProps) => {
   const { username, docID: paramsDoc } = useParams();
   const { codeCells, clients, handleDisconnect } = useNavbarContext();
   const setSelectedDocId = useSetRecoilState(selectedDocIdState);
@@ -66,18 +64,9 @@ const Navbar = ({ selectedDoc, isExpanded, setIsExpanded }: NavbarProps) => {
                 color='inherit'
                 aria-label='logo'
                 onClick={() => {
-                  if (paramsDoc) {
-                    if (handleDisconnect) {
-                      handleDisconnect(`/${username}`);
-                    }
-                  } else {
-                    if (setIsExpanded) {
-                      setIsExpanded(!isExpanded);
-                    }
-                    if (handleDisconnect) {
-                      handleDisconnect(`/`);
-                      setSelectedDocId(null);
-                    }
+                  if (handleDisconnect) {
+                    handleDisconnect(`/`);
+                    setSelectedDocId(null);
                   }
                 }}
                 sx={{ py: 1, borderRadius: '2px' }}>

@@ -1,14 +1,14 @@
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import { defineConfig } from 'vite';
-import { VitePluginFonts } from 'vite-plugin-fonts'
+import Fonts from 'unplugin-fonts/vite';
 
 export default defineConfig({
   plugins: [
     react(),
-    VitePluginFonts({
+    Fonts({
       google: {
-        families: ['Lato']
+        families: ['Lato', 'Inter', 'Fira Code']
       }
     }),
   ],

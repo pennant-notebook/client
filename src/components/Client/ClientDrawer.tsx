@@ -18,9 +18,9 @@ import {
   AccountCircle
 } from '~/utils/MuiImports';
 import { getClientFromLocalStorage } from '~/utils/awarenessHelpers';
-import IconRow from '../IconRow';
+import IconRow from '~/components/UI/IconRow';
 import styles from './Clients.module.css';
-import ThemeSelector from './ThemeSelector';
+import ThemeSelector from '~/components/UI/ThemeSelector';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { authState, selectedDocIdState } from '~/appState';
 import LoginSvg from '~/assets/auth/login.svg';

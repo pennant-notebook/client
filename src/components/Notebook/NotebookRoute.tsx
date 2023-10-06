@@ -27,13 +27,11 @@ const NotebookRoute = () => {
   if (isLoading || !notebook) return <LoadingSpinner />;
   if (error) return 'Error!';
 
-  const lang = contextValue.notebookMetadata.get('language');
-
   return (
     <ProviderContext.Provider value={contextValue as ProviderContextType}>
       <ErrorBoundary>
         <NavbarProvider provider={contextValue.provider || null} docID={docID || ''}>
-          <Navbar language={lang} />
+          <Navbar />
           {docID && <Notebook docID={docID} resourceTitle={notebook.title} notebook={notebook} />}
         </NavbarProvider>
       </ErrorBoundary>

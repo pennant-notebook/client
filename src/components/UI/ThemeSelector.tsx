@@ -1,6 +1,6 @@
 import { useState, MouseEvent } from 'react';
 import { Box, Menu, MenuItem, BrushIcon } from '~/utils/MuiImports';
-import IconRow from '../IconRow';
+import IconRow from './IconRow';
 import { CodeMirrorThemeContextType, useCMThemeContext } from '~/contexts/ThemeManager';
 import { Extension } from '@codemirror/state';
 
