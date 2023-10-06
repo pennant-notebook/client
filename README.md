@@ -4,7 +4,7 @@
   </a>
 </p>
 <p align="center">
- Welcome to Pennant! An Open-source Real-Time Collaborative Computational Notebook supporting Markdown and JavaScript.
+ Welcome to Pennant! An Open-source Real-Time Collaborative Computational Notebook supporting Markdown, JavaScript and Python.
 </p>
 <br />
 <p align="center">
@@ -29,7 +29,7 @@
 - **[react-dnd](https://github.com/react-dnd/react-dnd)**: Powers the drag-and-drop functionality for cells.
 - **[BlockNote](https://github.com/TypeCellOS/BlockNote)**: Markdown editor with customizations for a minimal design.
 - **[BlockNote](https://github.com/TypeCellOS/BlockNote)**: Markdown editor with customizations for a minimal design.
-- **[Recoil](https://github.com/facebookexperimental/Recoil)**: Manages Auth0 and regular authentication states for the app.
+- **[Recoil](https://github.com/facebookexperimental/Recoil)**: Centralizes state management for authentication and notebook-related logic.
 
 ## Getting started
 
@@ -39,7 +39,8 @@ Ensure you have a `.env` file set up in your project root. You can use the `.env
 
 - `VITE_WEBSOCKET_SERVER`: Websocket-Provider server url (see pennant-provider repo for more details)
 - `VITE_HP_ACCESS_TOKEN`: Provided when initializing the HocuspocusProvider (see pennant-provider/pocus repo for more details)
-- `VITE_ENGINE_SERVER`: Code execution engine url (see pennant-engine repo for more details)
+- `VITE_ENGINE_SERVER`: JavaScript code execution engine url (see pennant-engine repo for more details)
+- `VITE_FLASK_SERVER`: Python code execution engine url (see pennant-flask-server repo for more details)
 
 ### Installation
 
@@ -150,7 +151,7 @@ Please note that the content provided in the sections below serves as our prelim
 
 ## Services
 
-### JavaScript "Dredd" Execution Service (`src/services/codeExecution/dredd.ts`)
+### "Dredd" Execution Service (`src/services/codeExecution/dredd.ts`)
 
 - Provides functions for interacting with the Dredd execution engine.
 - Handles code execution, status checking, context resetting, and formatting cells for execution.
@@ -195,7 +196,6 @@ Please note that the content provided in the sections below serves as our prelim
 
 ## Upcoming Features
 
-- Support for Python is in Beta: try it out [here](https://pennant.mafishi.io/@trypennant/a0a23784-79f7-49b0-b9ea-85f1780f0f5a)
 - Support for additional programming languages: Golang, Ruby
 
 ## Contributing

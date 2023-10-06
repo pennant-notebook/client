@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import { YMap } from '~/utils/notebookHelpers';
 
 const BASE_URL = import.meta.env.VITE_ENGINE_SERVER as string;
-const PYTHON_URL = import.meta.env.VITE_SNAKE_SERVER as string;
+const PYTHON_URL = import.meta.env.VITE_FLASK_SERVER as string;
 
 interface Cell {
   cellId: string;
