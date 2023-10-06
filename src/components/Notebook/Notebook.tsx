@@ -30,7 +30,6 @@ const Notebook = ({ docID, resourceTitle, notebook }: NotebookProps) => {
   document.title = resourceTitle || 'Untitled Notebook';
 
   useEffect(() => {
-    console.log(notebook.language);
     notebookMetadata.set('language', notebook.language);
     setNotebookLanguage(notebook.language || null);
   }, []);

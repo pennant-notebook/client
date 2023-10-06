@@ -32,8 +32,6 @@ const GoogleSignInButton = ({ loginHandler }: { loginHandler?: () => void }) => 
             username: formattedName,
             provider: 'google'
           });
-        } else {
-          console.log('user exists');
         }
 
         localStorage.setItem('pennantAccessToken', access_token);

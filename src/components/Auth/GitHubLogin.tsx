@@ -54,14 +54,15 @@ const GitHubLogin = () => {
       });
 
       if (checkUserResponse.data.exists) {
-        console.log('user exists');
+        // console.log('user exists');
       } else {
-        console.log('user does not exist');
-        const createUserResponse = await axios.post(`${API_URL}/signup`, {
+        // console.log('user does not exist');
+        // const createUserResponse =
+        await axios.post(`${API_URL}/signup`, {
           username: data.login,
           provider: 'github'
         });
-        console.log(createUserResponse.data);
+        // console.log(createUserResponse.data);
       }
       // navigate(`/@${data.login}`);
     } catch (error) {
