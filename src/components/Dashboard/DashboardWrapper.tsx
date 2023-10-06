@@ -13,8 +13,8 @@ import LoadingSpinner from '../UI/loading/LoadingSpinner';
 import { updateDisconnectedClient } from '~/utils/awarenessHelpers';
 import { NavbarProvider } from '~/contexts/NavbarContext';
 import { Box } from '~/utils/MuiImports';
-import { useRecoilState } from 'recoil';
-import { selectedDocIdState } from '~/appState';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { notebooksState, selectedDocIdState } from '~/appState';
 
 const DashboardWrapper = () => {
   const { username } = useParams();
@@ -24,6 +24,7 @@ const DashboardWrapper = () => {
   const navigate = useNavigate();
   const usernameFromLocal = localStorage.getItem('pennant-username');
   const authToken = localStorage.getItem('pennantAccessToken');
+  const setNotebooks = useSetRecoilState(notebooksState);
 
   const {
     data: notebook,
@@ -48,6 +49,11 @@ const DashboardWrapper = () => {
   });
 
   useEffect(() => {
+    if (!notebooks) return;
+    setNotebooks(notebooks);
+  }, [notebooks]);
+
+  useEffect(() => {
     if (username === '@trypennant') return;
     if (!authToken || usernameFromLocal !== username.slice(1)) {
       const errorMsg = authToken ? 'You are not authorized to view this page.' : 'Please login to view this page.';
@@ -68,16 +74,13 @@ const DashboardWrapper = () => {
     setIsLoadingSelectedNotebook(false);
   };
 
-  const lang = contextValue.notebookMetadata.get('language');
-
   return (
     <ProviderContext.Provider value={contextValue}>
       <NavbarProvider provider={contextValue.provider || null} docID={selectedDocId || ''}>
         <Box>
-          <Navbar selectedDoc={selectedDocId!} language={lang} isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
+          <Navbar selectedDoc={selectedDocId!} isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
           <LeftSidebar
             username={username}
-            notebooks={notebooks}
             refetch={refetch}
             handleSelectedDocId={handleSelectedDocId}
             isExpanded={isExpanded}

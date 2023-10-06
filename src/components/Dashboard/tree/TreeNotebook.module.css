@@ -1,0 +1,48 @@
+.editingContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.inputBase {
+  font-family: Lato;
+  font-size: 0.85rem;
+  flex-grow: 1;
+}
+
+.iconButtonGreen {
+  color: green;
+}
+
+.iconButtonRed {
+  color: red;
+}
+
+.treeItemContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 36px;
+}
+
+.treeItemContainer .treeItemTypography {
+  font-family: Lato;
+  font-size: 0.85rem;
+  flex-grow: 1;
+}
+
+.treeItemContainer .iconButton {
+  width: 28px;
+  height: 28px;
+}
+
+.menuItem {
+  font-size: 14px;
+  font-family: Lato;
+}
+
+.fileCopyIcon {
+  margin-right: 8px;
+}

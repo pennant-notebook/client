@@ -1,13 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
 import { Box, Divider, IconButton, useTheme, ChevronLeftIcon, ChevronRightIcon } from '~/utils/MuiImports';
 import NotebookTreeView from './NotebookTreeView';
-import { NotebookType } from '@/NotebookTypes';
 import { useRecoilValue } from 'recoil';
-import { selectedDocIdState } from '~/appState';
+import { notebooksState, selectedDocIdState } from '~/appState';
 
 interface LeftSidebarProps {
   username: string;
-  notebooks?: NotebookType[];
   refetch: () => void;
   handleSelectedDocId: (docId: string) => void;
   isExpanded: boolean;
@@ -16,12 +14,12 @@ interface LeftSidebarProps {
 
 export default function LeftSidebar({
   username,
-  notebooks,
   refetch,
   handleSelectedDocId,
   isExpanded,
   setIsExpanded
 }: LeftSidebarProps) {
+  const notebooks = useRecoilValue(notebooksState);
   const selectedDocId = useRecoilValue(selectedDocIdState);
   const [showChevron, setShowChevron] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);

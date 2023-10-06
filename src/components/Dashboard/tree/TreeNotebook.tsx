@@ -1,4 +1,4 @@
-import { Box, Typography, Menu, MenuItem, InputBase, useTheme } from '~/utils/MuiImports';
+import { Box, Typography, Menu, MenuItem, InputBase } from '~/utils/MuiImports';
 import { CheckIcon, CloseIcon, IconButton, MoreVertIcon, FileCopyIcon } from '~/utils/MuiImports';
 import { StyledTreeItem } from '~/components/UI/StyledTreeComponents';
 import { NotebookType } from '@/NotebookTypes';
@@ -10,8 +10,9 @@ import { useNavigate } from 'react-router';
 import ListIconJs from './assets/listjs.svg';
 import ListIconPy from './assets/listpy.svg';
 import { useRecoilState } from 'recoil';
-import { notebookTitleStateFamily } from '~/appState';
+import { notebookTitleStateFamily, notebooksState, selectedDocIdState } from '~/appState';
 import { fetchDoc } from '~/services/dynamoFetch';
+import styles from './TreeNotebook.module.css';
 
 interface TreeNotebookProps {
   notebook: NotebookType;
@@ -21,13 +22,14 @@ interface TreeNotebookProps {
 }
 
 const TreeNotebook = ({ index, notebook, username, handleSelectedDocId }: TreeNotebookProps) => {
+  const [notebooks, setNotebooks] = useRecoilState(notebooksState);
   const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(notebook.title || '');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const navigate = useNavigate();
-  const theme = useTheme().palette.mode;
   const inputRef = useRef<HTMLElement | null>(null);
   const [title, setTitle] = useRecoilState(notebookTitleStateFamily(notebook.docID));
+  const [selectedDocId, setSelectedDocId] = useRecoilState(selectedDocIdState);
 
   const { data: fetchedNotebook, refetch } = useQuery<NotebookType>([notebook.docID, username], () =>
     fetchDoc(notebook.docID as string, username as string)
@@ -44,7 +46,10 @@ const TreeNotebook = ({ index, notebook, username, handleSelectedDocId }: TreeNo
 
   const deleteMutation = useMutation(deleteDoc, {
     onSuccess: () => {
-      refetch();
+      setNotebooks(notebooks.filter(n => n.docID !== notebook.docID));
+      if (selectedDocId === notebook.docID) {
+        setSelectedDocId(null);
+      }
     }
   });
 
@@ -133,32 +138,24 @@ const TreeNotebook = ({ index, notebook, username, handleSelectedDocId }: TreeNo
   const iconSize = '16px';
   const iconPyWidth = '20px';
   const iconPyHeight = '20px';
-  const treeFont = 'Lato';
 
   return (
     <Box>
       {isEditing ? (
-        <div
-          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginLeft: 10 }}
-          onBlur={handleCancelClick}>
+        <div className={styles.editingContainer} onBlur={handleCancelClick}>
           <InputBase
             ref={inputRef}
-            sx={{
-              fontFamily: treeFont,
-              color: theme === 'light' ? '#2c3032' : '#fff',
-              fontSize: '0.85rem',
-              flexGrow: 1
-            }}
+            className={styles.inputBase}
             value={newTitle}
             onChange={e => setNewTitle(e.target.value)}
             onBlur={handleCancelClick}
             onKeyDown={handleKeyDown}
             autoFocus
           />
-          <IconButton id='save-button' onClick={handleSaveClick} sx={{ color: 'green' }}>
+          <IconButton id='save-button' onClick={handleSaveClick} className={styles.iconButtonGreen}>
             <CheckIcon sx={{ fontSize: iconSize }} />
           </IconButton>
-          <IconButton onClick={handleCancelClick} sx={{ color: 'red' }}>
+          <IconButton onClick={handleCancelClick} className={styles.iconButtonRed}>
             <CloseIcon sx={{ fontSize: iconSize }} />
           </IconButton>
         </div>
@@ -175,34 +172,25 @@ const TreeNotebook = ({ index, notebook, username, handleSelectedDocId }: TreeNo
           }
           nodeId={notebook.docID}
           label={
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                width: '100%',
-                height: '36px'
-              }}>
-              <Typography
-                sx={{
-                  fontFamily: treeFont,
-                  color: theme === 'light' ? '#2c3032' : '#fff',
-                  fontSize: '0.85rem',
-                  flexGrow: 1
-                }}>
-                {title || `Untitled-${index}`}
-              </Typography>
-              <IconButton onClick={e => handleClick(e)} sx={{ width: '28px', height: '28px' }}>
+            <Box className={styles.treeItemContainer}>
+              <Typography className={styles.treeItemTypography}>{title || `Untitled-${index}`}</Typography>
+              <IconButton onClick={e => handleClick(e)} className={styles.iconButton}>
                 <MoreVertIcon />
               </IconButton>
               <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-                <MenuItem onClick={handleClickToNavigate}>Open</MenuItem>
-                <MenuItem onClick={handleDeleteClick}>Delete</MenuItem>
-                <MenuItem onClick={handleRenameClick}>Rename</MenuItem>
-                <MenuItem onClick={handleCopyClick}>
-                  <FileCopyIcon fontSize='small' style={{ marginRight: '8px' }} />
+                <MenuItem onClick={handleClickToNavigate} className={styles.menuItem}>
+                  Open
+                </MenuItem>
+                <MenuItem onClick={handleDeleteClick} className={styles.menuItem}>
+                  Delete
+                </MenuItem>
+                <MenuItem onClick={handleRenameClick} className={styles.menuItem}>
+                  Rename
+                </MenuItem>
+                <MenuItem onClick={handleCopyClick} className={styles.menuItem}>
+                  <FileCopyIcon fontSize='small' className={styles.fileCopyIcon} />
                   Copy Notebook URL
-                </MenuItem>{' '}
+                </MenuItem>
               </Menu>
             </Box>
           }
