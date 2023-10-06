@@ -1,0 +1,57 @@
+.add-cell-container {
+  opacity: 1;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.add-cell {
+  margin-left: 2px;
+}
+
+.button-container-noCells {
+  display: flex;
+  opacity: 1;
+  justify-content: left;
+}
+
+.button-container {
+  display: flex;
+  opacity: 0;
+  justify-content: left;
+}
+
+.button-container:hover {
+  opacity: 1;
+}
+
+.add-code-button,
+.add-markdown-button {
+  background-color: transparent;
+  border: 1px solid #bdc1c6;
+  border-radius: 15px;
+  width: fit-content;
+  height: 28px;
+  line-height: 20px;
+  padding: 0 16px;
+  margin: 4px;
+  transition: all 0.3s ease;
+}
+
+.add-code-button {
+  margin-right: 8px;
+}
+
+.add-code-button:hover,
+.add-markdown-button:hover {
+  border: 1px solid #505050;
+}
+
+.button-text {
+  font-family: 'Inter';
+  font-weight: 500;
+  font-size: 14px;
+  color: #555454;
+}

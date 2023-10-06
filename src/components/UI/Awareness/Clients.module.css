@@ -15,3 +15,11 @@
 .localWidget:hover {
   box-shadow: rgba(3, 102, 214, 0.3) 0px 0px 0px 2px;
 }
+
+.authButtons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0.6;
+  margin-right: 10px;
+}

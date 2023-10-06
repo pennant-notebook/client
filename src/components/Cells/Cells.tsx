@@ -2,9 +2,9 @@ import { CellType } from '@/CellTypes';
 import { useState, SetStateAction, Dispatch } from 'react';
 import useNotebookContext from '~/contexts/NotebookContext';
 import { Box } from '~/utils/MuiImports';
-import AddCell from './AddCell';
+import AddCell from './add/AddCell';
 import CellRow from './CellRow';
-import DraggableCells from './DraggableCells';
+import DraggableCells from './drag/DraggableCells';
 import '~/styles/App.css';
 
 interface CellsProps {

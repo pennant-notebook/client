@@ -10,6 +10,8 @@ import { getClientFromLocalStorage, updateDisconnectedClient } from '~/utils/awa
 import { YMap, createCell, getUserObjects } from '~/utils/notebookHelpers';
 import Cells from '../Cells/Cells';
 import { useNavbarContext } from '~/contexts/NavbarContext';
+import { useSetRecoilState } from 'recoil';
+import { notebookLanguageState } from '~/appState';
 
 interface NotebookProps {
   docID: string;
@@ -20,16 +22,17 @@ interface NotebookProps {
 const Notebook = ({ docID, resourceTitle, notebook }: NotebookProps) => {
   const { doc, provider, awareness, notebookMetadata }: ProviderContextType = useProviderContext()!;
   const { setCodeCells, setClients } = useNavbarContext();
-
+  const setNotebookLanguage = useSetRecoilState(notebookLanguageState);
   const theme = useTheme();
-
   const cellsArray = doc.getArray('cells');
   const [cellDataArr, setCellDataArr] = useState(cellsArray.toArray());
   const [allRunning, setAllRunning] = useState(false);
   document.title = resourceTitle || 'Untitled Notebook';
 
   useEffect(() => {
+    console.log(notebook.language);
     notebookMetadata.set('language', notebook.language);
+    setNotebookLanguage(notebook.language || null);
   }, []);
 
   useEffect(() => {
@@ -107,23 +110,6 @@ const Notebook = ({ docID, resourceTitle, notebook }: NotebookProps) => {
     cellsArray.insert(newIndex, [clone]);
     updatePositions();
   };
-
-  // useEffect(() => {
-  //   const titleObserver = () => {
-  //     const docTitle = notebookMetadata.get('title');
-  //     const displayTitle = docTitle ? docTitle.toString() : 'Untitled';
-  //     setTitle(displayTitle);
-  //     document.title = displayTitle;
-  //   };
-
-  //   if (notebookMetadata) {
-  //     notebookMetadata.observe(titleObserver);
-  //   }
-
-  //   return () => {
-  //     notebookMetadata.unobserve(titleObserver);
-  //   };
-  // }, [title]);
 
   useEffect(() => {
     const codeCellsForDredd = cellDataArr.filter((c: YMap) => c.get('type') === 'code');

@@ -36,6 +36,11 @@ export const selectedDocIdState = atom<string | null>({
   default: null,
 });
 
+export const notebookLanguageState = atom<string | null>({
+  key: 'notebookLanguage',
+  default: null,
+});
+
 export const notebookTitleStateFamily = atomFamily<string, string>({
   key: 'notebookTitleStateFamily',
   default: 'Untitled',

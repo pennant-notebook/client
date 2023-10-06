@@ -1,7 +1,6 @@
-import { Box, Divider, Stack } from '~/utils/MuiImports';
+import { Box, Stack } from '~/utils/MuiImports';
 import CodeCell from '../Code/cell/CodeCell';
 import MarkdownCell from '../Markdown/cell/MarkdownCell';
-import { CellPosAvatar } from '../UI/StyledComponents';
 import { YMap } from '~/utils/notebookHelpers';
 
 interface CellRowProps {
@@ -20,13 +19,13 @@ const CellRow = ({ cell, index }: CellRowProps) => {
           direction='row'
           alignItems='center'
           sx={{
-            width: '75%',
+            width: '72%',
             mx: 'auto'
           }}>
-          <Box display='flex' alignItems='center' width='100%' sx={{ ml: -2 }}>
-            <Divider flexItem orientation='vertical' sx={{ mr: 3, zIndex: 3 }}>
+          <Box display='flex' alignItems='center' width='100%'>
+            {/* <Divider flexItem orientation='vertical' sx={{ mr: 3, zIndex: 3 }}>
               <CellPosAvatar index={index + 1} />
-            </Divider>
+            </Divider> */}
             <Box alignItems='center' sx={{ flexGrow: 1, position: 'relative' }}>
               {type === 'markdown' && <MarkdownCell id={id} cell={cell} />}
               {type === 'code' && <CodeCell key={id} cellId={id} cell={cell} />}

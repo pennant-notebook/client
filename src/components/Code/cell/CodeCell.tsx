@@ -50,9 +50,8 @@ const CodeCell = ({ cellId, cell }: CodeCellProps) => {
       }
     } finally {
       cellMetadata.set('isRunning', false);
+      updateMetadata(cellMetadata, notebookMetadata);
     }
-
-    updateMetadata(cellMetadata, notebookMetadata);
   }, [docID, cellId, cell, cellMetadata]);
 
   useEffect(() => {

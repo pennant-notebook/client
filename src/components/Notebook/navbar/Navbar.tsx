@@ -18,18 +18,20 @@ import IconRow from '~/components/UI/IconRow';
 import DocTitle from './DocTitle';
 import DreddButtons from './actions/DreddButtons';
 import { useNavbarContext } from '~/contexts/NavbarContext';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { notebookLanguageState, selectedDocIdState } from '~/appState';
 
 interface NavbarProps {
   selectedDoc?: string;
-  language?: string;
   isExpanded?: boolean;
   setIsExpanded?: (isExpanded: boolean) => void;
 }
 
-const Navbar = ({ selectedDoc, language, isExpanded, setIsExpanded }: NavbarProps) => {
+const Navbar = ({ selectedDoc, isExpanded, setIsExpanded }: NavbarProps) => {
   const { username, docID: paramsDoc } = useParams();
   const { codeCells, clients, handleDisconnect } = useNavbarContext();
-
+  const setSelectedDocId = useSetRecoilState(selectedDocIdState);
+  const notebookLanguage = useRecoilValue(notebookLanguageState);
   const docID = selectedDoc || paramsDoc;
 
   // const navigate = useNavigate();
@@ -43,8 +45,8 @@ const Navbar = ({ selectedDoc, language, isExpanded, setIsExpanded }: NavbarProp
     clientCount <= 1 ? 10 : clientCount === 2 ? 8 : clientCount === 3 ? 6 : clientCount >= 4 ? 0 : 10;
 
   let pyColor = '#234659';
-  if (language === 'python') {
-    pyColor = '#000';
+  if (notebookLanguage === 'python') {
+    pyColor = '#234659';
   }
   return (
     <AppBar position='sticky' sx={{ backgroundColor: currTheme === 'dark' ? '#1e202d' : pyColor }}>
@@ -72,7 +74,10 @@ const Navbar = ({ selectedDoc, language, isExpanded, setIsExpanded }: NavbarProp
                     if (setIsExpanded) {
                       setIsExpanded(!isExpanded);
                     }
-                    // navigate(`/`);
+                    if (handleDisconnect) {
+                      handleDisconnect(`/`);
+                      setSelectedDocId(null);
+                    }
                   }
                 }}
                 sx={{ py: 1, borderRadius: '2px' }}>
@@ -87,7 +92,7 @@ const Navbar = ({ selectedDoc, language, isExpanded, setIsExpanded }: NavbarProp
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'center', flexGrow: 1 }}>
           {docID ? (
-            <DocTitle selectedDoc={docID} language={language} />
+            <DocTitle selectedDoc={docID} language={notebookLanguage!} />
           ) : (
             <Typography sx={{ opacity: 0.5, fontSize: '20px' }}></Typography>
           )}
