@@ -43,7 +43,7 @@ export const createAlertBlock = (theme: 'light' | 'dark') =>
     'alert',
     typeof alertPropSchema,
     true,
-    DefaultBlockSchema & { alert: BlockSpec<'alert', typeof alertPropSchema> }
+    DefaultBlockSchema & { alert: BlockSpec<'alert', typeof alertPropSchema, true> }
   >({
     type: 'alert' as const,
     propSchema: {

@@ -23,8 +23,8 @@ export const alertPropSchema = {
 } satisfies PropSchema;
 
 export const Alert = (props: {
-  block: SpecificBlock<DefaultBlockSchema & { alert: BlockSpec<'alert', typeof alertPropSchema> }, 'alert'>;
-  editor: BlockNoteEditor<DefaultBlockSchema & { alert: BlockSpec<'alert', typeof alertPropSchema> }>;
+  block: SpecificBlock<DefaultBlockSchema & { alert: BlockSpec<'alert', typeof alertPropSchema, true> }, 'alert'>;
+  editor: BlockNoteEditor<DefaultBlockSchema & { alert: BlockSpec<'alert', typeof alertPropSchema, true> }>;
   theme: 'light' | 'dark';
 }) => {
   const [type, setType] = useState(props.block.props.type);
@@ -83,7 +83,7 @@ export const insertAlert = {
   name: 'Alert',
   execute: editor => {
     const block = editor.getTextCursorPosition().block;
-    const blockIsEmpty = block.content.length === 0;
+    const blockIsEmpty = block.content?.length === 0;
 
     if (blockIsEmpty) {
       editor.updateBlock(block, { type: 'alert' });
@@ -101,7 +101,7 @@ export const insertAlert = {
     }
   },
   aliases: ['alert', 'notification', 'emphasize', 'warning', 'error', 'info', 'success'],
-  group: 'Custom',
+  group: 'Other',
   icon: <ErrorOutlineIcon />,
   hint: 'Used to emphasize text'
-} satisfies ReactSlashMenuItem<DefaultBlockSchema & { alert: BlockSpec<'alert', typeof alertPropSchema> }>;
+} satisfies ReactSlashMenuItem<DefaultBlockSchema & { alert: BlockSpec<'alert', typeof alertPropSchema, true> }>;
