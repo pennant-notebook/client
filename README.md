@@ -91,33 +91,6 @@ Please note that the content provided in the sections below serves as our prelim
 
 ---
 
-## Testing
-
-- This project implements both end-to-end (E2E) and component tests using [Playwright](https://playwright.dev/).
-- All tests, along with their related setup and utility files, are located in the `__tests__` directory, organized into subdirectories for easy navigation and maintenance.
-
-### Running Tests
-
-To run the E2E tests, use the following command:
-
-```bash
-npm run test:e2e
-```
-
-To run the component tests, use the following command:
-
-```bash
-npm run test:ct
-```
-
----
-
-## Preliminary Documentation
-
-Please note that the content provided in the sections below serves as our preliminary documentation. Our comprehensive main documentation is currently a work in progress and will be available soon.
-
----
-
 ## Main Components
 
 ### App (`src/App.tsx`)
