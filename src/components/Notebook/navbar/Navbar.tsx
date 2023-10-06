@@ -18,6 +18,8 @@ import IconRow from '~/components/UI/IconRow';
 import DocTitle from './DocTitle';
 import DreddButtons from './actions/DreddButtons';
 import { useNavbarContext } from '~/contexts/NavbarContext';
+import { useSetRecoilState } from 'recoil';
+import { selectedDocIdState } from '~/appState';
 
 interface NavbarProps {
   selectedDoc?: string;
@@ -29,6 +31,7 @@ interface NavbarProps {
 const Navbar = ({ selectedDoc, language, isExpanded, setIsExpanded }: NavbarProps) => {
   const { username, docID: paramsDoc } = useParams();
   const { codeCells, clients, handleDisconnect } = useNavbarContext();
+  const setSelectedDocId = useSetRecoilState(selectedDocIdState);
 
   const docID = selectedDoc || paramsDoc;
 
@@ -44,7 +47,7 @@ const Navbar = ({ selectedDoc, language, isExpanded, setIsExpanded }: NavbarProp
 
   let pyColor = '#234659';
   if (language === 'python') {
-    pyColor = '#000';
+    pyColor = '#234659';
   }
   return (
     <AppBar position='sticky' sx={{ backgroundColor: currTheme === 'dark' ? '#1e202d' : pyColor }}>
@@ -72,7 +75,10 @@ const Navbar = ({ selectedDoc, language, isExpanded, setIsExpanded }: NavbarProp
                     if (setIsExpanded) {
                       setIsExpanded(!isExpanded);
                     }
-                    // navigate(`/`);
+                    if (handleDisconnect) {
+                      handleDisconnect(`/`);
+                      setSelectedDocId(null);
+                    }
                   }
                 }}
                 sx={{ py: 1, borderRadius: '2px' }}>

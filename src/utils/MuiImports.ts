@@ -33,6 +33,7 @@ export { default as SvgIcon } from '@mui/material/SvgIcon';
 export { default as CssBaseline } from '@mui/material/CssBaseline'; // new
 export { default as Collapse } from '@mui/material/Collapse'; // new
 // Icons
+export { default as AccountCircle } from '@mui/icons-material/AccountCircle';
 export { default as Add } from '@mui/icons-material/Add';
 export { default as AddBoxIcon } from '@mui/icons-material/AddBox'; // new
 export { default as ArrowBack } from '@mui/icons-material/ArrowBack';
@@ -51,11 +52,7 @@ export { default as DragIndicator } from '@mui/icons-material/DragIndicator';
 export { default as Edit } from '@mui/icons-material/Edit';
 export { default as ErrorOutlineIcon } from '@mui/icons-material/ErrorOutline';
 export { default as FileCopyIcon } from '@mui/icons-material/FileCopy';
-
-export { default as Folder } from '@mui/icons-material/Folder';
-export { default as FolderOpen } from '@mui/icons-material/FolderOpen';
 export { default as ImageIcon } from '@mui/icons-material/Image';
-
 export { default as MenuIcon } from '@mui/icons-material/Menu';
 export { default as MoreVertIcon } from '@mui/icons-material/MoreVert';
 export { default as PlayCircle } from '@mui/icons-material/PlayCircle';

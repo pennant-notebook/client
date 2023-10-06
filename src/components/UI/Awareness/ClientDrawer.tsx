@@ -1,33 +1,30 @@
 import { ClientType } from '@/ClientTypes';
-import { NotebookType } from '@/NotebookTypes';
 import { useCallback, useEffect, useState } from 'react';
 import Avatar from 'react-avatar';
-import { useQuery } from 'react-query';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import useProviderContext from '~/contexts/ProviderContext';
-import { fetchNotebooks } from '~/services/dynamoFetch';
 import {
   ArrowBack,
   Box,
   Brightness4,
   Brightness7,
+  Divider,
   Drawer,
   Edit,
-  Folder,
-  FolderOpen,
   IconButton,
   Stack,
   Typography,
-  grey,
-  useTheme
+  useTheme,
+  AccountCircle
 } from '~/utils/MuiImports';
 import { getClientFromLocalStorage } from '~/utils/awarenessHelpers';
 import IconRow from '../IconRow';
-import { StyledButton } from '../StyledComponents';
 import styles from './Clients.module.css';
 import ThemeSelector from './ThemeSelector';
-import { useSetRecoilState } from 'recoil';
-import { selectedDocIdState } from '~/appState';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { authState, selectedDocIdState } from '~/appState';
+import LoginSvg from '~/assets/auth/login.svg';
+import LogoutSvg from '~/assets/auth/logout.svg';
 
 interface ClientDrawerProps {
   handleDisconnect: (destination: string) => void;
@@ -36,13 +33,13 @@ interface ClientDrawerProps {
 
 const ClientDrawer = ({ handleDisconnect, clients = [] }: ClientDrawerProps) => {
   const [open, setOpen] = useState(false);
-  const [showNotebooks, setShowNotebooks] = useState(false);
-  const { username, docID } = useParams();
+  const [auth, setAuth] = useRecoilState(authState);
+  const { docID } = useParams();
   const [avatar, setAvatar] = useState(clients[0]);
-  const { data: notebooks } = useQuery(['notebooks', username], () => username && fetchNotebooks(username));
   const providerContext = useProviderContext();
   const provider = providerContext ? providerContext.provider : null;
   const setSelectedDocId = useSetRecoilState(selectedDocIdState);
+  const navigate = useNavigate();
 
   const {
     custom: { toggleTheme }
@@ -62,10 +59,6 @@ const ClientDrawer = ({ handleDisconnect, clients = [] }: ClientDrawerProps) => 
     }
   }, [avatar, provider?.awareness]);
 
-  const handleFolderClick = () => {
-    setShowNotebooks(!showNotebooks);
-  };
-
   useEffect(() => {
     if (clients && clients.length > 0) {
       setAvatar(clients[0]);
@@ -76,12 +69,46 @@ const ClientDrawer = ({ handleDisconnect, clients = [] }: ClientDrawerProps) => 
   }, [clients]);
 
   const handleClickToGoBack = () => {
-    if (!docID) {
+    if (auth.isLoggedIn) {
+      navigate(`/@${auth.userData?.login}`);
+    } else {
       setSelectedDocId(null);
       handleDisconnect('/');
-    } else {
-      handleDisconnect(`/${username}`);
     }
+  };
+
+  useEffect(() => {
+    const checkLoginStatus = () => {
+      const pennantAccessToken = localStorage.getItem('pennantAccessToken');
+      const username = localStorage.getItem('pennant-username');
+      setAuth({
+        isLoggedIn: !!pennantAccessToken,
+        userData: { login: username || '' },
+        provider: null
+      });
+    };
+
+    checkLoginStatus();
+    window.addEventListener('storage', checkLoginStatus);
+
+    return () => {
+      window.removeEventListener('storage', checkLoginStatus);
+    };
+  }, []);
+
+  const handleSignOut = () => {
+    localStorage.removeItem('pennantAccessToken');
+    localStorage.removeItem('pennantAuthData');
+    localStorage.removeItem('pennant-username');
+    setAuth({ isLoggedIn: false, userData: null, provider: null });
+    if (!docID) {
+      handleDisconnect('/');
+    }
+  };
+
+  const handleSignIn = () => {
+    navigate('/auth');
+    setAuth({ isLoggedIn: true, userData: auth.userData, provider: auth.provider });
   };
 
   return (
@@ -115,34 +142,25 @@ const ClientDrawer = ({ handleDisconnect, clients = [] }: ClientDrawerProps) => 
                 text={`Toggle ${currTheme === 'dark' ? 'light' : 'dark'} mode`}
                 icon={currTheme === 'dark' ? <Brightness7 sx={{ color: '#e0e0e0' }} /> : <Brightness4 />}
               />
-
               <ThemeSelector />
+              <Divider sx={{ my: 2 }} />
 
-              <Box id='notebooks-folder'>
-                <IconRow
-                  onClick={handleFolderClick}
-                  text={username}
-                  icon={showNotebooks ? <FolderOpen /> : <Folder />}
-                />
-                {showNotebooks &&
-                  notebooks?.map((notebook: NotebookType, index: number) => (
-                    <StyledButton
-                      onClick={() => handleDisconnect(`/${username}/${notebook.docID}`)}
-                      style={{ textAlign: 'left' }}
-                      key={notebook.docID}>
-                      <Typography
-                        noWrap
-                        sx={{
-                          fontSize: '14px',
-                          fontFamily: 'Lato',
-                          color: currTheme == 'dark' ? grey[300] : grey[700]
-                        }}>
-                        {notebook.title || `Untitled-${index}`}
-                      </Typography>
-                    </StyledButton>
-                  ))}
-                <IconRow onClick={handleClickToGoBack} text={!docID ? 'Home' : 'Workspace'} icon={<ArrowBack />} />
-              </Box>
+              <IconRow
+                onClick={handleClickToGoBack}
+                text={!docID && !auth.isLoggedIn ? 'Home' : auth.isLoggedIn ? auth.userData?.login : 'Home'}
+                icon={auth.isLoggedIn ? <AccountCircle /> : <ArrowBack />}
+              />
+              <IconRow
+                onClick={auth.isLoggedIn ? handleSignOut : handleSignIn}
+                text={auth.isLoggedIn ? 'Logout' : 'Login'}
+                icon={
+                  <img
+                    src={auth.isLoggedIn ? LogoutSvg : LoginSvg}
+                    width='18'
+                    style={{ marginLeft: 4.5, marginRight: 0.5 }}
+                  />
+                }
+              />
             </Box>
           </Stack>
         </Box>
