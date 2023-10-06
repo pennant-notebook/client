@@ -31,7 +31,7 @@ export default defineConfig({
             '@uiw/codemirror-theme-vscode'
           ],
           'blocknote': ['@blocknote/core', '@blocknote/react'],
-          'yjs': ['y-codemirror.next', 'y-indexeddb', 'y-protocols', 'yjs'],
+          'yjs': ['y-codemirror.next', 'y-indexeddb', 'yjs'],
           'others': ['axios', 'jwt-decode', 'recoil', 'uuid']
         },
       },
