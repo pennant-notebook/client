@@ -1,4 +1,6 @@
-import { CloseSharp, Box, Stack, Tooltip, IconButton, Typography } from '~/utils/MuiImports';
+import React from 'react';
+import { Tooltip, Button, Typography } from 'antd';
+import { CloseOutlined } from '@ant-design/icons';
 import useNotebookContext from '~/contexts/NotebookContext';
 import styles from './MarkdownToolbar.module.css';
 
@@ -7,25 +9,27 @@ interface MarkdownToolbarProps {
   cellTheme: string;
 }
 
-const MarkdownToolbar = ({ id, cellTheme }: MarkdownToolbarProps) => {
+const MarkdownToolbar: React.FC<MarkdownToolbarProps> = ({ id, cellTheme }) => {
   const { deleteCell } = useNotebookContext();
 
   const buttonColor = cellTheme === 'dark' ? '#e1e1ea' : '#2c3032';
+
   return (
-    <Box className={`${styles['markdown-toolbar']} ${styles[cellTheme]}`}>
-      <Stack direction='row' sx={{ justifyContent: 'end', position: 'relative', alignItems: 'center', mr: 1 }}>
-        <Typography variant='overline' sx={{ color: buttonColor, position: 'absolute', left: '12px' }}>
-          Markdown
-        </Typography>
-        <Tooltip title='Remove cell' enterDelay={1000} enterNextDelay={1000}>
-          <IconButton
+    <div className={`${styles['markdown-toolbar']} ${styles[cellTheme]}`}>
+      <div className={styles.toolbarRow}>
+        <Typography.Text type='secondary' style={{ color: 'lightgray', position: 'absolute', left: '12px' }}>
+          MARKDOWN
+        </Typography.Text>
+        <Tooltip title='Remove cell' mouseEnterDelay={0} mouseLeaveDelay={0}>
+          <Button
+            type='text'
+            icon={<CloseOutlined style={{ color: buttonColor }} />}
             onClick={() => deleteCell(id)}
-            sx={{ opacity: 0.5, '&:hover': { opacity: 1, backgroundColor: 'transparent' } }}>
-            <CloseSharp sx={{ color: buttonColor }} />
-          </IconButton>
+            className={styles.toolbarButton}
+          />
         </Tooltip>
-      </Stack>
-    </Box>
+      </div>
+    </div>
   );
 };
 

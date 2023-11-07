@@ -28,8 +28,8 @@ div.notebook-title p {
 
 .ProseMirror {
   padding: 8px 24px !important;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
   border-bottom-right-radius: 5px;
   border-bottom-left-radius: 5px;
 }

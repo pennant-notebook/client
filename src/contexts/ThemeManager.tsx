@@ -64,7 +64,7 @@ function ThemeManager({ children, theme, toggleTheme, toggleCMTheme, editorTheme
     palette: {
       mode: 'dark',
       background: {
-        default: '#181a1b'
+        default: '#121212'
       }
     },
     ...customDark

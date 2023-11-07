@@ -1,6 +1,7 @@
-import { Box, Typography, useTheme } from '~/utils/MuiImports';
+import { useTheme } from '~/utils/MuiImports';
 import useNotebookContext from '~/contexts/NotebookContext';
 import styles from './AddCell.module.css';
+import { Button, Typography } from 'antd';
 
 interface AddCellProps {
   index: number;
@@ -21,27 +22,34 @@ const AddCell = ({ index, noCells, isDragging }: AddCellProps) => {
   };
 
   return (
-    <Box
-      sx={{
+    <div
+      style={{
         opacity: isDragging ? 0 : 1,
-        my: '10px',
+        marginTop: '10px',
+        marginBottom: '10px',
         width: '72%',
-        mx: 'auto'
+        marginLeft: 'auto',
+        marginRight: 'auto'
       }}>
-      <Box className={`add-cell ${theme}`} sx={{ ml: 3.5 }}>
-        <Box className={noCells ? styles['button-container-noCells'] : styles['button-container']}>
-          <button className={styles['add-code-button']} title='Add a code cell' onClick={handleAddCode}>
-            <Typography className={styles['button-text']}>+ Code</Typography>
-          </button>
-          <button
-            className={styles['add-markdown-button']}
+      <div className={`add-cell ${theme}`} style={{ marginLeft: 28 }}>
+        <div className={noCells ? styles['button-container-noCells'] : styles['button-container']}>
+          <Button
+            className={`${styles['add-code-button']} ${styles[theme]}`}
+            title='Add a code cell'
+            onClick={handleAddCode}
+            type='primary'>
+            <Typography.Text className={`${styles['button-text']}`}>+ Code</Typography.Text>
+          </Button>
+          <Button
+            className={`${styles['add-markdown-button']} ${styles[theme]}`}
             title='Add a markdown text cell'
-            onClick={handleAddMarkdown}>
-            <Typography className={styles['button-text']}>+ Markdown</Typography>
-          </button>
-        </Box>
-      </Box>
-    </Box>
+            onClick={handleAddMarkdown}
+            type='primary'>
+            <Typography.Text className={styles['button-text']}>+ Markdown</Typography.Text>
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 };
 

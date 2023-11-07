@@ -13,6 +13,7 @@ export interface CreateCodeEditorProps {
   editorTheme: CodeMirrorThemeType;
   hasOutput: boolean;
   language: string;
+  notebookTheme: string;
 }
 
 export interface MarkdownEditorProps {

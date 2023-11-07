@@ -1,56 +1,42 @@
-import { Box, Typography, Menu, MenuItem, InputBase } from '~/utils/MuiImports';
-import {
-  CheckIcon,
-  CloseIcon,
-  IconButton,
-  MoreVertIcon,
-  FileCopyIcon,
-  OpenInNewIcon,
-  Edit,
-  DeleteIcon
-} from '~/utils/MuiImports';
-import { StyledTreeItem } from '~/components/UI/StyledTreeComponents';
-import { NotebookType } from '@/NotebookTypes';
+import { useState, useEffect, useRef } from 'react';
+import { Input, Menu, Dropdown, Modal, message } from 'antd';
+import { EllipsisOutlined, DeleteOutlined, EditOutlined, CopyOutlined, BookOutlined } from '@ant-design/icons';
 import { useMutation, useQuery } from 'react-query';
 import { editDocTitle, deleteDoc } from '~/services/dynamoPost';
-import { useEffect, useRef, useState } from 'react';
-import { toast } from 'react-toastify';
-import ListIconJs from './assets/listjs.svg';
-import ListIconPy from './assets/listpy.svg';
+import { fetchDoc } from '~/services/dynamoFetch';
 import { useRecoilState } from 'recoil';
 import { notebookTitleStateFamily, notebooksState, selectedDocIdState } from '~/appState';
-import { fetchDoc } from '~/services/dynamoFetch';
-import styles from './TreeNotebook.module.css';
+import { NotebookType } from '@/NotebookTypes';
+
+import IconJS from './assets/jsfolder.png';
+import IconPY from './assets/pyfolder.png';
+
+import { useTheme } from '@mui/material';
+
+const { confirm } = Modal;
 
 interface TreeNotebookProps {
   notebook: NotebookType;
   username: string;
   index: number;
+  language: string;
   handleSelectedDocId: (docID: string) => void;
 }
 
-const TreeNotebook = ({ index, notebook, username, handleSelectedDocId }: TreeNotebookProps) => {
+const TreeNotebook = ({ notebook, username, handleSelectedDocId, language }: TreeNotebookProps) => {
   const [notebooks, setNotebooks] = useRecoilState(notebooksState);
   const [isEditing, setIsEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(notebook.title || '');
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const inputRef = useRef<HTMLElement | null>(null);
+  const inputRef = useRef<any>(null);
   const [title, setTitle] = useRecoilState(notebookTitleStateFamily(notebook.docID));
   const [selectedDocId, setSelectedDocId] = useRecoilState(selectedDocIdState);
 
-  const { data: fetchedNotebook, refetch } = useQuery<NotebookType>([notebook.docID, username], () =>
-    fetchDoc(notebook.docID as string, username as string)
-  );
+  const { refetch } = useQuery([notebook.docID, username], () => fetchDoc(notebook.docID, username));
+  const theme = useTheme().palette.mode;
 
   useEffect(() => {
-    setTitle(fetchedNotebook?.title || notebook.title || `Untitled-${index}`);
-  }, [notebook]);
-
-  const handleClickToNavigate = () => {
-    if (isEditing) return;
-    const url = `/${username}/${notebook.docID}`;
-    window.open(url, '_blank');
-  };
+    setTitle(notebook.title || `Untitled`);
+  }, [notebook, setTitle]);
 
   const deleteMutation = useMutation(deleteDoc, {
     onSuccess: () => {
@@ -61,6 +47,13 @@ const TreeNotebook = ({ index, notebook, username, handleSelectedDocId }: TreeNo
     }
   });
 
+  const handleNotebookClick = (e: any) => {
+    e.stopPropagation();
+    if (!isEditing) {
+      handleSelectedDocId(notebook.docID);
+    }
+  };
+
   const editMutation = useMutation(editDocTitle, {
     onSuccess: () => {
       setTitle(newTitle);
@@ -68,147 +61,138 @@ const TreeNotebook = ({ index, notebook, username, handleSelectedDocId }: TreeNo
     }
   });
 
-  const handleClick = (e: React.MouseEvent<HTMLElement>) => {
-    e.stopPropagation();
-    setAnchorEl(e.currentTarget);
-  };
-
-  const handleRenameClick = (e: React.MouseEvent<HTMLElement>) => {
-    e.stopPropagation();
-    setAnchorEl(null);
-    setNewTitle(notebook.title || '');
+  const handleRenameClick = () => {
     setIsEditing(true);
     setTimeout(() => {
       inputRef.current && inputRef.current.focus();
     }, 0);
   };
 
-  const handleDeleteClick = (e: React.MouseEvent<HTMLElement>) => {
-    e.stopPropagation();
-    if (window.confirm('Are you sure you want to delete this notebook?') && username) {
-      deleteMutation.mutate(
-        { docID: notebook.docID, username },
-        {
-          onSuccess: () => {
-            toast.success(`Successfully deleted ${notebook.title || 'untitled notebook'}`);
-          }
-        }
-      );
-    }
+  const handleDeleteClick = () => {
+    confirm({
+      title: 'Are you sure you want to delete this notebook?',
+      onOk() {
+        deleteMutation.mutate({ docID: notebook.docID, username });
+      }
+    });
   };
 
-  const handleSaveClick = (e: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>) => {
-    e.stopPropagation();
+  const handleSaveClick = () => {
     if (username) {
-      editMutation.mutate({ docID: notebook.docID, title: newTitle, username: username });
+      editMutation.mutate({ docID: notebook.docID, title: newTitle, username });
     }
     setIsEditing(false);
   };
 
-  const handleCancelClick = (
-    e: React.MouseEvent<HTMLElement> | React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLDivElement>
-  ) => {
-    const target = e.relatedTarget as HTMLElement;
-    if (target && target.id === 'save-button') return;
-    e.stopPropagation();
-    setTimeout(() => {
-      setIsEditing(false);
-    }, 50);
+  const handleCancelClick = () => {
+    setIsEditing(false);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLElement | HTMLTextAreaElement>) => {
-    e.stopPropagation();
-    if (e.key === 'Enter') {
-      handleSaveClick(e);
-    }
-    if (e.key === 'Escape') {
-      setIsEditing(false);
-    }
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleCopyClick = (e: React.MouseEvent<HTMLElement>) => {
-    e.stopPropagation();
+  const handleCopyClick = () => {
     const notebookURL = `https://trypennant.com/${username}/${notebook.docID}`;
     navigator.clipboard
       .writeText(notebookURL)
       .then(() => {
-        toast.success('Notebook URL copied to clipboard');
+        message.success('Notebook URL copied to clipboard');
       })
       .catch(err => {
-        toast.error('Failed to copy URL: ' + err);
+        message.error('Failed to copy URL: ' + err);
       });
   };
 
-  const iconSize = '16px';
-  const iconPyWidth = '20px';
-  const iconPyHeight = '20px';
+  const handleClickToNavigate = () => {
+    if (isEditing) return;
+    const url = `/${username}/${notebook.docID}`;
+    window.open(url, '_blank');
+  };
+
+  const menu = (
+    <Menu
+      items={[
+        {
+          label: 'Open Notebook',
+          key: '0',
+          icon: <BookOutlined />,
+          onClick: () => handleClickToNavigate()
+        },
+        {
+          label: 'Rename Notebook',
+          key: '1',
+          icon: <EditOutlined />,
+          onClick: () => handleRenameClick()
+        },
+        {
+          label: 'Delete Notebook',
+          key: '2',
+          icon: <DeleteOutlined />,
+          onClick: () => handleDeleteClick()
+        },
+        {
+          label: 'Copy Notebook URL',
+          key: '3',
+          icon: <CopyOutlined />,
+          onClick: () => handleCopyClick()
+        }
+      ]}
+      onClick={e => {
+        e.domEvent.stopPropagation();
+      }}
+    />
+  );
+  const notebookIconSrc = language === 'javascript' ? IconJS : IconPY;
 
   return (
-    <Box>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
       {isEditing ? (
-        <div className={styles.editingContainer} onBlur={handleCancelClick}>
-          <InputBase
+        <div style={{ flex: 1 }}>
+          <Input
             ref={inputRef}
-            className={styles.inputBase}
             value={newTitle}
             onChange={e => setNewTitle(e.target.value)}
             onBlur={handleCancelClick}
-            onKeyDown={handleKeyDown}
+            onPressEnter={handleSaveClick}
             autoFocus
           />
-          <IconButton id='save-button' onClick={handleSaveClick} className={styles.iconButtonGreen}>
-            <CheckIcon sx={{ fontSize: iconSize }} />
-          </IconButton>
-          <IconButton onClick={handleCancelClick} className={styles.iconButtonRed}>
-            <CloseIcon sx={{ fontSize: iconSize }} />
-          </IconButton>
         </div>
       ) : (
-        <StyledTreeItem
-          disabled={selectedDocId === notebook.docID}
-          onClick={() => (selectedDocId === notebook.docID ? null : handleSelectedDocId(notebook.docID))}
-          icon={
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '200px' }}>
+          <div
+            onClick={e => handleNotebookClick(e)}
+            style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <img
-              src={notebook.language === 'javascript' ? ListIconJs : ListIconPy}
-              alt='List Icon'
-              width={iconPyWidth}
-              height={iconPyHeight}
+              src={notebookIconSrc}
+              alt={`${language} Icon`}
+              style={{ width: '16px', height: '16px', marginRight: '8px' }}
             />
-          }
-          nodeId={notebook.docID}
-          label={
-            <Box className={styles.treeItemContainer}>
-              <Typography className={styles.treeItemTypography}>{title || `Untitled-${index}`}</Typography>
-              <IconButton onClick={e => handleClick(e)} className={styles.iconButton}>
-                <MoreVertIcon />
-              </IconButton>
-              <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-                <MenuItem onClick={handleClickToNavigate}>
-                  <OpenInNewIcon fontSize='small' style={{ marginRight: '8px' }} />
-                  <Typography sx={{ fontFamily: 'Lato', fontSize: '15px' }}>Open in New Tab</Typography>
-                </MenuItem>
-                <MenuItem onClick={handleDeleteClick}>
-                  <DeleteIcon fontSize='small' style={{ marginRight: '8px' }} />
-                  <Typography sx={{ fontFamily: 'Lato', fontSize: '15px' }}>Delete Notebook</Typography>
-                </MenuItem>
-                <MenuItem onClick={handleRenameClick}>
-                  <Edit fontSize='small' style={{ marginRight: '8px' }} />
-                  <Typography sx={{ fontFamily: 'Lato', fontSize: '15px' }}>Rename Notebook</Typography>
-                </MenuItem>
-                <MenuItem onClick={handleCopyClick}>
-                  <FileCopyIcon fontSize='small' className={styles.fileCopyIcon} />
-                  <Typography sx={{ fontFamily: 'Lato', fontSize: '15px' }}>Copy Notebook URL</Typography>
-                </MenuItem>
-              </Menu>
-            </Box>
-          }
-        />
+            <span
+              id='notebook-tree-title'
+              style={{
+                flexGrow: 1,
+                maxWidth: '140px',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap'
+              }}>
+              {title || `Untitled`}
+            </span>
+          </div>
+          <div id='dropdown-tree' className={`tree-dropdown ${theme}`}>
+            <Dropdown
+              overlay={menu}
+              trigger={['click']}
+              onOpenChange={open => {
+                if (!open) {
+                }
+              }}>
+              <a onClick={e => e.stopPropagation()} className={theme}>
+                <EllipsisOutlined className='ellipsis-icon' style={{ justifyContent: 'flex-end' }} />
+              </a>
+            </Dropdown>
+          </div>
+        </div>
       )}
-    </Box>
+    </div>
   );
 };
+
 export default TreeNotebook;

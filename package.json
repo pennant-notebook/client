@@ -17,6 +17,7 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.2.6",
     "@blocknote/core": "^0.9.3",
     "@blocknote/react": "^0.9.3",
     "@codemirror/autocomplete": "^6.9.0",
@@ -38,7 +39,9 @@
     "@uiw/codemirror-theme-dracula": "^4.21.8",
     "@uiw/codemirror-theme-tokyo-night": "^4.21.8",
     "@uiw/codemirror-theme-vscode": "^4.21.8",
+    "antd": "^5.11.0",
     "axios": "^1.4.0",
+    "classnames": "^2.3.2",
     "codemirror": "^6.0.0",
     "js-beautify": "^1.14.9",
     "jwt-decode": "^3.1.2",

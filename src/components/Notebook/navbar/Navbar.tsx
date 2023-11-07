@@ -1,38 +1,44 @@
-import { useParams } from 'react-router';
+import { useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { authState, notebookLanguageState, selectedDocIdState } from '~/appState';
+import LoggedInIcon from '~/assets/auth/loggedIn.svg';
 import logo from '~/assets/logo/pennant-color.png';
+import ClientDrawer from '~/components/Client/ClientDrawer';
+import Clients from '~/components/Client/Clients';
+import IconRow from '~/components/UI/IconRow';
+import { useNavbarContext } from '~/contexts/NavbarContext';
 import {
   AppBar,
   Box,
-  Brightness4,
-  Brightness7,
   IconButton,
+  Menu,
+  MenuItem,
   Stack,
   Toolbar,
   Tooltip,
   Typography,
   useTheme
 } from '~/utils/MuiImports';
-import ClientDrawer from '~/components/Client/ClientDrawer';
-import Clients from '~/components/Client/Clients';
-import IconRow from '~/components/UI/IconRow';
+import { BulbOutlined, BulbFilled } from '@ant-design/icons';
+
 import DocTitle from './DocTitle';
 import DreddButtons from './actions/DreddButtons';
-import { useNavbarContext } from '~/contexts/NavbarContext';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { notebookLanguageState, selectedDocIdState } from '~/appState';
 
 interface NavbarProps {
   selectedDoc?: string;
 }
 
 const Navbar = ({ selectedDoc }: NavbarProps) => {
+  const navigate = useNavigate();
   const { username, docID: paramsDoc } = useParams();
   const { codeCells, clients, handleDisconnect } = useNavbarContext();
   const setSelectedDocId = useSetRecoilState(selectedDocIdState);
   const notebookLanguage = useRecoilValue(notebookLanguageState);
   const docID = selectedDoc || paramsDoc;
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [auth, setAuth] = useRecoilState(authState);
 
-  // const navigate = useNavigate();
   const currTheme = useTheme().palette.mode;
   const {
     custom: { toggleTheme }
@@ -42,12 +48,34 @@ const Navbar = ({ selectedDoc }: NavbarProps) => {
   const paddingClient =
     clientCount <= 1 ? 10 : clientCount === 2 ? 8 : clientCount === 3 ? 6 : clientCount >= 4 ? 0 : 10;
 
-  let pyColor = '#234659';
-  if (notebookLanguage === 'python') {
-    pyColor = '#234659';
-  }
+  const handleMenu = (event: any) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('pennantAccessToken');
+    localStorage.removeItem('pennantAuthData');
+    localStorage.removeItem('pennant-username');
+    setAuth({
+      isLoggedIn: false,
+      userData: null,
+      provider: null
+    });
+
+    navigate('/');
+  };
+
   return (
-    <AppBar position='sticky' sx={{ backgroundColor: currTheme === 'dark' ? '#1e202d' : pyColor }}>
+    <AppBar
+      position='sticky'
+      sx={{
+        backgroundColor: currTheme === 'dark' ? '#000' : '#234659',
+        borderBottom: currTheme === 'dark' ? '1px solid #313121' : 'none'
+      }}>
       <Toolbar
         sx={{
           width: '100%',
@@ -94,16 +122,49 @@ const Navbar = ({ selectedDoc }: NavbarProps) => {
 
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           {!docID && (
-            <Typography sx={{ fontFamily: 'Lato', opacity: '0.5', pr: 2, fontWeight: 'bold' }}>{username}</Typography>
+            <>
+              <IconButton onClick={handleMenu} size='large' sx={{ ml: 2 }}>
+                <img
+                  style={{ borderRadius: '50%', width: '32px', height: '32px', marginRight: '10px' }}
+                  src={auth.userData?.avatar_url || auth.userData?.avatar || LoggedInIcon}
+                  alt="User's avatar"
+                  onError={e => {
+                    const imgElement = e.target as HTMLImageElement;
+                    imgElement.onerror = null;
+                    imgElement.src = LoggedInIcon;
+                  }}
+                />
+              </IconButton>
+              <Menu
+                id='menu-appbar'
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right'
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right'
+                }}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}>
+                <MenuItem onClick={handleClose}>{username}</MenuItem>
+                {/* <MenuItem onClick={handleClose} disabled>
+                  Settings
+                </MenuItem> */}
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              </Menu>
+            </>
           )}
           {!docID && (
             <IconRow
               onClick={toggleTheme}
               icon={
                 currTheme === 'dark' ? (
-                  <Brightness7 sx={{ color: '#e0e0e0', width: '20px' }} />
+                  <BulbOutlined style={{ color: '#e0e0e0', width: '20px' }} />
                 ) : (
-                  <Brightness4 sx={{ color: 'lightgray', width: '20px' }} />
+                  <BulbFilled style={{ color: 'lightgray', width: '20px' }} />
                 )
               }
             />
