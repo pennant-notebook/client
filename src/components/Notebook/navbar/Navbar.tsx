@@ -35,8 +35,10 @@ const Navbar = ({ selectedDoc }: NavbarProps) => {
   const [avatarUrl, setAvatarUrl] = useState<string>(LoggedInIcon);
 
   useEffect(() => {
-    const newAvatarUrl = auth?.userData?.avatar_url || auth?.userData?.avatar || LoggedInIcon;
-    setAvatarUrl(newAvatarUrl);
+    if (auth.isLoggedIn) {
+      const newAvatarUrl = auth?.userData?.avatar_url || auth?.userData?.avatar || LoggedInIcon;
+      setAvatarUrl(newAvatarUrl);
+    }
   }, [auth]);
 
   const handleLogout = () => {

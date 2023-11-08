@@ -39,12 +39,15 @@ const GitHubLogin = () => {
         }
       });
       const data = response.data;
+      if (data.avatar_url) {
+        localStorage.setItem('pennant-avatar-url', data.avatar_url);
+      }
       localStorage.setItem('pennantAuthData', JSON.stringify(data));
       localStorage.setItem('pennant-username', data.login);
 
       setAuth({
         isLoggedIn: true,
-        userData: data,
+        userData: { ...data, avatar_url: data.avatar_url },
         provider: 'github'
       });
 
