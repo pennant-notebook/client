@@ -40,7 +40,6 @@ const Navbar = ({ selectedDoc }: NavbarProps) => {
 
       if (localUserData) {
         const userData = JSON.parse(localUserData);
-        console.log(userData);
         setAuth({
           isLoggedIn: !!pennantAccessToken,
           userData: {

@@ -57,10 +57,10 @@ export const getUserObjects = (states: Map<number, AwarenessUserState>) => {
     .map(item => ({
       user: {
         id: item[0],
-        name: item[1].user!.name || "anonymous",
-        color: item[1].user!.color || getRandomColor(),
-        avatar_url: item[1].user!.avatar_url,
-        avatar: item[1].user!.avatar,
+        name: item[1].user?.name || "anonymous",
+        color: item[1].user?.color || getRandomColor(),
+        avatar_url: item[1].user?.avatar_url || '',
+        avatar: item[1].user?.avatar || '',
       }
     }));
 

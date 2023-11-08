@@ -34,6 +34,7 @@ export const NavbarProvider = ({ children, provider, docID }: NavbarProviderProp
   const [codeCells, setCodeCells] = useState<any[]>([]);
   const [clients, setClients] = useState<AwarenessUserState[]>([]);
   const [selectedDoc, setSelectedDoc] = useState<string>('');
+
   const navigate = useNavigate();
 
   const handleDisconnect = async (destination: string) => {
