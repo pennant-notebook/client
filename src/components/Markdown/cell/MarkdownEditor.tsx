@@ -27,8 +27,8 @@ const MarkdownEditor = ({ content, provider, currentUser, theme }: MarkdownEdito
       provider,
       fragment: content,
       user: {
-        name: currentUser?.name || 'Anonymous User',
-        color: currentUser?.color || getRandomColor()
+        name: currentUser?.user?.name || 'Anonymous User',
+        color: currentUser?.user?.color || getRandomColor()
       }
     },
     onEditorReady(editor) {

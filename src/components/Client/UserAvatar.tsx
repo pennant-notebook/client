@@ -1,25 +1,27 @@
-import { Avatar, Modal, Input } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
-import { getClientFromLocalStorage, storeClientInLocalStorage } from '~/utils/awarenessHelpers';
+import { Input, Modal } from 'antd';
 import { useState } from 'react';
+import { storeClientInLocalStorage } from '~/utils/awarenessHelpers';
+
+import Avatar from 'react-avatar';
+import { useRecoilValue } from 'recoil';
+import { authState } from '~/appState';
 
 interface UserAvatarProps {
-  name: string;
-  src?: string;
-  color?: string;
-  size?: number | 'large' | 'small' | 'default';
+  size?: string;
+  isDrawer?: boolean;
 }
 
-const UserAvatar = ({ name, src, color, size = 'default' }: UserAvatarProps) => {
+const UserAvatar = ({ size = '30px', isDrawer = false }: UserAvatarProps) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [newName, setNewName] = useState(getClientFromLocalStorage().name);
+  const auth = useRecoilValue(authState);
+  const [newName, setNewName] = useState(auth.userData?.name || '');
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewName(e.target.value);
   };
 
   const handleOk = () => {
-    storeClientInLocalStorage(newName);
+    storeClientInLocalStorage(newName, auth.userData?.color, auth.userData?.avatar_url);
     setIsModalVisible(false);
   };
 
@@ -27,21 +29,19 @@ const UserAvatar = ({ name, src, color, size = 'default' }: UserAvatarProps) => 
     setIsModalVisible(false);
   };
 
-  const avatarContent = src ? (
-    <Avatar size={size} src={src} />
-  ) : (
-    <Avatar size={size} style={{ backgroundColor: color }} icon={<UserOutlined />}>
-      {newName[0]?.toUpperCase()}
-    </Avatar>
-  );
-
   return (
-    <>
-      {avatarContent}
+    <div className='navbar-userAvatar'>
+      <Avatar
+        name={auth.userData && auth.userData.name ? auth.userData.name[0].toUpperCase() : ''}
+        size={size}
+        src={auth.userData?.avatar_url}
+        color={auth.userData?.color}
+        round='30px'
+      />
       <Modal title='Edit Name' open={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-        <Input value={name} onChange={handleNameChange} />
+        <Input value={auth.userData?.name} onChange={handleNameChange} />
       </Modal>
-    </>
+    </div>
   );
 };
 

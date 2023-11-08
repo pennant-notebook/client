@@ -1,19 +1,21 @@
 import { useState } from 'react';
 import { Modal, Input } from 'antd';
+import { useRecoilValue } from 'recoil';
+import { authState } from '~/appState';
 
 interface EditNameModalProps {
   isVisible: boolean;
-  currentName: string | undefined;
+  currentName: string;
   onUpdate: (newName: string) => void;
   onClose: () => void;
   theme: string;
 }
 
-const EditNameModal = ({ isVisible, currentName, onUpdate, onClose, theme }: EditNameModalProps) => {
-  const [newName, setNewName] = useState<string>(currentName || '');
-
+const EditNameModal = ({ isVisible, onUpdate, onClose, theme }: EditNameModalProps) => {
+  const auth = useRecoilValue(authState);
+  const [newName, setNewName] = useState<string>(auth.userData?.name || '');
   const handleOk = () => {
-    if (newName && newName !== currentName) {
+    if (newName && newName !== auth.userData?.name) {
       onUpdate(newName);
     }
     onClose();
@@ -26,7 +28,7 @@ const EditNameModal = ({ isVisible, currentName, onUpdate, onClose, theme }: Edi
       open={isVisible}
       onOk={handleOk}
       onCancel={onClose}
-      okButtonProps={{ disabled: newName.trim().length === 0 || newName === currentName }}>
+      okButtonProps={{ disabled: newName.trim().length === 0 }}>
       <Input
         placeholder='Enter new name'
         value={newName}

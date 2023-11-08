@@ -47,7 +47,7 @@ const GitHubLogin = () => {
 
       setAuth({
         isLoggedIn: true,
-        userData: { ...data, avatar_url: data.avatar_url },
+        userData: { ...data, avatar_url: data.avatar_url, setByUser: false, name: data.login },
         provider: 'github'
       });
 

@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { authState, notebookLanguageState, selectedDocIdState } from '~/appState';
-import LoggedInIcon from '~/assets/auth/loggedIn.svg';
 import logo from '~/assets/logo/pennant-color.png';
 import ClientDrawer from '~/components/Client/ClientDrawer';
 import Clients from '~/components/Client/Clients';
@@ -10,11 +9,12 @@ import { useNavbarContext } from '~/contexts/NavbarContext';
 import DocTitle from './DocTitle';
 import DreddButtons from './actions/DreddButtons';
 
-import { LogoutOutlined, SettingOutlined, MenuFoldOutlined, MenuOutlined } from '@ant-design/icons';
-import { Layout, Avatar, Dropdown, Button } from 'antd';
+import { LogoutOutlined, SettingOutlined } from '@ant-design/icons';
+import { Dropdown, Layout } from 'antd';
 
 const { Header } = Layout;
 
+import UserAvatar from '~/components/Client/UserAvatar';
 import styles from './Navbar.module.css';
 
 interface NavbarProps {
@@ -30,47 +30,71 @@ const Navbar = ({ selectedDoc }: NavbarProps) => {
   const docID = selectedDoc || paramsDoc;
 
   const [openDrawer, setOpenDrawer] = useState(false);
-
-  const [auth, setAuth] = useRecoilState(authState);
-  const [avatarUrl, setAvatarUrl] = useState<string>(LoggedInIcon);
+  const setAuth = useSetRecoilState(authState);
 
   useEffect(() => {
-    if (auth.isLoggedIn) {
-      const newAvatarUrl = auth?.userData?.avatar_url || auth?.userData?.avatar || LoggedInIcon;
-      setAvatarUrl(newAvatarUrl);
-    }
-  }, [auth]);
+    const checkLoginStatus = () => {
+      const pennantAccessToken = localStorage.getItem('pennantAccessToken');
+      const username = localStorage.getItem('pennant-username');
+      const localUserData = localStorage.getItem('pennantAuthData');
+
+      if (localUserData) {
+        const userData = JSON.parse(localUserData);
+        console.log(userData);
+        setAuth({
+          isLoggedIn: !!pennantAccessToken,
+          userData: {
+            id: userData.id,
+            login: username || userData.login,
+            avatar_url: userData.avatar_url,
+            name: userData.name,
+            color: userData.color,
+            setByUser: userData.setByUser
+          },
+          provider: null
+        });
+      }
+    };
+
+    checkLoginStatus();
+    window.addEventListener('storage', checkLoginStatus);
+
+    return () => {
+      window.removeEventListener('storage', checkLoginStatus);
+    };
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('pennantAccessToken');
     localStorage.removeItem('pennantAuthData');
     localStorage.removeItem('pennant-username');
+    localStorage.removeItem('pennant-avatar-url');
+    localStorage.removeItem('userData');
     setAuth({
       isLoggedIn: false,
       userData: null,
       provider: null
     });
-
     navigate('/');
   };
 
   const items = [
     {
-      key: '0',
+      key: '1',
       icon: '',
       label: `${username}`,
       disabled: true,
       style: { color: '#808080', cursor: 'default', fontWeight: 'bold' }
     },
     {
-      key: '1',
+      key: '2',
       icon: <SettingOutlined />,
       label: 'Settings',
       onClick: () => setOpenDrawer(true),
       disabled: !docID
     },
     {
-      key: '2',
+      key: '3',
       icon: <LogoutOutlined />,
       label: 'Logout',
       onClick: handleLogout
@@ -94,21 +118,13 @@ const Navbar = ({ selectedDoc }: NavbarProps) => {
       <div className={styles.docTitle}>{docID && <DocTitle selectedDoc={docID} language={notebookLanguage!} />}</div>
 
       <div className={styles.actions}>
-        <div className={docID ? styles.dredd : ''}>
-          {docID && <DreddButtons codeCells={codeCells} />}
+        <div className={docID ? styles.dredd : ''}>{docID && <DreddButtons codeCells={codeCells} />}</div>
+        <Dropdown menu={{ items }} className={styles.navbarAvatar} overlayStyle={{ top: '54px' }}>
+          <a onClick={e => e.preventDefault()}>
+            <UserAvatar />
+          </a>
+        </Dropdown>
 
-          <Dropdown menu={{ items }} className={styles.navbarAvatar}>
-            <Avatar src={avatarUrl} style={{ cursor: 'pointer' }} />
-          </Dropdown>
-        </div>
-
-        {docID && (
-          <Button
-            className={styles.clientDrawerTrigger}
-            icon={openDrawer ? <MenuFoldOutlined /> : <MenuOutlined />}
-            onClick={() => setOpenDrawer(true)}
-          />
-        )}
         {docID && handleDisconnect && (
           <ClientDrawer
             open={openDrawer}

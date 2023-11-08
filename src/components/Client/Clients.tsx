@@ -1,9 +1,9 @@
 import Avatar from 'react-avatar';
 import { Box, Stack } from '~/utils/MuiImports';
-import { ClientType } from '@/ClientTypes';
+import { AwarenessUserState } from '@/ClientTypes';
 
 type ClientsProps = {
-  clients: ClientType[];
+  clients: AwarenessUserState[];
 };
 
 const Clients = ({ clients }: ClientsProps) => {
@@ -16,7 +16,13 @@ const Clients = ({ clients }: ClientsProps) => {
       )}
       {clients.slice(1, 4).map((client, index) => (
         <Box key={index}>
-          <Avatar name={client.name} size='30' round='30px' color={client.color} />
+          <Avatar
+            name={client.user?.name}
+            src={client.user?.avatar_url}
+            color={client.user?.color}
+            size='30'
+            round='30px'
+          />
         </Box>
       ))}
     </Stack>

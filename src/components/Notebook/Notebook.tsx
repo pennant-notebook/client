@@ -1,17 +1,22 @@
+import { UserState } from '@/ClientTypes';
 import { NotebookContextType, NotebookType } from '@/NotebookTypes';
 import { ProviderContextType } from '@/ProviderTypes';
 import { useEffect, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { useSetRecoilState } from 'recoil';
+import { authState, notebookLanguageState } from '~/appState';
+import { useNavbarContext } from '~/contexts/NavbarContext';
 import { NotebookContext } from '~/contexts/NotebookContext';
 import useProviderContext from '~/contexts/ProviderContext';
 import { Box, useTheme } from '~/utils/MuiImports';
-import { getClientFromLocalStorage, updateDisconnectedClient } from '~/utils/awarenessHelpers';
+import {
+  createClientAndStoreInLocalStorage,
+  getClientFromLocalStorage,
+  updateDisconnectedClient
+} from '~/utils/awarenessHelpers';
 import { YMap, createCell, getUserObjects } from '~/utils/notebookHelpers';
 import Cells from '../Cells/Cells';
-import { useNavbarContext } from '~/contexts/NavbarContext';
-import { useSetRecoilState } from 'recoil';
-import { notebookLanguageState } from '~/appState';
 
 interface NotebookProps {
   docID: string;
@@ -28,6 +33,7 @@ const Notebook = ({ docID, resourceTitle, notebook }: NotebookProps) => {
   const [cellDataArr, setCellDataArr] = useState(cellsArray.toArray());
   const [allRunning, setAllRunning] = useState(false);
   document.title = resourceTitle || 'Untitled Notebook';
+  const setAuth = useSetRecoilState(authState);
 
   useEffect(() => {
     notebookMetadata.set('language', notebook.language);
@@ -47,14 +53,43 @@ const Notebook = ({ docID, resourceTitle, notebook }: NotebookProps) => {
   useEffect(() => {
     if (!awareness) return;
 
-    const { name, color } = getClientFromLocalStorage();
+    const updateLocalUserInfo = () => {
+      const userData = getClientFromLocalStorage();
+      if (userData) {
+        awareness.setLocalStateField('user', userData);
+      } else {
+        const { name, color } = createClientAndStoreInLocalStorage();
+        awareness.setLocalStateField('user', { name, color });
+      }
+    };
 
-    awareness.setLocalStateField('user', { name, color });
+    updateLocalUserInfo();
 
     const updateClients = () => {
       const states: Map<number, any> = new Map(Array.from(awareness.getStates()));
       const clientObjects = getUserObjects(states);
-      setTimeout(() => setClients(clientObjects), 0);
+      setClients(clientObjects);
+
+      if (clientObjects.length > 0) {
+        setAuth(prevAuth => {
+          if (!prevAuth.userData) return prevAuth;
+
+          const updatedUserData: UserState = {
+            ...prevAuth.userData,
+            name: clientObjects[0].user.name,
+            color: clientObjects[0].user.color
+          };
+
+          localStorage.setItem('pennantAuthData', JSON.stringify(updatedUserData));
+
+          const updatedAuthData = {
+            ...prevAuth,
+            userData: updatedUserData
+          };
+
+          return updatedAuthData;
+        });
+      }
     };
 
     awareness.on('update', updateClients);
@@ -69,8 +104,6 @@ const Notebook = ({ docID, resourceTitle, notebook }: NotebookProps) => {
       if (provider) {
         updateDisconnectedClient(provider);
       }
-      // e.preventDefault();
-      // e.returnValue = '';
     };
 
     window.addEventListener('beforeunload', handleBeforeUnload);

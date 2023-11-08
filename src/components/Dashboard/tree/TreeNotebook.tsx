@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Input, Menu, Dropdown, Modal, message } from 'antd';
+import { Input, Dropdown, Modal, message } from 'antd';
 import { EllipsisOutlined, DeleteOutlined, EditOutlined, CopyOutlined, BookOutlined } from '@ant-design/icons';
 import { useMutation, useQuery } from 'react-query';
 import { editDocTitle, deleteDoc } from '~/services/dynamoPost';
@@ -106,39 +106,33 @@ const TreeNotebook = ({ notebook, username, handleSelectedDocId, language }: Tre
     window.open(url, '_blank');
   };
 
-  const menu = (
-    <Menu
-      items={[
-        {
-          label: 'Open Notebook',
-          key: '0',
-          icon: <BookOutlined />,
-          onClick: () => handleClickToNavigate()
-        },
-        {
-          label: 'Rename Notebook',
-          key: '1',
-          icon: <EditOutlined />,
-          onClick: () => handleRenameClick()
-        },
-        {
-          label: 'Delete Notebook',
-          key: '2',
-          icon: <DeleteOutlined />,
-          onClick: () => handleDeleteClick()
-        },
-        {
-          label: 'Copy Notebook URL',
-          key: '3',
-          icon: <CopyOutlined />,
-          onClick: () => handleCopyClick()
-        }
-      ]}
-      onClick={e => {
-        e.domEvent.stopPropagation();
-      }}
-    />
-  );
+  const items = [
+    {
+      label: 'Open Notebook',
+      key: '0',
+      icon: <BookOutlined />,
+      onClick: () => handleClickToNavigate()
+    },
+    {
+      label: 'Rename Notebook',
+      key: '1',
+      icon: <EditOutlined />,
+      onClick: () => handleRenameClick()
+    },
+    {
+      label: 'Delete Notebook',
+      key: '2',
+      icon: <DeleteOutlined />,
+      onClick: () => handleDeleteClick()
+    },
+    {
+      label: 'Copy Notebook URL',
+      key: '3',
+      icon: <CopyOutlined />,
+      onClick: () => handleCopyClick()
+    }
+  ];
+
   const notebookIconSrc = language === 'javascript' ? IconJS : IconPY;
 
   return (
@@ -178,7 +172,7 @@ const TreeNotebook = ({ notebook, username, handleSelectedDocId, language }: Tre
           </div>
           <div id='dropdown-tree' className={`tree-dropdown ${theme}`}>
             <Dropdown
-              overlay={menu}
+              menu={{ items }}
               trigger={['click']}
               onOpenChange={open => {
                 if (!open) {
