@@ -1,27 +1,26 @@
-import { ClientType } from '@/ClientTypes';
 import { BulbFilled, BulbOutlined, EditOutlined, HomeOutlined, LoginOutlined, LogoutOutlined } from '@ant-design/icons';
 import { useTheme } from '@mui/material';
-import { Button, Drawer, List, Space, Spin, Typography } from 'antd';
-import { useEffect, useState } from 'react';
+import { Button, Drawer, List, Space, Typography } from 'antd';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState, useSetRecoilState } from 'recoil';
+import { AwarenessUserState, UserState } from '@/ClientTypes';
 import { authState, selectedDocIdState, sidebarExpandedState } from '~/appState';
 import useProviderContext from '~/contexts/ProviderContext';
-import { getClientFromLocalStorage } from '~/utils/awarenessHelpers';
 import EditNameModal from './EditNameModal';
 import UserAvatar from './UserAvatar';
 
 interface ClientDrawerProps {
   handleDisconnect: (destination: string) => void;
-  clients?: ClientType[];
+  clients?: AwarenessUserState[];
   open: boolean;
   setOpen: (open: boolean) => void;
+  avatarUrl?: string | null;
 }
 
 const ClientDrawer = ({ handleDisconnect, clients = [], open, setOpen }: ClientDrawerProps) => {
   const [auth, setAuth] = useRecoilState(authState);
   const { docID } = useParams();
-  const [avatar, setAvatar] = useState<ClientType | null>(null);
   const setIsExpanded = useSetRecoilState(sidebarExpandedState);
 
   const providerContext = useProviderContext();
@@ -42,46 +41,31 @@ const ClientDrawer = ({ handleDisconnect, clients = [], open, setOpen }: ClientD
 
   const currTheme = theme.palette.mode;
 
-  useEffect(() => {
-    if (clients && clients.length > 0) {
-      setAvatar(clients[0]);
-    } else {
-      const storedClient = getClientFromLocalStorage();
-      setAvatar(storedClient);
-    }
-  }, [clients]);
-
-  useEffect(() => {
-    const checkLoginStatus = () => {
-      const pennantAccessToken = localStorage.getItem('pennantAccessToken');
-      const username = localStorage.getItem('pennant-username');
-      setAuth({
-        isLoggedIn: !!pennantAccessToken,
-        userData: { login: username || '' },
-        provider: null
-      });
-    };
-
-    checkLoginStatus();
-    window.addEventListener('storage', checkLoginStatus);
-
-    return () => {
-      window.removeEventListener('storage', checkLoginStatus);
-    };
-  }, []);
-
   const updateName = (newName: string) => {
     if (newName) {
-      setAvatar(prevAvatar => ({
-        ...prevAvatar,
-        name: newName
-      }));
+      setAuth(prevAuth => {
+        if (!prevAuth.userData) return prevAuth;
+
+        const updatedUserData: UserState = {
+          ...prevAuth.userData,
+          name: newName,
+          setByUser: true
+        };
+
+        localStorage.setItem('pennantAuthData', JSON.stringify(updatedUserData));
+
+        return {
+          ...prevAuth,
+          userData: updatedUserData
+        };
+      });
+
       provider?.awareness.setLocalStateField('user', {
-        ...avatar,
         name: newName,
+        color: auth.userData?.color,
+        avatar_url: auth.userData?.avatar_url,
         setByUser: true
       });
-      localStorage.setItem('userData', JSON.stringify({ name: newName, color: avatar?.color, setByUser: true }));
     }
     closeEditModal();
   };
@@ -90,11 +74,10 @@ const ClientDrawer = ({ handleDisconnect, clients = [], open, setOpen }: ClientD
     localStorage.removeItem('pennantAccessToken');
     localStorage.removeItem('pennantAuthData');
     localStorage.removeItem('pennant-username');
+    localStorage.removeItem('pennant-avatar-url');
+    localStorage.removeItem('userData');
     setAuth({ isLoggedIn: false, userData: null, provider: null });
-    if (!docID) {
-      setSelectedDocId(null);
-      handleDisconnect('/');
-    }
+    handleDisconnect('/');
   };
 
   const handleSignIn = () => {
@@ -114,10 +97,6 @@ const ClientDrawer = ({ handleDisconnect, clients = [], open, setOpen }: ClientD
     setIsExpanded(true);
   };
 
-  if (!avatar || !avatar.name) {
-    return <Spin />;
-  }
-
   const drawerItemStyle: React.CSSProperties = {
     display: 'flex',
     flexDirection: 'column',
@@ -126,14 +105,24 @@ const ClientDrawer = ({ handleDisconnect, clients = [], open, setOpen }: ClientD
     color: currTheme === 'dark' ? '#fff' : '#000'
   };
 
+  const getDisplayedName = () => {
+    if (auth.isLoggedIn) {
+      return auth.userData?.setByUser ? auth.userData?.name : `@${auth.userData?.login}`;
+    } else {
+      return clients[0]?.user?.name;
+    }
+  };
+
+  const displayedName = getDisplayedName();
+
   const drawerItems = [
     {
       key: 'avatar',
       content: (
         <Space direction='vertical' size='large' align='center' style={{ width: '100%' }}>
-          <UserAvatar name={avatar.name} src={avatar.url} color={avatar.color} size={60} />
+          <UserAvatar size={'60px'} isDrawer={true} />
           <Typography.Title level={5} style={{ marginBottom: '12px', marginTop: 0 }}>
-            {avatar.name}
+            {displayedName}
           </Typography.Title>
         </Space>
       )
@@ -211,7 +200,7 @@ const ClientDrawer = ({ handleDisconnect, clients = [], open, setOpen }: ClientD
       <EditNameModal
         theme={currTheme}
         isVisible={isEditModalVisible}
-        currentName={avatar.name}
+        currentName={getDisplayedName() || ''}
         onUpdate={updateName}
         onClose={closeEditModal}
       />

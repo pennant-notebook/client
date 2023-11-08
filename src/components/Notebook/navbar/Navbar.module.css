@@ -6,6 +6,10 @@
   height: 64px;
 }
 
+.header > * {
+  align-self: center;
+}
+
 .logo {
   flex: 1;
   cursor: pointer;
@@ -30,15 +34,10 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  max-width: 26%;
 }
 
 .actions .dredd {
   display: flex;
-  flex: 2;
   align-items: center;
-}
-
-.navbarAvatar {
-  margin-inline: 16px;
+  margin-right: 22px;
 }

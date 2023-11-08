@@ -1,4 +1,4 @@
-import { UserState } from '@/ClientTypes';
+import { AwarenessUserState, UserState } from '@/ClientTypes';
 import { HocuspocusProviderConfig } from '@/ProviderTypes';
 import { removeAwarenessStates } from 'y-protocols/awareness';
 import { generateRandomName, getUserObjects, randomColor } from './notebookHelpers';
@@ -11,7 +11,7 @@ export const updateDisconnectedClient = async (provider: HocuspocusProviderConfi
     const clientIdsToRemove = [clientId];
 
     removeAwarenessStates(provider.awareness, clientIdsToRemove, provider);
-    const currentStates = provider.awareness.getStates() as Map<number, UserState>;
+    const currentStates = provider.awareness.getStates() as Map<number, AwarenessUserState>;
     provider.disconnect();
     return getUserObjects(currentStates);
   }
@@ -24,41 +24,52 @@ export const getCurrentClient = (provider: HocuspocusProviderConfig): UserState 
   return current;
 };
 
-export const storeClientInLocalStorage = (name: string, color?: string): void => {
-  const existingUserData = getClientFromLocalStorage();
-  const userData = {
-    name,
-    color: color || existingUserData.color || randomColor(),
-    setByUser: true
-  };
-
-  localStorage.setItem('userData', JSON.stringify(userData));
-};
-
-
-export const createClientAndStoreInLocalStorage = (): { name: string; color: string } => {
-  const color = randomColor();
-  const name = generateRandomName();
-
-  localStorage.setItem('userData', JSON.stringify({ name, color }));
-  return { name, color };
-};
-
-export const getClientFromLocalStorage = (): { name: string; color: string } => {
-  const storedUserData = localStorage.getItem('userData');
+export const getClientFromLocalStorage = (): { name: string; color: string; avatar_url?: string } | undefined => {
+  const storedUserData = localStorage.getItem('pennantAuthData');
   if (storedUserData !== null) {
     try {
       const parsedUserData = JSON.parse(storedUserData);
-      if (parsedUserData.setByUser) {
-        return { name: parsedUserData.name, color: parsedUserData.color };
-      }
+      return parsedUserData;
     } catch (e) {
       console.error("Couldn't parse stored user data:", e);
     }
   }
-
-  return createClientAndStoreInLocalStorage();
 };
+
+export const createClientAndStoreInLocalStorage = (): { name: string; color: string; avatar_url?: string } => {
+  const color = randomColor();
+  const name = generateRandomName();
+
+  localStorage.setItem('pennantAuthData', JSON.stringify({ name, color, setByUser: false }));
+  return { name, color };
+};
+
+
+export const storeClientInLocalStorage = (newName: string, color?: string, avatar_url?: string): void => {
+  const localUser = getClientFromLocalStorage();
+  if (localUser) {
+    const userData = {
+      ...localUser,
+      name: newName,
+      setByUser: true
+    };
+
+    localStorage.setItem('pennantAuthData', JSON.stringify(userData));
+  }
+};
+
+
+
+export const updateAwarenessState = (provider: HocuspocusProviderConfig, userData: UserState) => {
+  provider.awareness.setLocalStateField('user', {
+    id: userData.id,
+    name: userData.name,
+    color: userData.color,
+    avatar_url: userData.avatar_url,
+    avatar: userData.avatar
+  });
+};
+
 
 export const getRandomElement = (list: any[]) => list[Math.floor(Math.random() * list.length)];
 

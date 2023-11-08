@@ -75,7 +75,7 @@ const Auth = () => {
 
       setAuth({
         isLoggedIn: true,
-        userData: { login: username },
+        userData: { login: username, name: username, color: '', avatar_url: '', avatar: '' },
         provider: 'username'
       });
 
@@ -99,11 +99,11 @@ const Auth = () => {
       const response = await axios.post(`${API_URL}/signin`, { username, password });
       setShowDashboardLoader(true);
       localStorage.setItem('pennantAccessToken', response.data.token);
-      localStorage.setItem('pennantAuthData', JSON.stringify({ login: username }));
+      localStorage.setItem('pennantAuthData', JSON.stringify({ login: username, name: username }));
       localStorage.setItem('pennant-username', username);
       setAuth({
         isLoggedIn: true,
-        userData: { login: username },
+        userData: { login: username, name: username },
         provider: 'username'
       });
       setShowDashboardLoader(true);
@@ -118,6 +118,7 @@ const Auth = () => {
     localStorage.removeItem('pennantAccessToken');
     localStorage.removeItem('pennantAuthData');
     localStorage.removeItem('pennant-username');
+    localStorage.removeItem('pennant-avatar-url');
     setAuth({
       isLoggedIn: false,
       userData: null,

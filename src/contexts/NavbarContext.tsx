@@ -1,4 +1,4 @@
-import { ClientType } from '@/ClientTypes';
+import { AwarenessUserState } from '@/ClientTypes';
 import { HocuspocusProviderConfig } from '@/ProviderTypes';
 import { createContext, useContext, useState } from 'react';
 import { useNavigate } from 'react-router';
@@ -32,7 +32,7 @@ interface NavbarProviderProps {
 
 export const NavbarProvider = ({ children, provider, docID }: NavbarProviderProps) => {
   const [codeCells, setCodeCells] = useState<any[]>([]);
-  const [clients, setClients] = useState<ClientType[]>([]);
+  const [clients, setClients] = useState<AwarenessUserState[]>([]);
   const [selectedDoc, setSelectedDoc] = useState<string>('');
   const navigate = useNavigate();
 

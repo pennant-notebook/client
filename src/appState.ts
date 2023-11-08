@@ -2,12 +2,8 @@ import { NotebookType } from '@/NotebookTypes';
 import { HocuspocusProviderConfig } from '@/ProviderTypes';
 import { atom, atomFamily } from 'recoil';
 
-interface User {
-  login: string;
-  avatar_url?: string;
-  avatar?: string;
-  name?: string;
-}
+import { UserState } from './types/ClientTypes';
+
 export const refreshState = atom({
   key: 'refreshState',
   default: false,
@@ -15,13 +11,19 @@ export const refreshState = atom({
 
 export const authState = atom<{
   isLoggedIn: boolean;
-  userData: User | null;
+  userData: UserState | null;
   provider: 'github' | 'google' | 'username' | null;
 }>({
   key: 'authState',
   default: {
     isLoggedIn: false,
-    userData: null,
+    userData: {
+      login: '',
+      avatar_url: '',
+      name: '',
+      color: '',
+      setByUser: false
+    },
     provider: null,
   },
 });

@@ -69,7 +69,7 @@ const DreddButtons = ({ codeCells = [] }: DreddButtonsProps) => {
 
   return (
     <div className={styles.buttonGroup}>
-      <Tooltip title='Reset Code Execution Context'>
+      <Tooltip title='Reset Code Execution Context' mouseEnterDelay={1} mouseLeaveDelay={0}>
         <Button
           className={styles.navbarActions}
           disabled={isDisabledReset()}
@@ -78,7 +78,7 @@ const DreddButtons = ({ codeCells = [] }: DreddButtonsProps) => {
         />
       </Tooltip>
 
-      <Tooltip title='Run All Code Cells'>
+      <Tooltip title='Run All Code Cells' mouseEnterDelay={1} mouseLeaveDelay={0}>
         <Button
           className={styles.navbarActions}
           disabled={isDisabledRun()}

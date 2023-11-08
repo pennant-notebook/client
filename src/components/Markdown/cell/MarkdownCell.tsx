@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { MarkdownCellProps } from '@/CellPropsTypes';
-import { UserState } from '@/ClientTypes';
+import { AwarenessUserState } from '@/ClientTypes';
 import { ProviderContextType } from '@/ProviderTypes';
 import '@blocknote/core/style.css';
 import useProviderContext from '~/contexts/ProviderContext';
@@ -15,7 +15,7 @@ const MarkdownCell: React.FC<MarkdownCellProps> = ({ id, cell }) => {
 
   const cellRef = useRef<HTMLDivElement>(null);
   const theme = useTheme().palette.mode;
-  const users = getUserObjects(awareness.getStates() as Map<number, UserState>);
+  const users = getUserObjects(awareness.getStates() as Map<number, AwarenessUserState>);
   const currentUser = users[0];
 
   useEffect(() => {

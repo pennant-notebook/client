@@ -166,3 +166,13 @@ div[id*='tippy'] > div[class*='tippy-box'][data-placement='left'] {
   color: #fff;
   border: none;
 }
+
+.navbar-userAvatar {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-userAvatar img {
+  display: block;
+  align-items: center;
+}

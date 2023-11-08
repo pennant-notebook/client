@@ -1,7 +1,8 @@
 import * as Y from 'yjs';
 import { v4 as uuidv4 } from 'uuid';
 import { uniqueNamesGenerator, animals } from 'unique-names-generator';
-import { UserState } from '@/ClientTypes';
+import { AwarenessUserState } from '@/ClientTypes';
+import { getRandomColor } from './awarenessHelpers';
 
 export type YDoc = Y.Doc;
 export type YArray = Y.Array<any>;
@@ -50,14 +51,20 @@ export const generateRandomName = () => {
   return uniqueNamesGenerator({ dictionaries: [animals], length: 1 });
 };
 
-export const getUserObjects = (states: Map<number, UserState>) => {
-  return Array.from(states)
+export const getUserObjects = (states: Map<number, AwarenessUserState>) => {
+  const userObjects = Array.from(states)
     .filter(([, state]) => state.user !== null)
     .map(item => ({
-      id: item[0],
-      name: item[1].user?.name,
-      color: item[1].user?.color
+      user: {
+        id: item[0],
+        name: item[1].user!.name || "anonymous",
+        color: item[1].user!.color || getRandomColor(),
+        avatar_url: item[1].user!.avatar_url,
+        avatar: item[1].user!.avatar,
+      }
     }));
+
+  return userObjects;
 };
 
 export const randomColor = () => {
