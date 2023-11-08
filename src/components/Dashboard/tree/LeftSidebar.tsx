@@ -1,8 +1,8 @@
 import { LeftCircleOutlined, RightCircleOutlined } from '@ant-design/icons';
 import { Button, Layout } from 'antd';
 import { useEffect, useRef, useState } from 'react';
-import { useRecoilValue } from 'recoil';
-import { notebooksState, selectedDocIdState } from '~/appState';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { notebooksState, selectedDocIdState, sidebarExpandedState } from '~/appState';
 import { useTheme } from '~/utils/MuiImports';
 import NotebookTreeView from './NotebookTreeView';
 import Sider from 'antd/es/layout/Sider';
@@ -16,7 +16,7 @@ interface LeftSidebarProps {
 export default function LeftSidebar({ username, refetch, handleSelectedDocId }: LeftSidebarProps) {
   const notebooks = useRecoilValue(notebooksState);
   const selectedDocId = useRecoilValue(selectedDocIdState);
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useRecoilState(sidebarExpandedState);
   const [showChevron, setShowChevron] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const theme = useTheme().palette.mode;
@@ -118,6 +118,7 @@ export default function LeftSidebar({ username, refetch, handleSelectedDocId }: 
         )}
       </Sider>
       <Button
+        ghost
         icon={!isExpanded ? <RightCircleOutlined /> : <LeftCircleOutlined />}
         onClick={handleExpandCollapse}
         style={{
@@ -138,7 +139,7 @@ export default function LeftSidebar({ username, refetch, handleSelectedDocId }: 
           height: '24px',
           color: '#000'
         }}
-        className='custom-chevron-button'
+        className={'custom-chevron-button' + ` ${theme}`}
       />
     </Layout>
   );

@@ -40,6 +40,7 @@
     "@uiw/codemirror-theme-tokyo-night": "^4.21.8",
     "@uiw/codemirror-theme-vscode": "^4.21.8",
     "antd": "^5.11.0",
+    "antd-style": "^3.5.1",
     "axios": "^1.4.0",
     "classnames": "^2.3.2",
     "codemirror": "^6.0.0",

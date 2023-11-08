@@ -1,82 +1,55 @@
 import { ClientType } from '@/ClientTypes';
-import { useCallback, useEffect, useState } from 'react';
-import Avatar from 'react-avatar';
-import { useNavigate, useParams } from 'react-router';
-import useProviderContext from '~/contexts/ProviderContext';
-import {
-  ArrowBack,
-  Box,
-  Brightness4,
-  Brightness7,
-  Divider,
-  Drawer,
-  Edit,
-  IconButton,
-  Stack,
-  Typography,
-  useTheme,
-  AccountCircle
-} from '~/utils/MuiImports';
-import { getClientFromLocalStorage } from '~/utils/awarenessHelpers';
-import IconRow from '~/components/UI/IconRow';
-import styles from './Clients.module.css';
-import ThemeSelector from '~/components/UI/ThemeSelector';
+import { BulbFilled, BulbOutlined, EditOutlined, HomeOutlined, LoginOutlined, LogoutOutlined } from '@ant-design/icons';
+import { useTheme } from '@mui/material';
+import { Button, Drawer, List, Space, Spin, Typography } from 'antd';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { authState, selectedDocIdState } from '~/appState';
-import LoginSvg from '~/assets/auth/login.svg';
-import LogoutSvg from '~/assets/auth/logout.svg';
+import { authState, selectedDocIdState, sidebarExpandedState } from '~/appState';
+import useProviderContext from '~/contexts/ProviderContext';
+import { getClientFromLocalStorage } from '~/utils/awarenessHelpers';
+import EditNameModal from './EditNameModal';
+import UserAvatar from './UserAvatar';
 
 interface ClientDrawerProps {
   handleDisconnect: (destination: string) => void;
   clients?: ClientType[];
+  open: boolean;
+  setOpen: (open: boolean) => void;
 }
 
-const ClientDrawer = ({ handleDisconnect, clients = [] }: ClientDrawerProps) => {
-  const [open, setOpen] = useState(false);
+const ClientDrawer = ({ handleDisconnect, clients = [], open, setOpen }: ClientDrawerProps) => {
   const [auth, setAuth] = useRecoilState(authState);
   const { docID } = useParams();
-  const [avatar, setAvatar] = useState(clients[0]);
+  const [avatar, setAvatar] = useState<ClientType | null>(null);
+  const setIsExpanded = useSetRecoilState(sidebarExpandedState);
+
   const providerContext = useProviderContext();
   const provider = providerContext ? providerContext.provider : null;
   const setSelectedDocId = useSetRecoilState(selectedDocIdState);
   const navigate = useNavigate();
 
+  const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+
+  const showEditModal = () => setIsEditModalVisible(true);
+  const closeEditModal = () => setIsEditModalVisible(false);
+
   const {
     custom: { toggleTheme }
   } = useTheme();
 
-  const currTheme = useTheme().palette.mode;
+  const theme = useTheme();
 
-  const handleEditNameClick = useCallback(() => {
-    let newName = window.prompt('Enter a new name:');
-    if (newName) {
-      setAvatar(prevAvatar => ({
-        ...prevAvatar,
-        name: newName || prevAvatar.name
-      }));
-      provider?.awareness.setLocalStateField('user', { ...avatar, name: newName, setByUser: true });
-      localStorage.setItem('userData', JSON.stringify({ name: newName, color: avatar?.color, setByUser: true }));
-    }
-  }, [avatar, provider?.awareness]);
+  const currTheme = theme.palette.mode;
 
   useEffect(() => {
     if (clients && clients.length > 0) {
       setAvatar(clients[0]);
     } else {
-      const storedClient: ClientType = getClientFromLocalStorage();
+      const storedClient = getClientFromLocalStorage();
       setAvatar(storedClient);
     }
   }, [clients]);
-
-  const handleClickToGoBack = () => {
-    if (auth.isLoggedIn) {
-      setSelectedDocId(null);
-      handleDisconnect(`/@${auth.userData?.login}`);
-    } else {
-      setSelectedDocId(null);
-      handleDisconnect('/');
-    }
-  };
 
   useEffect(() => {
     const checkLoginStatus = () => {
@@ -97,6 +70,22 @@ const ClientDrawer = ({ handleDisconnect, clients = [] }: ClientDrawerProps) => 
     };
   }, []);
 
+  const updateName = (newName: string) => {
+    if (newName) {
+      setAvatar(prevAvatar => ({
+        ...prevAvatar,
+        name: newName
+      }));
+      provider?.awareness.setLocalStateField('user', {
+        ...avatar,
+        name: newName,
+        setByUser: true
+      });
+      localStorage.setItem('userData', JSON.stringify({ name: newName, color: avatar?.color, setByUser: true }));
+    }
+    closeEditModal();
+  };
+
   const handleSignOut = () => {
     localStorage.removeItem('pennantAccessToken');
     localStorage.removeItem('pennantAuthData');
@@ -113,61 +102,120 @@ const ClientDrawer = ({ handleDisconnect, clients = [] }: ClientDrawerProps) => 
     setAuth({ isLoggedIn: true, userData: auth.userData, provider: auth.provider });
   };
 
+  const handleClickToGoBack = () => {
+    if (auth.isLoggedIn) {
+      setSelectedDocId(null);
+      handleDisconnect(`/@${auth.userData?.login}`);
+    } else {
+      setSelectedDocId(null);
+      handleDisconnect('/');
+    }
+    setOpen(false);
+    setIsExpanded(true);
+  };
+
+  if (!avatar || !avatar.name) {
+    return <Spin />;
+  }
+
+  const drawerItemStyle: React.CSSProperties = {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    width: '100%',
+    color: currTheme === 'dark' ? '#fff' : '#000'
+  };
+
+  const drawerItems = [
+    {
+      key: 'avatar',
+      content: (
+        <Space direction='vertical' size='large' align='center' style={{ width: '100%' }}>
+          <UserAvatar name={avatar.name} src={avatar.url} color={avatar.color} size={60} />
+          <Typography.Title level={5} style={{ marginBottom: '12px', marginTop: 0 }}>
+            {avatar.name}
+          </Typography.Title>
+        </Space>
+      )
+    },
+    {
+      key: 'edit-name',
+      content: (
+        <Button
+          className={`button-normal ${currTheme === 'dark' ? 'dark-theme' : ''}`}
+          type='text'
+          icon={<EditOutlined />}
+          onClick={showEditModal}
+          block>
+          Edit Display Name
+        </Button>
+      )
+    },
+    {
+      key: 'toggle-theme',
+      content: (
+        <Button
+          className={`button-normal ${currTheme === 'dark' ? 'dark-theme' : ''}`}
+          type='text'
+          icon={currTheme === 'dark' ? <BulbFilled /> : <BulbOutlined />}
+          onClick={toggleTheme}
+          block>
+          Toggle {currTheme === 'dark' ? 'Light' : 'Dark'} Mode
+        </Button>
+      )
+    },
+    {
+      key: 'go-back',
+      content: (
+        <Button
+          className={`button-normal ${currTheme === 'dark' ? 'dark-theme' : ''}`}
+          type='text'
+          icon={!docID && !auth.isLoggedIn ? <HomeOutlined /> : <LogoutOutlined />}
+          onClick={handleClickToGoBack}
+          block>
+          {auth.isLoggedIn ? 'Dashboard' : 'Home'}
+        </Button>
+      )
+    },
+    {
+      key: 'sign-in-out',
+      content: (
+        <Button
+          className={`button-normal ${currTheme === 'dark' ? 'dark-theme' : ''}`}
+          type='text'
+          icon={auth.isLoggedIn ? <LogoutOutlined /> : <LoginOutlined />}
+          onClick={auth.isLoggedIn ? handleSignOut : handleSignIn}
+          block>
+          {auth.isLoggedIn ? 'Logout' : 'Login'}
+        </Button>
+      )
+    }
+  ];
+
   return (
-    <Box sx={{ alignItems: 'center' }}>
-      {avatar && (
-        <IconButton onClick={() => setOpen(true)} sx={{ mx: 1, p: 0 }}>
-          <Box className={styles.localWidget}>
-            <Avatar name={avatar.name} size='30' round='30px' textSizeRatio={3} color={avatar.color} />
-          </Box>
-        </IconButton>
-      )}
-
-      <Drawer anchor='right' open={open} onClose={() => setOpen(false)}>
-        <Box sx={{ width: '220px', padding: '20px' }}>
-          <Stack spacing={3} sx={{ alignItems: 'left' }}>
-            {avatar && (
-              <Stack sx={{ alignItems: 'center' }} spacing={3}>
-                <Avatar name={avatar.name} size='60' round='30px' color={avatar.color} />
-                <Stack direction='row' alignItems='center'>
-                  <Typography variant='h5'>{avatar.name}</Typography>
-                  <IconButton size='small' onClick={handleEditNameClick} sx={{ ml: 1 }}>
-                    <Edit />
-                  </IconButton>
-                </Stack>
-              </Stack>
-            )}
-
-            <Box sx={{ width: '100%', textAlign: 'left' }}>
-              <IconRow
-                onClick={toggleTheme}
-                text={`Toggle ${currTheme === 'dark' ? 'light' : 'dark'} mode`}
-                icon={currTheme === 'dark' ? <Brightness7 sx={{ color: '#e0e0e0' }} /> : <Brightness4 />}
-              />
-              <ThemeSelector />
-              <Divider sx={{ my: 2 }} />
-
-              <IconRow
-                onClick={handleClickToGoBack}
-                text={!docID && !auth.isLoggedIn ? 'Home' : auth.isLoggedIn ? auth.userData?.login : 'Home'}
-                icon={auth.isLoggedIn ? <AccountCircle /> : <ArrowBack />}
-              />
-              <IconRow
-                onClick={auth.isLoggedIn ? handleSignOut : handleSignIn}
-                text={auth.isLoggedIn ? 'Logout' : 'Login'}
-                icon={
-                  <img
-                    src={auth.isLoggedIn ? LogoutSvg : LoginSvg}
-                    width='18'
-                    style={{ marginLeft: 4.5, marginRight: 0.5 }}
-                  />
-                }
-              />
-            </Box>
-          </Stack>
-        </Box>
+    <>
+      <Drawer
+        title='Settings'
+        placement='right'
+        closable={true}
+        onClose={() => setOpen(false)}
+        open={open}
+        width={200}
+        rootClassName={currTheme}>
+        <List
+          itemLayout='horizontal'
+          dataSource={drawerItems}
+          renderItem={item => <List.Item style={{ padding: '12px 0', ...drawerItemStyle }}>{item.content}</List.Item>}
+        />
       </Drawer>
-    </Box>
+      <EditNameModal
+        theme={currTheme}
+        isVisible={isEditModalVisible}
+        currentName={avatar.name}
+        onUpdate={updateName}
+        onClose={closeEditModal}
+      />
+    </>
   );
 };
 export default ClientDrawer;

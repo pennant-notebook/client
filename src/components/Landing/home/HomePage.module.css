@@ -382,9 +382,6 @@ form {
   letter-spacing: -2px;
   line-height: 1;
   color: #000;
-  :root.dark & {
-    color: #fff;
-  }
 }
 
 strong {

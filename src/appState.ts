@@ -60,3 +60,8 @@ export const usernameState = atom<string | null>({
   key: 'usernameState',
   default: null,
 });
+
+export const sidebarExpandedState = atom({
+  key: 'sidebarExpandedState',
+  default: true,
+});

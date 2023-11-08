@@ -1,6 +1,6 @@
 import { NotebookType } from '@/NotebookTypes';
 import { PlusCircleOutlined } from '@ant-design/icons';
-import { Tree, Tooltip } from 'antd';
+import { Tree, Tooltip, Switch } from 'antd';
 import { useState } from 'react';
 import { createDoc } from '~/services/dynamoPost';
 import { useTheme } from '~/utils/MuiImports';
@@ -22,16 +22,10 @@ export default function NotebookTreeView({
   handleSelectedDocId
 }: NotebookTreeViewProps) {
   const [expanded, setExpanded] = useState<string[]>(['js', 'py']);
-  const [globalSortOrder, setGlobalSortOrder] = useState<'asc' | 'desc'>('asc');
   const theme = useTheme().palette.mode;
-
-  const sortNotebooks = (notebooks: NotebookType[]) => {
-    return notebooks.sort((a, b) => {
-      const aTitle = a.title ?? 'Untitled';
-      const bTitle = b.title ?? 'Untitled';
-      return globalSortOrder === 'asc' ? aTitle.localeCompare(bTitle) : bTitle.localeCompare(aTitle);
-    });
-  };
+  const {
+    custom: { toggleTheme }
+  } = useTheme();
 
   const handleCreateNotebook = async (language: string) => {
     const newNotebook = await createDoc(username, language);
@@ -42,8 +36,6 @@ export default function NotebookTreeView({
 
   const jsNotebooks = notebooks.filter(nb => nb.language === 'javascript');
   const pyNotebooks = notebooks.filter(nb => nb.language === 'python');
-  const sortedJsNotebooks = sortNotebooks(jsNotebooks);
-  const sortedPyNotebooks = sortNotebooks(pyNotebooks);
 
   const generateTreeData = (data: NotebookType[], language: string) => {
     return data.map((item, index) => ({
@@ -78,7 +70,7 @@ export default function NotebookTreeView({
         </div>
       ),
       key: 'js',
-      children: generateTreeData(sortedJsNotebooks, 'javascript')
+      children: generateTreeData(jsNotebooks, 'javascript')
     },
     {
       title: (
@@ -97,22 +89,28 @@ export default function NotebookTreeView({
         </div>
       ),
       key: 'py',
-      children: generateTreeData(sortedPyNotebooks, 'python')
+      children: generateTreeData(pyNotebooks, 'python')
     }
   ];
 
   return (
-    <Tree
-      defaultExpandAll
-      expandedKeys={expanded}
-      onExpand={expandedKeys => {
-        setExpanded(expandedKeys.map(key => String(key)));
-      }}
-      treeData={treeData}
-      style={{
-        backgroundColor: theme === 'dark' ? '#121212' : '#fafafa',
-        color: theme === 'dark' ? '#fff' : '#000'
-      }}
-    />
+    <>
+      <div style={{ display: 'flex', alignItems: 'center', padding: '0px 12px', justifyContent: 'space-between' }}>
+        <h3>Workspace</h3>
+        <Switch checkedChildren='Dark' unCheckedChildren='Light' checked={theme === 'dark'} onChange={toggleTheme} />
+      </div>
+      <Tree
+        defaultExpandAll
+        expandedKeys={expanded}
+        onExpand={expandedKeys => {
+          setExpanded(expandedKeys.map(key => String(key)));
+        }}
+        treeData={treeData}
+        style={{
+          backgroundColor: theme === 'dark' ? '#121212' : '#fafafa',
+          color: theme === 'dark' ? '#fff' : '#000'
+        }}
+      />
+    </>
   );
 }

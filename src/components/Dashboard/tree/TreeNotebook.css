@@ -50,8 +50,18 @@ span.ant-tree-indent {
   margin-top: 12px !important;
 } */
 
-.custom-chevron-button:hover {
-  background-color: rgb(12, 102, 228) !important;
+button.custom-chevron-button:hover {
+  background-color: rgb(68, 137, 235) !important;
+  color: #fff !important;
+}
+
+button.custom-chevron-button.dark {
+  background-color: #223242 !important;
+  color: #fff !important;
+}
+
+button.custom-chevron-button.dark:hover {
+  background-color: rgb(68, 137, 235) !important;
   color: #fff !important;
 }
 
