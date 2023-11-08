@@ -26,7 +26,7 @@ interface NotebookProps {
 
 const Notebook = ({ docID, resourceTitle, notebook }: NotebookProps) => {
   const { doc, provider, awareness, notebookMetadata }: ProviderContextType = useProviderContext()!;
-  const { setCodeCells, setClients } = useNavbarContext();
+  const { setCodeCells, clients, setClients } = useNavbarContext();
   const setNotebookLanguage = useSetRecoilState(notebookLanguageState);
   const theme = useTheme();
   const cellsArray = doc.getArray('cells');
@@ -68,28 +68,7 @@ const Notebook = ({ docID, resourceTitle, notebook }: NotebookProps) => {
     const updateClients = () => {
       const states: Map<number, any> = new Map(Array.from(awareness.getStates()));
       const clientObjects = getUserObjects(states);
-      setClients(clientObjects);
-
-      if (clientObjects.length > 0) {
-        setAuth(prevAuth => {
-          if (!prevAuth.userData) return prevAuth;
-
-          const updatedUserData: UserState = {
-            ...prevAuth.userData,
-            name: clientObjects[0].user.name,
-            color: clientObjects[0].user.color
-          };
-
-          localStorage.setItem('pennantAuthData', JSON.stringify(updatedUserData));
-
-          const updatedAuthData = {
-            ...prevAuth,
-            userData: updatedUserData
-          };
-
-          return updatedAuthData;
-        });
-      }
+      setTimeout(() => setClients(clientObjects), 0);
     };
 
     awareness.on('update', updateClients);
@@ -98,6 +77,43 @@ const Notebook = ({ docID, resourceTitle, notebook }: NotebookProps) => {
       awareness.off('update', updateClients);
     };
   }, [awareness]);
+
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (provider) {
+        updateDisconnectedClient(provider);
+      }
+      // e.preventDefault();
+      // e.returnValue = '';
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [provider]);
+
+  useEffect(() => {
+    const states: Map<number, any> = new Map(Array.from(awareness.getStates()));
+    const clientObjects = getUserObjects(states);
+    if (clientObjects.length > 0) {
+      setAuth(prevAuth => {
+        if (!prevAuth.userData) return prevAuth;
+        const updatedUserData: UserState = {
+          ...prevAuth.userData,
+          name: clientObjects[0].user.name,
+          color: clientObjects[0].user.color
+        };
+        localStorage.setItem('pennantAuthData', JSON.stringify(updatedUserData));
+        const updatedAuthData = {
+          ...prevAuth,
+          userData: updatedUserData
+        };
+        return updatedAuthData;
+      });
+    }
+  }, [clients]);
 
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {

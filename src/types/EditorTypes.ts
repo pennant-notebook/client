@@ -19,6 +19,6 @@ export interface CreateCodeEditorProps {
 export interface MarkdownEditorProps {
   content: YXmlFragment;
   provider: HocuspocusProviderConfig;
-  currentUser: AwarenessUserState | null;
+  currentUser: AwarenessUserState;
   theme: "light" | "dark" | Theme | { light: Theme; dark: Theme; } | undefined
 }

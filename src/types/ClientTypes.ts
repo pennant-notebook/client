@@ -5,7 +5,7 @@ export interface BaseUser {
 }
 
 export interface UserState extends BaseUser {
-  login: string;
+  login?: string;
   setByUser?: boolean;
   avatar_url?: string; // for github
   avatar?: string; // for gmail
