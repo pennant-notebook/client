@@ -1,15 +1,16 @@
-import { Box, Stack, Typography, useTheme } from '~/utils/MuiImports';
-import { useEffect, useRef, useState, useCallback } from 'react';
-import useProviderContext from '~/contexts/ProviderContext';
-import CodeToolbar from '../toolbar/CodeToolbar';
-import createCodeEditor from './createCodeEditor';
-import { handleDredd, updateMetadata } from '~/services/codeExecution/dredd';
-import StyledBadge from '../../UI/StyledComponents';
-import { useCMThemeContext } from '~/contexts/ThemeManager';
-import { YMapEvent } from '~/utils/notebookHelpers';
-import { EditorView } from 'codemirror';
-import styles from './CodeCell.module.css';
 import { CodeCellProps } from '@/CellPropsTypes';
+import { Typography } from 'antd';
+import { EditorView } from 'codemirror';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import useProviderContext from '~/contexts/ProviderContext';
+import { useCMThemeContext } from '~/contexts/ThemeManager';
+import { handleDredd, updateMetadata } from '~/services/codeExecution/dredd';
+import { useTheme } from '~/utils/MuiImports';
+import { YMapEvent } from '~/utils/notebookHelpers';
+import StyledBadge from '../../UI/StyledComponents';
+import CodeToolbar from '../toolbar/CodeToolbar';
+import styles from './CodeCell.module.css';
+import createCodeEditor from './createCodeEditor';
 
 const CodeCell = ({ cellId, cell }: CodeCellProps) => {
   const content = cell.get('content');
@@ -34,13 +35,11 @@ const CodeCell = ({ cellId, cell }: CodeCellProps) => {
     try {
       cellMetadata.set('isRunning', true);
       const response = await handleDredd(language, docID, cellId, cell.get('content').toString());
-      // console.log('Received response:', response, language); // Debug log
       const outputMap = cell.get('outputMap');
       outputMap.set('stdout', response.output);
       outputMap.set('status', response.type);
       return true;
     } catch (error: any) {
-      // console.error('Error during code execution:', error.message); // Debug log
       if (error.message === 'critical error') {
         outputMap.set('status', 'critical');
         outputMap.set(
@@ -65,7 +64,8 @@ const CodeCell = ({ cellId, cell }: CodeCellProps) => {
         handleRunCode,
         editorTheme,
         hasOutput,
-        language
+        language,
+        notebookTheme
       });
       if (editorContainer) {
         editorContainer.appendChild(editorRef.current.dom);
@@ -81,7 +81,7 @@ const CodeCell = ({ cellId, cell }: CodeCellProps) => {
         editorRef.current = null;
       }
     };
-  }, [content, editorTheme]);
+  }, [content, editorTheme, notebookTheme, output]);
 
   useEffect(() => {
     cell.get('outputMap').observe(() => {
@@ -101,17 +101,17 @@ const CodeCell = ({ cellId, cell }: CodeCellProps) => {
   }, [outputMap, cellMetadata, processing]);
 
   return (
-    <Box
+    <div
       data-test='codeCell'
       ref={cellRef}
-      sx={{
+      style={{
         display: 'flex',
         alignItems: 'center',
         width: '100%'
       }}>
-      <Stack direction='row' sx={{ width: '100%', alignItems: 'center' }} data-test='codeCell-stack'>
+      <div data-test='codeCell-stack' style={{ width: '100%', display: 'flex', alignItems: 'center' }}>
         <StyledBadge badgeContent={processing ? '*' : cellExeCount || ' '} status={status} data-test='codeCell-badge' />
-        <Box data-test='codeToolbar' className={`${styles.codecellContainer} ${notebookTheme}`}>
+        <div data-test='codeToolbar' className={`${styles.codecellContainer} ${notebookTheme}`}>
           <CodeToolbar
             onClickRun={handleRunCode}
             id={cellId}
@@ -119,27 +119,27 @@ const CodeCell = ({ cellId, cell }: CodeCellProps) => {
             language={language}
             data-test='codeToolbar-component'
           />
-          <Box id={`editor-${cellId}`} data-test='codeEditor' data-testid={`editor-${cellId}`}></Box>
-          <Box
-            className={`${styles.codecellOutput} ${styles[status]}`}
-            sx={{ py: output ? '4px' : 0 }}
+          <div id={`editor-${cellId}`} data-test='codeEditor' data-testid={`editor-${cellId}`}></div>
+          <div
+            className={`${styles.codecellOutput} ${styles[notebookTheme]} ${styles[status]} `}
+            style={{ paddingTop: output ? '4px' : 0, paddingBottom: output ? '4px' : 0 }}
             data-test='codeCell-outputBox'>
             {processing ? (
-              <Typography data-test='processing' sx={{ ml: '5px', color: '#cfd1d8' }}>
+              <Typography.Text data-test='processing' style={{ marginLeft: '5px', color: '#cfd1d8' }}>
                 Processing...
-              </Typography>
+              </Typography.Text>
             ) : (
               output &&
-              output?.split('\n').map((stdout: string, idx: number) => (
-                <Typography key={idx} sx={{ ml: '5px', color: '#cfd1d8' }} data-test={`output`}>
+              output.split('\n').map((stdout: string, idx: number) => (
+                <Typography.Text key={idx} style={{ marginLeft: '5px', color: '#cfd1d8' }} data-test={`output`}>
                   {stdout}
-                </Typography>
+                </Typography.Text>
               ))
             )}
-          </Box>
-        </Box>
-      </Stack>
-    </Box>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

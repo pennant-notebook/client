@@ -1,117 +1,122 @@
-import { useParams } from 'react-router';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { authState, notebookLanguageState, selectedDocIdState } from '~/appState';
+import LoggedInIcon from '~/assets/auth/loggedIn.svg';
 import logo from '~/assets/logo/pennant-color.png';
-import {
-  AppBar,
-  Box,
-  Brightness4,
-  Brightness7,
-  IconButton,
-  Stack,
-  Toolbar,
-  Tooltip,
-  Typography,
-  useTheme
-} from '~/utils/MuiImports';
 import ClientDrawer from '~/components/Client/ClientDrawer';
 import Clients from '~/components/Client/Clients';
-import IconRow from '~/components/UI/IconRow';
+import { useNavbarContext } from '~/contexts/NavbarContext';
 import DocTitle from './DocTitle';
 import DreddButtons from './actions/DreddButtons';
-import { useNavbarContext } from '~/contexts/NavbarContext';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { notebookLanguageState, selectedDocIdState } from '~/appState';
+
+import { LogoutOutlined, SettingOutlined, MenuFoldOutlined, MenuOutlined } from '@ant-design/icons';
+import { Layout, Avatar, Dropdown, Button } from 'antd';
+
+const { Header } = Layout;
+
+import styles from './Navbar.module.css';
 
 interface NavbarProps {
   selectedDoc?: string;
 }
 
 const Navbar = ({ selectedDoc }: NavbarProps) => {
+  const navigate = useNavigate();
   const { username, docID: paramsDoc } = useParams();
   const { codeCells, clients, handleDisconnect } = useNavbarContext();
   const setSelectedDocId = useSetRecoilState(selectedDocIdState);
   const notebookLanguage = useRecoilValue(notebookLanguageState);
   const docID = selectedDoc || paramsDoc;
 
-  // const navigate = useNavigate();
-  const currTheme = useTheme().palette.mode;
-  const {
-    custom: { toggleTheme }
-  } = useTheme();
+  const [openDrawer, setOpenDrawer] = useState(false);
 
-  const clientCount = clients.length;
-  const paddingClient =
-    clientCount <= 1 ? 10 : clientCount === 2 ? 8 : clientCount === 3 ? 6 : clientCount >= 4 ? 0 : 10;
+  const [auth, setAuth] = useRecoilState(authState);
+  const [avatarUrl, setAvatarUrl] = useState<string>(LoggedInIcon);
 
-  let pyColor = '#234659';
-  if (notebookLanguage === 'python') {
-    pyColor = '#234659';
-  }
+  useEffect(() => {
+    const newAvatarUrl = auth?.userData?.avatar_url || auth?.userData?.avatar || LoggedInIcon;
+    setAvatarUrl(newAvatarUrl);
+  }, [auth]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('pennantAccessToken');
+    localStorage.removeItem('pennantAuthData');
+    localStorage.removeItem('pennant-username');
+    setAuth({
+      isLoggedIn: false,
+      userData: null,
+      provider: null
+    });
+
+    navigate('/');
+  };
+
+  const items = [
+    {
+      key: '0',
+      icon: '',
+      label: `${username}`,
+      disabled: true,
+      style: { color: '#808080', cursor: 'default', fontWeight: 'bold' }
+    },
+    {
+      key: '1',
+      icon: <SettingOutlined />,
+      label: 'Settings',
+      onClick: () => setOpenDrawer(true),
+      disabled: !docID
+    },
+    {
+      key: '2',
+      icon: <LogoutOutlined />,
+      label: 'Logout',
+      onClick: handleLogout
+    }
+  ];
+
   return (
-    <AppBar position='sticky' sx={{ backgroundColor: currTheme === 'dark' ? '#1e202d' : pyColor }}>
-      <Toolbar
-        sx={{
-          width: '100%',
-          justifyContent: 'space-between'
+    <Header className={styles.header}>
+      <div
+        className={styles.logo}
+        onClick={() => {
+          if (handleDisconnect) {
+            handleDisconnect(`/`);
+            setSelectedDocId(null);
+          }
         }}>
-        <Box id='logo-clients' sx={{ display: 'flex', alignItems: 'center' }}>
-          <Box
-            sx={{
-              alignItems: 'center'
-            }}>
-            <Tooltip title={paramsDoc ? '⬅ Dashboard' : 'Toggle Sidebar'} enterDelay={2000} enterNextDelay={5000} arrow>
-              <IconButton
-                edge='start'
-                color='inherit'
-                aria-label='logo'
-                onClick={() => {
-                  if (handleDisconnect) {
-                    handleDisconnect(`/`);
-                    setSelectedDocId(null);
-                  }
-                }}
-                sx={{ py: 1, borderRadius: '2px' }}>
-                <img src={logo} width='56px' />
-              </IconButton>
-            </Tooltip>
-          </Box>
+        <img src={logo} alt='Logo' width='48px' style={{ marginRight: '32px' }} />
+        {docID && <Clients clients={clients} />}
+      </div>
 
-          <Box id='CLIENTS' sx={{ ml: 4, pr: paddingClient }}>
-            {docID && <Clients clients={clients} />}
-          </Box>
-        </Box>
-        <Box sx={{ display: 'flex', justifyContent: 'center', flexGrow: 1 }}>
-          {docID ? (
-            <DocTitle selectedDoc={docID} language={notebookLanguage!} />
-          ) : (
-            <Typography sx={{ opacity: 0.5, fontSize: '20px' }}></Typography>
-          )}
-        </Box>
-        <Stack direction='row' spacing={{ xs: 0, sm: 1, md: 2 }} alignItems='center'>
+      <div className={styles.docTitle}>{docID && <DocTitle selectedDoc={docID} language={notebookLanguage!} />}</div>
+
+      <div className={styles.actions}>
+        <div className={docID ? styles.dredd : ''}>
           {docID && <DreddButtons codeCells={codeCells} />}
 
-          {docID && handleDisconnect && <ClientDrawer handleDisconnect={handleDisconnect} clients={clients} />}
-        </Stack>
+          <Dropdown menu={{ items }} className={styles.navbarAvatar}>
+            <Avatar src={avatarUrl} style={{ cursor: 'pointer' }} />
+          </Dropdown>
+        </div>
 
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          {!docID && (
-            <Typography sx={{ fontFamily: 'Lato', opacity: '0.5', pr: 2, fontWeight: 'bold' }}>{username}</Typography>
-          )}
-          {!docID && (
-            <IconRow
-              onClick={toggleTheme}
-              icon={
-                currTheme === 'dark' ? (
-                  <Brightness7 sx={{ color: '#e0e0e0', width: '20px' }} />
-                ) : (
-                  <Brightness4 sx={{ color: 'lightgray', width: '20px' }} />
-                )
-              }
-            />
-          )}
-        </Box>
-      </Toolbar>
-    </AppBar>
+        {docID && (
+          <Button
+            className={styles.clientDrawerTrigger}
+            icon={openDrawer ? <MenuFoldOutlined /> : <MenuOutlined />}
+            onClick={() => setOpenDrawer(true)}
+          />
+        )}
+        {docID && handleDisconnect && (
+          <ClientDrawer
+            open={openDrawer}
+            setOpen={setOpenDrawer}
+            handleDisconnect={handleDisconnect}
+            clients={clients}
+          />
+        )}
+      </div>
+    </Header>
   );
 };
-
 export default Navbar;

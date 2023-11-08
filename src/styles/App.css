@@ -28,8 +28,8 @@ div.notebook-title p {
 
 .ProseMirror {
   padding: 8px 24px !important;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
   border-bottom-right-radius: 5px;
   border-bottom-left-radius: 5px;
 }
@@ -86,4 +86,83 @@ div[id*='tippy'] > div[class*='tippy-box'][data-placement='left'] {
   background-color: #808080;
   border-color: #808080;
   transition: opacity 0.2s ease-in-out;
+}
+
+/* ANT DRAWER (CLIENT DRAWER) */
+
+.dark .ant-drawer-wrapper-body {
+  background-color: #121518;
+}
+
+.dark .ant-drawer-wrapper-body .ant-drawer-title,
+.dark .ant-drawer-wrapper-body .ant-drawer-close,
+.dark .ant-drawer-wrapper-body .ant-space-item h5 {
+  color: #8892b0;
+}
+
+.button-normal {
+  text-align: left;
+  width: 100%;
+  padding: 0;
+  color: #000;
+}
+
+.button-normal:hover {
+  background-color: #ddd;
+}
+
+.button-normal.dark-theme {
+  color: #8892b0 !important;
+  background-color: transparent;
+}
+
+.dark .ant-drawer-wrapper-body .ant-drawer-close:hover,
+.button-normal.dark-theme:hover {
+  color: #fff !important;
+}
+
+.editNameModal.dark .ant-modal-content,
+.editNameModal.dark .ant-modal-title {
+  background-color: #121518;
+  color: #8892b0 !important;
+}
+
+/* EDIT NAME MODAL */
+.editNameModal.dark .ant-input {
+  background-color: #121518;
+  color: #ddd !important;
+  border: 1px solid #8892b0;
+}
+
+.editNameModal.dark button {
+  background-color: #121518;
+  color: #8892b0 !important;
+  border: 1px solid #8892b0;
+}
+
+.editNameModal.dark button:hover {
+  background: none;
+  background-color: transparent !important;
+  border: 1px solid #488bdd;
+}
+
+.editNameModal.dark button:disabled,
+.editNameModal.dark button:disabled:hover {
+  background-color: #121518;
+  color: #8892b0;
+  border: none;
+}
+
+.editNameModal.dark .ant-modal-close span,
+.editNameModal.dark .ant-modal-close {
+  color: #8892b0;
+  border: none;
+}
+
+.editNameModal.dark .ant-modal-close:hover,
+.editNameModal.dark .ant-modal-close span:hover {
+  background-color: transparent;
+  background: none;
+  color: #fff;
+  border: none;
 }

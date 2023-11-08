@@ -24,8 +24,16 @@ function formatCode(view: EditorView) {
   view.dispatch(transaction);
 }
 
+export const themeClass = (notebookTheme: string, hasOutput: boolean) => {
+  const themeClassName = notebookTheme === 'dark' ? 'cm-theme-dark' : 'cm-theme-light';
+  const outputClassName = hasOutput ? 'cm-hasOutput' : 'cm-hasNoOutput';
+  return EditorView.editorAttributes.of({
+    class: `${themeClassName} ${outputClassName}`
+  });
+};
+
 const createCodeEditor = (props: CreateCodeEditorProps) => {
-  const { content, id, awareness, handleRunCode, editorTheme, hasOutput, language } = props;
+  const { content, id, awareness, handleRunCode, editorTheme, hasOutput, language, notebookTheme } = props;
 
   const customKeymap = keymap.of([
     {
@@ -48,6 +56,7 @@ const createCodeEditor = (props: CreateCodeEditorProps) => {
     ...defaultKeymap
   ]);
 
+
   const state = EditorState.create({
     doc: content.toString(),
     extensions: [
@@ -57,19 +66,23 @@ const createCodeEditor = (props: CreateCodeEditorProps) => {
       autocompletion(),
       yCollab(content, awareness),
       EditorView.lineWrapping,
+      themeClass(notebookTheme, hasOutput),
       EditorView.theme({
-        '&, .cm-scroller, .cm-content, .cm-gutter': {
+        '.cm-gutters, .cm-gutter, .cm-scroller': {
+          backgroundColor: notebookTheme === 'dark' ? '#121212' : 'inherit'
+        },
+        '&, .cm-scroller, .cm-content, .cm-gutters': {
           overflow: 'visible !important',
           borderBottomRightRadius: hasOutput ? '0px' : '5px',
-          borderBottomLeftRadius: hasOutput ? '0px' : '5px'
+          borderBottomLeftRadius: hasOutput ? '0px' : '5px',
         },
         '.cm-content, .cm-gutter': {
           marginTop: '8px',
           marginBottom: '8px',
-          fontSize: '15px'
+          fontSize: '15px',
         },
         '.cm-tooltip, .cm-tooltip-autocomplete, .cm-tooltip-below': {
-          zIndex: '9999 !important'
+          zIndex: '9999 !important',
         },
         '.cm-scroller': {
           minHeight: '50px'
@@ -97,7 +110,6 @@ const createCodeEditor = (props: CreateCodeEditorProps) => {
       }),
       editorTheme.theme
     ]
-
   });
 
   let view = new EditorView({

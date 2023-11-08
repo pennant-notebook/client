@@ -44,9 +44,20 @@
   margin-right: 8px;
 }
 
+.add-code-button .button-text,
+.add-markdown-button .button-text {
+  color: #505050;
+  transition: color 0.3s;
+}
+
 .add-code-button:hover,
 .add-markdown-button:hover {
   border: 1px solid #505050;
+}
+
+.add-code-button:hover .button-text,
+.add-markdown-button:hover .button-text {
+  color: #555454;
 }
 
 .button-text {
@@ -54,4 +65,26 @@
   font-weight: 500;
   font-size: 14px;
   color: #555454;
+}
+
+.add-code-button.dark .button-text,
+.add-markdown-button.dark .button-text {
+  color: #fff;
+  transition: color 0.3s;
+}
+
+.add-code-button .button-text,
+.add-markdown-button .button-text {
+  color: #555454;
+}
+
+.add-code-button:hover,
+.add-markdown-button:hover {
+  background-color: rgb(249, 249, 249) !important;
+}
+
+.add-code-button.dark:hover,
+.add-markdown-button.dark:hover {
+  border: 1px solid rgb(71, 71, 233);
+  background-color: rgb(95, 95, 236) !important;
 }

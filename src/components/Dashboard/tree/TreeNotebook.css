@@ -1,0 +1,87 @@
+span.ant-tree-indent {
+  width: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.tree-dropdown {
+  display: flex;
+  background-color: transparent;
+  text-align: center;
+  align-items: center;
+  padding: 2px !important;
+  height: 18px;
+  border-radius: 6px;
+}
+
+.light.ant-dropdown-trigger {
+  color: black;
+}
+
+.dark.ant-dropdown-trigger {
+  color: white;
+}
+
+.dark.ant-dropdown-trigger:hover {
+  color: black !important;
+}
+
+.python-notebooks-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* margin-top: 22px !important; */
+  margin-bottom: 6px;
+}
+
+.javascript-notebooks-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  /* margin-top: 12px !important; */
+}
+
+/* .ant-tree-treenode-leaf-last .ant-tree-switcher {
+  margin-top: 22px !important;
+} */
+
+/* .ant-tree-switcher {
+  margin-top: 12px !important;
+} */
+
+button.custom-chevron-button:hover {
+  background-color: rgb(68, 137, 235) !important;
+  color: #fff !important;
+}
+
+button.custom-chevron-button.dark {
+  background-color: #223242 !important;
+  color: #fff !important;
+}
+
+button.custom-chevron-button.dark:hover {
+  background-color: rgb(68, 137, 235) !important;
+  color: #fff !important;
+}
+
+.plus-icon:hover {
+  color: #1890ff !important;
+  transform: scale(1.1) !important;
+  transition: color 0.3s, transform 0.3s !important;
+}
+
+.tree-dropdown:hover {
+  background-color: lightgray !important;
+  color: #1890ff !important;
+  transform: scale(1.1) !important;
+  transition: transform 0.3s, color 0.3s !important;
+}
+
+/* .ant-tree-treenode {
+  padding: 4px 0 !important;
+} */
+
+.ant-tooltip-inner {
+  font-size: 12px !important;
+}

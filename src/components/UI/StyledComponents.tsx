@@ -1,4 +1,5 @@
-import { Box, useTheme, styled, Button, Avatar } from '~/utils/MuiImports';
+import { styled, Button, Avatar } from '~/utils/MuiImports';
+import { Badge } from 'antd';
 
 export const StyledButton = styled(Button)({
   position: 'relative',
@@ -45,44 +46,37 @@ export const CellPosAvatar = ({ index }: CellPosAvatarProps) => {
 };
 
 interface StyledBadgeProps {
-  badgeContent: string | number;
-  status: string | undefined;
+  badgeContent: React.ReactNode;
+  status: 'error' | 'critical' | 'default';
 }
 
-const StyledBadge = ({ badgeContent, status }: StyledBadgeProps) => {
-  const theme = useTheme().palette.mode;
-  return (
-    <Box sx={{ ml: 1.5, mr: 2 }}>
-      <Box
-        sx={{
-          borderRadius: '3px',
-          backgroundColor:
-            status === 'error'
-              ? 'crimson'
-              : status === 'critical'
-              ? 'yellow'
-              : theme === 'dark'
-              ? '#282c34'
-              : '#eff1f3',
-          color: theme === 'dark' ? '#fff' : '#3d414d',
+const StyledBadge: React.FC<StyledBadgeProps> = ({ badgeContent, status }) => {
+  let backgroundColor: string;
 
-          width: typeof badgeContent === 'number' && badgeContent > 99 ? '24px' : '22px',
-          fontFamily: 'MonoLisa',
-          height: '22px',
-          fontSize: '0.75rem',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          ml: -2,
-          opacity: '1',
-          boxShadow:
-            theme === 'light'
-              ? `rgba(6, 24, 44, 0.4) 0px 0px 0px 1px, rgba(6, 24, 44, 0.65) 0px 2px 2px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset`
-              : `rgba(3, 102, 214, 0.3) 0px 0px 0px 2px;`
-        }}>
-        {badgeContent}
-      </Box>
-    </Box>
+  switch (status) {
+    case 'error':
+      backgroundColor = 'crimson';
+      break;
+    case 'critical':
+      backgroundColor = 'yellow';
+      break;
+    default:
+      backgroundColor = '#eff1f3'; // Default or dark theme
+  }
+
+  return (
+    <Badge
+      count={badgeContent}
+      style={{
+        borderRadius: '5px',
+        marginRight: '12px',
+        padding: '0px',
+        backgroundColor,
+        color: '#3d414d',
+        boxShadow: '0 0 0 1px #d9d9d9 inset' // Adjusted for antd
+      }}
+      overflowCount={99}
+    />
   );
 };
 

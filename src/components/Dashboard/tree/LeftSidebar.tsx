@@ -1,8 +1,11 @@
-import { useState, useRef, useEffect } from 'react';
-import { Box, Divider, IconButton, useTheme, ChevronLeftIcon, ChevronRightIcon } from '~/utils/MuiImports';
+import { LeftCircleOutlined, RightCircleOutlined } from '@ant-design/icons';
+import { Button, Layout } from 'antd';
+import { useEffect, useRef, useState } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { notebooksState, selectedDocIdState, sidebarExpandedState } from '~/appState';
+import { useTheme } from '~/utils/MuiImports';
 import NotebookTreeView from './NotebookTreeView';
-import { useRecoilValue } from 'recoil';
-import { notebooksState, selectedDocIdState } from '~/appState';
+import Sider from 'antd/es/layout/Sider';
 
 interface LeftSidebarProps {
   username: string;
@@ -13,7 +16,7 @@ interface LeftSidebarProps {
 export default function LeftSidebar({ username, refetch, handleSelectedDocId }: LeftSidebarProps) {
   const notebooks = useRecoilValue(notebooksState);
   const selectedDocId = useRecoilValue(selectedDocIdState);
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useRecoilState(sidebarExpandedState);
   const [showChevron, setShowChevron] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const theme = useTheme().palette.mode;
@@ -60,106 +63,84 @@ export default function LeftSidebar({ username, refetch, handleSelectedDocId }: 
     }
   }, [selectedDocId]);
 
-  const sidebarWidth = 270;
+  const sidebarWidth = 240;
+  const collapsedWidth = 30;
+
   return (
-    <div
+    <Layout
       style={{
         position: 'relative',
         zIndex: 5
       }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}>
-      <Box
-        onClick={handleOverlayClick}
-        sx={{
-          position: 'fixed',
-          top: 0,
-          left: sidebarWidth,
-          width: `calc(100% - ${sidebarWidth}px)`,
-          height: '100vh',
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          zIndex: 4,
-          transition: 'opacity 0.35s cubic-bezier(0.2, 0, 0, 1)',
-          opacity: isExpanded ? 1 : 0,
-          pointerEvents: isExpanded ? 'auto' : 'none'
-        }}></Box>
-      <div
-        style={{
-          height: '100vh',
-          overflow: 'hidden',
-          width: sidebarWidth,
-          transform: isExpanded ? 'translateX(0)' : `translateX(-${sidebarWidth - 30}px)`,
-          transition: 'transform 0.35s cubic-bezier(0.2, 0, 0, 1)',
-          position: 'fixed',
-          backgroundColor: theme === 'dark' ? '#1e202d' : '#fff',
-          // boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
-          boxShadow:
-            'rgba(55, 55, 26, 0.1) 0px 1px 0px, rgba(55, 55, 26, 0.1) 0px 8px 24px, rgba(55, 55, 26, 0.1) 0px 16px 48px'
-        }}>
-        <Divider
-          orientation='vertical'
-          sx={{
-            position: 'fixed',
-            height: '100vh',
-            left: sidebarWidth
-          }}
-        />
-        <Box
+      {isExpanded && (
+        <div
           style={{
+            position: 'fixed',
+            top: 0,
+            left: sidebarWidth,
+            width: `calc(100% - ${sidebarWidth}px)`,
             height: '100vh',
-            width: sidebarWidth
-          }}>
-          <Box
-            sx={{
-              width: sidebarWidth,
-              position: 'relative',
-              pt: 2
-            }}>
-            {isExpanded && (
-              <NotebookTreeView
-                username={username}
-                notebooks={notebooks}
-                refetch={refetch}
-                handleSelectedDocId={handleSelectedDocId}
-              />
-            )}
-          </Box>
-        </Box>
-      </div>
-      <Box
-        sx={{
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            zIndex: 4,
+            transition: 'opacity 0.35s cubic-bezier(0.2, 0, 0, 1)',
+            opacity: isExpanded ? 1 : 0,
+            pointerEvents: isExpanded ? 'auto' : 'none'
+          }}
+          onClick={handleOverlayClick}
+        />
+      )}
+      <Sider
+        width={sidebarWidth}
+        collapsible
+        collapsed={!isExpanded}
+        collapsedWidth={collapsedWidth}
+        trigger={null}
+        style={{
+          overflow: 'auto',
+          height: '100vh',
           position: 'fixed',
-          top: 0,
-          left: isExpanded ? sidebarWidth - 35 : 15,
+          left: 0,
+          backgroundColor: theme === 'dark' ? '#121212' : '#fafafa',
+
+          zIndex: 5
+        }}>
+        {isExpanded && (
+          <div style={{ marginTop: '32px' }}>
+            <NotebookTreeView
+              username={username}
+              notebooks={notebooks}
+              refetch={refetch}
+              handleSelectedDocId={handleSelectedDocId}
+            />
+          </div>
+        )}
+      </Sider>
+      <Button
+        ghost
+        icon={!isExpanded ? <RightCircleOutlined /> : <LeftCircleOutlined />}
+        onClick={handleExpandCollapse}
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'fixed',
+          top: '80px',
+          left: isExpanded ? sidebarWidth - 15 : 15,
           opacity: showChevron ? 1 : 0,
           transition: 'all 0.1s ease-in-out',
-          pt: 2,
-          marginTop: '70px'
-        }}>
-        <Box
-          sx={{
-            position: 'absolute',
-            top: 18,
-            left: 2,
-            width: 24,
-            height: 24,
-            borderRadius: '50%',
-            backgroundColor: 'rgb(255, 255, 255)',
-            boxShadow: 'rgb(220, 223, 228) 0px 0px 0px 1.2px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            '&:hover': {
-              backgroundColor: 'rgb(12, 102, 228)'
-            }
-          }}>
-          <IconButton
-            sx={{ width: 24, height: 24, color: '#000', '&:hover': { color: '#fff' } }}
-            onClick={handleExpandCollapse}>
-            {!isExpanded ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
-        </Box>
-      </Box>
-    </div>
+          zIndex: 6,
+          border: 'none',
+          background: 'rgb(255, 255, 255)',
+          boxShadow: 'rgb(220, 223, 228) 0px 0px 0px 1.2px',
+          padding: 0,
+          borderRadius: '50%',
+          width: '24px',
+          height: '24px',
+          color: '#000'
+        }}
+        className={'custom-chevron-button' + ` ${theme}`}
+      />
+    </Layout>
   );
 }

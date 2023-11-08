@@ -1,14 +1,12 @@
 import { NotebookType } from '@/NotebookTypes';
-import { TreeView } from '@mui/x-tree-view/TreeView';
-import { Add, Box, Typography, IconButton, Tooltip, useTheme } from '~/utils/MuiImports';
-import { MinusSquare, PlusSquare, StyledTreeItem } from '~/components/UI/StyledTreeComponents';
+import { PlusCircleOutlined } from '@ant-design/icons';
+import { Tree, Tooltip, Switch } from 'antd';
 import { useState } from 'react';
-import TreeNotebook from './TreeNotebook';
 import { createDoc } from '~/services/dynamoPost';
-import IconPY from './assets/pyfolder.png';
-import IconJS from './assets/jsfolder.png';
-import AzIconWhite from './assets/az-white.png';
-import AzIcon from './assets/az.png';
+import { useTheme } from '~/utils/MuiImports';
+
+import TreeNotebook from './TreeNotebook';
+import './TreeNotebook.css';
 
 interface NotebookTreeViewProps {
   username: string;
@@ -24,26 +22,10 @@ export default function NotebookTreeView({
   handleSelectedDocId
 }: NotebookTreeViewProps) {
   const [expanded, setExpanded] = useState<string[]>(['js', 'py']);
-  const [globalSortOrder, setGlobalSortOrder] = useState<'asc' | 'desc'>('asc');
   const theme = useTheme().palette.mode;
-
-  const jsNotebooks = notebooks.filter(nb => nb.language === 'javascript');
-  const pyNotebooks = notebooks.filter(nb => nb.language === 'python');
-
-  const toggleGlobalSortOrder = () => {
-    setGlobalSortOrder(prevOrder => (prevOrder === 'asc' ? 'desc' : 'asc'));
-  };
-
-  const sortNotebooks = (notebooks: NotebookType[]) => {
-    return notebooks.sort((a, b) => {
-      const aTitle = a.title ?? 'Untitled';
-      const bTitle = b.title ?? 'Untitled';
-      return globalSortOrder === 'asc' ? aTitle.localeCompare(bTitle) : bTitle.localeCompare(aTitle);
-    });
-  };
-
-  const sortedJsNotebooks = sortNotebooks(jsNotebooks);
-  const sortedPyNotebooks = sortNotebooks(pyNotebooks);
+  const {
+    custom: { toggleTheme }
+  } = useTheme();
 
   const handleCreateNotebook = async (language: string) => {
     const newNotebook = await createDoc(username, language);
@@ -52,95 +34,83 @@ export default function NotebookTreeView({
     refetch();
   };
 
-  const treeFont = 'Lato';
+  const jsNotebooks = notebooks.filter(nb => nb.language === 'javascript');
+  const pyNotebooks = notebooks.filter(nb => nb.language === 'python');
 
-  const AZIcon = theme === 'dark' ? AzIconWhite : AzIcon;
+  const generateTreeData = (data: NotebookType[], language: string) => {
+    return data.map((item, index) => ({
+      title: (
+        <TreeNotebook
+          notebook={item}
+          username={username}
+          index={index}
+          handleSelectedDocId={handleSelectedDocId}
+          language={language}
+        />
+      ),
+      key: item.docID
+    }));
+  };
+
+  const treeData = [
+    {
+      title: (
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <span style={{ flexGrow: 1, marginRight: '6px' }}>JavaScript</span>
+          <Tooltip title='Create JavaScript Notebook'>
+            <PlusCircleOutlined
+              onClick={e => {
+                e.stopPropagation();
+                handleCreateNotebook('javascript');
+              }}
+              style={{ cursor: 'pointer', color: '#595959' }}
+              className='plus-icon'
+            />
+          </Tooltip>
+        </div>
+      ),
+      key: 'js',
+      children: generateTreeData(jsNotebooks, 'javascript')
+    },
+    {
+      title: (
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <span style={{ flexGrow: 1, marginRight: '6px' }}>Python</span>
+          <Tooltip title='Create Python Notebook'>
+            <PlusCircleOutlined
+              onClick={e => {
+                e.stopPropagation();
+                handleCreateNotebook('python');
+              }}
+              style={{ cursor: 'pointer', color: '#595959' }}
+              className='plus-icon'
+            />
+          </Tooltip>
+        </div>
+      ),
+      key: 'py',
+      children: generateTreeData(pyNotebooks, 'python')
+    }
+  ];
 
   return (
-    <Box sx={{ minHeight: 270, flexGrow: 1, maxWidth: 268 }}>
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          mb: 2,
-          ml: 1,
-          color: 'gray'
-        }}>
-        <Typography variant='h6' sx={{ fontFamily: treeFont, ml: 1 }}>
-          Workspace
-        </Typography>
-        <Tooltip title='Sort All Notebooks' enterDelay={1000} enterNextDelay={1000}>
-          <IconButton
-            sx={{ ml: 1.5, borderRadius: '5px', width: '28px', height: '28px', opacity: 0.7 }}
-            onClick={toggleGlobalSortOrder}>
-            {globalSortOrder === 'asc' ? (
-              <img src={AZIcon} style={{ width: '20px', height: '16px', transform: 'scaleY(-1)' }} />
-            ) : (
-              <img src={AZIcon} style={{ width: '20px', height: '16px' }} />
-            )}
-          </IconButton>
-        </Tooltip>
-      </Box>
-      <TreeView
-        aria-label='customized'
-        expanded={expanded}
-        onNodeToggle={(event, nodeIds) => {
-          setExpanded(nodeIds as string[]);
+    <>
+      <div style={{ display: 'flex', alignItems: 'center', padding: '0px 12px', justifyContent: 'space-between' }}>
+        <h3>Workspace</h3>
+        <Switch checkedChildren='Dark' unCheckedChildren='Light' checked={theme === 'dark'} onChange={toggleTheme} />
+      </div>
+      <Tree
+        defaultExpandAll
+        expandedKeys={expanded}
+        onExpand={expandedKeys => {
+          setExpanded(expandedKeys.map(key => String(key)));
         }}
-        defaultCollapseIcon={<MinusSquare />}
-        defaultExpandIcon={<PlusSquare />}
-        sx={{ overflowX: 'hidden', overflowY: 'hidden' }}>
-        <StyledTreeItem
-          nodeId='js'
-          label={
-            <div style={{ display: 'flex', alignItems: 'center', height: '40px' }}>
-              <img src={IconJS} alt='JS Icon' width={20} style={{ marginRight: '6px' }} />
-              <span style={{ fontFamily: treeFont, fontSize: '0.95rem' }}>JavaScript</span>
-              <Tooltip title='Create New JavaScript Notebook' enterDelay={1000} enterNextDelay={1000}>
-                <IconButton
-                  sx={{ ml: 'auto', borderRadius: '5px', width: '28px', height: '28px' }}
-                  onClick={() => handleCreateNotebook('javascript')}>
-                  <Add />
-                </IconButton>
-              </Tooltip>
-            </div>
-          }>
-          {sortedJsNotebooks.map((notebook, idx) => (
-            <TreeNotebook
-              key={notebook.docID}
-              index={idx}
-              notebook={notebook}
-              username={username}
-              handleSelectedDocId={handleSelectedDocId}
-            />
-          ))}
-        </StyledTreeItem>
-        <StyledTreeItem
-          nodeId='py'
-          label={
-            <div style={{ display: 'flex', alignItems: 'center', height: '40px' }}>
-              <img src={IconPY} alt='PY Icon' width={20} style={{ marginRight: '6px' }} />
-              <span style={{ fontFamily: treeFont, fontSize: '0.95rem' }}>Python</span>
-              <Tooltip title='Create New Python Notebook' enterDelay={1000} enterNextDelay={1000}>
-                <IconButton
-                  sx={{ ml: 'auto', borderRadius: '5px', width: '28px', height: '28px' }}
-                  onClick={() => handleCreateNotebook('python')}>
-                  <Add />
-                </IconButton>
-              </Tooltip>
-            </div>
-          }>
-          {sortedPyNotebooks.map((notebook, idx) => (
-            <TreeNotebook
-              key={notebook.docID}
-              index={idx}
-              notebook={notebook}
-              username={username}
-              handleSelectedDocId={handleSelectedDocId}
-            />
-          ))}
-        </StyledTreeItem>
-      </TreeView>
-    </Box>
+        treeData={treeData}
+        style={{
+          backgroundColor: theme === 'dark' ? '#121212' : '#fafafa',
+          color: theme === 'dark' ? '#fff' : '#000'
+        }}
+      />
+    </>
   );
 }

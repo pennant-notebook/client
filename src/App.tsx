@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Auth from './components/Auth/Auth';
 import DashboardWrapper from './components/Dashboard/DashboardWrapper';
 import HomePage from './components/Landing/home/HomePage';
+
 import NotebookRoute from './components/Notebook/NotebookRoute';
 import ThemeManager, { codeMirrorThemes } from './contexts/ThemeManager';
 import { Box } from './utils/MuiImports';

@@ -8,6 +8,9 @@
   width: 100%;
   border: 1px solid dimgray;
   border-radius: 5px;
+
+  border-top-right-radius: 0px;
+  border-top-left-radius: 0px;
 }
 
 .has-text .isEmpty.hasAnchor .inlineContent:before {
@@ -16,7 +19,7 @@
 
 div[id*='blockcell'] > div > div[data-theme='dark'] {
   color: rgb(221, 215, 215) !important;
-  background-color: #282a34 !important;
+  background-color: #121212 !important;
 }
 
 div[data-theme='dark'].blocknote-editor code {

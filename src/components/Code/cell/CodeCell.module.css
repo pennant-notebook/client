@@ -4,7 +4,6 @@
 }
 
 .codecellContainer {
-  /* mask-image: radial-gradient(circle, black 100%, transparent 100%); */
   width: 100%;
   border: 1px solid dimgray;
   border-radius: 5px;
@@ -12,7 +11,6 @@
 }
 
 .codecellContainer.dark {
-  /* mask-image: radial-gradient(circle, black 100%, transparent 100%); */
   width: 100%;
   border-radius: 5px;
   background-color: #3d414d;
@@ -42,4 +40,32 @@
 
 .codecellOutput.critical p {
   color: black;
+}
+
+.cm-theme-dark .cm-gutters,
+.cm-theme-dark .cm-content,
+.cm-theme-dark .cm-gutter,
+.cm-theme-dark .cm-scroller {
+  background-color: goldenrod;
+}
+
+.cm-theme-light .cm-gutters,
+.cm-theme-light .cm-content,
+.cm-theme-light .cm-gutter,
+.cm-theme-light .cm-scroller {
+  background-color: inherit;
+}
+
+.cm-hasOutput .cm-scroller,
+.cm-hasOutput .cm-content,
+.cm-hasOutput .cm-gutters {
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+.cm-hasNoOutput .cm-scroller,
+.cm-hasNoOutput .cm-content,
+.cm-hasNoOutput .cm-gutters {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }

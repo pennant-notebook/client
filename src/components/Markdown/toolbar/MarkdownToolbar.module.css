@@ -17,3 +17,21 @@
 .markdown-toolbar.dark {
   background-color: #282a34;
 }
+
+.toolbarRow {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 8px;
+  position: relative;
+}
+
+.toolbarButton {
+  opacity: 0.5;
+  transition: opacity 0.3s;
+}
+
+.toolbarButton:hover {
+  opacity: 1;
+  background-color: transparent !important;
+}

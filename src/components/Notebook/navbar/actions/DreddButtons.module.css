@@ -1,30 +1,16 @@
-.navbar-actions.run,
-.navbar-actions.reset {
-  width: 40px;
-  height: 32.47px;
-  border-radius: 2px;
-  opacity: 1;
-  box-shadow: rgba(6, 24, 44, 0.65) 0px 1px 2px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
-}
-.navbar-actions.run:hover,
-.navbar-actions.reset:hover {
-  box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset, rgba(6, 24, 44, 0.4) 0px 0px 0px 1px;
+.buttonGroup {
+  display: flex;
+  align-items: center;
+  color: #fff;
+  gap: 8px; /* Adjust the gap between buttons as needed */
 }
 
-.navbar-actions.reset {
-  margin-right: 6px;
-  padding: 0.25rem 0.4rem;
+.navbarActions {
+  background-color: transparent;
+  color: #fff;
 }
 
-.navbar-actions.run {
-  margin-right: 6px;
-}
-
-.navbar-actions.run:disabled {
-  opacity: 0.3;
-}
-
-.navbar-actions.reset:disabled {
-  color: lightgray;
-  opacity: 0.3;
+.navbarActions:disabled {
+  color: #eaeaec;
+  opacity: 0.6;
 }

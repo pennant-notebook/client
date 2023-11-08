@@ -24,6 +24,18 @@ export const getCurrentClient = (provider: HocuspocusProviderConfig): UserState 
   return current;
 };
 
+export const storeClientInLocalStorage = (name: string, color?: string): void => {
+  const existingUserData = getClientFromLocalStorage();
+  const userData = {
+    name,
+    color: color || existingUserData.color || randomColor(),
+    setByUser: true
+  };
+
+  localStorage.setItem('userData', JSON.stringify(userData));
+};
+
+
 export const createClientAndStoreInLocalStorage = (): { name: string; color: string } => {
   const color = randomColor();
   const name = generateRandomName();

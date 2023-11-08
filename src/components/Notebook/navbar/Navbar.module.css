@@ -1,0 +1,44 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  height: 64px;
+}
+
+.logo {
+  flex: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.clientDrawerTrigger {
+  background-color: transparent;
+  border: none;
+  color: #fff;
+}
+
+.docTitle {
+  color: #fff;
+  flex: 3;
+  text-align: center;
+}
+
+.actions {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  max-width: 26%;
+}
+
+.actions .dredd {
+  display: flex;
+  flex: 2;
+  align-items: center;
+}
+
+.navbarAvatar {
+  margin-inline: 16px;
+}

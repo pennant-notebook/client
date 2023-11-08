@@ -1,15 +1,9 @@
 import useNotebookContext from '~/contexts/NotebookContext';
-import {
-  Box,
-  CircularProgress,
-  CloseSharp,
-  IconButton,
-  PlayCircle,
-  Typography,
-  Stack,
-  Tooltip
-} from '~/utils/MuiImports';
+import { Button, Tooltip, Typography } from 'antd';
+import { PlayCircleOutlined, CloseOutlined, LoadingOutlined } from '@ant-design/icons';
+
 import styles from './CodeToolbar.module.css';
+import { useTheme } from '@mui/material';
 
 interface CodeToolbarProps {
   onClickRun: () => void;
@@ -18,54 +12,58 @@ interface CodeToolbarProps {
   language: string;
 }
 
-const CodeToolbar = ({ onClickRun, id, processing, language }: CodeToolbarProps) => {
+const CodeToolbar: React.FC<CodeToolbarProps> = ({ onClickRun, id, processing, language }) => {
   const { deleteCell } = useNotebookContext();
-
+  const theme = useTheme().palette.mode;
   return (
-    <Box
+    <div
+      id='code-toolbar'
       data-test='codeToolbarContainer'
-      sx={{
-        backgroundColor: '#282A35',
+      style={{
+        backgroundColor: theme === 'dark' ? '#121212' : '#282A35',
         height: '40px',
         margin: 0,
         padding: 0,
         zIndex: 0,
         borderTopLeftRadius: '5px',
-        borderTopRightRadius: '5px'
+        borderTopRightRadius: '5px',
+        display: 'flex',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        paddingRight: '8px'
       }}>
-      <Stack
-        data-test='toolbarStack'
-        direction='row'
-        sx={{ justifyContent: 'end', position: 'relative', alignItems: 'center', mr: 1, p: 1 }}
-        spacing={2}>
-        <Typography variant='overline' sx={{ color: 'lightgray', position: 'absolute', left: '12px' }}>
-          {language}
-        </Typography>
-        <Tooltip title='Run code' enterDelay={1000} enterNextDelay={1000}>
-          <span>
-            <IconButton
-              data-test='runCodeButton'
-              className={styles.toolbutton}
-              disabled={processing}
-              onClick={onClickRun}>
-              {processing ? <CircularProgress data-test='loadingIndicator' size={24} /> : <PlayCircle />}
-            </IconButton>
-          </span>
-        </Tooltip>
-        <Tooltip title='Remove cell' enterDelay={1000} enterNextDelay={1000}>
-          <span>
-            <IconButton
-              data-test='removeCellButton'
-              className={styles.toolbutton}
-              disabled={processing}
-              onClick={() => deleteCell(id)}
-              sx={{ opacity: 0.5, '&:hover': { opacity: 1, backgroundColor: 'transparent' } }}>
-              <CloseSharp />
-            </IconButton>
-          </span>
-        </Tooltip>
-      </Stack>
-    </Box>
+      <Typography.Text
+        type='secondary'
+        style={{
+          color: 'lightgray',
+          position: 'absolute',
+          left: '42px',
+          fontSize: '0.8rem',
+          opacity: 0.7
+        }}>
+        {language.toUpperCase()}
+      </Typography.Text>
+      <Tooltip title='Run code'>
+        <Button
+          data-test='runCodeButton'
+          className={styles.toolbutton}
+          disabled={processing}
+          icon={processing ? <LoadingOutlined /> : <PlayCircleOutlined />}
+          onClick={onClickRun}
+          type='text'
+        />
+      </Tooltip>
+      <Tooltip title='Remove cell'>
+        <Button
+          data-test='removeCellButton'
+          className={styles.toolbutton}
+          disabled={processing}
+          icon={<CloseOutlined />}
+          onClick={() => deleteCell(id)}
+          type='text'
+        />
+      </Tooltip>
+    </div>
   );
 };
 

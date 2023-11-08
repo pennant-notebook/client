@@ -2,14 +2,14 @@ import { ProviderContextType } from '@/ProviderTypes';
 import { useState } from 'react';
 import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import PlayAllIcon from '~/assets/app/allplay.png';
 import useProviderContext from '~/contexts/ProviderContext';
 import { handleResetContext, handleRunAllCode } from '~/services/codeExecution/dredd';
-import { CircularProgress, IconButton, Refresh, Stack, Tooltip } from '~/utils/MuiImports';
 import styles from './DreddButtons.module.css';
 import { YMap } from '~/utils/notebookHelpers';
 import { useRecoilValue } from 'recoil';
 import { selectedDocIdState } from '~/appState';
+import { PlayCircleOutlined, RedoOutlined } from '@ant-design/icons';
+import { Button, Tooltip, Spin } from 'antd';
 
 interface DreddButtonsProps {
   codeCells: YMap[] | undefined;
@@ -67,37 +67,26 @@ const DreddButtons = ({ codeCells = [] }: DreddButtonsProps) => {
     return running || resetting || codeCells.length < 1;
   };
 
-  const iconSize = '24px';
   return (
-    <Stack sx={{ alignItems: 'center' }} direction='row' spacing={1.5}>
-      <Tooltip title='Reset Code Execution Context' enterDelay={1000} enterNextDelay={1000}>
-        <span>
-          <IconButton
-            className={`${styles['navbar-actions']} ${styles['navbar-actions.reset']}`}
-            disabled={isDisabledReset()}
-            onClick={handleReset}
-            color='inherit'>
-            {resetting ? <CircularProgress size={24} sx={{ color: 'lightgray', fontSize: iconSize }} /> : <Refresh />}
-          </IconButton>
-        </span>
+    <div className={styles.buttonGroup}>
+      <Tooltip title='Reset Code Execution Context'>
+        <Button
+          className={styles.navbarActions}
+          disabled={isDisabledReset()}
+          onClick={handleReset}
+          icon={resetting ? <Spin /> : <RedoOutlined />}
+        />
       </Tooltip>
 
-      <Tooltip title='Run All Code Cells' enterDelay={1000} enterNextDelay={1000}>
-        <span>
-          <IconButton
-            className={`${styles['navbar-actions']} ${styles['navbar-actions.run']}`}
-            disabled={isDisabledRun()}
-            onClick={handleRunAll}
-            color='inherit'>
-            {running ? (
-              <CircularProgress size={24} sx={{ color: 'lightgray', width: iconSize }} />
-            ) : (
-              <img src={PlayAllIcon} style={{ color: '#fff', width: iconSize }} />
-            )}
-          </IconButton>
-        </span>
+      <Tooltip title='Run All Code Cells'>
+        <Button
+          className={styles.navbarActions}
+          disabled={isDisabledRun()}
+          onClick={handleRunAll}
+          icon={running ? <Spin /> : <PlayCircleOutlined />}
+        />
       </Tooltip>
-    </Stack>
+    </div>
   );
 };
 
