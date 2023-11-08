@@ -24,33 +24,34 @@ export const getCurrentClient = (provider: HocuspocusProviderConfig): UserState 
   return current;
 };
 
-export const storeClientInLocalStorage = (name: string, color?: string): void => {
-  const existingUserData = getClientFromLocalStorage();
+export const storeClientInLocalStorage = (name: string, color?: string, avatar_url?: string): void => {
   const userData = {
-    name,
-    color: color || existingUserData.color || randomColor(),
+    name: name,
+    color: color || randomColor(),
+    avatar_url: avatar_url,
     setByUser: true
   };
 
   localStorage.setItem('userData', JSON.stringify(userData));
 };
 
-
-export const createClientAndStoreInLocalStorage = (): { name: string; color: string } => {
+export const createClientAndStoreInLocalStorage = (): { name: string; color: string; avatar_url?: string } => {
   const color = randomColor();
   const name = generateRandomName();
+  const avatar_url = '';
 
-  localStorage.setItem('userData', JSON.stringify({ name, color }));
-  return { name, color };
+  localStorage.setItem('userData', JSON.stringify({ name, color, avatar_url }));
+  return { name, color, avatar_url };
 };
 
-export const getClientFromLocalStorage = (): { name: string; color: string } => {
+export const getClientFromLocalStorage = (): { name: string; color: string; avatar_url?: string } => {
   const storedUserData = localStorage.getItem('userData');
   if (storedUserData !== null) {
     try {
       const parsedUserData = JSON.parse(storedUserData);
+
       if (parsedUserData.setByUser) {
-        return { name: parsedUserData.name, color: parsedUserData.color };
+        return { name: parsedUserData.name, color: parsedUserData.color, avatar_url: parsedUserData.avatar_url };
       }
     } catch (e) {
       console.error("Couldn't parse stored user data:", e);

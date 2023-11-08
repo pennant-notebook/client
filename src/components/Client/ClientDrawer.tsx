@@ -7,7 +7,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { authState, selectedDocIdState, sidebarExpandedState } from '~/appState';
 import useProviderContext from '~/contexts/ProviderContext';
-import { getClientFromLocalStorage } from '~/utils/awarenessHelpers';
 import EditNameModal from './EditNameModal';
 import UserAvatar from './UserAvatar';
 
@@ -16,12 +15,13 @@ interface ClientDrawerProps {
   clients?: ClientType[];
   open: boolean;
   setOpen: (open: boolean) => void;
+  avatarUrl?: string | null;
 }
 
 const ClientDrawer = ({ handleDisconnect, clients = [], open, setOpen }: ClientDrawerProps) => {
   const [auth, setAuth] = useRecoilState(authState);
   const { docID } = useParams();
-  const [avatar, setAvatar] = useState<ClientType | null>(null);
+  const [avatar, setAvatar] = useState<ClientType | null>(auth.userData || null);
   const setIsExpanded = useSetRecoilState(sidebarExpandedState);
 
   const providerContext = useProviderContext();
@@ -45,30 +45,8 @@ const ClientDrawer = ({ handleDisconnect, clients = [], open, setOpen }: ClientD
   useEffect(() => {
     if (clients && clients.length > 0) {
       setAvatar(clients[0]);
-    } else {
-      const storedClient = getClientFromLocalStorage();
-      setAvatar(storedClient);
     }
   }, [clients]);
-
-  useEffect(() => {
-    const checkLoginStatus = () => {
-      const pennantAccessToken = localStorage.getItem('pennantAccessToken');
-      const username = localStorage.getItem('pennant-username');
-      setAuth({
-        isLoggedIn: !!pennantAccessToken,
-        userData: { login: username || '' },
-        provider: null
-      });
-    };
-
-    checkLoginStatus();
-    window.addEventListener('storage', checkLoginStatus);
-
-    return () => {
-      window.removeEventListener('storage', checkLoginStatus);
-    };
-  }, []);
 
   const updateName = (newName: string) => {
     if (newName) {
@@ -90,6 +68,7 @@ const ClientDrawer = ({ handleDisconnect, clients = [], open, setOpen }: ClientD
     localStorage.removeItem('pennantAccessToken');
     localStorage.removeItem('pennantAuthData');
     localStorage.removeItem('pennant-username');
+    localStorage.removeItem('pennant-avatar-url');
     setAuth({ isLoggedIn: false, userData: null, provider: null });
     if (!docID) {
       setSelectedDocId(null);
@@ -131,7 +110,7 @@ const ClientDrawer = ({ handleDisconnect, clients = [], open, setOpen }: ClientD
       key: 'avatar',
       content: (
         <Space direction='vertical' size='large' align='center' style={{ width: '100%' }}>
-          <UserAvatar name={avatar.name} src={avatar.url} color={avatar.color} size={60} />
+          <UserAvatar size={'60px'} isDrawer={true} />
           <Typography.Title level={5} style={{ marginBottom: '12px', marginTop: 0 }}>
             {avatar.name}
           </Typography.Title>
