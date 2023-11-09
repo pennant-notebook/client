@@ -58,6 +58,10 @@
   padding: 100px 0;
 }
 
+.perksPromotional {
+  margin-bottom: 60px;
+}
+
 .mainStory {
   padding: 20px;
 }
@@ -175,7 +179,7 @@
   font-weight: 500;
 }
 
-.section_separator {
+.sectionSeparator {
   height: 1px;
   width: 50%;
   margin: 0 auto;
@@ -434,7 +438,7 @@ strong {
   }
 }
 
-.ctaButtonWrapper {
+.ctaWrapper {
   display: flex;
   align-items: center;
   justify-content: center;
