@@ -1,8 +1,8 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './HomePage.module.css';
 import contextVideo from './vids/context.mp4';
-import sharingVideo from './vids/sharing.mp4';
-import welcomeVideo from './vids/intro.gif';
+import intuitiveVideo from './vids/intuitive.mp4';
+import introVideo from './vids/intro.gif';
 import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { authState } from '~/appState';
@@ -73,26 +73,26 @@ const NewHome = () => {
           <p className={styles['headline']}>
             Pennant is an open source computational notebook and live coding environment.
           </p>
-          <div className={styles.ctaButtonWrapper}>
-            <div className={styles.ctaButtons}>
-              <Link to='/@trypennant'>Try demo notebooks</Link>
+          <div className={styles.ctaWrapper}>
+            <div className={''} style={{ textAlign: 'center' }}>
+              <GetStartedButton title='Try demo notebooks' link={'/@trypennant'} />
             </div>
             <GetStartedButton title='Get Started' onClick={handleClick} />
           </div>
         </div>
         <div className={styles.headerMedia}>
-          <div className={styles.code_block}>
-            <img src={welcomeVideo} width='100%' />
+          <div className={styles.videoWrapper}>
+            <img src={introVideo} width='100%' />
           </div>
         </div>
       </header>
-      <div className={styles.page + '  centered'}>
-        <section className={classNames(styles.mainStory)}>
+      <div className={styles.page}>
+        <section className={classNames(styles.mainStory, styles.perksPromotional)}>
           <div className={classNames(styles.content, styles.story)}>
-            <div className={''}>
+            <div className={styles}>
               <video autoPlay={true} loop={true} muted={true} style={{ maxWidth: '85%' }}>
-                <source src={sharingVideo} type='video/mp4' />
-                Your browser does not support the video tag.
+                <source src={intuitiveVideo} type='video/mp4' />
+                Video playback is not supported on your current browser.
               </video>
             </div>
             <div className={styles['promotional']}>
@@ -105,7 +105,7 @@ const NewHome = () => {
             </div>
           </div>
 
-          <div className={styles.perks + ' ' + styles.content}>
+          <div className={classNames(styles.perks, styles.content)}>
             <div
               className={styles.perk}
               style={{
@@ -141,7 +141,7 @@ const NewHome = () => {
           </div>
         </section>
 
-        <div className={styles.section_separator} role='separator'></div>
+        <div className={styles.sectionSeparator} role='separator'></div>
         <section className={classNames(styles.mainStory)}>
           <div className={classNames(styles.content, styles.story)}>
             <div className={styles['promotional']}>
@@ -158,16 +158,16 @@ const NewHome = () => {
             <div className={''}>
               <video autoPlay={true} loop={true} muted={true} style={{ maxWidth: '85%' }}>
                 <source src={contextVideo} type='video/mp4' />
-                Your browser does not support the video tag.
+                Video playback is not supported on your current browser.{' '}
               </video>
             </div>
           </div>
         </section>
 
-        <div className={styles.section_separator} role='separator'></div>
+        <div className={styles.sectionSeparator} role='separator'></div>
         <section className={classNames(styles.mainStory, styles.colReverse)}>
           <div className={classNames(styles.content, styles.story)}>
-            <div className={''} style={{ textAlign: 'center' }}>
+            <div className={styles.ctaWrapper}>
               <GetStartedButton title='Read our Case Study' link={'https://pennant-notebook.github.io/'} />
             </div>
             <div className={styles['promotional']}>

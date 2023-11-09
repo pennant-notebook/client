@@ -8,7 +8,7 @@ type ClientsProps = {
 
 const Clients = ({ clients }: ClientsProps) => {
   return (
-    <Stack direction='row' spacing={-0.7} padding='0px 0px'>
+    <Stack direction='row' spacing={-0.7} className='navbar-userAvatar'>
       {clients.length > 3 && (
         <Box>
           <Avatar value={`+${clients.length - 3}`} size='30' round='30px' textSizeRatio={2.5} color='lightgray' />
@@ -18,7 +18,7 @@ const Clients = ({ clients }: ClientsProps) => {
         <Box key={index}>
           <Avatar
             name={client.user?.name}
-            src={client.user?.avatar_url}
+            src={index === 1 ? 'https://avatars.githubusercontent.com/u/99911676?v=4' : client.user?.avatar_url}
             color={client.user?.color}
             size='30'
             round='30px'
