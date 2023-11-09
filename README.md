@@ -28,7 +28,6 @@
 - **[y-protocols](https://github.com/yjs/y-protocols)**: Used to manipulate specific aspects of the awareness protocol.
 - **[react-dnd](https://github.com/react-dnd/react-dnd)**: Powers the drag-and-drop functionality for cells.
 - **[BlockNote](https://github.com/TypeCellOS/BlockNote)**: Markdown editor with customizations for a minimal design.
-- **[BlockNote](https://github.com/TypeCellOS/BlockNote)**: Markdown editor with customizations for a minimal design.
 - **[Recoil](https://github.com/facebookexperimental/Recoil)**: Centralizes state management for authentication and notebook-related logic.
 
 ## Getting started
