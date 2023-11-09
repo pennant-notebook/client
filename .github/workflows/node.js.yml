@@ -29,6 +29,6 @@ jobs:
       run: |
         echo "$DO_SSH_KEY" > private_key.pem
         chmod 600 private_key.pem
-        scp -i private_key.pem -r * trypennant@142.93.60.189:~/pennant-notebook/client
-        ssh -i private_key.pem trypennant@142.93.60.189 "cd ~/pennant-notebook/server && npm run build:ui && pm2 restart 0"
+        scp -i private_key.pem -r * trypennant@142.93.60.189:~/home/marwan/pennant-notebook/client
+        ssh -i private_key.pem trypennant@142.93.60.189 "cd ~/home/marwan/pennant-notebook/server && npm run build:ui && pm2 restart 0"
         rm -f private_key.pem
