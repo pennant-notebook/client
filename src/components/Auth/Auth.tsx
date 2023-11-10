@@ -192,7 +192,7 @@ const Auth = () => {
                   </Divider>
                   <form>
                     <TextField
-                      label='Username'
+                      label='Username or Email'
                       variant='filled'
                       fullWidth
                       value={username}
