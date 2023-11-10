@@ -37,13 +37,13 @@ const GoogleSignInButton = ({ loginHandler }: { loginHandler?: () => void }) => 
         localStorage.setItem('pennantAccessToken', access_token);
         localStorage.setItem(
           'pennantAuthData',
-          JSON.stringify({ login: formattedName, avatar: userInfo.data.picture, name: userInfo.data.name })
+          JSON.stringify({ login: formattedName, avatar_url: userInfo.data.picture, name: userInfo.data.name })
         );
         localStorage.setItem('pennant-username', formattedName);
 
         setAuth({
           isLoggedIn: true,
-          userData: { login: formattedName, avatar: userInfo.data.picture, name: userInfo.data.name },
+          userData: { login: formattedName, avatar_url: userInfo.data.picture, name: userInfo.data.name },
           provider: 'google'
         });
 
@@ -62,8 +62,10 @@ const GoogleSignInButton = ({ loginHandler }: { loginHandler?: () => void }) => 
     googleLogin();
   };
 
+  console.log(auth?.isLoggedIn);
+
   return (
-    <div className={styles.googleButton} onClick={!auth.isLoggedIn ? handleGoogleLogin : undefined}>
+    <div className={styles.googleButton} onClick={handleGoogleLogin}>
       {!auth.isLoggedIn || !localStorage.getItem('pennantAccessToken') ? (
         <>
           <img src={GoogleLogo} alt='Google Logo' className={styles.googleLogo} />

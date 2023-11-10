@@ -18,7 +18,7 @@ const Clients = ({ clients }: ClientsProps) => {
         <Box key={index}>
           <Avatar
             name={client.user?.name}
-            src={index === 1 ? 'https://avatars.githubusercontent.com/u/99911676?v=4' : client.user?.avatar_url}
+            src={client.user?.avatar_url}
             color={client.user?.color}
             size='30'
             round='30px'

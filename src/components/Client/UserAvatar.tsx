@@ -28,7 +28,6 @@ const UserAvatar = ({ size = '30px', isDrawer = false }: UserAvatarProps) => {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
-
   return (
     <div className='navbar-userAvatar'>
       <Avatar
