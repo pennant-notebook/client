@@ -83,7 +83,7 @@ const Navbar = ({ selectedDoc }: NavbarProps) => {
     {
       key: '1',
       icon: '',
-      label: `${loggedInUsername}`,
+      label: `${loggedInUsername || 'Anonymous User'}`,
       disabled: true,
       style: { color: '#808080', cursor: 'default', fontWeight: 'bold' }
     },
