@@ -23,11 +23,13 @@ interface NavbarProps {
 
 const Navbar = ({ selectedDoc }: NavbarProps) => {
   const navigate = useNavigate();
-  const { username, docID: paramsDoc } = useParams();
+  const { docID: paramsDoc } = useParams();
   const { codeCells, clients, handleDisconnect } = useNavbarContext();
   const setSelectedDocId = useSetRecoilState(selectedDocIdState);
   const notebookLanguage = useRecoilValue(notebookLanguageState);
   const docID = selectedDoc || paramsDoc;
+
+  const loggedInUsername = localStorage.getItem('pennant-username');
 
   const [openDrawer, setOpenDrawer] = useState(false);
   const setAuth = useSetRecoilState(authState);
@@ -35,7 +37,7 @@ const Navbar = ({ selectedDoc }: NavbarProps) => {
   useEffect(() => {
     const checkLoginStatus = () => {
       const pennantAccessToken = localStorage.getItem('pennantAccessToken');
-      const username = localStorage.getItem('pennant-username');
+      const username = loggedInUsername;
       const localUserData = localStorage.getItem('pennantAuthData');
 
       if (localUserData) {
@@ -81,7 +83,7 @@ const Navbar = ({ selectedDoc }: NavbarProps) => {
     {
       key: '1',
       icon: '',
-      label: `${username}`,
+      label: `${loggedInUsername}`,
       disabled: true,
       style: { color: '#808080', cursor: 'default', fontWeight: 'bold' }
     },
