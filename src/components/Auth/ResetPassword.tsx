@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import styles from './Auth.module.css';
 import PennantLogo from '~/assets/logo/pennant-logo.png';
 
-const API_URL = process.env.NODE_ENV === 'production' ? '/auth' : 'http://localhost:3001/auth';
+const API_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:3001/auth' : '/auth';
 const { Text } = Typography;
 
 const ResetPassword = () => {

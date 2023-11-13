@@ -20,7 +20,7 @@ import GoogleSignInButton from './GoogleSignInButton';
 
 const { Text } = Typography;
 
-const API_URL = process.env.NODE_ENV === 'production' ? '/auth' : 'http://localhost:3001/auth';
+const API_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:3001/auth' : '/auth';
 
 const Auth = () => {
   const [auth, setAuth] = useRecoilState(authState);
