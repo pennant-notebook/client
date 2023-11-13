@@ -1,9 +1,13 @@
 import { AwarenessUserState, UserState } from '@/ClientTypes';
 import { HocuspocusProviderConfig } from '@/ProviderTypes';
 import { removeAwarenessStates } from 'y-protocols/awareness';
-import { generateRandomName, getUserObjects, randomColor } from './notebookHelpers';
+import { generateRandomName, getUserObjects } from './notebookHelpers';
 
-const colors = ['#958DF1', '#F98181', '#FBBC88', '#FAF594', '#70CFF8', '#94FADB', '#B9F18D'];
+const colors = ['#958DF1', '#F98181', '#FBBC88', '#15289b', '#70CFF8', '#94FADB', '#B9F18D', "#8B8000", '#8458B3', '#494d5f'];
+
+export const getRandomElement = (list: any[]) => list[Math.floor(Math.random() * list.length)];
+
+export const getRandomColor = () => getRandomElement(colors);
 
 export const updateDisconnectedClient = async (provider: HocuspocusProviderConfig) => {
   if (provider) {
@@ -37,7 +41,7 @@ export const getClientFromLocalStorage = (): { name: string; color: string; avat
 };
 
 export const createClientAndStoreInLocalStorage = (): { name: string; color: string; avatar_url?: string } => {
-  const color = randomColor();
+  const color = getRandomColor();
   const name = generateRandomName();
 
   localStorage.setItem('pennantAuthData', JSON.stringify({ name, color, setByUser: false }));
@@ -71,6 +75,3 @@ export const updateAwarenessState = (provider: HocuspocusProviderConfig, userDat
 };
 
 
-export const getRandomElement = (list: any[]) => list[Math.floor(Math.random() * list.length)];
-
-export const getRandomColor = () => getRandomElement(colors);
