@@ -3,11 +3,32 @@ import { HocuspocusProviderConfig } from '@/ProviderTypes';
 import { removeAwarenessStates } from 'y-protocols/awareness';
 import { generateRandomName, getUserObjects } from './notebookHelpers';
 
-const colors = ['#958DF1', '#F98181', '#FBBC88', '#15289b', '#70CFF8', '#94FADB', '#B9F18D', "#8B8000", '#8458B3', '#494d5f'];
+type ColorMap = {
+  [key: string]: string;
+};
+
+export const colorMap: ColorMap = {
+  '#ff6600': '#ff9000', // Orange to Lighter Orange
+  '#ffcc00': '#fff600', // Yellow to Light Yellow
+  '#ccff00': '#a2ff00', // Yellow-Green to Green-Yellow
+  '#47A906': '#47A906', // Light Green to Slightly Darker Green
+  '#05C270': '#00ff90', // Aquamarine to Lighter Aquamarine
+  '#06C1BA': '#00fff6', // Turquoise to Light Turquoise
+  '#037CC2': '#00a2ff', // Sky Blue to Slightly Darker Sky Blue
+  '#5871C1': '#5871C1', // Blue to Slightly Darker Blue
+  '#2F74C4': '#2F74C4', // Pure Blue to Slightly Violet Blue
+  '#6600ff': '#9100ff', // Indigo to Lighter Indigo
+  '#cc00ff': '#f700ff', // Violet to Lighter Violet
+  '#ff00cc': '#ff00a1', // Magenta to Lighter Magenta
+  '#ff0066': '#ff003c'  // Pink to Slightly Darker Pink
+};
+
+const colors = Object.keys(colorMap);
 
 export const getRandomElement = (list: any[]) => list[Math.floor(Math.random() * list.length)];
 
 export const getRandomColor = () => getRandomElement(colors);
+export const getAnalogColor = (color: string) => colorMap[color];
 
 export const updateDisconnectedClient = async (provider: HocuspocusProviderConfig) => {
   if (provider) {

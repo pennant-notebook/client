@@ -1,7 +1,7 @@
 import { MarkdownEditorProps } from '@/EditorTypes';
 import { defaultBlockSchema } from '@blocknote/core';
 import { BlockNoteView, ReactSlashMenuItem, getDefaultReactSlashMenuItems, useBlockNote } from '@blocknote/react';
-import { getRandomColor } from '~/utils/awarenessHelpers';
+import { getAnalogColor, getRandomColor } from '~/utils/awarenessHelpers';
 import styles from './MarkdownCell.module.css';
 import { insertAlert } from './alert/Alert';
 import { createAlertBlock } from './alert/helpers';
@@ -28,7 +28,7 @@ const MarkdownEditor = ({ content, provider, currentUser, theme }: MarkdownEdito
       fragment: content,
       user: {
         name: currentUser?.user?.name || 'Anonymous User',
-        color: currentUser?.user?.color || getRandomColor()
+        color: getAnalogColor(currentUser?.user?.color || getRandomColor())
       }
     },
     onEditorReady(editor) {
