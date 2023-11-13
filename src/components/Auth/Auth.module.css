@@ -1,12 +1,15 @@
 .wrapper {
   display: flex;
+  justify-content: center;
   max-width: 80%;
   margin: auto;
+  height: 100vh;
 }
 
 .container {
   display: flex;
-  height: 100vh;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
 .logoContainer,
@@ -14,6 +17,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-basis: 100%;
+  max-width: 100%;
 }
 
 .smallScreen {
@@ -29,82 +34,182 @@
   text-align: center;
 }
 
-.githubButton {
-  background-color: black;
-  color: white;
-  border-radius: 5px;
+.centerLogo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.rotate {
+  animation: rotation 1s infinite linear;
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+@media (min-width: 768px) {
+  .logoContainer,
+  .formContainer {
+    flex-basis: 50%;
+  }
+}
+
+.loggedInWrapper {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 8px;
-  cursor: pointer;
+  text-align: center;
+  justify-content: center;
+  max-width: 50%;
+  min-width: 242px;
+  width: 300px;
+  padding: 10px;
+  margin: 0 auto;
+  margin-top: 20px;
+  background-color: rgb(255, 255, 255);
+  color: rgba(0, 0, 0, 0.87);
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 3px -2px, rgba(0, 0, 0, 0.14) 0px 3px 4px 0px,
+    rgba(0, 0, 0, 0.12) 0px 1px 8px 0px;
+}
+
+.loggedInContainer {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  border-radius: 5px;
+}
+
+.avatarLoggedIn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #121212;
+  color: #fff !important;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 12px;
+  margin-top: 20px;
+  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 1px -2px, rgba(0, 0, 0, 0.14) 0px 2px 2px 0px,
+    rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;
+}
+
+.avatarLoggedIn .loggedInAsText {
+  font-size: 0.8rem;
+  font-weight: 500;
   margin-bottom: 10px;
 }
 
-.githubButton:hover {
-  background-color: #3e454b;
-  color: white;
+.loggedInContainer button {
+  margin-bottom: 20px;
 }
 
-.googleButton {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px;
-  margin-bottom: 15px;
-  border: thin solid #888;
-  border-radius: 5px;
-  background-color: #ffffff;
-  color: #444;
+.avatarLoggedIn > img {
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  margin-right: 10px;
+}
+
+.logoutButton {
+  padding: 12px 20px;
+  background-color: #7288d7;
+  cursor: pointer;
+  margin: 0;
+}
+
+.AuthForm .authButton {
+  background-color: #207bf7;
+  border: none;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 10px 16px;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.AuthForm .authButton:hover {
+  background-color: #478def;
+}
+
+.dashboardButton {
+  background-color: #226abe;
+  margin: 0;
+  padding: 12px 20px;
   cursor: pointer;
 }
 
+.dashboardButton:hover {
+  background-color: #2676d4;
+}
+
+.logoutButton:hover {
+  background-color: #6379c8;
+  border: none;
+}
+
+.separator span {
+  color: rgb(128, 128, 128);
+  font-family: -apple-system, 'system-ui', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+  font-size: 14px;
+}
+
+.githubLogo {
+  opacity: 0.6;
+}
+
+.githubLogo,
+.googleLogo {
+  width: 20px;
+  margin-right: 10px;
+}
+
+.githubButton,
+.googleButton {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  border: thin solid rgb(211, 211, 211);
+  border-radius: 4px;
+  background-color: #ffffff;
+  color: rgb(128, 128, 128);
+  cursor: pointer;
+}
+
+.buttonText {
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+  text-align: left;
+}
+
+.githubButton {
+  margin-top: 10px;
+}
+
+.githubButton:hover,
 .googleButton:hover {
   background: #eee;
-  color: #444;
-  border: thin solid #888;
-  white-space: nowrap;
+  border: thin solid rgb(211, 211, 211);
 }
 
 .googleButton.dark {
   background-color: #4285f4;
   color: white;
-}
-
-.loggedInContainer {
-  background-color: black;
-  color: white;
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px;
-  margin-bottom: 15px;
-}
-
-span.buttonText {
-  display: inline-block;
-  vertical-align: middle;
-  padding-left: 42px;
-  padding-right: 42px;
-  font-size: 14px;
-  font-family: 'Roboto', sans-serif;
-}
-
-.githubLogo {
-  margin-left: 3px;
-  width: 28px;
-}
-
-.googleLogo {
-  margin-left: 3px;
-  width: 24px;
-}
-
-.buttonText {
-  flex-grow: 1;
-  font-size: 0.9rem;
-  text-align: center;
 }
 
 .button {
@@ -122,14 +227,37 @@ span.buttonText {
   margin-top: 15px;
 }
 
-.dashboardButton {
-  align-items: center;
-  width: 100%;
-  height: 40px;
+.switchDiv {
+  text-align: center;
+  justify-content: center;
+  font-weight: 400;
 }
 
-.dashboardButton:hover {
+.AuthForm .formItem {
+  margin-bottom: 16px;
+}
+
+.AuthForm .formLabel {
+  color: rgb(128, 128, 128);
+  margin-bottom: 6px;
+  font-size: small;
+}
+
+.switchButton {
+  text-decoration: underline;
+  color: rgb(128, 128, 128);
+}
+
+.switchButton > span {
+  font-size: 0.8rem;
+  color: rgb(128, 128, 128);
+}
+
+.switchButton > span:hover {
+  border: none;
   cursor: pointer;
+  text-decoration: underline;
+  color: #628bcd;
 }
 
 .buttonSmall {
@@ -160,22 +288,71 @@ span.buttonText {
   background-color: #f3f3f3;
 }
 
-.centerLogo {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+/* Styles for Login and Signup */
+
+.AuthWrapper {
+  width: 100%;
+  height: 100%;
+  background-color: rgb(250, 251, 252);
 }
 
-.rotate {
-  animation: rotation 1s infinite linear;
+.AuthHeader {
+  width: 100%;
+  height: 100px;
+  padding-top: 15px;
 }
 
-@keyframes rotation {
-  from {
-    transform: rotate(0deg);
+.AuthHeaderLogo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.AuthForm {
+  position: relative;
+  border-color: var(--N40);
+  box-shadow: 0px 4px 8px rgba(9, 30, 66, 0.25), 0px 0px 1px rgba(9, 30, 66, 0.31);
+  border-radius: 4;
+  width: 400px;
+  margin: 16px auto;
+  padding: 16px 20px;
+  background: white;
+}
+
+@media (max-width: 704px) {
+  .AuthForm {
+    border: 0;
+    box-shadow: none;
   }
-  to {
-    transform: rotate(359deg);
+
+  .AuthPage {
+    background-color: white;
   }
+}
+
+.AuthForm p {
+  margin: 0px 0 10px 0;
+}
+
+.AuthFooter {
+  margin-top: 16px;
+}
+
+.footerItem {
+  color: rgb(107, 119, 140);
+  font-size: 14px;
+  text-align: center;
+  border-radius: 0;
+  margin-bottom: 4px;
+}
+
+.footerItem {
+  border: none;
+  margin-top: 0;
+}
+
+.AuthFooter > div {
+  justify-content: center;
 }

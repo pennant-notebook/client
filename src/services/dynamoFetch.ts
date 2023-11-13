@@ -11,14 +11,20 @@ async function fetchNotebooks(username: string): Promise<any> {
   }
 }
 
-async function fetchUser(username: string): Promise<any> {
+async function fetchUser(identifier: string): Promise<any> {
   try {
-    const response: AxiosResponse<any> = await axios.get(`${URL}/user/${username.slice(1)}`);
+    const modifiedIdentifier = identifier.startsWith('@') ? identifier.slice(1) : identifier;
+
+    const isEmail = modifiedIdentifier.includes('@');
+    const queryParams = isEmail ? { email: modifiedIdentifier } : { username: modifiedIdentifier };
+
+    const response: AxiosResponse<any> = await axios.get(`${URL}/user`, { params: queryParams });
     return response.data;
   } catch (error) {
-    console.error(`Error fetching user ${username} from DynamoDB:`, error);
+    console.error(`Error fetching user with identifier ${identifier} from DynamoDB:`, error);
   }
 }
+
 
 async function fetchDoc(docID: string, username: string): Promise<any> {
   try {

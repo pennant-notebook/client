@@ -3,12 +3,12 @@ import axios, { AxiosResponse } from 'axios';
 const isDevelopment = process.env.NODE_ENV === 'development';
 const URL = isDevelopment ? 'http://localhost:3001/api' : '/api';
 
-async function createUser(username: string): Promise<any> {
+async function createUser(email: string): Promise<any> {
   try {
-    const response: AxiosResponse<any> = await axios.post(`${URL}/user/${username}`);
+    const response: AxiosResponse<any> = await axios.post(`${URL}/user`, { email });
     return response.data;
   } catch (error) {
-    console.error(`Error creating user ${username} in DynamoDB:`, error);
+    console.error(`Error creating user with email ${email} in DynamoDB:`, error);
   }
 }
 
@@ -49,5 +49,6 @@ async function deleteDoc({ docID, username }: DeleteDocParams): Promise<any> {
     console.error('Error deleting notebook in DynamoDB:', error);
   }
 }
+
 
 export { createUser, createDoc, editDocTitle, deleteDoc };

@@ -1,29 +1,24 @@
+import { LockOutlined, MailOutlined, UserOutlined } from '@ant-design/icons';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import { Divider, Form, Input, Spin, Typography } from 'antd';
 import axios from 'axios';
+import classNames from 'classnames';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import { useRecoilState } from 'recoil';
-import { validateForm } from '~/utils/authHelpers';
+import { authState } from '~/appState';
 import LoggedInIcon from '~/assets/auth/loggedIn.svg';
 import Pennant from '~/assets/auth/logo.png';
 import PennantLogoDark from '~/assets/logo/pennant-logo-dark.png';
 import PennantLogo from '~/assets/logo/pennant-logo.png';
-import {
-  Button,
-  Divider,
-  Grid,
-  Paper,
-  Stack,
-  TextField,
-  Typography,
-  useMediaQuery,
-  useTheme
-} from '~/utils/MuiImports';
+import { useTheme } from '~/utils/MuiImports';
+import { validateForm } from '~/utils/authHelpers';
 import styles from './Auth.module.css';
 import GitHubLogin from './GitHubLogin';
 import GoogleSignInButton from './GoogleSignInButton';
-import { authState } from '~/appState';
-import { GoogleOAuthProvider } from '@react-oauth/google';
+
+const { Text } = Typography;
 
 const API_URL = process.env.NODE_ENV === 'production' ? '/auth' : 'http://localhost:3001/auth';
 
@@ -31,14 +26,17 @@ const Auth = () => {
   const [auth, setAuth] = useRecoilState(authState);
   const [username, setUsername] = useState(localStorage.getItem('pennant-username') || '');
   const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const theme = useTheme().palette.mode;
+  const [isSignUp, setIsSignUp] = useState(false);
   const [rerender, setRerender] = useState(false);
   const [showDashboardLoader, setShowDashboardLoader] = useState(false);
-  const navigate = useNavigate();
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
+  const [isSendingEmail, setIsSendingEmail] = useState(false);
 
-  const [isSignUp, setIsSignUp] = useState(false);
-  const isSmallScreen = useMediaQuery('(max-width:600px)');
+  const [form] = Form.useForm();
+  const theme = useTheme().palette.mode;
+  const navigate = useNavigate();
 
   const isLoggedIn = !!localStorage.getItem('pennantAccessToken');
 
@@ -51,66 +49,60 @@ const Auth = () => {
   };
 
   const handleSignup = async () => {
-    const errorMessage = validateForm({ isSignUp: true, username, password, confirmPassword });
+    const errorMessage = validateForm({ isSignUp: true, identifier: email, password, confirmPassword });
 
     if (errorMessage) {
-      toast.error(errorMessage);
+      toast.error(errorMessage, { autoClose: 1500, pauseOnFocusLoss: false });
       return;
     }
 
     try {
-      const {
-        data: { exists }
-      } = await axios.post(`${API_URL}/checkUser`, { username });
-
-      if (exists) {
-        toast.error('Username already exists.');
-        return;
-      }
-
-      const response = await axios.post(`${API_URL}/signup`, { username, password, provider: '' });
+      const response = await axios.post(`${API_URL}/signup`, { email, password, provider: '' });
       localStorage.setItem('pennantAccessToken', response.data.token);
-      localStorage.setItem('pennantAuthData', JSON.stringify({ login: username }));
-      localStorage.setItem('pennant-username', username);
+      localStorage.setItem('pennantAuthData', JSON.stringify({ login: email.split('@')[0] }));
+      localStorage.setItem('pennant-username', email.split('@')[0]);
 
       setAuth({
         isLoggedIn: true,
-        userData: { login: username, name: username, color: '', avatar_url: '', avatar: '' },
-        provider: 'username'
+        userData: { login: email.split('@')[0], name: email.split('@')[0], color: '', avatar_url: '', avatar: '' },
+        provider: null
       });
 
       setShowDashboardLoader(true);
-      setTimeout(() => navigate(`/@${username}`), 1500);
+      setTimeout(() => navigate(`/@${email.split('@')[0]}`), 1500);
     } catch (error) {
       console.error('Could not sign up:', error);
-      toast.error('Could not sign up. Please try again.');
+      toast.error('Could not sign up. Please try again.', { autoClose: 1500, pauseOnFocusLoss: false });
     }
   };
 
   const handleLogin = async () => {
-    const errorMessage = validateForm({ isSignUp: false, username, password });
+    const identifier = username; // username or email
+    const errorMessage = validateForm({ isSignUp: false, identifier, password });
 
     if (errorMessage) {
-      toast.error(errorMessage);
+      toast.error(errorMessage, { autoClose: 1500, pauseOnFocusLoss: false });
       return;
     }
 
     try {
-      const response = await axios.post(`${API_URL}/signin`, { username, password });
+      const response = await axios.post(`${API_URL}/signin`, { identifier, password });
+      const userLogin = identifier.includes('@') ? identifier.split('@')[0] : identifier;
+
       setShowDashboardLoader(true);
       localStorage.setItem('pennantAccessToken', response.data.token);
-      localStorage.setItem('pennantAuthData', JSON.stringify({ login: username, name: username }));
-      localStorage.setItem('pennant-username', username);
+      localStorage.setItem('pennantAuthData', JSON.stringify({ login: userLogin, name: userLogin }));
+      localStorage.setItem('pennant-username', userLogin);
       setAuth({
         isLoggedIn: true,
-        userData: { login: username, name: username },
-        provider: 'username'
+        userData: { login: userLogin, name: userLogin },
+        provider: null
       });
       setShowDashboardLoader(true);
-      setTimeout(() => navigate(`/@${username}`), 1500);
+      setTimeout(() => navigate(`/@${userLogin}`), 1500);
     } catch (error) {
       console.error(error);
-      toast.error('Invalid username or password.');
+      toast.error('Invalid username or password.', { autoClose: 1500, pauseOnFocusLoss: false });
     }
   };
 
@@ -128,31 +120,94 @@ const Auth = () => {
     setRerender(!rerender);
   };
 
+  const handleForgotPassword = async () => {
+    const emailToReset = email;
+    if (!emailToReset) {
+      toast.error('Please enter your email address.', { autoClose: 1500, pauseOnFocusLoss: false });
+      return;
+    }
+    setIsSendingEmail(true);
+    try {
+      const response = await axios.post(`${API_URL}/forgot-password`, { email: emailToReset });
+      console.log(response.data);
+      setIsSendingEmail(false);
+      toast.success('Password reset email sent. Please check your inbox.', {
+        autoClose: 1500,
+        pauseOnFocusLoss: false
+      });
+    } catch (error) {
+      console.error('Error sending forgot password email:', error);
+      setIsSendingEmail(false);
+      toast.error('Error sending forgot password email. Please try again later.', {
+        autoClose: 1500,
+        pauseOnFocusLoss: false
+      });
+    }
+  };
+
   return (
-    <div className={styles.wrapper}>
-      {showDashboardLoader && (
-        <div className={`${styles.centerLogo}`}>
-          <img src={Pennant} alt='Pennant Logo' className={`${styles.logo} ${styles.rotate}`} />
-        </div>
-      )}
-      <Grid container className={styles.container} direction={{ xs: 'column', sm: 'row' }}>
-        <Grid item xs={isSmallScreen ? 4 : 6} className={`${styles.logoContainer} `}>
-          {!showDashboardLoader && (
+    <div className={styles.AuthWrapper}>
+      <div className={styles.AuthHeader}>
+        {showDashboardLoader && (
+          <div className={`${styles.centerLogo}`}>
+            <img src={Pennant} alt='Pennant Logo' className={`${styles.logo} ${styles.rotate}`} />
+          </div>
+        )}
+      </div>
+      <div className={styles.AuthHeader}>
+        {!showDashboardLoader && (
+          <div className={styles.AuthHeaderLogo}>
             <img
               src={theme === 'dark' ? PennantLogoDark : PennantLogo}
               alt='Pennant Logo'
               className={`${styles.logo}`}
             />
-          )}
-        </Grid>
+          </div>
+        )}
+      </div>
+      <div>
         {!showDashboardLoader && (
-          <Grid item xs={isSmallScreen ? 4 : 6} className={`${styles.formContainer}`}>
-            <Paper elevation={3} className={styles.paper}>
-              {isLoggedIn ? (
-                <Stack sx={{ minWidth: '242px' }}>
-                  <div className={`${styles.loggedInContainer}`}>
+          <>
+            {isForgotPassword ? (
+              <div className={styles.AuthForm}>
+                <Form form={form} layout='vertical' className={styles.AuthForm}>
+                  <Form.Item className={styles.formItem}>
+                    <p className={styles.formLabel}>Email</p>
+                    <Input
+                      prefix={<MailOutlined style={{ color: 'rgb(128,128,128)' }} />}
+                      placeholder='Email'
+                      value={email}
+                      onChange={e => setEmail(e.target.value)}
+                    />
+                  </Form.Item>
+
+                  <div className={styles.AuthFooter}>
+                    {isSendingEmail ? (
+                      <div className={classNames(styles.switchDiv, styles.footerItem)}>
+                        <Spin />
+                      </div>
+                    ) : (
+                      <>
+                        <button onClick={handleForgotPassword} className={classNames(styles.authButton)}>
+                          Send Password Reset Email
+                        </button>
+                        <div
+                          className={classNames(styles.switchDiv, styles.footerItem)}
+                          onClick={() => setIsForgotPassword(false)}>
+                          <div className={classNames(styles.switchButton)}>
+                            <Text>Back to Login</Text>
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </Form>
+              </div>
+            ) : isLoggedIn ? (
+              <div className={styles.loggedInWrapper}>
+                <div className={`${styles.loggedInContainer}`}>
+                  <div className={styles.avatarLoggedIn}>
                     <img
-                      style={{ borderRadius: '50%', width: '32px', height: '32px', marginRight: '10px' }}
                       src={auth.userData?.avatar_url || auth.userData?.avatar || LoggedInIcon}
                       alt="User's avatar"
                       onError={e => {
@@ -161,82 +216,100 @@ const Auth = () => {
                         imgElement.src = LoggedInIcon;
                       }}
                     />
-                    <Typography className={styles.buttonText} sx={{ fontSize: '0.9em' }}>
+                    <p className={classNames(styles.buttonText, styles.loggedInAsText)}>
                       Logged in as {auth.userData?.login || localStorage.getItem('pennant-username')}
-                    </Typography>
+                    </p>
                   </div>
-                  <Button
-                    onClick={handleLogout}
-                    variant='contained'
-                    className={`${styles.button} ${styles.secondary}`}
-                    sx={{ textTransform: 'none', mb: '10px' }}>
+                  <Divider />
+                  <button onClick={handleLogout} className={classNames(styles.avatarLoggedIn, styles.logoutButton)}>
                     Log out
-                  </Button>
-                  <Button
-                    onClick={goToDashboard}
-                    variant='contained'
-                    className={`${styles.dashboardButton} ${styles.secondary}`}
-                    sx={{ textTransform: 'none', my: '10px' }}>
+                  </button>
+                  <button onClick={goToDashboard} className={classNames(styles.avatarLoggedIn, styles.dashboardButton)}>
                     Go to Dashboard
-                  </Button>
-                </Stack>
-              ) : (
-                <>
-                  <h2>{isSignUp ? 'Sign up' : 'Log in'}</h2>
-                  <GitHubLogin />
-                  <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-                    <GoogleSignInButton />
-                  </GoogleOAuthProvider>
-                  <Divider variant='middle' style={{ margin: '15px 0' }}>
-                    <Typography align='center'>OR</Typography>
-                  </Divider>
-                  <form>
-                    <TextField
-                      label='Username or Email'
-                      variant='filled'
-                      fullWidth
-                      value={username}
-                      onChange={e => setUsername(e.target.value)}
-                      sx={{ mb: '15px' }}
-                    />
-                    <TextField
-                      label='Password'
-                      variant='filled'
-                      fullWidth
-                      type='password'
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className={styles.AuthForm}>
+                <GitHubLogin />
+                <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+                  <GoogleSignInButton />
+                </GoogleOAuthProvider>
+                <Divider className={styles.separator}>OR</Divider>
+
+                <Form form={form} layout='vertical' className={styles.AuthForm}>
+                  {isSignUp ? (
+                    <Form.Item className={styles.formItem}>
+                      <p className={styles.formLabel}>Email</p>
+                      <Input
+                        prefix={<MailOutlined style={{ color: 'rgb(128,128,128)' }} />}
+                        placeholder='Email'
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
+                      />
+                    </Form.Item>
+                  ) : (
+                    <Form.Item className={styles.formItem}>
+                      <p className={styles.formLabel}>Username or Email</p>
+                      <Input
+                        prefix={<UserOutlined style={{ color: 'rgb(128,128,128)' }} />}
+                        placeholder='Username or Email'
+                        value={username}
+                        onChange={e => setUsername(e.target.value)}
+                      />
+                    </Form.Item>
+                  )}
+                  <Form.Item className={styles.formItem}>
+                    <p className={styles.formLabel}>Password</p>
+                    <Input.Password
+                      prefix={<LockOutlined style={{ color: 'rgb(128,128,128)' }} />}
+                      placeholder='Password'
                       value={password}
                       onChange={e => setPassword(e.target.value)}
-                      sx={{ mb: '10px' }}
                     />
-                    {isSignUp && (
-                      <TextField
-                        label='Confirm Password'
-                        variant='outlined'
-                        fullWidth
-                        type='password'
+                  </Form.Item>
+                  {isSignUp && (
+                    <Form.Item className={styles.formItem}>
+                      <p className={styles.formLabel}>Confirm Password</p>
+                      <Input.Password
+                        prefix={<LockOutlined style={{ color: 'rgb(128,128,128)' }} />}
+                        placeholder='Confirm Password'
                         value={confirmPassword}
                         onChange={e => setConfirmPassword(e.target.value)}
-                        sx={{ mb: '10px' }}
                       />
-                    )}
-                    <Button
-                      onClick={isSignUp ? handleSignup : handleLogin}
-                      variant='contained'
-                      className={`${styles.button} ${styles.secondary}`}
-                      fullWidth
-                      sx={{ my: '10px', p: '8px 14px' }}>
-                      <span className={styles.buttonText}>{isSignUp ? 'Sign Up' : 'log In'}</span>
-                    </Button>
-                    <div onClick={toggleSignUp} className={`${styles.button} ${styles.primary}`}>
-                      <span className={styles.buttonText}>{isSignUp ? 'Switch to Login' : 'Switch to Signup'}</span>
+                    </Form.Item>
+                  )}
+                  <button onClick={isSignUp ? handleSignup : handleLogin} className={classNames(styles.authButton)}>
+                    {isSignUp ? 'Sign Up' : 'Log In'}
+                  </button>
+                  <div className={styles.AuthFooter}>
+                    <div
+                      className={classNames(styles.switchDiv, styles.footerItem)}
+                      onClick={() => setIsForgotPassword(true)}>
+                      {!isSignUp && (
+                        <div className={classNames(styles.switchButton)}>
+                          <Text> Forgot Password?</Text>
+                        </div>
+                      )}
                     </div>
-                  </form>
-                </>
-              )}
-            </Paper>
-          </Grid>
+                    <div className={classNames(styles.switchDiv, styles.footerItem)} onClick={toggleSignUp}>
+                      {isSignUp ? (
+                        <div className={classNames(styles.switchButton)}>
+                          <Text> Already have an account? Log In</Text>
+                        </div>
+                      ) : (
+                        <div className={classNames(styles.switchButton)}>
+                          <Text> New to Pennant? Sign Up</Text>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </Form>
+              </div>
+            )}
+          </>
         )}
-      </Grid>
+      </div>
     </div>
   );
 };

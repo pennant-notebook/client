@@ -7,10 +7,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import Auth from './components/Auth/Auth';
 import DashboardWrapper from './components/Dashboard/DashboardWrapper';
 import HomePage from './components/Landing/home/HomePage';
-
 import NotebookRoute from './components/Notebook/NotebookRoute';
 import ThemeManager, { codeMirrorThemes } from './contexts/ThemeManager';
 import { Box } from './utils/MuiImports';
+import ResetPassword from './components/Auth/ResetPassword';
 
 interface CodeMirrorThemeType {
   name: string;
@@ -40,6 +40,7 @@ function App() {
             <Route path='/auth' element={<Auth />} />
             <Route path='/auth/github' element={<Auth />} />
             <Route path='/auth/google' element={<Auth />} />
+            <Route path='/reset-password/:resetToken' element={<ResetPassword />} />
             <Route path='/:username/:docID' element={<NotebookRoute />} />
             <Route path='/:username' element={<DashboardWrapper />} />
             <Route path='/' element={<HomePage />} />

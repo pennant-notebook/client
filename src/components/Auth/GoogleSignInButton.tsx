@@ -62,8 +62,6 @@ const GoogleSignInButton = ({ loginHandler }: { loginHandler?: () => void }) => 
     googleLogin();
   };
 
-  console.log(auth?.isLoggedIn);
-
   return (
     <div className={styles.googleButton} onClick={handleGoogleLogin}>
       {!auth.isLoggedIn || !localStorage.getItem('pennantAccessToken') ? (

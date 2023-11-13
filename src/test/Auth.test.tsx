@@ -28,12 +28,12 @@ test('Auth Component', () => {
 
 test('Form Validation', () => {
   suite('should return error message for empty username', () => {
-    const errorMessage = validateForm({ isSignUp: false, username: '', password: '123456' });
+    const errorMessage = validateForm({ isSignUp: false, identifier: '', password: '123456' });
     expect(errorMessage).toBe('Expected error message');
   });
 
   suite('should return error message for empty password', () => {
-    const errorMessage = validateForm({ isSignUp: false, username: 'testUser', password: '' });
+    const errorMessage = validateForm({ isSignUp: false, identifier: 'testUser', password: '' });
     expect(errorMessage).toBe('Expected error message');
   });
 });
