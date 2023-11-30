@@ -130,11 +130,16 @@ const CodeCell = ({ cellId, cell }: CodeCellProps) => {
               </Typography.Text>
             ) : (
               output &&
-              output.split('\n').map((stdout: string, idx: number) => (
-                <Typography.Text key={idx} style={{ marginLeft: '5px', color: '#cfd1d8' }} data-test={`output`}>
-                  {stdout}
-                </Typography.Text>
-              ))
+              output
+                .split('\n')
+                .filter(Boolean)
+                .map((stdout: string, idx: number) => (
+                  <div key={idx}>
+                    <Typography.Text style={{ marginLeft: '5px', color: '#cfd1d8' }} data-test={`output`}>
+                      {stdout}
+                    </Typography.Text>
+                  </div>
+                ))
             )}
           </div>
         </div>
