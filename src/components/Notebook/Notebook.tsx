@@ -115,20 +115,6 @@ const Notebook = ({ docID, resourceTitle, notebook }: NotebookProps) => {
     }
   }, [clients]);
 
-  useEffect(() => {
-    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      if (provider) {
-        updateDisconnectedClient(provider);
-      }
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, [provider]);
-
   const deleteCell = async (id: string) => {
     const cellIndex = cellsArray.toArray().findIndex((c: YMap) => c.get('id') === id);
     if (cellIndex !== -1) cellsArray.delete(cellIndex);

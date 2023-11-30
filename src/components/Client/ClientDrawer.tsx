@@ -1,4 +1,12 @@
-import { BulbFilled, BulbOutlined, EditOutlined, HomeOutlined, LoginOutlined, LogoutOutlined } from '@ant-design/icons';
+import {
+  ArrowLeftOutlined,
+  BulbFilled,
+  BulbOutlined,
+  EditOutlined,
+  HomeOutlined,
+  LoginOutlined,
+  LogoutOutlined
+} from '@ant-design/icons';
 import { useTheme } from '@mui/material';
 import { Button, Drawer, List, Space, Typography } from 'antd';
 import { useState } from 'react';
@@ -9,6 +17,7 @@ import { authState, selectedDocIdState, sidebarExpandedState } from '~/appState'
 import useProviderContext from '~/contexts/ProviderContext';
 import EditNameModal from './EditNameModal';
 import UserAvatar from './UserAvatar';
+import ThemeSelector from '../UI/ThemeSelector';
 
 interface ClientDrawerProps {
   handleDisconnect: (destination: string) => void;
@@ -154,12 +163,16 @@ const ClientDrawer = ({ handleDisconnect, clients = [], open, setOpen }: ClientD
       )
     },
     {
+      key: 'code-theme',
+      content: <ThemeSelector currTheme={currTheme} />
+    },
+    {
       key: 'go-back',
       content: (
         <Button
           className={`button-normal ${currTheme === 'dark' ? 'dark-theme' : ''}`}
           type='text'
-          icon={!docID && !auth.isLoggedIn ? <HomeOutlined /> : <LogoutOutlined />}
+          icon={!docID && !auth.isLoggedIn ? <HomeOutlined /> : <ArrowLeftOutlined />}
           onClick={handleClickToGoBack}
           block>
           {auth.isLoggedIn ? 'Dashboard' : 'Home'}

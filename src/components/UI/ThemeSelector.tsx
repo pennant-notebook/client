@@ -1,46 +1,39 @@
-import { useState, MouseEvent } from 'react';
-import { Box, Menu, MenuItem, BrushIcon } from '~/utils/MuiImports';
-import IconRow from './IconRow';
+import { FormatPainterOutlined } from '@ant-design/icons';
+import { Button, Dropdown } from 'antd';
 import { CodeMirrorThemeContextType, useCMThemeContext } from '~/contexts/ThemeManager';
-import { Extension } from '@codemirror/state';
 
-interface CodeMirrorThemeType {
-  name: string;
-  theme: Extension;
+interface ThemeSelectorProps {
+  currTheme: string;
 }
 
-const ThemeSelector = () => {
+const ThemeSelector = ({ currTheme }: ThemeSelectorProps) => {
   const contextValue: CodeMirrorThemeContextType | null = useCMThemeContext();
 
   if (!contextValue) {
     return null;
   }
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const handleThemeClick = (event: MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleThemeClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleThemeSelect = (theme: CodeMirrorThemeType) => {
-    contextValue.toggleCMTheme(theme);
-    handleThemeClose();
-  };
+  const items = contextValue.codeMirrorThemes.map(theme => ({
+    key: theme.name,
+    label: theme.name,
+    className: theme.name === currTheme ? 'active' : '',
+    onClick: () => contextValue.toggleCMTheme(theme)
+  }));
 
   return (
-    <Box>
-      <IconRow icon={<BrushIcon />} onClick={handleThemeClick} text='Code Themes' />
-      <Menu anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleThemeClose}>
-        {contextValue.codeMirrorThemes.map(theme => (
-          <MenuItem key={theme.name} onClick={() => handleThemeSelect(theme)}>
-            {theme.name}
-          </MenuItem>
-        ))}
-      </Menu>
-    </Box>
+    <Dropdown
+      className={`button-normal ${currTheme === 'dark' ? 'dark-theme' : ''}`}
+      menu={{ items }}
+      trigger={['click']}
+      onOpenChange={open => {
+        if (!open) {
+        }
+      }}>
+      <Button type='text' onClick={e => e.stopPropagation()} icon={<FormatPainterOutlined />} block>
+        Code Theme
+      </Button>
+    </Dropdown>
   );
 };
+
 export default ThemeSelector;

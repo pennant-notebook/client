@@ -22,7 +22,7 @@ export const CODE_CELL_OUTPUT_BOX_SELECTOR = "[data-test='codeCell-outputBox']";
 // Constants for selecting components in CodeToolbar.tsx
 export const CODE_TOOLBAR_CONTAINER_SELECTOR = "[data-test='codeToolbarContainer']";
 export const TOOLBAR_STACK_SELECTOR = "[data-test='toolbarStack']";
-export const LANGUAGE_SELECTOR = "[data-test='languageSelector']";
+export const LANGUAGE_SELECTOR = "[data-test='language']";
 export const LANGUAGE_OPTION_JS_SELECTOR = "[data-test='languageOption-js']";
 export const LANGUAGE_OPTION_GO_SELECTOR = "[data-test='languageOption-go']";
 export const RUN_CODE_BUTTON_SELECTOR = "[data-test='runCodeButton']";

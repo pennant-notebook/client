@@ -46,7 +46,6 @@ export const yPrettyPrint = (ydoc: Y.Doc, msg = '') => {
   console.log('\n\n==> ' + msg + ': \n' + JSON.stringify(ydoc.toJSON(), null, 4) + '\n\n');
 };
 
-
 export const generateRandomName = () => {
   return uniqueNamesGenerator({ dictionaries: [animals], length: 1 });
 };

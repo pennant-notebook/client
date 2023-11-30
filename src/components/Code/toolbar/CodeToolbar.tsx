@@ -33,6 +33,7 @@ const CodeToolbar: React.FC<CodeToolbarProps> = ({ onClickRun, id, processing, l
         paddingRight: '8px'
       }}>
       <Typography.Text
+        data-test='language'
         type='secondary'
         style={{
           color: 'lightgray',
@@ -48,7 +49,13 @@ const CodeToolbar: React.FC<CodeToolbarProps> = ({ onClickRun, id, processing, l
           data-test='runCodeButton'
           className={styles.toolbutton}
           disabled={processing}
-          icon={processing ? <LoadingOutlined /> : <PlayCircleOutlined />}
+          icon={
+            processing ? (
+              <LoadingOutlined data-test='loadingIndicator' />
+            ) : (
+              <PlayCircleOutlined data-test='runCodeButton' />
+            )
+          }
           onClick={onClickRun}
           type='text'
         />

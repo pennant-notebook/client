@@ -17,9 +17,9 @@ test.describe('CodeToolbar Component', () => {
   });
 
   test('should have language selector with default value as JavaScript', async ({ page }) => {
-    const languageSelector = await page.waitForSelector(LANGUAGE_SELECTOR);
-    expect(languageSelector).toBeTruthy();
-    const selectedLanguage = await page.$eval(`${LANGUAGE_SELECTOR} input`, (el: HTMLSelectElement) => el.value);
-    expect(selectedLanguage).toBe('javascript');
+    const languageText = await page.waitForSelector(LANGUAGE_SELECTOR);
+    expect(languageText).toBeTruthy();
+    const displayedLanguage = await page.textContent(LANGUAGE_SELECTOR);
+    expect(displayedLanguage).toBe('JAVASCRIPT');
   });
 });

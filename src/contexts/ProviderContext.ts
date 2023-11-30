@@ -18,7 +18,8 @@ export const initializeProvider = (docID: string) => {
 
   persistence.on('synced', () => {
     console.log('🔮 Provider + IndexedDB Synced 🔮');
-
+    // when running tests, uncomment line below to allow playwright to inspect the provider object
+    // console.log(provider)
     if ((provider.document.get('metaData') as YMap).get('executionCount') === undefined) {
       notebookMetadata.set('executionCount', 0);
     }
@@ -39,7 +40,6 @@ export const useProvider = (docID: string) => {
   const provider = useMemo(() => initializeProvider(docID), [docID]);
   return provider;
 };
-
 
 
 export const ProviderContext = createContext<ProviderContextType | null>(null);

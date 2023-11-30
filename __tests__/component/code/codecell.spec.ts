@@ -1,5 +1,9 @@
-import { URL_CODE_CELL as URL } from '../utils/const';
-import { test, expect, Page } from '../setup/setupScript'
+import { URL_CODE_CELL as URL } from '../../utils/const';
+import {
+  test,
+  expect
+} from '../../setup/setupScriptComponent'
+
 import {
   CODE_CELL_SELECTOR,
   CODE_TOOLBAR_SELECTOR,
@@ -7,7 +11,8 @@ import {
   CODE_CELL_OUTPUT_SELECTOR,
   RUN_CODE_BUTTON_SELECTOR,
   LOADING_INDICATOR_SELECTOR
-} from '../utils/const';
+} from '../../utils/const';
+import { Page } from 'playwright/test';
 
 const clearEditorContent = async (page: Page) => {
   await page.click(CODE_CELL_EDITOR_SELECTOR, { clickCount: 3 });
@@ -47,5 +52,4 @@ test.describe('CodeCell Component', () => {
     const outputText = await output.innerText();
     expect(outputText).toContain('testing cell');
   });
-
 });
