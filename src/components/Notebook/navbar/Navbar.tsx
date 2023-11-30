@@ -98,7 +98,8 @@ const Navbar = ({ selectedDoc }: NavbarProps) => {
       key: '3',
       icon: <LogoutOutlined />,
       label: 'Logout',
-      onClick: handleLogout
+      onClick: handleLogout,
+      disabled: !loggedInUsername
     }
   ];
 
