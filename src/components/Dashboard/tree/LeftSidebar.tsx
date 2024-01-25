@@ -103,7 +103,6 @@ export default function LeftSidebar({ username, refetch, handleSelectedDocId }: 
           position: 'fixed',
           left: 0,
           backgroundColor: theme === 'dark' ? '#121212' : '#fafafa',
-
           zIndex: 5
         }}>
         {isExpanded && (

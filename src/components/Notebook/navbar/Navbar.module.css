@@ -1,9 +1,12 @@
 .header {
   display: flex;
+  position: sticky;
   align-items: center;
   justify-content: space-between;
   padding: 0 24px;
+  top: 0;
   height: 64px;
+  z-index: 1000;
 }
 
 .header > * {

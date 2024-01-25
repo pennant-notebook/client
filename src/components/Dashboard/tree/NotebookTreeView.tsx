@@ -97,7 +97,12 @@ export default function NotebookTreeView({
     <>
       <div style={{ display: 'flex', alignItems: 'center', padding: '0px 12px', justifyContent: 'space-between' }}>
         <h3>Workspace</h3>
-        <Switch checkedChildren='Dark' unCheckedChildren='Light' checked={theme === 'dark'} onChange={toggleTheme} />
+        <Switch
+          checkedChildren='Dark'
+          unCheckedChildren='Light'
+          checked={theme === 'dark'}
+          onChange={toggleTheme}
+        />
       </div>
       <Tree
         defaultExpandAll
