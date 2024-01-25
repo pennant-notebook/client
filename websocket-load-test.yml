@@ -1,0 +1,86 @@
+config:
+  target: 'wss://hp.mafishi.io/collab'
+  phases:
+    - duration: 60
+      arrivalRate: 5
+      rampTo: 20
+      name: 'Ramping up the load'
+    - duration: 120
+      arrivalRate: 20
+      name: 'Sustained load'
+  ws:
+    # Replace with actual token if required
+    headers:
+      Authorization: 'Bearer YOUR_ACCESS_TOKEN'
+
+scenarios:
+  - name: 'WebSocket Connection and Interaction'
+    flow:
+      - loop:
+          - function: 'connectWebSocket'
+          - think: 5
+          - function: 'editMarkdownCell'
+          - think: 10
+          - function: 'editCodeCell'
+          - think: 15
+          - function: 'navigateDashboard'
+          - think: 5
+        count: 10
+
+  - name: 'Concurrent Editing Simulation'
+    flow:
+      - loop:
+          - function: 'connectWebSocket'
+          - think: 5
+          - function: 'concurrentEditCell'
+          - think: 10
+        count: 20
+
+  - name: 'Connection Stability Test'
+    flow:
+      - loop:
+          - function: 'connectWebSocket'
+          - think: 2
+          - function: 'disconnectWebSocket'
+          - think: 1
+        count: 30
+
+# Custom functions simulating different user actions
+functions:
+  connectWebSocket:
+    # JavaScript function to establish WebSocket connection using Hocuspocus provider
+    js: |
+      function(context, events, done) {
+        var docID = '9c93ccb1-6154-4a05-a6c8-903d092d2956'; 
+        var url = `wss://hp.mafishi.io/collab/${docID}`;
+        var token = 'super-secret-token'; 
+
+        context.ws.connect(url, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+          onOpen: function(socket) {
+            console.log('WebSocket connection opened');
+            // Store the WebSocket connection in the context for other functions to use
+            context.ws = socket;
+            done();
+          },
+          onClose: function() {
+            console.log('WebSocket connection closed');
+          },
+          onError: function(error) {
+            console.error('WebSocket error:', error);
+            done(error);
+          }
+        });
+      }
+  editMarkdownCell:
+    # Add logic to simulate editing a markdown cell
+  editCodeCell:
+    # Add logic to simulate editing a code cell
+  navigateDashboard:
+    # Add logic to simulate dashboard navigation
+  concurrentEditCell:
+    # Add logic to simulate concurrent editing of a cell
+  disconnectWebSocket:
+    # Add logic to disconnect the WebSocket
