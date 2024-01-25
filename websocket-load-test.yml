@@ -1,5 +1,6 @@
 config:
-  target: 'wss://hp.mafishi.io/collab'
+  # replace with actual wss provider url
+  target: 'WEBSOCKET_SERVER_URL'
   phases:
     - duration: 60
       arrivalRate: 5
@@ -9,7 +10,7 @@ config:
       arrivalRate: 20
       name: 'Sustained load'
   ws:
-    # Replace with actual token if required
+    # replace with actual token
     headers:
       Authorization: 'Bearer YOUR_ACCESS_TOKEN'
 
@@ -45,15 +46,15 @@ scenarios:
           - think: 1
         count: 30
 
-# Custom functions simulating different user actions
 functions:
   connectWebSocket:
-    # JavaScript function to establish WebSocket connection using Hocuspocus provider
+    # establishes a WebSocket connection with the backend provider
+    # make sure to set real values for docID, WSS_HOST, and token when running the test
     js: |
       function(context, events, done) {
-        var docID = '9c93ccb1-6154-4a05-a6c8-903d092d2956'; 
-        var url = `wss://hp.mafishi.io/collab/${docID}`;
-        var token = 'super-secret-token'; 
+        var docID = 'NOTEBOOK_YDOC_ID'; 
+        var url = `wss://<WSS_HOST>/collab/${docID}`;
+        var token = 'TEMPLATE_TOKEN'; 
 
         context.ws.connect(url, {
           headers: {
@@ -75,12 +76,12 @@ functions:
         });
       }
   editMarkdownCell:
-    # Add logic to simulate editing a markdown cell
+    # TODO: add logic to simulate editing a markdown cell
   editCodeCell:
-    # Add logic to simulate editing a code cell
+    # TODO: add logic to simulate editing a code cell
   navigateDashboard:
-    # Add logic to simulate dashboard navigation
+    # TODO: add logic to simulate dashboard navigation
   concurrentEditCell:
-    # Add logic to simulate concurrent editing of a cell
+    # TODO: add logic to simulate concurrent editing of a cell
   disconnectWebSocket:
-    # Add logic to disconnect the WebSocket
+    # TODO: add logic to disconnect the WebSocket
