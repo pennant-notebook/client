@@ -13,18 +13,24 @@ Pennant is a multi-repository project, each handling a different aspect of the a
 
 1. **Clone Each Repository**:
    For each component, clone its repository:
+
+   ```bash
    git clone [repository URL]
+   ```
 
 2. **Install Dependencies**:
    Navigate to each cloned directory and install NPM packages:
+
+   ```bash
    cd [repository directory]
    npm install
+   ```
 
 3. **Configure Environment**:
    Set up a `.env` file in each project root. Use the `.env.example` file as a template and fill in the necessary environment variables.
 
 4. **Running Each Component**:
-   Follow the specific instructions in each repository's README.md to start the server or service.
+   Follow the specific instructions in each repository's [README.md](#) to start the server or service.
 
 ### Specific Instructions
 
