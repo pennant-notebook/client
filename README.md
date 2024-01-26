@@ -81,15 +81,6 @@ For component tests:
 npm run test:ct
 ```
 
-## Key Components
-
-- **App**: The heart of Pennant, managing themes, routing, and the main interface.
-- **Cells**: Dynamic notebook cells with drag-and-drop functionality.
-- **Code Cell**: Interactive code cells with individual CodeMirror instances.
-- **Markdown Cell**: Markdown cells with a sleek editor for seamless writing.
-- **Notebook**: The core component managing the notebook interface and features.
-
-
 ## Preliminary Documentation
 
 Please note that the content provided in the sections below serves as our preliminary documentation. Our comprehensive main documentation is currently a work in progress and will be available soon.
