@@ -9,3 +9,7 @@ declare module '*.gif';
 
 declare module 'y-codemirror.next';
 
+declare module '*.module.css' {
+  const classes: { [key: string]: string };
+  export default classes;
+}

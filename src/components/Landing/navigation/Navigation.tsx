@@ -55,16 +55,27 @@ const Navigation = () => {
         <img src={PennantLogo} alt='Pennant Logo' className={styles.logo} />
         <span className={styles.title}>pennant</span>
         <div className={styles.separator}></div>
-        <div
-          className={`${styles.githubContainer}`}
-          onClick={() => window.open('https://pennant-notebook.github.io/', '_blank')}>
+        <a
+          href='https://pennant-notebook.github.io/'
+          target='_blank'
+          rel='noopener noreferrer'
+          className={styles.githubContainer}>
           <span className={styles.githubTitle}>Case Study</span>
-        </div>
-        <div
-          className={`${styles.githubContainer}`}
-          onClick={() => window.open('https://github.com/pennant-notebook', '_blank')}>
+        </a>
+        <a
+          href='https://github.com/pennant-notebook'
+          target='_blank'
+          rel='noopener noreferrer'
+          className={styles.githubContainer}>
           <span className={styles.githubTitle}>GitHub</span>
-        </div>
+        </a>
+        <a
+          href='https://docs.trypennant.com'
+          target='_blank'
+          rel='noopener noreferrer'
+          className={styles.githubContainer}>
+          <span className={styles.githubTitle}>Docs</span>
+        </a>
       </div>
       <div className={styles.authButtons}>
         {auth.isLoggedIn ? (
