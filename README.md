@@ -99,13 +99,12 @@ Feel free to submit issues, feature requests, or pull requests. Your contributio
 
 ## Credits
 
-Our work builds upon the foundations laid by several outstanding open source projects:
+Our work builds upon the foundations laid by several outstanding open source projects and the generous support of [JetBrains](https://jb.gg/OpenSourceSupport):
 
 - **[Yjs](https://yjs.dev/)**: The CRDT framework that enables RTC through its efficient shared data model and types.
 - **[CodeMirror](https://codemirror.net/)**: The open source text editor that powers Chrome DevTools.
 - **[BlockNote](https://www.blocknotejs.org/)**: Markdown editor that powers our markdown cells.
 - **[TypeScript](https://www.typescriptlang.org/)**: Our compiler and language toolkit.
-- **[JetBrains](https://jb.gg/OpenSourceSupport)**: For their generous support of our open source project.
 
 <p>
   &nbsp;<br>
