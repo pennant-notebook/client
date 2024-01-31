@@ -6,7 +6,7 @@ import { YMap } from '~/utils/notebookHelpers';
 
 export const initializeProvider = (docID: string) => {
   const provider = new HocuspocusProvider({
-    url: `wss://hp.mafishi.io/collab/${docID}`,
+    url: `${import.meta.env.VITE_WEBSOCKET_SERVER}/collab/${docID}`,
     name: docID,
     token: import.meta.env.VITE_HP_ACCESS_TOKEN
   });
