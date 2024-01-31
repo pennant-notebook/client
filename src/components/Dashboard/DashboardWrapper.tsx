@@ -53,7 +53,7 @@ const DashboardWrapper = () => {
   }, [notebooks]);
 
   useEffect(() => {
-    if (username === '@trypennant') return;
+    if (username === '@trypennant' || username === 'documentation') return;
     if (!authToken || usernameFromLocal !== username.slice(1)) {
       const errorMsg = authToken ? 'You are not authorized to view this page.' : 'Please login to view this page.';
       toast.error(errorMsg);

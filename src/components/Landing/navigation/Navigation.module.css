@@ -66,6 +66,7 @@
   cursor: pointer;
   margin-top: 3px;
   padding: 16px;
+  text-decoration: none;
 }
 
 .githubContainer::after {
