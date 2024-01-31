@@ -4,7 +4,7 @@
   </a>
 </p>
 <p align="center">
- Welcome to Pennant! An Open-source Real-Time Collaborative Computational Notebook supporting Markdown, JavaScript and Python.
+ Welcome to Pennant! An Open-Source Computational Notebook Supporting Real-Time Collaboration and Flexible Code Execution in Markdown, JavaScript, and Python.
 </p>
 <br />
 <p align="center">
@@ -18,28 +18,27 @@
   </a>
 </p>
 
-## Overview
+## Features
 
-- **[Yjs](https://github.com/yjs/yjs)**: CRDT framework that enables real-time collaboration and synchronization between different users.
-- **[y-indexeddb](https://github.com/yjs/y-indexeddb)**: Used for efficient caching and offline persistence.
-- **[CodeMirror 6](https://github.com/codemirror/dev)**: Provides a versatile code editing environment, customized with various keybindings.
-- **[y-codemirror.next](https://github.com/yjs/y-codemirror.next)**: Utilized to create the editor binding between Yjs and CodeMirror.
-- **[Hocuspocus](https://github.com/ueberdosis/hocuspocus)**: Current provider in an architecture designed to be provider-agnostic, allowing for easy switching to other providers.
-- **[y-protocols](https://github.com/yjs/y-protocols)**: Used to manipulate specific aspects of the awareness protocol.
-- **[react-dnd](https://github.com/react-dnd/react-dnd)**: Powers the drag-and-drop functionality for cells.
-- **[BlockNote](https://github.com/TypeCellOS/BlockNote)**: Markdown editor with customizations for a minimal design.
-- **[Recoil](https://github.com/facebookexperimental/Recoil)**: Centralizes state management for authentication and notebook-related logic.
+- **Real-Time Collaboration**: Powered by [Yjs](https://github.com/yjs/yjs), a CRDT that enables real-time collaboration and synchronization between different users.
+- **Versatile Code Editing**: CodeMirror 6 provides a rich coding environment, integrated with Yjs for collaborative editing.
+- **Offline Persistence**: Efficient caching and offline capabilities with [y-indexeddb](https://github.com/yjs/y-indexeddb).
+- **Drag-and-Drop Functionality**: Powered by [react-dnd](https://github.com/react-dnd/react-dnd).
+- **Markdown Support**: Enhanced markdown editing experience with [BlockNote](https://github.com/TypeCellOS/BlockNote).
+- **Python Support**: Fully equipped to handle Python notebooks.
+- **Shared Execution Context**: Facilitates collaborative coding where outputs are updated in real-time, and visible to all connected users.
+- **Notebook-Style Code Execution**: Independently run cells or the full notebook, tailored for exploratory coding and enhanced learning.
 
-## Getting started
+## Quick Start
+
+Pennant is structured as a multi-repo project for modular development and deployment. The instructions below are for the client repository only. For detailed setup instructions for all components, please refer to the [CONTRIBUTING.md](CONTRIBUTING.md) file.
+
+### Setup
 
 ### Prerequisites
 
-Ensure you have a `.env` file set up in your project root. You can use the `.env.example` file in the repository as a template. Copy it and rename to `.env`, then fill in the necessary environment variables.
-
-- `VITE_WEBSOCKET_SERVER`: Websocket-Provider server url (see pennant-provider repo for more details)
-- `VITE_HP_ACCESS_TOKEN`: Provided when initializing the HocuspocusProvider (see pennant-provider/pocus repo for more details)
-- `VITE_ENGINE_SERVER`: JavaScript code execution engine url (see pennant-engine repo for more details)
-- `VITE_FLASK_SERVER`: Python code execution engine url (see pennant-flask-server repo for more details)
+- Set up a `.env` file in your project root using `.env.example` as a template.
+- Fill in the necessary environment variables.
 
 ### Installation
 
@@ -65,115 +64,47 @@ npm start
 
 ## Testing
 
-- This project implements both end-to-end (E2E) and component tests using [Playwright](https://playwright.dev/).
-- All tests, along with their related setup and utility files, are located in the `__tests__` directory, organized into subdirectories for easy navigation and maintenance.
+- Comprehensive testing with [Playwright](https://playwright.dev/) for E2E and component tests.
+- Tests are organized in the `__tests__` directory.
 
 ### Running Tests
 
-To run the E2E tests, use the following command:
+For E2E tests:
 
 ```bash
 npm run test:e2e
 ```
 
-To run the component tests, use the following command:
+For component tests:
 
 ```bash
 npm run test:ct
 ```
 
----
+## Documentation
 
-## Preliminary Documentation
+The preliminary documentation is available at [https://docs.trypennant.com](https://docs.trypennant.com).
 
-Please note that the content provided in the sections below serves as our preliminary documentation. Our comprehensive main documentation is currently a work in progress and will be available soon.
-
----
-
-## Main Components
-
-### App (`src/App.tsx`)
-
-- Main entry point for the application.
-- Manages themes and routing.
-- Includes routes for landing page, user dashboard, and individual notebooks.
-
-### Cells (`src/components/Cells`)
-
-- Responsible for rendering and managing notebook cells.
-- Supports drag-and-drop functionality for reordering cells using `react-dnd` & `react-dnd-html5-backend`.
-
-### Code Cell (`src/components/Code`)
-
-- Represents a code cell within the notebook.
-- Each code cell utilizes its own code editor (CodeMirror 6) instance.
-- Editor binding created using `y-codemirror.next`.
-- Handles code execution, output rendering, and toolbar actions.
-
-### Markdown Cell (`src/components/Markdown`)
-
-- Represents a markdown cell within the notebook.
-- Includes a markdown editor (BlockNote) and toolbar.
-- Editor binding created using `collab` plugin.
-
-### Notebook (`src/components/Notebook`)
-
-- Main component for rendering and managing the notebook interface.
-- Manages cells, navigation, and collaboration features.
-
-## Services
-
-### "Dredd" Execution Service (`src/services/codeExecution/dredd.ts`)
-
-- Provides functions for interacting with the Dredd execution engine.
-- Handles code execution, status checking, context resetting, and formatting cells for execution.
-
-### DynamoDB Service (`src/services/dynamoFetch.ts` and `dynamoPost.ts`)
-
-- Contains functions that make API calls to fetch notebook and user metadata from DynamoDB.
-
-## Helpers & Utils
-
-### Notebook Helpers (`src/utils/notebookHelpers.ts`)
-
-- Utility functions for creating and managing notebook content.
-- Includes functions for creating cells (`Y.Map`) and typings for various Yjs Data Types.
-- Includes functions for creating content for cells (`Y.Text` for code, `Y.XmlFragment` for markdown)
-- The only file where "yjs" is imported.
-
-### Awareness Helpers (`src/utils/awarenessHelpers.ts`)
-
-- Utility functions for creating and managing client objects and awareness states.
-- Includes functions for creating users (`Y.Map`) and managing user objects.
-
-## Contexts
-
-### Navbar Context (`src/contexts/NavbarContext.ts`)
-
-- Centralizes control over navigation-related state and interactions.
-- Manages state for the selected notebook, its code cells, and connected clients.
-- Includes a function for graceful client disconnection during navigation.
-
-### Provider Context (`src/contexts/ProviderContext.ts`)
-
-- Initializes the client-side Websocket-Provider (`HocuspocusProvider`) and the Yjs Document (`Y.Doc`).
-- Initializes an instance of `IndexeddbPersistence` and syncs it with the `Y.Doc` and provider.
-
-### Notebook Context (`src/contexts/NotebookContext.ts`)
-
-- Contains notebook metadata, provider, awareness, and the y.doc for a given notebook.
-- Contains various functions for adding, deleting, cloning, and repositioning cells.
-
----
+Please feel free to explore and provide feedback to help us improve.
 
 ## Upcoming Features
 
-- Support for additional programming languages: Golang, Ruby
+Support for additional programming languages: Golang, Ruby
 
 ## Contributing
 
-Contributions are welcome! Feel free to open an issue or submit a pull request.
+Feel free to submit issues, feature requests, or pull requests. Your contributions are highly valued and welcome. For detailed guidelines, refer to [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Credits
+
+Our work builds upon the foundations laid by several outstanding open source projects:
+
+- **[Yjs](https://yjs.dev/)**: The CRDT framework that enables RTC through its efficient shared data model and types.
+- **[TypeScript](https://www.typescriptlang.org/)**: Our compiler and language toolkit.
+- **[BlockNote](https://www.blocknotejs.org/)**: Markdown editor that powers our markdown cells.
+- **[CodeMirror](https://codemirror.net/)**: The open source text editor that powers Chrome DevTools.
+- **[JetBrains](https://jb.gg/OpenSourceSupport)**: For their generous support of our open source project.
 
 ## License
 
-MIT
+Pennant Notebook is MIT licensed.
