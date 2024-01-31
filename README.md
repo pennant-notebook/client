@@ -102,10 +102,17 @@ Feel free to submit issues, feature requests, or pull requests. Your contributio
 Our work builds upon the foundations laid by several outstanding open source projects:
 
 - **[Yjs](https://yjs.dev/)**: The CRDT framework that enables RTC through its efficient shared data model and types.
-- **[TypeScript](https://www.typescriptlang.org/)**: Our compiler and language toolkit.
-- **[BlockNote](https://www.blocknotejs.org/)**: Markdown editor that powers our markdown cells.
 - **[CodeMirror](https://codemirror.net/)**: The open source text editor that powers Chrome DevTools.
+- **[BlockNote](https://www.blocknotejs.org/)**: Markdown editor that powers our markdown cells.
+- **[TypeScript](https://www.typescriptlang.org/)**: Our compiler and language toolkit.
 - **[JetBrains](https://jb.gg/OpenSourceSupport)**: For their generous support of our open source project.
+
+<p>
+  &nbsp;<br>
+  <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+  <img src="/public/credits.png" alt="Credits" width="600" />
+  <br>&nbsp;
+</p>
 
 ## License
 
