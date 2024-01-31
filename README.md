@@ -81,9 +81,11 @@ For component tests:
 npm run test:ct
 ```
 
-## Preliminary Documentation
+## Documentation
 
-Please note that the content provided in the sections below serves as our preliminary documentation. Our comprehensive main documentation is currently a work in progress and will be available soon.
+The preliminary documentation is available at [https://docs.trypennant.com](https://docs.trypennant.com).
+
+Please feel free to explore and provide feedback to help us improve.
 
 ## Upcoming Features
 
