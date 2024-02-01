@@ -232,6 +232,18 @@ const NewHome = () => {
               </li>
             </ul>
           </div>
+
+          {/* footer column for developer documentation */}
+          <div className={styles.footerColumn}>
+            <h4 className={styles.footerHeading}>For Developers</h4>
+            <ul className={styles.footerList}>
+              <li>
+                <a href='https://docs.trypennant.com' target='_blank' rel='noreferrer'>
+                  Read Documentation
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
       </footer>
     </div>

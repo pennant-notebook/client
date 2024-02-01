@@ -18,7 +18,6 @@
   </a>
 </p>
 
-
 ## Features
 
 - **Real-Time Collaboration**: Powered by [Yjs](https://github.com/yjs/yjs), a CRDT that enables real-time collaboration and synchronization between different users.
@@ -35,7 +34,6 @@
 Pennant is structured as a multi-repo project for modular development and deployment. The instructions below are for the client repository only. For detailed setup instructions for all components, please refer to the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
 ### Setup
-
 
 ### Prerequisites
 
@@ -116,4 +114,3 @@ Our work builds upon the foundations laid by several outstanding open source pro
 ## License
 
 Pennant Notebook is MIT licensed.
-
