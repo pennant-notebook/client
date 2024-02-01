@@ -18,7 +18,6 @@
   </a>
 </p>
 
-
 ## Features
 
 - **Real-Time Collaboration**: Powered by [Yjs](https://github.com/yjs/yjs), a CRDT that enables real-time collaboration and synchronization between different users.
@@ -35,7 +34,6 @@
 Pennant is structured as a multi-repo project for modular development and deployment. The instructions below are for the client repository only. For detailed setup instructions for all components, please refer to the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
 ### Setup
-
 
 ### Prerequisites
 
@@ -99,15 +97,20 @@ Feel free to submit issues, feature requests, or pull requests. Your contributio
 
 ## Credits
 
-Our work builds upon the foundations laid by several outstanding open source projects:
+Our work builds upon the foundations laid by several outstanding open source projects and the generous support of [JetBrains](https://jb.gg/OpenSourceSupport):
 
 - **[Yjs](https://yjs.dev/)**: The CRDT framework that enables RTC through its efficient shared data model and types.
-- **[TypeScript](https://www.typescriptlang.org/)**: Our compiler and language toolkit.
-- **[BlockNote](https://www.blocknotejs.org/)**: Markdown editor that powers our markdown cells.
 - **[CodeMirror](https://codemirror.net/)**: The open source text editor that powers Chrome DevTools.
-- **[JetBrains](https://jb.gg/OpenSourceSupport)**: For their generous support of our open source project.
+- **[BlockNote](https://www.blocknotejs.org/)**: Markdown editor that powers our markdown cells.
+- **[TypeScript](https://www.typescriptlang.org/)**: Our compiler and language toolkit.
+
+<p>
+  &nbsp;<br>
+  <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+  <img src="/public/credits.png" alt="Credits" width="600" />
+  <br>&nbsp;
+</p>
 
 ## License
 
 Pennant Notebook is MIT licensed.
-
