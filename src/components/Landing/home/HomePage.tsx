@@ -4,7 +4,7 @@ import contextVideo from './vids/context.mp4';
 import intuitiveVideo from './vids/intuitive.mp4';
 import introVideo from './vids/intro.gif';
 import { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { authState } from '~/appState';
 import Navigation from '../navigation/Navigation';
 import classNames from 'classnames';
@@ -19,7 +19,7 @@ const NewHome = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const [auth, setAuth] = useRecoilState(authState);
+  const setAuth = useSetRecoilState(authState);
   const [showPython, setShowPython] = useState(false);
   const [transitioning, setTransitioning] = useState(false);
 
@@ -82,7 +82,7 @@ const NewHome = () => {
         </div>
         <div className={styles.headerMedia}>
           <div className={styles.videoWrapper}>
-            <img src={introVideo} width='100%' />
+            <img src={introVideo} width='100%' alt='Pennant Demo' />
           </div>
         </div>
       </header>
