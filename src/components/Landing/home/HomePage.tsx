@@ -51,11 +51,11 @@ const NewHome = () => {
     checkLoginStatus();
   }, []);
 
-  useEffect(() => {
-    if (location.pathname === '/' && auth.isLoggedIn) {
-      navigate(`/@${auth.userData?.login}`);
-    }
-  }, [location.pathname, auth.isLoggedIn]);
+  // useEffect(() => {
+  //   if (location.pathname === '/' && auth.isLoggedIn) {
+  //     navigate(`/@${auth.userData?.login}`);
+  //   }
+  // }, [location.pathname, auth.isLoggedIn]);
 
   const handleClick = (event: React.MouseEvent) => {
     navigate('./auth', { state: { from: location } });
@@ -97,10 +97,16 @@ const NewHome = () => {
             </div>
             <div className={styles['promotional']}>
               <h4>Intuitive Interface</h4>
-              <p>Enjoy an elegant, user-friendly interface that makes computational work a breeze.</p>
-              <p>Focus on your code and content without the clutter, enhancing productivity and creativity.</p>
               <p>
-                Invite peers to join your notebook and collaborate on code in real-time, from anywhere in the world.
+                Enjoy an elegant, user-friendly interface that makes computational work a breeze.
+              </p>
+              <p>
+                Focus on your code and content without the clutter, enhancing productivity and
+                creativity.
+              </p>
+              <p>
+                Invite peers to join your notebook and collaborate on code in real-time, from
+                anywhere in the world.
               </p>
             </div>
           </div>
@@ -113,7 +119,10 @@ const NewHome = () => {
                 transition: 'opacity 1s ease-in-out'
               }}>
               <div className={styles.icon}>
-                <img src={showPython ? python : javascript} alt={showPython ? 'Python icon' : 'Javascript icon'} />
+                <img
+                  src={showPython ? python : javascript}
+                  alt={showPython ? 'Python icon' : 'Javascript icon'}
+                />
               </div>
               <h3>{showPython ? 'Python' : 'JavaScript'}</h3>
               <span>
@@ -147,12 +156,12 @@ const NewHome = () => {
             <div className={styles['promotional']}>
               <h4>Seamless Workflow Continuity</h4>
               <p>
-                Write and run code within a state-preserving environment, allowing for incremental development without
-                redundant declarations.
+                Write and run code within a state-preserving environment, allowing for incremental
+                development without redundant declarations.
               </p>
               <p>
-                A comprehensive reset or execution of all cells is achievable with just one click, streamlining your
-                development process for a smoother, more efficient experience.
+                A comprehensive reset or execution of all cells is achievable with just one click,
+                streamlining your development process for a smoother, more efficient experience.
               </p>
             </div>
             <div className={''}>
@@ -168,13 +177,16 @@ const NewHome = () => {
         <section className={classNames(styles.mainStory, styles.colReverse)}>
           <div className={classNames(styles.content, styles.story)}>
             <div className={styles.ctaWrapper}>
-              <GetStartedButton title='Read our Case Study' link={'https://pennant-notebook.github.io/'} />
+              <GetStartedButton
+                title='Read our Case Study'
+                link={'https://pennant-notebook.github.io/'}
+              />
             </div>
             <div className={styles['promotional']}>
               <h4>Dive Deeper</h4>
               <p>
-                Explore our case study and see how we implemented a collaborative computational notebook from start to
-                finish.
+                Explore our case study and see how we implemented a collaborative computational
+                notebook from start to finish.
               </p>
               <p>
                 Create your own{' '}
@@ -182,7 +194,10 @@ const NewHome = () => {
                   workspace
                 </a>{' '}
                 and feel free to contribute to our open-source project on{' '}
-                <a target='_blank' href='https://github.com/pennant-notebook/client' rel='noreferrer'>
+                <a
+                  target='_blank'
+                  href='https://github.com/pennant-notebook/client'
+                  rel='noreferrer'>
                   GitHub
                 </a>
                 .
@@ -202,7 +217,10 @@ const NewHome = () => {
                 </a>
               </li>
               <li>
-                <a href='https://www.linkedin.com/company/96636793/admin/feed/posts/' target='_blank' rel='noreferrer'>
+                <a
+                  href='https://www.linkedin.com/company/96636793/admin/feed/posts/'
+                  target='_blank'
+                  rel='noreferrer'>
                   LinkedIn
                 </a>
               </li>
