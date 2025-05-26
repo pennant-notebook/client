@@ -2,7 +2,7 @@ import { URL_CODE_CELL as URL } from '../../utils/const';
 import {
   test,
   expect
-} from '../../setup/setupScriptComponent'
+} from '../../utils/setupScriptComponent'
 
 import {
   CODE_CELL_SELECTOR,

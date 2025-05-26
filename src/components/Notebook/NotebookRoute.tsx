@@ -1,20 +1,20 @@
-import { ProviderContextType } from '@/ProviderTypes';
-import { useQuery } from 'react-query';
-import { useParams } from 'react-router-dom';
-import ErrorBoundary from '../../ErrorBoundary';
-import { ProviderContext, useProvider } from '~/contexts/ProviderContext';
-import { fetchDoc } from '~/services/dynamoFetch';
-import Notebook from './Notebook';
-import LoadingSpinner from '~/components/UI/loading/LoadingSpinner';
-import { NavbarProvider } from '~/contexts/NavbarContext';
-import Navbar from './navbar/Navbar';
+import { ProviderContextType } from "@/ProviderTypes";
+import { useQuery } from "react-query";
+import { useParams } from "react-router-dom";
+import LoadingSpinner from "~/components/UI/loading/LoadingSpinner";
+import { NavbarProvider } from "~/contexts/NavbarContext";
+import { ProviderContext, useProvider } from "~/contexts/ProviderContext";
+import { fetchDoc } from "~/services/dynamoFetch";
+import ErrorBoundary from "../../ErrorBoundary";
+import Navbar from "./navbar/Navbar";
+import Notebook from "./Notebook";
 
 const NotebookRoute = () => {
   const { username, docID } = useParams();
   const {
     data: notebook,
     isLoading,
-    error
+    error,
   } = useQuery([docID, username], () => {
     if (!docID || !username) {
       return;
@@ -22,17 +22,24 @@ const NotebookRoute = () => {
     return fetchDoc(docID, username);
   });
 
-  const contextValue = useProvider(docID || 'demo') as ProviderContextType;
+  const contextValue = useProvider(docID || "demo") as ProviderContextType;
 
   if (isLoading || !notebook) return <LoadingSpinner />;
-  if (error) return 'Error!';
+  if (error) return "Error!";
 
   return (
     <ProviderContext.Provider value={contextValue as ProviderContextType}>
       <ErrorBoundary>
-        <NavbarProvider provider={contextValue.provider || null} docID={docID || ''}>
+        <NavbarProvider
+          provider={contextValue.provider || null}
+          docID={docID || ""}>
           <Navbar />
-          {docID && <Notebook docID={docID} resourceTitle={notebook.title} notebook={notebook} />}
+          {docID && (
+            <Notebook
+              resourceTitle={notebook.title}
+              notebook={notebook}
+            />
+          )}
         </NavbarProvider>
       </ErrorBoundary>
     </ProviderContext.Provider>

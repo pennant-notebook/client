@@ -12,9 +12,12 @@
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "postinstall": "playwright install",
+    "test": "vitest",
+    "test:unit": "vitest run tests/unit",
+    "test:integration": "playwright test tests/integration -c playwright.config.ts",
+    "test:component": "playwright test -c playwright-ct.config.ts",
     "test:e2e": "playwright test",
-    "test:ct": "playwright test -c playwright-ct.config.ts",
-    "test": "vitest"
+    "test:all": "npm run test:unit && npm run test:component && npm run test:e2e"
   },
   "dependencies": {
     "@ant-design/icons": "^5.2.6",

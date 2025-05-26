@@ -1,4 +1,4 @@
-import { YMap } from '~/utils/notebookHelpers';
+import { YMap } from "./YjsTypes";
 
 export interface CodeCellProps {
   cellId: string;

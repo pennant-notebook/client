@@ -27,6 +27,7 @@ const ThemeSelector = ({ currTheme }: ThemeSelectorProps) => {
       trigger={['click']}
       onOpenChange={open => {
         if (!open) {
+          // Handle dropdown close
         }
       }}>
       <Button type='text' onClick={e => e.stopPropagation()} icon={<FormatPainterOutlined />} block>

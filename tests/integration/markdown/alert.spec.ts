@@ -1,7 +1,7 @@
 import {
   test,
   expect
-} from '../../setup/setupScriptComponent'
+} from '../../utils/setupScriptComponent'
 import {
   ALERT_BLOCK_SELECTOR,
   ALERT_ICON_WRAPPER_SELECTOR,

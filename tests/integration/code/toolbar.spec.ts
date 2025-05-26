@@ -1,5 +1,5 @@
 import { URL_CODE_CELL as URL } from '../../utils/const';
-import { test, expect } from '../../setup/setupScriptComponent';
+import { test, expect } from '../../utils/setupScriptComponent';
 
 import {
   CODE_TOOLBAR_CONTAINER_SELECTOR,
