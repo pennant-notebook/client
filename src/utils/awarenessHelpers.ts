@@ -25,7 +25,7 @@ export const colorMap: ColorMap = {
 
 const colors = Object.keys(colorMap);
 
-export const getRandomElement = (list: any[]) => list[Math.floor(Math.random() * list.length)];
+export const getRandomElement = <T>(list: T[]): T => list[Math.floor(Math.random() * list.length)];
 
 export const getRandomColor = () => getRandomElement(colors);
 export const getAnalogColor = (color: string) => colorMap[color];
@@ -76,7 +76,9 @@ export const storeClientInLocalStorage = (newName: string, color?: string, avata
     const userData = {
       ...localUser,
       name: newName,
-      setByUser: true
+      setByUser: true,
+      color: color || localUser.color,
+      avatar_url: avatar_url || localUser.avatar_url
     };
 
     localStorage.setItem('pennantAuthData', JSON.stringify(userData));

@@ -21,7 +21,7 @@ export interface CodeMirrorThemeType {
 export interface CodeMirrorThemeContextType {
   editorTheme: CodeMirrorThemeType;
   toggleCMTheme: (theme: CodeMirrorThemeType) => void;
-  codeMirrorThemes: { name: string; theme: any }[];
+  codeMirrorThemes: CodeMirrorThemeType[];
 }
 
 export const CodeMirrorThemeContext = createContext<CodeMirrorThemeContextType | null>(null);

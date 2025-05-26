@@ -4,16 +4,6 @@ import { uniqueNamesGenerator, animals } from 'unique-names-generator';
 import { AwarenessUserState } from '@/ClientTypes';
 import { getRandomColor } from './awarenessHelpers';
 
-export type YDoc = Y.Doc;
-export type YArray = Y.Array<any>;
-export type YMap = Y.Map<any>;
-export type YText = Y.Text;
-export type YXmlElement = Y.XmlElement;
-export type YXmlFragment = Y.XmlFragment;
-export type YXmlText = Y.XmlText;
-
-export type YMapEvent<T> = Y.YMapEvent<T>;
-
 export const createContent = (type: string) => {
   if (type === 'code') return new Y.Text('');
   const xmlFragment = new Y.XmlFragment();
@@ -76,7 +66,7 @@ export const randomColor = () => {
 };
 
 export const codeTestingPromise = async () => {
-  const promise = new Promise((resolve, reject) => {
+  const promise = new Promise((resolve) => {
     setTimeout(() => {
       resolve('Success!');
     }, 2000);

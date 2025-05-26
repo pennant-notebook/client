@@ -4,12 +4,14 @@ import { createContext, useContext, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { updateDisconnectedClient } from '~/utils/awarenessHelpers';
 
+import { CellType } from '@/Cell';
+
 interface NavbarContextType {
-  codeCells: any[];
-  setCodeCells: React.Dispatch<React.SetStateAction<any[]>>;
+  codeCells: CellType[];
+  setCodeCells: React.Dispatch<React.SetStateAction<CellType[]>>;
   handleDisconnect: (destination: string) => void;
-  clients: any[];
-  setClients: React.Dispatch<React.SetStateAction<any[]>>;
+  clients: AwarenessUserState[];
+  setClients: React.Dispatch<React.SetStateAction<AwarenessUserState[]>>;
   selectedDoc: string;
   setSelectedDoc: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -31,7 +33,7 @@ interface NavbarProviderProps {
 }
 
 export const NavbarProvider = ({ children, provider, docID }: NavbarProviderProps) => {
-  const [codeCells, setCodeCells] = useState<any[]>([]);
+  const [codeCells, setCodeCells] = useState<CellType[]>([]);
   const [clients, setClients] = useState<AwarenessUserState[]>([]);
   const [selectedDoc, setSelectedDoc] = useState<string>('');
 
