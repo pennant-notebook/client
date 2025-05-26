@@ -6,8 +6,13 @@ test.describe('A single WebSocket provider should be initialized per notebook', 
   test('Single Client WebSocket connection initially', async ({ page }) => {
     await page.goto(URL);
 
-    const consoleMessages: any[] = [];
-    page.on('console', message => consoleMessages.push(message));
+    interface ConsoleMessage {
+    text: () => string;
+    args: () => { jsonValue: () => Promise<Record<string, unknown>> }[];
+  }
+
+  const consoleMessages: ConsoleMessage[] = [];
+    page.on('console', message => consoleMessages.push(message as ConsoleMessage));
 
     await page.waitForTimeout(2000);
     console.log({ consoleMessages });
@@ -18,13 +23,13 @@ test.describe('A single WebSocket provider should be initialized per notebook', 
   test('Clients connecting to the same notebook should be connected to the same WebSocket Provider', async ({ browser }) => {
     const context1 = await browser.newContext();
     const page1 = await context1.newPage();
-    const consoleMessages1: any[] = [];
-    page1.on('console', message => consoleMessages1.push(message));
+    const consoleMessages1: ConsoleMessage[] = [];
+    page1.on('console', message => consoleMessages1.push(message as ConsoleMessage));
 
     const context2 = await browser.newContext();
     const page2 = await context2.newPage();
-    const consoleMessages2: any[] = [];
-    page2.on('console', message => consoleMessages2.push(message));
+    const consoleMessages2: ConsoleMessage[] = [];
+    page2.on('console', message => consoleMessages2.push(message as ConsoleMessage));
 
     await page1.goto(URL);
     await page2.goto(URL);

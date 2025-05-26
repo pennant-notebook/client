@@ -3,6 +3,8 @@ interface ImportMeta {
     VITE_WEBSOCKET_SERVER: string;
     VITE_HP_ACCESS_TOKEN: string;
     VITE_ENGINE_SERVER: string;
+    VITE_FLASK_SERVER: string;
+    VITE_LSP_SERVER: string;
     VITE_GITHUB_CLIENT_ID: string;
     VITE_GITHUB_CLIENT_SECRET: string;
     VITE_GOOGLE_CLIENT_ID: string;
@@ -10,4 +12,3 @@ interface ImportMeta {
     [key: string]: string;
   };
 }
-
