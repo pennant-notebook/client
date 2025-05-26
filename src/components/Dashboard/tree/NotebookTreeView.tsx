@@ -29,9 +29,11 @@ export default function NotebookTreeView({
 
   const handleCreateNotebook = async (language: string) => {
     const newNotebook = await createDoc(username, language);
-    const docID = newNotebook.docID;
-    handleSelectedDocId(docID);
-    refetch();
+    if (newNotebook?.docID) {
+      const docID = newNotebook.docID;
+      handleSelectedDocId(docID);
+      refetch();
+    }
   };
 
   const jsNotebooks = notebooks.filter(nb => nb.language === 'javascript');

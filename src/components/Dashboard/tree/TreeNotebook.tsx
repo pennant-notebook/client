@@ -1,17 +1,23 @@
-import { useState, useEffect, useRef } from 'react';
-import { Input, Dropdown, Modal, message } from 'antd';
-import { EllipsisOutlined, DeleteOutlined, EditOutlined, CopyOutlined, BookOutlined } from '@ant-design/icons';
-import { useMutation, useQuery } from 'react-query';
-import { editDocTitle, deleteDoc } from '~/services/dynamoPost';
-import { fetchDoc } from '~/services/dynamoFetch';
-import { useRecoilState } from 'recoil';
-import { notebookTitleStateFamily, notebooksState, selectedDocIdState } from '~/appState';
-import { NotebookType } from '@/NotebookTypes';
+import { NotebookType } from "@/NotebookTypes";
+import {
+  BookOutlined,
+  CopyOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  EllipsisOutlined,
+} from "@ant-design/icons";
+import { Dropdown, Input, InputRef, Modal, message } from "antd";
+import { useEffect, useRef, useState } from "react";
+import { useMutation, useQuery } from "react-query";
+import { useRecoilState } from "recoil";
+import { notebookTitleStateFamily, notebooksState, selectedDocIdState } from "~/appState";
+import { fetchDoc } from "~/services/dynamoFetch";
+import { deleteDoc, editDocTitle } from "~/services/dynamoPost";
 
-import IconJS from './assets/jsfolder.png';
-import IconPY from './assets/pyfolder.png';
+import IconJS from "./assets/jsfolder.png";
+import IconPY from "./assets/pyfolder.png";
 
-import { useTheme } from '@mui/material';
+import { useTheme } from "@mui/material";
 
 const { confirm } = Modal;
 
@@ -26,12 +32,14 @@ interface TreeNotebookProps {
 const TreeNotebook = ({ notebook, username, handleSelectedDocId, language }: TreeNotebookProps) => {
   const [notebooks, setNotebooks] = useRecoilState(notebooksState);
   const [isEditing, setIsEditing] = useState(false);
-  const [newTitle, setNewTitle] = useState(notebook.title || '');
-  const inputRef = useRef<any>(null);
+  const [newTitle, setNewTitle] = useState(notebook.title || "");
+  const inputRef = useRef<InputRef | null>(null);
   const [title, setTitle] = useRecoilState(notebookTitleStateFamily(notebook.docID));
   const [selectedDocId, setSelectedDocId] = useRecoilState(selectedDocIdState);
 
-  const { refetch } = useQuery([notebook.docID, username], () => fetchDoc(notebook.docID, username));
+  const { refetch } = useQuery([notebook.docID, username], () =>
+    fetchDoc(notebook.docID, username)
+  );
   const theme = useTheme().palette.mode;
 
   useEffect(() => {
@@ -40,14 +48,14 @@ const TreeNotebook = ({ notebook, username, handleSelectedDocId, language }: Tre
 
   const deleteMutation = useMutation(deleteDoc, {
     onSuccess: () => {
-      setNotebooks(notebooks.filter(n => n.docID !== notebook.docID));
+      setNotebooks(notebooks.filter((n) => n.docID !== notebook.docID));
       if (selectedDocId === notebook.docID) {
         setSelectedDocId(null);
       }
-    }
+    },
   });
 
-  const handleNotebookClick = (e: any) => {
+  const handleNotebookClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!isEditing) {
       handleSelectedDocId(notebook.docID);
@@ -58,7 +66,7 @@ const TreeNotebook = ({ notebook, username, handleSelectedDocId, language }: Tre
     onSuccess: () => {
       setTitle(newTitle);
       refetch();
-    }
+    },
   });
 
   const handleRenameClick = () => {
@@ -70,10 +78,10 @@ const TreeNotebook = ({ notebook, username, handleSelectedDocId, language }: Tre
 
   const handleDeleteClick = () => {
     confirm({
-      title: 'Are you sure you want to delete this notebook?',
+      title: "Are you sure you want to delete this notebook?",
       onOk() {
         deleteMutation.mutate({ docID: notebook.docID, username });
-      }
+      },
     });
   };
 
@@ -93,93 +101,113 @@ const TreeNotebook = ({ notebook, username, handleSelectedDocId, language }: Tre
     navigator.clipboard
       .writeText(notebookURL)
       .then(() => {
-        message.success('Notebook URL copied to clipboard');
+        message.success("Notebook URL copied to clipboard");
       })
-      .catch(err => {
-        message.error('Failed to copy URL: ' + err);
+      .catch((err) => {
+        message.error("Failed to copy URL: " + err);
       });
   };
 
   const handleClickToNavigate = () => {
     if (isEditing) return;
     const url = `/${username}/${notebook.docID}`;
-    window.open(url, '_blank');
+    window.open(url, "_blank");
   };
 
   const items = [
     {
-      label: 'Open Notebook',
-      key: '0',
+      label: "Open Notebook",
+      key: "0",
       icon: <BookOutlined />,
-      onClick: () => handleClickToNavigate()
+      onClick: () => handleClickToNavigate(),
     },
     {
-      label: 'Rename Notebook',
-      key: '1',
+      label: "Rename Notebook",
+      key: "1",
       icon: <EditOutlined />,
-      onClick: () => handleRenameClick()
+      onClick: () => handleRenameClick(),
     },
     {
-      label: 'Delete Notebook',
-      key: '2',
+      label: "Delete Notebook",
+      key: "2",
       icon: <DeleteOutlined />,
-      onClick: () => handleDeleteClick()
+      onClick: () => handleDeleteClick(),
     },
     {
-      label: 'Copy Notebook URL',
-      key: '3',
+      label: "Copy Notebook URL",
+      key: "3",
       icon: <CopyOutlined />,
-      onClick: () => handleCopyClick()
-    }
+      onClick: () => handleCopyClick(),
+    },
   ];
 
-  const notebookIconSrc = language === 'javascript' ? IconJS : IconPY;
+  const notebookIconSrc = language === "javascript" ? IconJS : IconPY;
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        width: "100%",
+      }}>
       {isEditing ? (
         <div style={{ flex: 1 }}>
           <Input
             ref={inputRef}
             value={newTitle}
-            onChange={e => setNewTitle(e.target.value)}
+            onChange={(e) => setNewTitle(e.target.value)}
             onBlur={handleCancelClick}
             onPressEnter={handleSaveClick}
             autoFocus
           />
         </div>
       ) : (
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '200px' }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            width: "200px",
+          }}>
           <div
-            onClick={e => handleNotebookClick(e)}
-            style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            onClick={(e) => handleNotebookClick(e)}
+            style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <img
               src={notebookIconSrc}
               alt={`${language} Icon`}
-              style={{ width: '16px', height: '16px', marginRight: '8px' }}
+              style={{ width: "16px", height: "16px", marginRight: "8px" }}
             />
             <span
-              id='notebook-tree-title'
+              id="notebook-tree-title"
               style={{
                 flexGrow: 1,
-                maxWidth: '140px',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap'
+                maxWidth: "140px",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
               }}>
               {title || `Untitled`}
             </span>
           </div>
-          <div id='dropdown-tree' className={`tree-dropdown ${theme}`}>
+          <div
+            id="dropdown-tree"
+            className={`tree-dropdown ${theme}`}>
             <Dropdown
               menu={{ items }}
-              trigger={['click']}
-              onOpenChange={open => {
+              trigger={["click"]}
+              onOpenChange={(open) => {
                 if (!open) {
+                  // Handle dropdown close
                 }
               }}>
-              <a onClick={e => e.stopPropagation()} className={theme}>
-                <EllipsisOutlined className='ellipsis-icon' style={{ justifyContent: 'flex-end' }} />
+              <a
+                onClick={(e) => e.stopPropagation()}
+                className={theme}>
+                <EllipsisOutlined
+                  className="ellipsis-icon"
+                  style={{ justifyContent: "flex-end" }}
+                />
               </a>
             </Dropdown>
           </div>
