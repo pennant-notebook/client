@@ -1,4 +1,4 @@
-import { YMap } from '~/utils/notebookHelpers';
+import { YMap } from "@/YjsTypes";
 
 // export type CodeCellType = YMap & {
 //   id: string;

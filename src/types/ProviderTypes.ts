@@ -1,7 +1,6 @@
-import { HocuspocusProvider } from '@hocuspocus/provider';
-import { Awareness } from 'y-protocols/awareness';
-import { YDoc, YMap } from '~/utils/notebookHelpers';
-
+import { YDoc, YMap } from "@/YjsTypes";
+import { HocuspocusProvider } from "@hocuspocus/provider";
+import { Awareness } from "y-protocols/awareness";
 
 export interface HocuspocusProviderConfig extends HocuspocusProvider {
   url: string;
@@ -15,9 +14,7 @@ export interface HocuspocusProviderConfig extends HocuspocusProvider {
 export interface ProviderContextType {
   notebookMetadata: YMap;
   docID: string;
-  doc: any;
+  doc: YDoc;
   provider: HocuspocusProviderConfig;
   awareness: Awareness;
 }
-
-
