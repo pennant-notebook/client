@@ -41,8 +41,8 @@ release/
 *.so
 *.dylib
 *.test
-*.out  # Go coverage tool output
-.glide/  # Project-local glide cache
+*.out   # Go coverage tool output
+.glide/ # Project-local glide cache
 # vendor/  # Uncomment if you don't want to track vendor directory
 
 # Compiled Object files, Static and Dynamic libs (Shared Objects)
@@ -61,3 +61,4 @@ _test
 # SQL database files
 *.db
 *.sql
+CLAUDE.md

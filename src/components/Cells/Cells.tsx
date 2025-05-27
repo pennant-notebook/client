@@ -51,7 +51,7 @@ const Cells = ({ cells, setCells }: CellsProps) => {
             {cells &&
               cells.map((cell, i) => (
                 <div
-                  key={cell.get("id")}
+                  key={`cell-${i}`}
                   className="cell">
                   <DraggableCells
                     index={i}

@@ -1,7 +1,7 @@
 import { defineConfig, devices } from "@playwright/experimental-ct-react";
-import { resolve } from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+import react from "@vitejs/plugin-react";
+import { dirname, resolve } from "path";
+import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -33,11 +33,13 @@ export default defineConfig({
 
     /* Port to use for Playwright component endpoint. */
     ctPort: 3100,
+    ctTemplateDir: "./playwright",
     ctViteConfig: {
+      plugins: [react()],
       resolve: {
         alias: {
-          '@': resolve(__dirname, './src/types'),
-          '~': resolve(__dirname, './src'),
+          "@": resolve(__dirname, "./src/types"),
+          "~": resolve(__dirname, "./src"),
         },
       },
     },

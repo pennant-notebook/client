@@ -51,7 +51,7 @@ const CodeCell = ({ cellId, cell }: CodeCellProps) => {
       cellMetadata.set("isRunning", false);
       updateMetadata(cellMetadata, notebookMetadata);
     }
-  }, [docID, cellId, cell, cellMetadata]);
+  }, [docID, cellId, cell, cellMetadata, notebookMetadata, language, outputMap]);
 
   useEffect(() => {
     const editorContainer = document.querySelector(`#editor-${cellId}`);
@@ -81,7 +81,17 @@ const CodeCell = ({ cellId, cell }: CodeCellProps) => {
         editorRef.current = null;
       }
     };
-  }, [content, editorTheme, notebookTheme, output]);
+  }, [
+    content,
+    editorTheme,
+    notebookTheme,
+    output,
+    awareness,
+    cell,
+    cellId,
+    handleRunCode,
+    language,
+  ]);
 
   useEffect(() => {
     cell.get("outputMap").observe(() => {
@@ -98,7 +108,7 @@ const CodeCell = ({ cellId, cell }: CodeCellProps) => {
         }
       });
     });
-  }, [outputMap, cellMetadata, processing]);
+  }, [outputMap, cellMetadata, processing, cell]);
 
   return (
     <div
@@ -108,11 +118,18 @@ const CodeCell = ({ cellId, cell }: CodeCellProps) => {
         display: "flex",
         alignItems: "center",
         width: "100%",
-      }}
-    >
-      <div data-test="codeCell-stack" style={{ width: "100%", display: "flex", alignItems: "center" }}>
-        <StyledBadge badgeContent={processing ? "*" : cellExeCount || " "} status={status} data-test="codeCell-badge" />
-        <div data-test="codeToolbar" className={`${styles.codecellContainer} ${notebookTheme}`}>
+      }}>
+      <div
+        data-test="codeCell-stack"
+        style={{ width: "100%", display: "flex", alignItems: "center" }}>
+        <StyledBadge
+          badgeContent={processing ? "*" : cellExeCount || " "}
+          status={status}
+          data-test="codeCell-badge"
+        />
+        <div
+          data-test="codeToolbar"
+          className={`${styles.codecellContainer} ${notebookTheme}`}>
           <CodeToolbar
             onClickRun={handleRunCode}
             id={cellId}
@@ -120,14 +137,18 @@ const CodeCell = ({ cellId, cell }: CodeCellProps) => {
             language={language}
             data-test="codeToolbar-component"
           />
-          <div id={`editor-${cellId}`} data-test="codeEditor" data-testid={`editor-${cellId}`}></div>
+          <div
+            id={`editor-${cellId}`}
+            data-test="codeEditor"
+            data-testid={`editor-${cellId}`}></div>
           <div
             className={`${styles.codecellOutput} ${styles[notebookTheme]} ${styles[status]} `}
             style={{ paddingTop: output ? "4px" : 0, paddingBottom: output ? "4px" : 0 }}
-            data-test="codeCell-outputBox"
-          >
+            data-test="codeCell-outputBox">
             {processing ? (
-              <Typography.Text data-test="processing" style={{ marginLeft: "5px", color: "#cfd1d8" }}>
+              <Typography.Text
+                data-test="processing"
+                style={{ marginLeft: "5px", color: "#cfd1d8" }}>
                 Processing...
               </Typography.Text>
             ) : (
@@ -137,7 +158,9 @@ const CodeCell = ({ cellId, cell }: CodeCellProps) => {
                 .filter(Boolean)
                 .map((stdout: string, idx: number) => (
                   <div key={idx}>
-                    <Typography.Text style={{ marginLeft: "5px", color: "#cfd1d8" }} data-test={`output`}>
+                    <Typography.Text
+                      style={{ marginLeft: "5px", color: "#cfd1d8" }}
+                      data-test={`output`}>
                       {stdout}
                     </Typography.Text>
                   </div>
