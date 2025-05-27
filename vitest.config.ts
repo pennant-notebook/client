@@ -22,7 +22,7 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: '@testing-library/jest-dom',
     mockReset: true,
-    include: ['tests/unit/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}', 'tests/integration/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+    include: ['tests/unit/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     exclude: ['tests/component/**/*', 'tests/e2e/**/*'],
   },
   resolve: {

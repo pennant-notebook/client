@@ -1,12 +1,12 @@
-import { NotebookType } from '@/NotebookTypes';
-import { PlusCircleOutlined } from '@ant-design/icons';
-import { Tree, Tooltip, Switch } from 'antd';
-import { useState } from 'react';
-import { createDoc } from '~/services/dynamoPost';
-import { useTheme } from '~/utils/MuiImports';
+import { NotebookType } from "@/NotebookTypes";
+import { PlusCircleOutlined } from "@ant-design/icons";
+import { Switch, Tooltip, Tree } from "antd";
+import { useState } from "react";
+import { createDoc } from "~/services/dynamoPost";
+import { useTheme } from "~/utils/MuiImports";
 
-import TreeNotebook from './TreeNotebook';
-import './TreeNotebook.css';
+import TreeNotebook from "./TreeNotebook";
+import "./TreeNotebook.css";
 
 interface NotebookTreeViewProps {
   username: string;
@@ -19,12 +19,12 @@ export default function NotebookTreeView({
   username,
   notebooks = [],
   refetch,
-  handleSelectedDocId
+  handleSelectedDocId,
 }: NotebookTreeViewProps) {
-  const [expanded, setExpanded] = useState<string[]>(['js', 'py']);
+  const [expanded, setExpanded] = useState<string[]>(["js", "py"]);
   const theme = useTheme().palette.mode;
   const {
-    custom: { toggleTheme }
+    custom: { toggleTheme },
   } = useTheme();
 
   const handleCreateNotebook = async (language: string) => {
@@ -36,8 +36,8 @@ export default function NotebookTreeView({
     }
   };
 
-  const jsNotebooks = notebooks.filter(nb => nb.language === 'javascript');
-  const pyNotebooks = notebooks.filter(nb => nb.language === 'python');
+  const jsNotebooks = notebooks.filter((nb) => nb.language === "javascript");
+  const pyNotebooks = notebooks.filter((nb) => nb.language === "python");
 
   const generateTreeData = (data: NotebookType[], language: string) => {
     return data.map((item, index) => ({
@@ -50,72 +50,78 @@ export default function NotebookTreeView({
           language={language}
         />
       ),
-      key: item.docID
+      key: item.docID,
     }));
   };
 
   const treeData = [
     {
       title: (
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <span style={{ flexGrow: 1, marginRight: '6px' }}>JavaScript</span>
-          <Tooltip title='Create JavaScript Notebook'>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <span style={{ flexGrow: 1, marginRight: "6px" }}>JavaScript</span>
+          <Tooltip title="Create JavaScript Notebook">
             <PlusCircleOutlined
-              onClick={e => {
+              onClick={(e) => {
                 e.stopPropagation();
-                handleCreateNotebook('javascript');
+                handleCreateNotebook("javascript");
               }}
-              style={{ cursor: 'pointer', color: '#595959' }}
-              className='plus-icon'
+              style={{ cursor: "pointer", color: "#595959" }}
+              className="plus-icon"
             />
           </Tooltip>
         </div>
       ),
-      key: 'js',
-      children: generateTreeData(jsNotebooks, 'javascript')
+      key: "js",
+      children: generateTreeData(jsNotebooks, "javascript"),
     },
     {
       title: (
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <span style={{ flexGrow: 1, marginRight: '6px' }}>Python</span>
-          <Tooltip title='Create Python Notebook'>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <span style={{ flexGrow: 1, marginRight: "6px" }}>Python</span>
+          <Tooltip title="Create Python Notebook">
             <PlusCircleOutlined
-              onClick={e => {
+              onClick={(e) => {
                 e.stopPropagation();
-                handleCreateNotebook('python');
+                handleCreateNotebook("python");
               }}
-              style={{ cursor: 'pointer', color: '#595959' }}
-              className='plus-icon'
+              style={{ cursor: "pointer", color: "#595959" }}
+              className="plus-icon"
             />
           </Tooltip>
         </div>
       ),
-      key: 'py',
-      children: generateTreeData(pyNotebooks, 'python')
-    }
+      key: "py",
+      children: generateTreeData(pyNotebooks, "python"),
+    },
   ];
 
   return (
     <>
-      <div style={{ display: 'flex', alignItems: 'center', padding: '0px 12px', justifyContent: 'space-between' }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          padding: "0px 12px",
+          justifyContent: "space-between",
+        }}>
         <h3>Workspace</h3>
         <Switch
-          checkedChildren='Dark'
-          unCheckedChildren='Light'
-          checked={theme === 'dark'}
+          checkedChildren="Dark"
+          unCheckedChildren="Light"
+          checked={theme === "dark"}
           onChange={toggleTheme}
         />
       </div>
       <Tree
         defaultExpandAll
         expandedKeys={expanded}
-        onExpand={expandedKeys => {
-          setExpanded(expandedKeys.map(key => String(key)));
+        onExpand={(expandedKeys) => {
+          setExpanded(expandedKeys.map((key) => String(key)));
         }}
         treeData={treeData}
         style={{
-          backgroundColor: theme === 'dark' ? '#121212' : '#fafafa',
-          color: theme === 'dark' ? '#fff' : '#000'
+          backgroundColor: theme === "dark" ? "#121212" : "#fafafa",
+          color: theme === "dark" ? "#fff" : "#000",
         }}
       />
     </>
